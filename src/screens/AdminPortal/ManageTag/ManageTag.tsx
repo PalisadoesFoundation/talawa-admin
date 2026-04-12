@@ -72,7 +72,7 @@ import { UNASSIGN_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import { USER_TAGS_ASSIGNED_MEMBERS } from 'GraphQl/Queries/userTagQueries';
 import AddPeopleToTag from 'components/AdminPortal/AddPeopleToTag/AddPeopleToTag';
 import TagActions from 'components/AdminPortal/TagActions/TagActions';
-import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import Toolbar from 'shared-components/Toolbar/Toolbar';
 import { useModalState } from 'shared-components/CRUDModalTemplate';
 import { DeleteModal } from 'shared-components/CRUDModalTemplate/DeleteModal';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
@@ -299,28 +299,30 @@ function ManageTag(): JSX.Element {
             })}
           </div>
 
-          <div className={styles.btnsContainer}>
-            <div className={styles.searchBarGrow}>
-              <SearchFilterBar
-                hasDropdowns={false}
-                searchPlaceholder={tCommon('searchByName')}
-                searchValue={assignedMemberSearchInput}
-                onSearchChange={(term) =>
-                  setAssignedMemberSearchInput(term.trim())
-                }
-                searchInputTestId="searchInput"
-                searchButtonTestId="searchBtn"
-              />
-            </div>
-            <Button
-              variant="success"
-              onClick={addPeopleToTagModal.open}
-              data-testid="addPeopleToTagBtn"
-              className={styles.createButton}
-            >
-              <i className={'fa fa-plus me-2'} />
-              {t('addPeopleToTag')}
-            </Button>
+          <div>
+            <Toolbar
+              search={{
+                placeholder: tCommon('searchByName'),
+                value: assignedMemberSearchInput,
+                onSearch: (term) => setAssignedMemberSearchInput(term.trim()),
+                onChange: (term) => setAssignedMemberSearchInput(term.trim()),
+                inputTestId: 'searchInput',
+                buttonTestId: 'searchBtn',
+                ariaDescription: tCommon('searchByName'),
+              }}
+              rootClassName={styles.btnsContainer}
+              actions={
+                <Button
+                  variant="outline-secondary"
+                  onClick={addPeopleToTagModal.open}
+                  data-testid="addPeopleToTagBtn"
+                  className={styles.createButton}
+                >
+                  <i className={'fa fa-plus me-2'} />
+                  {t('addPeopleToTag')}
+                </Button>
+              }
+            />
           </div>
 
           <LoadingState

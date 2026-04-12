@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_ERROR**: `object`[]
 
-Defined in: [src/components/AdminPortal/AddPeopleToTag/AddPeopleToTagsMocks.ts:277](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/AddPeopleToTag/AddPeopleToTagsMocks.ts#L277)
+Defined in: [src/components/AdminPortal/AddPeopleToTag/AddPeopleToTagsMocks.ts:169](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/AddPeopleToTag/AddPeopleToTagsMocks.ts#L169)
 
 ## Type Declaration
 
@@ -24,32 +24,16 @@ Defined in: [src/components/AdminPortal/AddPeopleToTag/AddPeopleToTagsMocks.ts:2
 
 #### request.variables
 
-> **variables**: `object`
+> **variables**: `object` = `baseMemberQueryVariables`
 
 #### request.variables.first
 
 > **first**: `number` = `TAGS_QUERY_DATA_CHUNK_SIZE`
 
-#### request.variables.id
+#### request.variables.organizationId
 
-> **id**: `string` = `'1'`
+> **organizationId**: `string` = `'1'`
 
-#### request.variables.where
+#### request.variables.tagId
 
-> **where**: `object`
-
-#### request.variables.where.firstName
-
-> **firstName**: `object`
-
-#### request.variables.where.firstName.starts\_with
-
-> **starts\_with**: `string` = `''`
-
-#### request.variables.where.lastName
-
-> **lastName**: `object`
-
-#### request.variables.where.lastName.starts\_with
-
-> **starts\_with**: `string` = `''`
+> **tagId**: `string` = `'1'`

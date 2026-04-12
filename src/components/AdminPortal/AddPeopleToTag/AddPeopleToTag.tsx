@@ -46,7 +46,7 @@ import type {
 import { DataGrid } from 'shared-components/DataGridWrapper';
 import { USER_TAGS_MEMBERS_TO_ASSIGN_TO } from 'GraphQl/Queries/userTagQueries';
 import type { ChangeEvent } from 'react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Button from 'shared-components/Button';
 import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import { useParams } from 'react-router';
@@ -57,6 +57,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
 import { useTranslation } from 'react-i18next';
 import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/InfiniteScrollLoader';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 import type {
   InterfaceAddPeopleToTagProps,
   InterfaceMemberData,
@@ -66,27 +67,10 @@ import {
   TAGS_QUERY_DATA_CHUNK_SIZE,
   dataGridStyle,
 } from 'types/AdminPortal/Tag/utils';
-import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 const GRID_COLUMN_MIN_WIDTH = 100;
-
-const getMemberDisplayName = (member: Partial<InterfaceMemberData>): string => {
-  const displayName = member.name?.trim() ?? '';
-  if (displayName) return displayName;
-
-  const firstName = member.firstName?.trim() ?? '';
-  const lastName = member.lastName?.trim() ?? '';
-
-  if (!firstName && !lastName) return '';
-  if (!firstName) return lastName;
-  if (!lastName) return firstName;
-
-  if (firstName.toLowerCase() === lastName.toLowerCase()) return firstName;
-
-  return `${firstName} ${lastName}`;
-};
 
 const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   addPeopleToTagModalIsOpen,
@@ -106,6 +90,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
 
   const [memberToAssignToSearchInput, setMemberToAssignToSearchInput] =
     useState('');
+  const wasAddPeopleModalOpenRef = useRef(addPeopleToTagModalIsOpen);
 
   const {
     data: userTagsMembersToAssignToData,
@@ -131,9 +116,15 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   );
 
   useEffect(() => {
-    setMemberToAssignToSearchInput('');
-    userTagsMembersToAssignToRefetch();
-  }, [addPeopleToTagModalIsOpen]);
+    const wasModalOpen = wasAddPeopleModalOpenRef.current;
+
+    if (!wasModalOpen && addPeopleToTagModalIsOpen) {
+      setMemberToAssignToSearchInput('');
+      userTagsMembersToAssignToRefetch();
+    }
+
+    wasAddPeopleModalOpenRef.current = addPeopleToTagModalIsOpen;
+  }, [addPeopleToTagModalIsOpen, userTagsMembersToAssignToRefetch]);
 
   const loadMoreMembersToAssignTo = (): void => {
     fetchMoreMembersToAssignTo({
@@ -271,9 +262,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        return (
-          <div data-testid="memberName">{getMemberDisplayName(params.row)}</div>
-        );
+        return <div data-testid="memberName">{params.row.name}</div>;
       },
     },
     {
@@ -357,7 +346,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
             ) : (
               assignToMembers.map((member) => (
                 <div key={member._id} className={styles.memberBadge}>
-                  {getMemberDisplayName(member)}
+                  {member.name}
                   <Button
                     type="button"
                     className={styles.removeMemberChipButton}
@@ -373,15 +362,14 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
           </div>
 
           <div className="my-3">
-            <SearchFilterBar
-              hasDropdowns={false}
-              searchPlaceholder={tCommon('searchByName')}
-              searchValue={memberToAssignToSearchInput}
-              onSearchChange={(value) =>
-                setMemberToAssignToSearchInput(value.trim())
-              }
-              searchInputTestId="searchByName"
-              searchButtonTestId="searchByNameBtn"
+            <SearchBar
+              placeholder={tCommon('searchByName')}
+              value={memberToAssignToSearchInput}
+              onChange={(value) => setMemberToAssignToSearchInput(value.trim())}
+              onSearch={(value) => setMemberToAssignToSearchInput(value.trim())}
+              inputTestId="searchByName"
+              showSearchButton={false}
+              showLeadingIcon
             />
           </div>
 

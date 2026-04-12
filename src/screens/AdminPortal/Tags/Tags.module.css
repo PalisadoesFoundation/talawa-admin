@@ -166,28 +166,26 @@ form label,
 
 /* Create Button*/
 
-.createButton {
-  background-color: var(--color-gray-50) !important;
+.createButton:global(.btn) {
+  background-color: var(--color-white) !important;
   color: var(--color-gray-700) !important;
-  border: var(--border-1) solid var(--color-gray-700) !important;
+  border: var(--border-1) solid var(--color-gray-300) !important;
   margin: 0;
   width: auto;
-  min-width: fit-content;
+  min-width: var(--space-15);
   padding-inline: var(--space-4);
-  height: var(--space-10);
+  height: var(--space-9);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
 }
 
-.createButton:hover {
-  background-color: var(--color-gray-400) !important;
-  border-color: var(--color-gray-300) !important;
+.createButton:global(.btn):is(:hover, :focus-visible, :active) {
+  background-color: var(--color-blue-500) !important;
+  border-color: var(--color-blue-500) !important;
   color: var(--color-white) !important;
   box-shadow: none;
-}
-
-.createButton:active {
-  color: var(--color-gray-400) !important;
-  background-color: var(--color-gray-100) !important;
-  border: var(--border-1) solid var(--color-gray-400) !important;
 }
 
 .buttonNoWrap {

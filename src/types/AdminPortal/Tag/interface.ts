@@ -72,3 +72,59 @@ export interface InterfaceTagUsersToAssignToQuery extends InterfaceBaseQueryResu
     options: InterfaceBaseFetchMoreOptions<InterfaceQueryUserTagsMembersToAssignTo>,
   ) => void;
 }
+
+export interface InterfaceTagFolderNode {
+  id: string;
+  name: string;
+  createdAt?: string | null;
+  creator?: {
+    id?: string;
+    name?: string | null;
+  } | null;
+  childFolders?: {
+    edges?: Array<{
+      node: {
+        id: string;
+      };
+    }>;
+  };
+  tags?: {
+    edges?: Array<{
+      node: {
+        id: string;
+      };
+    }>;
+  };
+}
+
+export interface InterfaceOrganizationTagFoldersQuery {
+  organization?: {
+    id: string;
+    name: string;
+    tagFolders?: {
+      edges: Array<{
+        node: InterfaceTagFolderNode;
+      }>;
+      pageInfo?: {
+        hasNextPage?: boolean;
+        endCursor?: string | null;
+      };
+    };
+  };
+}
+
+export interface InterfaceOrganizationTagCountsQuery {
+  organization?: {
+    id: string;
+    tags?: {
+      edges?: Array<{
+        node: {
+          id: string;
+          folder?: {
+            id: string;
+          } | null;
+        };
+      }>;
+    };
+  };
+}

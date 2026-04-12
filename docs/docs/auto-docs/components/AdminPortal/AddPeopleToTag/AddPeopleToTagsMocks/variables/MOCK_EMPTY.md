@@ -6,7 +6,7 @@
 
 > `const` **MOCK\_EMPTY**: `object`[]
 
-Defined in: [src/components/AdminPortal/AddPeopleToTag/AddPeopleToTagsMocks.ts:294](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/AddPeopleToTag/AddPeopleToTagsMocks.ts#L294)
+Defined in: [src/components/AdminPortal/AddPeopleToTag/AddPeopleToTagsMocks.ts:179](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/AddPeopleToTag/AddPeopleToTagsMocks.ts#L179)
 
 ## Type Declaration
 
@@ -20,35 +20,19 @@ Defined in: [src/components/AdminPortal/AddPeopleToTag/AddPeopleToTagsMocks.ts:2
 
 #### request.variables
 
-> **variables**: `object`
+> **variables**: `object` = `baseMemberQueryVariables`
 
 #### request.variables.first
 
 > **first**: `number` = `TAGS_QUERY_DATA_CHUNK_SIZE`
 
-#### request.variables.id
+#### request.variables.organizationId
 
-> **id**: `string` = `'1'`
+> **organizationId**: `string` = `'1'`
 
-#### request.variables.where
+#### request.variables.tagId
 
-> **where**: `object`
-
-#### request.variables.where.firstName
-
-> **firstName**: `object`
-
-#### request.variables.where.firstName.starts\_with
-
-> **starts\_with**: `string` = `''`
-
-#### request.variables.where.lastName
-
-> **lastName**: `object`
-
-#### request.variables.where.lastName.starts\_with
-
-> **starts\_with**: `string` = `''`
+> **tagId**: `string` = `'1'`
 
 ### result
 
@@ -58,22 +42,54 @@ Defined in: [src/components/AdminPortal/AddPeopleToTag/AddPeopleToTagsMocks.ts:2
 
 > **data**: `object`
 
-#### result.data.getUsersToAssignTo
+#### result.data.organization
 
-> **getUsersToAssignTo**: `object`
+> **organization**: `object`
 
-#### result.data.getUsersToAssignTo.usersToAssignTo
+#### result.data.organization.id
 
-> **usersToAssignTo**: `object`
+> **id**: `string` = `'1'`
 
-#### result.data.getUsersToAssignTo.usersToAssignTo.edges
+#### result.data.organization.members
 
-> **edges**: `any`[] = `[]`
+> **members**: `object`
 
-#### result.data.getUsersToAssignTo.usersToAssignTo.pageInfo
+#### result.data.organization.members.edges
+
+> **edges**: `object`[]
+
+#### result.data.organization.members.pageInfo
 
 > **pageInfo**: `object`
 
-#### result.data.getUsersToAssignTo.usersToAssignTo.pageInfo.hasNextPage
+#### result.data.organization.members.pageInfo.endCursor
 
-> **hasNextPage**: `boolean` = `false`
+> **endCursor**: `string`
+
+#### result.data.organization.members.pageInfo.hasNextPage
+
+> **hasNextPage**: `boolean`
+
+#### result.data.organization.members.pageInfo.hasPreviousPage
+
+> **hasPreviousPage**: `boolean` = `false`
+
+#### result.data.organization.members.pageInfo.startCursor
+
+> **startCursor**: `string`
+
+#### result.data.tag
+
+> **tag**: `object`
+
+#### result.data.tag.assignees
+
+> **assignees**: `object`
+
+#### result.data.tag.assignees.edges
+
+> **edges**: `any`[] = `[]`
+
+#### result.data.tag.id
+
+> **id**: `string` = `'1'`

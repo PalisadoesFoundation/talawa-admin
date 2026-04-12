@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/AdminPortal/OrganizationTags/OrganizationTags.tsx:101](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationTags/OrganizationTags.tsx#L101)
+Defined in: [src/screens/AdminPortal/OrganizationTags/OrganizationTags.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationTags/OrganizationTags.tsx#L50)
 
 ## Returns
 

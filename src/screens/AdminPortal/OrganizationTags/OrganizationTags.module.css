@@ -124,31 +124,27 @@
   box-shadow: none;
 }
 
-.createButton {
-  background-color: var(--color-white);
-  color: var(--color-gray-900);
-  border: var(--border-1-5) solid var(--color-black-10);
+.createButton:global(.btn) {
+  background-color: var(--color-white) !important;
+  color: var(--color-gray-700) !important;
+  border: var(--border-1) solid var(--color-gray-300) !important;
   border-radius: var(--radius-md);
-  margin: var(--space-3-5) var(--space-4);
+  margin: 0;
   width: auto;
-  min-width: var(--space-11-5);
-  white-space: nowrap;
+  min-width: var(--space-15);
   height: var(--space-9);
-  font-size: var(--font-size-14);
-  font-weight: var(--font-weight-medium);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  white-space: nowrap;
 }
 
-.createButton:hover {
-  background-color: var(--color-gray-400) !important;
-  border-color: var(--color-gray-300) !important;
-  color: var(--color-white) !important;
+.createButton:global(.btn):is(:hover, :focus-visible, :active) {
   box-shadow: none;
-}
-
-.createButton:active {
-  color: var(--color-gray-400);
-  background-color: var(--color-gray-100);
-  border: var(--border-1) solid var(--color-gray-400);
+  background-color: var(--color-blue-500) !important;
+  color: var(--color-white) !important;
+  border: var(--border-1) solid var(--color-blue-500) !important;
 }
 
 .buttonNoWrap {

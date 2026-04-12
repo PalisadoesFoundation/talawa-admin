@@ -164,36 +164,26 @@
 }
 
 .createButton:global(.btn) {
-  background-color: var(--color-gray-50);
-  color: var(--color-gray-700);
-  border: var(--border-1) solid var(--color-gray-700);
-  margin: var(--space-2) var(--space-4);
-  width: var(--space-16);
-  height: var(--space-10);
+  background-color: var(--color-white) !important;
+  color: var(--color-gray-700) !important;
+  border: var(--border-1) solid var(--color-gray-300) !important;
+  border-radius: var(--radius-md);
+  margin: 0;
+  width: auto;
+  min-width: var(--space-15);
+  height: var(--space-9);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  white-space: nowrap;
 }
 
-.createButton:global(.btn):hover {
-  box-shadow: var(--border-shadow-xs) var(--border-shadow-xs)
-    var(--border-shadow-xs) var(--color-black-25);
-  background-color: var(--color-gray-50);
-  color: var(--color-gray-700);
-  border: var(--border-1) solid var(--color-gray-700);
-}
-
-.createButton:global(.btn):focus-visible {
-  box-shadow: var(--border-shadow-xs) var(--border-shadow-xs)
-    var(--border-shadow-xs) var(--color-black-25);
-  background-color: var(--color-gray-50);
-  color: var(--color-gray-700);
-  border: var(--border-1) solid var(--color-gray-700);
-  outline: var(--border-2) solid var(--color-gray-700);
-  outline-offset: var(--border-2);
-}
-
-.createButton:global(.btn):active {
-  color: var(--color-gray-400);
-  background-color: var(--color-gray-100);
-  border: var(--border-1) solid var(--color-gray-400);
+.createButton:global(.btn):is(:hover, :focus-visible, :active) {
+  box-shadow: none;
+  background-color: var(--color-blue-500) !important;
+  color: var(--color-white) !important;
+  border: var(--border-1) solid var(--color-blue-500) !important;
 }
 
 .tagsBreadCrumbs {

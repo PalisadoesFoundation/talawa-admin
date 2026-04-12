@@ -44,7 +44,7 @@ import {
 } from 'GraphQl/Mutations/TagMutations';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
-import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/InfiniteScrollLoader';
 import { getRootFolderIds, renderFolderTree } from './tagTreeRenderer';
 import { loadFolderNode } from './tagFolderLoader';
@@ -478,13 +478,15 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
         </div>
 
         <div className={styles.searchSection}>
-          <SearchFilterBar
-            hasDropdowns={false}
-            searchPlaceholder={tCommon('searchByName')}
-            searchValue={tagSearchName}
-            onSearchChange={(value) => setTagSearchName(value.trim())}
-            searchInputTestId="searchByName"
-            searchButtonTestId="searchByNameBtn"
+          <SearchBar
+            placeholder={tCommon('searchByName')}
+            value={tagSearchName}
+            onChange={(value) => setTagSearchName(value.trim())}
+            onSearch={(value) => setTagSearchName(value.trim())}
+            inputTestId="searchByName"
+            showSearchButton={false}
+            showLeadingIcon
+            showClearButton
           />
         </div>
 

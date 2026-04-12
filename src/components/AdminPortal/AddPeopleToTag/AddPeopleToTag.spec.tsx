@@ -1,5 +1,5 @@
 import React from 'react';
-import { vi, expect, describe, it } from 'vitest';
+import { vi, expect, describe, it, beforeEach, afterEach } from 'vitest';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
 import { render, screen, cleanup, waitFor, act } from '@testing-library/react';
@@ -21,16 +21,6 @@ import {
 } from './AddPeopleToTagsMocks';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
-const link = new StaticMockLink(MOCKS, true);
-const link2 = new StaticMockLink(MOCKS_ERROR, true);
-
-async function wait(): Promise<void> {
-  await waitFor(() => {
-    // The waitFor utility automatically uses optimal timing
-    return Promise.resolve();
-  });
-}
-
 const toastMocks = vi.hoisted(() => {
   return {
     success: vi.fn(),
@@ -46,6 +36,24 @@ vi.mock('components/NotificationToast/NotificationToast', async () => {
     NotificationToast: toastMocks,
   };
 });
+
+const createCache = (): InMemoryCache =>
+  new InMemoryCache({
+    typePolicies: {
+      Query: {
+        fields: {
+          getUserTag: {
+            merge(existing = {}, incoming) {
+              return {
+                ...existing,
+                ...incoming,
+              };
+            },
+          },
+        },
+      },
+    },
+  });
 
 const translations = {
   ...JSON.parse(
@@ -63,73 +71,24 @@ const defaultProps: InterfaceAddPeopleToTagProps = {
 
 const props: InterfaceAddPeopleToTagProps = {
   addPeopleToTagModalIsOpen: true,
-  hideAddPeopleToTagModal: () => {},
-  refetchAssignedMembersData: () => {},
+  hideAddPeopleToTagModal: vi.fn(),
+  refetchAssignedMembersData: vi.fn(),
 };
 
-const cache = new InMemoryCache({
-  typePolicies: {
-    Query: {
-      fields: {
-        getUserTag: {
-          merge(existing = {}, incoming) {
-            const merged = {
-              ...existing,
-              ...incoming,
-              usersToAssignTo: {
-                ...existing.usersToAssignTo,
-                ...incoming.usersToAssignTo,
-                edges: [
-                  ...(existing.usersToAssignTo?.edges || []),
-                  ...(incoming.usersToAssignTo?.edges || []),
-                ],
-              },
-            };
-
-            return merged;
-          },
-        },
-      },
-    },
-  },
-});
-
 const renderAddPeopleToTagModal = (
-  props: InterfaceAddPeopleToTagProps,
-  link: ApolloLink,
+  customProps: InterfaceAddPeopleToTagProps,
+  link: ApolloLink = new StaticMockLink(MOCKS, true),
+  cache: InMemoryCache = createCache(),
 ): RenderResult => {
   return render(
     <MockedProvider cache={cache} link={link}>
-      <MemoryRouter initialEntries={['/admin/orgtags/123/manageTag/1']}>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18n}>
-            <Routes>
-              <Route
-                path="/admin/orgtags/:orgId/manageTag/:tagId"
-                element={<AddPeopleToTag {...props} />}
-              />
-            </Routes>
-          </I18nextProvider>
-        </Provider>
-      </MemoryRouter>
-    </MockedProvider>,
-  );
-};
-
-const renderComponent = (
-  customProps?: Partial<InterfaceAddPeopleToTagProps>,
-): RenderResult =>
-  render(
-    <MockedProvider cache={cache} link={new StaticMockLink(MOCKS, true)}>
       <MemoryRouter initialEntries={['/admin/orgtags/1/manageTag/1']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
             <Routes>
               <Route
                 path="/admin/orgtags/:orgId/manageTag/:tagId"
-                element={
-                  <AddPeopleToTag {...defaultProps} {...(customProps ?? {})} />
-                }
+                element={<AddPeopleToTag {...customProps} />}
               />
             </Routes>
           </I18nextProvider>
@@ -137,31 +96,20 @@ const renderComponent = (
       </MemoryRouter>
     </MockedProvider>,
   );
+};
 
 describe('Organisation Tags Page', () => {
   beforeEach(() => {
-    // Mocking `react-router-dom` to return the actual module and override `useParams`
-    vi.mock('react-router', async () => {
-      const actual = await vi.importActual('react-router'); // Import the actual module
-      return {
-        ...actual,
-        useParams: () => ({ orgId: '1', tagId: '1' }), // Mock `useParams` to return a custom object
-      };
-    });
-
-    // Reset any necessary cache or mocks
-    vi.restoreAllMocks(); // Restore all mocks to ensure a clean state before each test
+    vi.clearAllMocks();
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
     cleanup();
   });
 
   it('Component loads correctly', async () => {
-    const { getByText } = renderAddPeopleToTagModal(props, link);
-
-    await wait();
+    const { getByText } = renderAddPeopleToTagModal(props);
 
     await waitFor(() => {
       expect(getByText(translations.addPeople)).toBeInTheDocument();
@@ -169,20 +117,18 @@ describe('Organisation Tags Page', () => {
   });
 
   it('Renders error component when when query is unsuccessful', async () => {
-    const { queryByText } = renderAddPeopleToTagModal(props, link2);
-
-    await wait();
+    renderAddPeopleToTagModal(props, new StaticMockLink(MOCKS_ERROR, true));
 
     await waitFor(() => {
-      expect(queryByText(translations.addPeople)).not.toBeInTheDocument();
+      expect(
+        screen.getByText(/error occured while loading members/i),
+      ).toBeInTheDocument();
     });
   });
 
   it('Selects and deselects members to assign to', async () => {
     const user = userEvent.setup();
-    renderAddPeopleToTagModal(props, link);
-
-    await wait();
+    renderAddPeopleToTagModal(props);
 
     await waitFor(() => {
       expect(screen.getAllByTestId('selectMemberBtn')[0]).toBeInTheDocument();
@@ -190,9 +136,9 @@ describe('Organisation Tags Page', () => {
     await user.click(screen.getAllByTestId('selectMemberBtn')[0]);
 
     await waitFor(() => {
-      expect(screen.getAllByTestId('selectMemberBtn')[1]).toBeInTheDocument();
+      expect(screen.getAllByTestId('selectMemberBtn')[0]).toBeInTheDocument();
     });
-    await user.click(screen.getAllByTestId('selectMemberBtn')[1]);
+    await user.click(screen.getAllByTestId('selectMemberBtn')[0]);
 
     await waitFor(() => {
       expect(
@@ -209,67 +155,57 @@ describe('Organisation Tags Page', () => {
 
   it('searchs for tags where the firstName matches the provided firstName search input', async () => {
     const user = userEvent.setup();
-    renderAddPeopleToTagModal(props, link);
+    renderAddPeopleToTagModal(props);
 
     await waitFor(() => {
       expect(
-        screen.getByPlaceholderText(translations.firstName),
+        screen.getByPlaceholderText(translations.searchByName),
       ).toBeInTheDocument();
     });
 
-    const input = screen.getByPlaceholderText(translations.firstName);
-
-    // clear and type value
+    const input = screen.getByPlaceholderText(translations.searchByName);
     await user.clear(input);
     await user.paste('usersToAssignTo');
 
-    // should render the two users from the mock data
     await waitFor(() => {
       const members = screen.getAllByTestId('memberName');
       expect(members).toHaveLength(2);
     });
 
     const members = screen.getAllByTestId('memberName');
-
     expect(members[0]).toHaveTextContent('usersToAssignTo user1');
     expect(members[1]).toHaveTextContent('usersToAssignTo user2');
   });
 
   it('searchs for tags where the lastName matches the provided lastName search input', async () => {
     const user = userEvent.setup();
-    renderAddPeopleToTagModal(props, link);
+    renderAddPeopleToTagModal(props);
 
     await waitFor(() => {
       expect(
-        screen.getByPlaceholderText(translations.lastName),
+        screen.getByPlaceholderText(translations.searchByName),
       ).toBeInTheDocument();
     });
 
-    const input = screen.getByPlaceholderText(translations.lastName);
-
-    // clear and type value
+    const input = screen.getByPlaceholderText(translations.searchByName);
     await user.clear(input);
     await user.paste('userToAssignTo');
 
-    // should render the two users from the mock data
     await waitFor(() => {
       const members = screen.getAllByTestId('memberName');
       expect(members).toHaveLength(2);
     });
 
     const members = screen.getAllByTestId('memberName');
-
     expect(members[0]).toHaveTextContent('first userToAssignTo');
     expect(members[1]).toHaveTextContent('second userToAssignTo');
   });
 
   it('clears first name search input', async () => {
     const user = userEvent.setup();
-    renderAddPeopleToTagModal(props, link);
-    await wait();
+    renderAddPeopleToTagModal(props);
 
-    const input = screen.getByPlaceholderText(translations.firstName);
-    // use a value that exists in mocks
+    const input = await screen.findByPlaceholderText(translations.searchByName);
     await user.click(input);
     await user.paste('usersToAssignTo');
 
@@ -277,9 +213,8 @@ describe('Organisation Tags Page', () => {
       expect(input).toHaveValue('usersToAssignTo');
     });
 
-    // clear button exists because query succeeded
-    const clearBtn = await screen.findByTestId('clearFirstNameSearch');
-    await user.click(clearBtn);
+    await user.clear(input);
+
     await waitFor(() => {
       expect(input).toHaveValue('');
     });
@@ -287,12 +222,9 @@ describe('Organisation Tags Page', () => {
 
   it('clears last name search input', async () => {
     const user = userEvent.setup();
-    renderAddPeopleToTagModal(props, link);
-    await wait();
+    renderAddPeopleToTagModal(props);
 
-    const input = screen.getByPlaceholderText(translations.lastName);
-
-    // use a value that exists in mocks
+    const input = await screen.findByPlaceholderText(translations.searchByName);
     await user.click(input);
     await user.paste('userToAssignTo');
 
@@ -300,31 +232,26 @@ describe('Organisation Tags Page', () => {
       expect(input).toHaveValue('userToAssignTo');
     });
 
-    // SearchBar renders a clear button when value is not empty
-    const clearBtn = await screen.findByTestId('clearLastNameSearch');
-    await user.click(clearBtn);
+    await user.clear(input);
+
     await waitFor(() => {
       expect(input).toHaveValue('');
     });
   });
 
   it('Renders more members with infinite scroll', async () => {
-    const { getByText } = renderAddPeopleToTagModal(props, link);
-
-    await wait();
+    const { getByText } = renderAddPeopleToTagModal(props);
 
     await waitFor(() => {
       expect(getByText(translations.addPeople)).toBeInTheDocument();
     });
 
-    // Find the infinite scroll div by test ID or another selector
     const addPeopleToTagScrollableDiv = screen.getByTestId(
       'addPeopleToTagScrollableDiv',
     );
 
     const initialMemberDataLength = screen.getAllByTestId('memberName').length;
 
-    // Set scroll position to the bottom
     await act(async () => {
       addPeopleToTagScrollableDiv.scrollTop =
         addPeopleToTagScrollableDiv.scrollHeight;
@@ -336,20 +263,18 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       const finalMemberDataLength = screen.getAllByTestId('memberName').length;
       expect(finalMemberDataLength).toBeGreaterThan(initialMemberDataLength);
-
       expect(getByText(translations.addPeople)).toBeInTheDocument();
     });
   });
 
   it('Toasts error when no one is selected while assigning', async () => {
     const user = userEvent.setup();
-    renderAddPeopleToTagModal(props, link);
-
-    await wait();
+    renderAddPeopleToTagModal(props);
 
     await waitFor(() => {
       expect(screen.getByTestId('assignPeopleBtn')).toBeInTheDocument();
     });
+
     await user.click(screen.getByTestId('assignPeopleBtn'));
 
     await waitFor(() => {
@@ -361,25 +286,15 @@ describe('Organisation Tags Page', () => {
 
   it('Assigns tag to multiple people', async () => {
     const user = userEvent.setup();
-    renderAddPeopleToTagModal(props, link);
+    renderAddPeopleToTagModal(props);
 
-    await wait();
-
-    // select members and assign them
     await waitFor(() => {
       expect(screen.getAllByTestId('selectMemberBtn')[0]).toBeInTheDocument();
     });
+
     await user.click(screen.getAllByTestId('selectMemberBtn')[0]);
-
-    await waitFor(() => {
-      expect(screen.getAllByTestId('selectMemberBtn')[1]).toBeInTheDocument();
-    });
-    await user.click(screen.getAllByTestId('selectMemberBtn')[1]);
-
-    await waitFor(() => {
-      expect(screen.getAllByTestId('selectMemberBtn')[2]).toBeInTheDocument();
-    });
-    await user.click(screen.getAllByTestId('selectMemberBtn')[2]);
+    await user.click(screen.getAllByTestId('selectMemberBtn')[0]);
+    await user.click(screen.getAllByTestId('selectMemberBtn')[0]);
 
     await user.click(screen.getByTestId('assignPeopleBtn'));
 
@@ -391,26 +306,26 @@ describe('Organisation Tags Page', () => {
   });
 
   it('Displays "no more members found" overlay when data is empty', async () => {
-    const link = new StaticMockLink(MOCK_EMPTY, true);
-    renderAddPeopleToTagModal(props, link);
-
-    await waitFor(() => {
-      expect(
-        screen.queryByTestId('infiniteScrollLoader'),
-      ).not.toBeInTheDocument();
-    });
+    renderAddPeopleToTagModal(props, new StaticMockLink(MOCK_EMPTY, true));
 
     expect(
-      screen.getByText(translations.noMoreMembersFound),
+      await screen.findByText(translations.noMoreMembersFound),
     ).toBeInTheDocument();
   });
 
   it('Resets the search state and refetches when the modal transitions from closed to open', async () => {
-    const { rerender } = renderComponent({ addPeopleToTagModalIsOpen: false });
+    const cache = createCache();
+    const link = new StaticMockLink(MOCKS, true);
+
+    const { rerender } = renderAddPeopleToTagModal(
+      { ...defaultProps, addPeopleToTagModalIsOpen: false },
+      link,
+      cache,
+    );
 
     await act(async () => {
       rerender(
-        <MockedProvider cache={cache} link={new StaticMockLink(MOCKS, true)}>
+        <MockedProvider cache={cache} link={link}>
           <MemoryRouter initialEntries={['/admin/orgtags/1/manageTag/1']}>
             <Provider store={store}>
               <I18nextProvider i18n={i18n}>
@@ -433,25 +348,15 @@ describe('Organisation Tags Page', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByPlaceholderText(translations.firstName)).toHaveValue(
-        '',
-      );
-      expect(screen.getByPlaceholderText(translations.lastName)).toHaveValue(
-        '',
-      );
+      expect(
+        screen.getByPlaceholderText(translations.searchByName),
+      ).toHaveValue('');
     });
   });
 
   it('displays the unknownError toast if a non-Error is thrown', async () => {
     const user = userEvent.setup();
-    const linkWithNonError = new StaticMockLink(MOCK_NON_ERROR, true);
-
-    const customProps = {
-      ...props,
-      addPeopleToTagModalIsOpen: true,
-    };
-
-    renderAddPeopleToTagModal(customProps, linkWithNonError);
+    renderAddPeopleToTagModal(props, new StaticMockLink(MOCK_NON_ERROR, true));
 
     await waitFor(() => {
       expect(screen.getAllByTestId('selectMemberBtn')).toHaveLength(1);

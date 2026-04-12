@@ -36,67 +36,16 @@ import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 import { ORGANIZATION_USER_TAGS_LIST_PG } from 'GraphQl/Queries/OrganizationQueries';
 import { CREATE_TAG_FOLDER } from 'GraphQl/Mutations/TagMutations';
 import { ORGANIZATION_TAGS_WITH_FOLDER } from 'GraphQl/Queries/userTagQueries';
-import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import Toolbar from 'shared-components/Toolbar/Toolbar';
 import { PAGE_SIZE } from 'types/ReportingTable/utils';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import ManageFolderModal from 'screens/AdminPortal/ManageTag/ManageFolderModal';
-
-interface InterfaceTagFolderNode {
-  id: string;
-  name: string;
-  createdAt?: string | null;
-  creator?: {
-    id?: string;
-    name?: string | null;
-  } | null;
-  childFolders?: {
-    edges?: Array<{
-      node: {
-        id: string;
-      };
-    }>;
-  };
-  tags?: {
-    edges?: Array<{
-      node: {
-        id: string;
-      };
-    }>;
-  };
-}
-
-interface InterfaceOrganizationTagFoldersQuery {
-  organization?: {
-    id: string;
-    name: string;
-    tagFolders?: {
-      edges: Array<{
-        node: InterfaceTagFolderNode;
-      }>;
-      pageInfo?: {
-        hasNextPage?: boolean;
-        endCursor?: string | null;
-      };
-    };
-  };
-}
-
-interface InterfaceOrganizationTagCountsQuery {
-  organization?: {
-    id: string;
-    tags?: {
-      edges?: Array<{
-        node: {
-          id: string;
-          folder?: {
-            id: string;
-          } | null;
-        };
-      }>;
-    };
-  };
-}
+import type {
+  InterfaceOrganizationTagCountsQuery,
+  InterfaceOrganizationTagFoldersQuery,
+  InterfaceTagFolderNode,
+} from 'types/AdminPortal/Tag/interface';
 
 function OrganizationTags(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -380,31 +329,35 @@ function OrganizationTags(): JSX.Element {
     <>
       <Row>
         <div>
-          <div
-            className={styles.btnsContainer}
-            data-testid="organizationTags-header"
-          >
-            <SearchFilterBar
-              hasDropdowns={false}
-              searchPlaceholder={tCommon('searchByName')}
-              searchValue={folderSearchName}
-              onSearchChange={(value) => setFolderSearchName(value.trim())}
-              searchInputTestId="searchByName"
-              searchButtonTestId="searchBtn"
-            />
-            <Button
-              onClick={() => {
-                setFolderName('');
-                setFolderNameTouched(false);
-                showCreateTagModal();
+          <div data-testid="organizationTags-header">
+            <Toolbar
+              search={{
+                placeholder: tCommon('searchByName'),
+                value: folderSearchName,
+                onSearch: (value) => setFolderSearchName(value.trim()),
+                onChange: (value) => setFolderSearchName(value.trim()),
+                inputTestId: 'searchByName',
+                buttonTestId: 'searchBtn',
+                ariaDescription: tCommon('searchByName'),
               }}
-              data-testid="createTagBtn"
-              className={`${styles.createButton} ${styles.buttonNoWrap}`}
-              aria-label={t('createTag')}
-            >
-              <i className="fa fa-plus me-2" />
-              {t('createTag')}
-            </Button>
+              rootClassName={styles.btnsContainer}
+              actions={
+                <Button
+                  variant="outline-secondary"
+                  onClick={() => {
+                    setFolderName('');
+                    setFolderNameTouched(false);
+                    showCreateTagModal();
+                  }}
+                  data-testid="createTagBtn"
+                  className={styles.createButton}
+                  aria-label={t('createTag')}
+                >
+                  <i className="fa fa-plus me-2" />
+                  {t('createTag')}
+                </Button>
+              }
+            />
           </div>
 
           {orgTagFoldersError ? (

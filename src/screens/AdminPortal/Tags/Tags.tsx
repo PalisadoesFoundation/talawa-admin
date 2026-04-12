@@ -30,7 +30,7 @@ import {
   ORGANIZATION_TAGS_WITH_FOLDER,
   TAG_FOLDER_CHILD_FOLDERS,
 } from 'GraphQl/Queries/userTagQueries';
-import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import Toolbar from 'shared-components/Toolbar/Toolbar';
 import { PAGE_SIZE } from 'types/ReportingTable/utils';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import ManageFolderModal from 'screens/AdminPortal/ManageTag/ManageFolderModal';
@@ -221,7 +221,7 @@ function TagFoldersHierarchy(): JSX.Element {
   const additionalActionButtons = (
     <div className={styles.actionButtonsRow}>
       <Button
-        variant="success"
+        variant="outline-secondary"
         onClick={showCreateFolderModal}
         data-testid="addFolderBtn"
         className={`${styles.createButton} ${styles.buttonNoWrap}`}
@@ -230,7 +230,7 @@ function TagFoldersHierarchy(): JSX.Element {
         {t('addChildTag')}
       </Button>
       <Button
-        variant="success"
+        variant="outline-secondary"
         onClick={showCreateTagModal}
         data-testid="addTagBtn"
         className={`${styles.createButton} ${styles.buttonNoWrap}`}
@@ -511,17 +511,19 @@ function TagFoldersHierarchy(): JSX.Element {
             </div>
           )}
 
-          <div className={styles.btnsContainer}>
-            <SearchFilterBar
-              hasDropdowns={false}
-              searchPlaceholder={tCommon('searchByName')}
-              searchValue={folderSearchName}
-              onSearchChange={(value) => setFolderSearchName(value.trim())}
-              searchInputTestId="searchByName"
-              searchButtonTestId="searchBtn"
-            />
-            {additionalActionButtons}
-          </div>
+          <Toolbar
+            search={{
+              placeholder: tCommon('searchByName'),
+              value: folderSearchName,
+              onSearch: (value) => setFolderSearchName(value.trim()),
+              onChange: (value) => setFolderSearchName(value.trim()),
+              inputTestId: 'searchByName',
+              buttonTestId: 'searchBtn',
+              ariaDescription: tCommon('searchByName'),
+            }}
+            rootClassName={styles.btnsContainer}
+            actions={additionalActionButtons}
+          />
 
           <div className="mb-2 ">
             <div
