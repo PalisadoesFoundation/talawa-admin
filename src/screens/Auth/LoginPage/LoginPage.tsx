@@ -10,7 +10,7 @@
  * <LoginPage />
  * ```
  */
-import { ApolloError, useQuery } from '@apollo/client';
+import { ApolloError, useQuery, useLazyQuery } from '@apollo/client';
 import React, { useEffect, useRef, useState } from 'react';
 
 import Button from 'shared-components/Button';
@@ -105,7 +105,15 @@ const LoginPage = (): JSX.Element => {
     fetchPolicy: 'cache-and-network',
   });
 
-  const { data: orgData } = useQuery(ORGANIZATION_LIST_NO_MEMBERS);
+  const [fetchOrgs, { data: orgData }] = useLazyQuery(
+    ORGANIZATION_LIST_NO_MEMBERS,
+  );
+  useEffect(() => {
+    if (showTab === 'REGISTER' && !orgData) {
+      fetchOrgs();
+    }
+  }, [showTab, orgData, fetchOrgs]);
+
   useEffect(() => {
     if (orgData?.organizations) {
       const options: InterfaceOrgOption[] = orgData.organizations.map(

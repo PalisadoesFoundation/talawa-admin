@@ -1,4 +1,5 @@
 import React, { act } from 'react';
+import * as ApolloClient from '@apollo/client';
 import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
 import {
   render,
@@ -1771,6 +1772,23 @@ const setLocationPath = (pathname: string): void => {
 describe('Extra coverage for 100 %', () => {
   afterEach(() => {
     vi.doUnmock('Constant/constant.ts');
+  });
+
+  it('does not trigger organizations lazy query on initial login view', async () => {
+    const fetchOrgsSpy = vi.fn();
+    const useLazyQuerySpy = vi
+      .spyOn(ApolloClient, 'useLazyQuery')
+      .mockReturnValue([
+        fetchOrgsSpy,
+        { data: undefined },
+      ] as unknown as ReturnType<typeof ApolloClient.useLazyQuery>);
+
+    setLocationPath('/');
+    renderLoginPage();
+    await wait();
+
+    expect(fetchOrgsSpy).not.toHaveBeenCalled();
+    useLazyQuerySpy.mockRestore();
   });
 
   it('sets document.title on render', async () => {
