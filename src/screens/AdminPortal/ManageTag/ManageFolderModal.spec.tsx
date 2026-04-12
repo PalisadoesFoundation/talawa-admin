@@ -176,8 +176,10 @@ describe('ManageFolderModal', () => {
 
     await user.click(screen.getByRole('button', { name: /view folder/i }));
 
-    expect(onClose).toHaveBeenCalled();
-    expect(onViewFolder).toHaveBeenCalledWith('folder-1');
+    await waitFor(() => {
+      expect(onClose).toHaveBeenCalled();
+      expect(onViewFolder).toHaveBeenCalledWith('folder-1');
+    });
   });
 
   test('resets local state when modal closes and reopens', async () => {

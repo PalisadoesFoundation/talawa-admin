@@ -31,7 +31,7 @@
   margin: var(--space-3) var(--space-0);
 }
 
-.expandSubTags {
+.expandChildFolders {
   cursor: pointer;
   margin-inline-end: var(--space-5);
 }
@@ -74,11 +74,11 @@
     transform: rotate(360deg);
   }
 }
-.subTagsScrollableContainer {
+.childFoldersScrollableContainer {
   margin-inline-end: var(--space-7);
 }
 
-.subTagsScrollableDiv {
+.childFoldersScrollableDiv {
   max-height: var(--space-20);
   overflow: auto;
 }

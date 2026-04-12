@@ -55,25 +55,41 @@
   cursor: pointer;
 }
 
-.inputField {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  background-color: var(--eventManagement-button-bg);
-  border: 1px solid var(--input-shadow);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.searchSection {
+  margin-top: var(--space-2);
+  margin-bottom: var(--space-1);
 }
 
-.inputField::placeholder {
-  color: var(--inputField-placeholder-color) !important;
-  opacity: 1;
+.removeMemberChipButton[class~='btn'] {
+  width: var(--space-7);
+  height: var(--space-7);
+  min-width: var(--space-7);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 0;
+  margin-left: var(--space-1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--color-gray-600);
+  box-shadow: none;
 }
 
-.inputField:focus {
-  border: 0.1px solid var(--inputField-border-focus) !important;
-  background-color: var(--inputField-bg-focus) !important;
-  box-shadow: var(--drop-shadow);
-  outline: none;
-  transition: box-shadow 0.2s ease;
+.removeMemberChipButton[class~='btn']:is(:hover, :active, :focus) {
+  background: var(--color-blue-200);
+  color: var(--color-gray-700);
+  border: none;
+  box-shadow: none;
+}
+
+.listTitle {
+  margin-top: 0;
+  margin-bottom: var(--space-2);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-gray-700);
+  letter-spacing: 0.01em;
 }
 
 .loadingDiv {
@@ -108,7 +124,7 @@
   line-height: var(--line-height-normal);
 }
 
-.folderToggleButton:global(.btn) {
+.folderToggleButton[class~='btn'] {
   width: var(--space-6);
   height: var(--space-6);
   min-width: var(--space-6);
@@ -124,7 +140,7 @@
   box-shadow: none;
 }
 
-.folderToggleButton:global(.btn):is(:hover, :active, :focus) {
+.folderToggleButton[class~='btn']:is(:hover, :active, :focus) {
   background: var(--color-blue-200);
   color: var(--color-gray-700);
   border: none;

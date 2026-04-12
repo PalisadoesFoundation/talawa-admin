@@ -1142,16 +1142,22 @@ export interface InterfaceQueryOrganizationUserTagsPG {
 }
 
 /**
- * Defines the structure for a query result containing user tag child tags.
+ * Defines the structure for a folder query result containing child folders.
  */
-export interface InterfaceQueryUserTagChildTags {
+export interface InterfaceQueryTagFolderChildFolders {
   name: string;
-  childTags: InterfaceTagNodeData;
+  childFolders: InterfaceTagNodeData;
   ancestorTags: {
     _id: string;
     name: string;
   }[];
 }
+
+/**
+ * @deprecated Use InterfaceQueryTagFolderChildFolders.
+ */
+export type InterfaceQueryUserTagChildTags =
+  InterfaceQueryTagFolderChildFolders;
 
 /**
  * Defines the structure for a query result containing user tags and their assigned members.

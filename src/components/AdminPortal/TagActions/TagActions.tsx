@@ -56,6 +56,8 @@ import type {
   InterfaceTagSelectionItem,
 } from 'types/AdminPortal/TagActions/interface';
 
+const TAG_ACTION_BATCH_SIZE = 10;
+
 const TagActions: React.FC<InterfaceTagActionsProps> = ({
   tagActionsModalIsOpen,
   hideTagActionsModal,
@@ -336,24 +338,55 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
     }
 
     try {
-      for (const selectedTag of selectedTags) {
-        for (const assigneeId of assigneeIds) {
-          if (tagActionType === 'assignToTags') {
-            await assignUserTag({
-              variables: {
-                tagId: selectedTag.id,
-                userId: assigneeId,
-              },
-            });
-          } else {
-            await unassignUserTag({
-              variables: {
-                tagId: selectedTag.id,
-                userId: assigneeId,
-              },
-            });
+      const mutationFn =
+        tagActionType === 'assignToTags' ? assignUserTag : unassignUserTag;
+
+      const tagAssigneePairs = selectedTags.flatMap((selectedTag) =>
+        assigneeIds.map((assigneeId) => ({
+          tagId: selectedTag.id,
+          assigneeId,
+        })),
+      );
+
+      const batchErrors: Error[] = [];
+
+      for (
+        let batchStart = 0;
+        batchStart < tagAssigneePairs.length;
+        batchStart += TAG_ACTION_BATCH_SIZE
+      ) {
+        const batchPairs = tagAssigneePairs.slice(
+          batchStart,
+          batchStart + TAG_ACTION_BATCH_SIZE,
+        );
+        const batchPromises = batchPairs.map(({ tagId, assigneeId }) =>
+          mutationFn({
+            variables: {
+              tagId,
+              userId: assigneeId,
+            },
+          }),
+        );
+
+        try {
+          await Promise.all(batchPromises);
+        } catch {
+          const batchResults = await Promise.allSettled(batchPromises);
+          for (const result of batchResults) {
+            if (result.status === 'rejected') {
+              batchErrors.push(
+                result.reason instanceof Error
+                  ? result.reason
+                  : new Error(String(result.reason)),
+              );
+            }
           }
         }
+      }
+
+      if (batchErrors.length > 0) {
+        NotificationToast.error(batchErrors[0].message);
+        return;
       }
 
       if (tagActionType === 'assignToTags') {
@@ -527,6 +560,8 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                 onToggleFolderExpansion: toggleFolderExpansion,
                 onToggleTagSelection: toggleTagSelection,
                 noTagsFoundText: t('noTagsFound'),
+                expandFolderAriaLabel: t('expandFolder'),
+                collapseFolderAriaLabel: t('collapseFolder'),
               }),
             )
           )}

@@ -13,6 +13,16 @@ import {
 import styles from './ManageTagModal.module.css';
 import type { InterfaceManageTagModalProps } from 'types/AdminPortal/Tags/interface';
 
+/**
+ * Modal component for viewing, editing, and deleting a tag.
+ *
+ * @param props - Component props typed by {@link InterfaceManageTagModalProps}.
+ * @remarks
+ * `props.open` controls visibility, `props.tag` is the selected tag,
+ * `props.onClose` closes the modal, `props.onRefetch` refreshes tag data,
+ * `props.onViewTag` opens the tag view, and the `*TestId` props provide stable selectors.
+ * @returns JSX element rendering edit/delete/view controls for a tag.
+ */
 function ManageTagModal({
   open,
   tag,

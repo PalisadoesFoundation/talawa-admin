@@ -54,24 +54,24 @@ export const USER_TAGS_ASSIGNED_MEMBERS = gql`
 `;
 
 /**
- * GraphQL query to retrieve the sub tags of a certain tag.
+ * GraphQL query to retrieve child folders for a given folder node.
  *
- * @param id - The ID of the parent tag.
- * @returns The list of sub tags.
+ * @param id - The ID of the parent folder.
+ * @returns The list of child folders for tree rendering.
  */
 
-export const USER_TAG_SUB_TAGS = gql`
-  query GetChildTags(
+export const TAG_FOLDER_CHILD_FOLDERS_FOR_NODE = gql`
+  query GetTagFolderChildFolders(
     $id: String!
     $after: String
     $before: String
     $first: Int
     $last: Int
   ) {
-    getChildTags: tagFolder(input: { id: $id }) {
+    tagFolder: tagFolder(input: { id: $id }) {
       _id: id
       name
-      childTags: childFolders(
+      childFolders: childFolders(
         after: $after
         before: $before
         first: $first
@@ -88,7 +88,7 @@ export const USER_TAG_SUB_TAGS = gql`
                 }
               }
             }
-            childFolders(first: 32) {
+            childTags: childFolders(first: 32) {
               edges {
                 node {
                   id

@@ -100,11 +100,11 @@ const renderAddPeopleToTagModal = (
 
 describe('Organisation Tags Page', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     cleanup();
   });
 

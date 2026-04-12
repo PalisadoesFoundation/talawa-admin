@@ -70,25 +70,25 @@
   text-decoration: underline;
 }
 
-.subTagsLink i {
+.childFoldersLink i {
   visibility: hidden;
 }
 
-.subTagsLink:hover,
-.subTagsLink:focus {
-  color: var(--gray-500);
-  font-weight: 600;
+.childFoldersLink:hover,
+.childFoldersLink:focus {
+  color: var(--color-gray-500);
+  font-weight: var(--font-weight-semibold);
   text-decoration: underline;
 }
 
-.subTagsLink:hover i,
-.subTagsLink:focus i {
+.childFoldersLink:hover i,
+.childFoldersLink:focus i {
   visibility: visible;
 }
 
-.subTagsLink {
-  color: var(--green-700);
-  font-weight: 500;
+.childFoldersLink {
+  color: var(--color-blue-800);
+  font-weight: var(--font-weight-medium);
   cursor: pointer;
 
   &::after {
@@ -172,11 +172,250 @@
 }
 
 .inputField {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  background-color: var(--surface);
-  border: 1px solid var(--gray-200);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-4);
+  background-color: var(--color-white);
+  border: var(--border-1) solid var(--color-gray-200);
+  box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-lg)
+    color-mix(in srgb, var(--color-black) 10%, transparent);
+}
+
+.folderCreateModal {
+  width: 100%;
+  max-width: none;
+  --folder-modal-width: var(--space-25);
+  --folder-modal-input-height: calc(var(--space-10) + var(--space-2));
+  --folder-modal-input-padding-x: calc(var(--space-5) + var(--space-1));
+  --folder-modal-action-width: calc(
+    var(--space-24) + var(--space-2) + var(--space-0-5)
+  );
+  --folder-modal-action-height: calc(
+    var(--space-10) + var(--space-1) + var(--space-0-5)
+  );
+}
+
+/* :global() is required here to override third-party modal internals (for example, .createMode :global(.modal-dialog), .createMode :global(.modal-content), and .manageMode :global(.modal-footer)); overrides stay intentionally scoped under .createMode/.manageMode wrappers for maintainability. */
+
+.createMode :global(.modal-dialog) {
+  width: min(var(--folder-modal-width), calc(var(--vw-100) - var(--space-8)));
+  max-width: var(--folder-modal-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.createMode :global(.modal-content) {
+  border: var(--border-1) solid var(--color-black-8);
+  box-shadow: calc(-1 * var(--shadow-offset-xs)) var(--shadow-offset-lg)
+    var(--shadow-blur-xl) var(--color-black-8);
+  border-radius: var(--radius-xl);
+}
+
+.createMode :global(.modal-title) {
+  color: var(--color-black);
+  font-family: 'Lato', sans-serif;
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+}
+
+.createMode :global(.modal-header .btn-danger) {
+  color: var(--color-red-500) !important;
+}
+
+.createMode :global(.modal-header .btn-danger:hover) {
+  color: var(--color-red-500) !important;
+}
+
+.createMode :global(.modal-body) {
+  padding-top: calc(var(--space-2) + var(--space-1));
+}
+
+.fieldRow {
+  width: 100%;
+  margin-bottom: calc(var(--space-4) + var(--space-1));
+}
+
+.fieldRow :global(.mb-3) {
+  margin-bottom: 0 !important;
+}
+
+.fieldRow :global(label) {
+  display: inline-block;
+  margin-bottom: var(--space-3);
+  color: var(--color-black);
+  font-family: 'Lato', sans-serif;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+}
+
+.fieldRow :global(.form-control) {
+  width: 100%;
+  height: var(--folder-modal-input-height);
+  border-radius: var(--radius-md);
+  border: var(--border-1) solid var(--color-gray-200);
+  background: var(--color-gray-50);
+  box-shadow: none;
+  color: var(--color-black);
+  font-family: 'Lato', sans-serif;
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-tight);
+  padding: var(--space-0) var(--folder-modal-input-padding-x);
+}
+
+.fieldRow :global(.form-control::placeholder) {
+  color: var(--color-gray-600);
+  opacity: 0.85;
+}
+
+.fieldRow :global(.form-control:focus) {
+  border-color: var(--color-blue-300);
+  box-shadow: var(--shadow-spread-none) var(--shadow-spread-none)
+    var(--shadow-spread-none) var(--space-2) var(--color-blue-shadow-focus);
+  background: var(--color-gray-50);
+}
+
+.createMode :global(.modal-footer) {
+  min-height: auto;
+  align-items: center;
+  border-top: none;
+  justify-content: center;
+  gap: 0;
+  padding: calc(var(--space-2) + var(--space-1)) var(--space-0)
+    calc(var(--space-4) + var(--space-1));
+}
+
+.createMode :global(.modal-footer .btn-secondary) {
+  display: none !important;
+}
+
+.createMode :global([data-testid='modal-cancel-btn']) {
+  display: none !important;
+}
+
+.createMode :global(.modal-footer .btn) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--folder-modal-action-width);
+  min-width: 0;
+  height: var(--folder-modal-action-height);
+  border-radius: var(--radius-sm);
+  border: none;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-none);
+  padding: var(--space-0) var(--space-5);
+}
+
+.createMode :global(.modal-footer .btn > span) {
+  width: 100%;
+  justify-content: center;
+}
+
+.createMode :global(.modal-footer .btn > span > span) {
+  justify-content: center;
+}
+
+.createMode :global(.modal-footer .btn-primary) {
+  background-color: var(--color-blue-200);
+  color: var(--color-gray-700);
+}
+
+.createMode :global(.modal-footer .btn-primary:hover) {
+  background-color: var(--color-blue-300);
+  color: var(--color-gray-700);
+}
+
+.createMode :global(.modal-footer .btn-secondary) {
+  background-color: var(--color-gray-400);
+  color: var(--color-white);
+  border: none;
+}
+
+.createMode :global(.modal-footer .btn-secondary:hover) {
+  background-color: var(--color-gray-500);
+  color: var(--color-white);
+}
+
+.manageMode :global(.modal-dialog) {
+  width: min(var(--folder-modal-width), calc(var(--vw-100) - var(--space-8)));
+  max-width: var(--folder-modal-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.manageMode :global(.modal-content) {
+  border: var(--border-1) solid var(--color-black-8);
+  box-shadow: calc(-1 * var(--shadow-offset-xs)) var(--shadow-offset-lg)
+    var(--shadow-blur-xl) var(--color-black-8);
+  border-radius: var(--radius-xl);
+}
+
+.manageMode :global(.modal-body) {
+  padding-top: calc(var(--space-2) + var(--space-1));
+}
+
+.manageMode :global(.modal-footer) {
+  border-top: none;
+  padding: var(--space-0) var(--space-5) calc(var(--space-4) + var(--space-1));
+}
+
+.manageMode :global(.modal-footer .btn-secondary) {
+  display: none !important;
+}
+
+.editFooterActions {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.editActionRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.editActionButton,
+.deleteActionButton,
+.viewActionButton {
+  height: calc(var(--space-10) + var(--space-1));
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+}
+
+.editActionButton {
+  background-color: var(--color-blue-200);
+  color: var(--color-gray-700);
+}
+
+.editActionButton:is(:hover, :active, :focus) {
+  background-color: var(--color-blue-300);
+  color: var(--color-gray-700);
+}
+
+.deleteActionButton {
+  background-color: var(--color-red-100);
+  color: var(--color-red-500);
+}
+
+.deleteActionButton:is(:hover, :active, :focus) {
+  background-color: var(--color-red-500);
+  color: var(--color-white);
+}
+
+.viewActionButton {
+  background-color: var(--color-gray-200);
+  color: var(--color-gray-700);
+}
+
+.viewActionButton:is(:hover, :active, :focus) {
+  background-color: var(--color-gray-300);
+  color: var(--color-gray-700);
 }
 
 .inputField::placeholder {

@@ -134,7 +134,7 @@
   "security": "Security",
   "events": "Events",
   "tags": "Tags",
-  "viewSubTagsOf": "View subtags of {{tagName}}",
+  "viewChildFoldersOf": "View child folders of {{tagName}}",
   "toggleOptions": "Toggle options",
   "filterAndSortOptions": "Filter and sort options",
   "clear": "Clear",

@@ -63,10 +63,7 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import styles from './ManageTag.module.css';
 import { DataTable } from 'shared-components/DataTable/DataTable';
 import { useTableData } from 'shared-components/DataTable/hooks/useTableData';
-import type {
-  IColumnDef,
-  Key,
-} from 'types/shared-components/DataTable/interface';
+import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 import type { TagActionType } from 'utils/organizationTagsUtils';
 import type {
   InterfaceAssignedMemberRow,
@@ -187,10 +184,11 @@ function ManageTag(): JSX.Element {
   const currentTagName =
     userTagAssignedMembersData?.getAssignedUsers.name ?? '';
 
-  const userTagAssignedMembers =
-    userTagAssignedMembersData?.getAssignedUsers.usersAssignedTo?.edges?.map(
-      (edge) => edge.node,
-    ) ?? [];
+  const filteredAssignedMembers = userTagAssignedMembers.filter((member) =>
+    (member.name ?? '')
+      .toLowerCase()
+      .startsWith(assignedMemberSearchInput.toLowerCase()),
+  );
 
   // get the ancestorTags array and push the current tag in it
   // used for the tag breadcrumbs
@@ -227,7 +225,7 @@ function ManageTag(): JSX.Element {
     );
   }
 
-  const columns: TokenAwareGridColDef[] = [
+  const columns: IColumnDef<InterfaceAssignedMemberRow>[] = [
     {
       field: 'id',
       headerName: '#',
