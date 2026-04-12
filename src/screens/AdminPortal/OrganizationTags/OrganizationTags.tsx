@@ -239,7 +239,7 @@ function OrganizationTags(): JSX.Element {
             className={styles.folderNameButton}
             data-testid="tagName"
             onClick={() => redirectToChildFolders(row.id)}
-            aria-label={tCommon('viewSubTagsOf', {
+            aria-label={tCommon('viewChildFoldersOf', {
               tagName: row.name,
             })}
           >
@@ -257,7 +257,7 @@ function OrganizationTags(): JSX.Element {
     },
     {
       id: 'totalSubFolders',
-      header: t('totalSubTags'),
+      header: t('totalChildFolders'),
       accessor: 'id',
       render: (_value, row) => {
         return renderCountLink(

@@ -2,11 +2,11 @@
 
 ***
 
-# Interface: InterfaceQueryUserTagChildTags
+# Interface: InterfaceQueryTagFolderChildFolders
 
 Defined in: [src/utils/interfaces.ts:1146](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1146)
 
-Defines the structure for a query result containing user tag child tags.
+Defines the structure for a folder query result containing child folders.
 
 ## Properties
 
@@ -26,9 +26,9 @@ Defined in: [src/utils/interfaces.ts:1149](https://github.com/PalisadoesFoundati
 
 ***
 
-### childTags
+### childFolders
 
-> **childTags**: `InterfaceTagNodeData`
+> **childFolders**: `InterfaceTagNodeData`
 
 Defined in: [src/utils/interfaces.ts:1148](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1148)
 

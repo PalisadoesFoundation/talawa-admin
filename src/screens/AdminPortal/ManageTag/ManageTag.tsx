@@ -62,11 +62,13 @@ import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import styles from './ManageTag.module.css';
 import { DataTable } from 'shared-components/DataTable/DataTable';
+import { useTableData } from 'shared-components/DataTable/hooks/useTableData';
 import type { IColumnDef } from 'types/shared-components/DataTable/interface';
+import type { TagActionType } from 'utils/organizationTagsUtils';
 import type {
-  InterfaceTagAssignedMembersQuery,
-  TagActionType,
-} from 'utils/organizationTagsUtils';
+  InterfaceAssignedMemberRow,
+  InterfaceManageTagQueryData,
+} from 'types/AdminPortal/ManageTag/interface';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import { UNASSIGN_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import { USER_TAGS_ASSIGNED_MEMBERS } from 'GraphQl/Queries/userTagQueries';
@@ -112,18 +114,31 @@ function ManageTag(): JSX.Element {
     unassignUserTagModal.toggle();
   };
 
+  const userTagAssignedMembersQuery = useQuery<InterfaceManageTagQueryData>(
+    USER_TAGS_ASSIGNED_MEMBERS,
+    {
+      variables: {
+        id: currentTagId,
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+      },
+      fetchPolicy: 'no-cache',
+    },
+  );
+
   const {
-    data: userTagAssignedMembersData,
+    rows: userTagAssignedMembers,
     loading: userTagAssignedMembersLoading,
     error: userTagAssignedMembersError,
     refetch: userTagAssignedMembersRefetch,
-  }: InterfaceTagAssignedMembersQuery = useQuery(USER_TAGS_ASSIGNED_MEMBERS, {
-    variables: {
-      id: currentTagId,
-      first: TAGS_QUERY_DATA_CHUNK_SIZE,
-    },
-    fetchPolicy: 'no-cache',
+  } = useTableData<
+    InterfaceAssignedMemberRow,
+    InterfaceAssignedMemberRow,
+    InterfaceManageTagQueryData
+  >(userTagAssignedMembersQuery, {
+    path: (data) => data?.getAssignedUsers?.usersAssignedTo,
   });
+
+  const userTagAssignedMembersData = userTagAssignedMembersQuery.data;
 
   const [unassignUserTag, { loading: unassignUserTagLoading }] =
     useMutation(UNASSIGN_USER_TAG);
@@ -148,11 +163,6 @@ function ManageTag(): JSX.Element {
 
   const currentTagName =
     userTagAssignedMembersData?.getAssignedUsers.name ?? '';
-
-  const userTagAssignedMembers =
-    userTagAssignedMembersData?.getAssignedUsers.usersAssignedTo?.edges?.map(
-      (edge) => edge.node,
-    ) ?? [];
 
   const filteredAssignedMembers = userTagAssignedMembers.filter((member) =>
     (member.name ?? '')
@@ -192,7 +202,7 @@ function ManageTag(): JSX.Element {
     );
   }
 
-  const columns: IColumnDef<(typeof filteredAssignedMembers)[number]>[] = [
+  const columns: IColumnDef<InterfaceAssignedMemberRow>[] = [
     {
       id: 'sl_no',
       header: tCommon('sl_no'),
@@ -348,6 +358,8 @@ function ManageTag(): JSX.Element {
                       data={filteredAssignedMembers}
                       columns={columns}
                       loading={userTagAssignedMembersLoading}
+                      error={userTagAssignedMembersError}
+                      refetch={userTagAssignedMembersRefetch}
                       rowKey="_id"
                       paginationMode="client"
                       pageSize={PAGE_SIZE}

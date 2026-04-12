@@ -18,6 +18,8 @@ interface InterfaceTagTreeRendererParams {
     isSelected: boolean,
   ) => void;
   noTagsFoundText: string;
+  expandFolderAriaLabel: string;
+  collapseFolderAriaLabel: string;
 }
 
 const MAX_INDENT_LEVEL = 12;
@@ -85,6 +87,12 @@ const renderTagRow = (
   );
 };
 
+/**
+ * Returns root folder ids sorted by folder name.
+ *
+ * @param folderStateMap - Map of all loaded folders keyed by folder id.
+ * @returns Sorted root folder ids.
+ */
 export const getRootFolderIds = (
   folderStateMap: Map<string, InterfaceTagFolderItem>,
 ): string[] =>
@@ -93,6 +101,14 @@ export const getRootFolderIds = (
     .sort((a, b) => a.name.localeCompare(b.name))
     .map((folder) => folder.id);
 
+/**
+ * Renders a folder row and, when expanded, its child folder and tag rows.
+ *
+ * @param folderId - Folder id to render.
+ * @param depth - Nesting depth used for indentation.
+ * @param params - Rendering state and event handlers.
+ * @returns JSX rows for the requested folder subtree.
+ */
 export const renderFolderTree = (
   folderId: string,
   depth: number,
@@ -123,7 +139,11 @@ export const renderFolderTree = (
           className={styles.folderToggleButton}
           onClick={() => params.onToggleFolderExpansion(folder.id)}
           data-testid={`expandFolder${folder.id}`}
-          aria-label={isExpanded ? 'Collapse folder' : 'Expand folder'}
+          aria-label={
+            isExpanded
+              ? params.collapseFolderAriaLabel
+              : params.expandFolderAriaLabel
+          }
         >
           <i
             className={`fa ${isExpanded ? 'fa-chevron-down' : 'fa-chevron-right'}`}

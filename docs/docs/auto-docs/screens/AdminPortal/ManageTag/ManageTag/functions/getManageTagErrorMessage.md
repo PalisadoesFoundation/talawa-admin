@@ -6,7 +6,7 @@
 
 > **getManageTagErrorMessage**(`error`): `string`
 
-Defined in: [src/screens/AdminPortal/ManageTag/ManageTag.tsx:81](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/ManageTag/ManageTag.tsx#L81)
+Defined in: [src/screens/AdminPortal/ManageTag/ManageTag.tsx:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/ManageTag/ManageTag.tsx#L83)
 
 ## Parameters
 

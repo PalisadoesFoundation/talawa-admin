@@ -196,33 +196,51 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
       return;
     }
 
-    try {
-      const { data } = await addPeople({
-        variables: {
-          tagId: currentTagId,
-          userId: assignToMembers[0]?._id,
-        },
-      });
+    const memberIds = assignToMembers
+      .map((member) => member._id)
+      .filter((memberId): memberId is string => Boolean(memberId));
 
-      for (const member of assignToMembers.slice(1)) {
-        await addPeople({
+    if (!currentTagId || memberIds.length !== assignToMembers.length) {
+      NotificationToast.error(
+        'Unable to assign members due to missing tag or member information.',
+      );
+      setAssignToMembers([]);
+      return;
+    }
+
+    const successfullyAssignedMemberIds: string[] = [];
+
+    try {
+      for (const memberId of memberIds) {
+        const { data } = await addPeople({
           variables: {
             tagId: currentTagId,
-            userId: member._id,
+            userId: memberId,
           },
         });
+
+        if (data) {
+          successfullyAssignedMemberIds.push(memberId);
+        }
       }
 
-      if (data) {
+      if (successfullyAssignedMemberIds.length === memberIds.length) {
         NotificationToast.success(t('successfullyAssignedToPeople'));
-        refetchAssignedMembersData();
+        await Promise.resolve(refetchAssignedMembersData());
         hideAddPeopleToTagModal();
         setAssignToMembers([]);
       }
     } catch (error: unknown) {
+      await Promise.resolve(refetchAssignedMembersData());
+      setAssignToMembers([]);
+
       const errorMessage =
         error instanceof Error ? error.message : tErrors('unknownError');
-      NotificationToast.error(errorMessage);
+      NotificationToast.error(
+        successfullyAssignedMemberIds.length > 0
+          ? `${errorMessage} Assignments were refreshed to avoid partial state.`
+          : errorMessage,
+      );
     }
   };
 

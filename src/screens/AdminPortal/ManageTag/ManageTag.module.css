@@ -49,6 +49,7 @@
   border-color: var(--color-gray-100);
   --bs-btn-active-bg: var(--color-blue-500);
   --bs-btn-active-border-color: var(--color-gray-100);
+
   width: var(--space-14);
   height: calc(var(--space-10) - var(--space-1));
   border-radius: var(--radius-md);
@@ -66,7 +67,7 @@
   box-shadow: none;
 }
 
-.unassignButton:global(.btn) {
+.unassignButton[class~='btn'] {
   width: var(--space-14);
   height: calc(var(--space-10) - var(--space-1));
   border-radius: var(--radius-md);
@@ -76,7 +77,7 @@
   font-weight: var(--font-weight-semibold);
 }
 
-.unassignButton:global(.btn):is(:hover, :focus, :active) {
+.unassignButton[class~='btn']:is(:hover, :focus, :active) {
   background: var(--color-red-100);
   border-color: transparent;
   color: var(--color-red-400);
@@ -106,7 +107,7 @@
   color: var(--color-gray-500);
 }
 
-.topBreadcrumbLink:global(.btn) {
+.topBreadcrumbLink[class~='btn'] {
   padding: 0;
   margin: 0;
   border: none;
@@ -119,7 +120,7 @@
   box-shadow: none;
 }
 
-.topBreadcrumbLink:global(.btn):is(:hover, :focus-visible) {
+.topBreadcrumbLink[class~='btn']:is(:hover, :focus-visible) {
   color: var(--color-blue-700);
   text-decoration: underline;
 }
@@ -163,7 +164,7 @@
   min-width: 0;
 }
 
-.createButton:global(.btn) {
+.createButton[class~='btn'] {
   background-color: var(--color-white) !important;
   color: var(--color-gray-700) !important;
   border: var(--border-1) solid var(--color-gray-300) !important;
@@ -179,7 +180,7 @@
   white-space: nowrap;
 }
 
-.createButton:global(.btn):is(:hover, :focus-visible, :active) {
+.createButton[class~='btn']:is(:hover, :focus-visible, :active) {
   box-shadow: none;
   background-color: var(--color-blue-500) !important;
   color: var(--color-white) !important;
@@ -229,8 +230,8 @@
   width: 85%;
 }
 
-.assignTagActionButton:global(.btn),
-.removeTagActionButton:global(.btn) {
+.assignTagActionButton[class~='btn'],
+.removeTagActionButton[class~='btn'] {
   width: 90%;
   height: calc(var(--space-10) - var(--space-2));
   border: none;
@@ -240,7 +241,7 @@
   align-items: center;
   justify-content: flex-start;
   padding: 0 var(--space-4);
-  font-family: 'Lato', sans-serif;
+  font-family: Lato, sans-serif;
   font-style: normal;
   font-weight: var(--font-weight-regular);
   font-size: var(--font-size-sm);
@@ -249,29 +250,29 @@
   box-shadow: none;
 }
 
-.assignTagActionButton:global(.btn),
-.assignTagActionButton:global(.btn):focus,
-.assignTagActionButton:global(.btn):active {
+.assignTagActionButton[class~='btn'],
+.assignTagActionButton[class~='btn']:focus,
+.assignTagActionButton[class~='btn']:active {
   background: var(--color-blue-200);
   color: var(--color-gray-700);
   border-color: transparent;
 }
 
-.assignTagActionButton:global(.btn):is(:hover, :focus-visible) {
+.assignTagActionButton[class~='btn']:is(:hover, :focus-visible) {
   background: var(--color-blue-300);
   color: var(--color-gray-700);
   border-color: transparent;
 }
 
-.removeTagActionButton:global(.btn),
-.removeTagActionButton:global(.btn):focus,
-.removeTagActionButton:global(.btn):active {
+.removeTagActionButton[class~='btn'],
+.removeTagActionButton[class~='btn']:focus,
+.removeTagActionButton[class~='btn']:active {
   background: var(--color-red-100);
   color: var(--color-red-400);
   border-color: transparent;
 }
 
-.removeTagActionButton:global(.btn):is(:hover, :focus-visible) {
+.removeTagActionButton[class~='btn']:is(:hover, :focus-visible) {
   background: var(--color-red-100);
   color: var(--color-red-400);
   border-color: transparent;
@@ -299,46 +300,46 @@
   --folder-modal-input-padding-x: calc(var(--space-5) + var(--space-1));
 }
 
-.manageMode :global(.modal-dialog) {
+.manageMode [class~='modal-dialog'] {
   width: min(var(--folder-modal-width), calc(var(--vw-100) - var(--space-8)));
   max-width: var(--folder-modal-width);
   margin-left: auto;
   margin-right: auto;
 }
 
-.manageMode :global(.modal-content) {
+.manageMode [class~='modal-content'] {
   border: var(--border-1) solid var(--color-black-8);
   box-shadow: calc(-1 * var(--shadow-offset-xs)) var(--shadow-offset-lg)
     var(--shadow-blur-xl) var(--color-black-8);
   border-radius: var(--radius-xl);
 }
 
-.manageMode :global(.modal-title) {
+.manageMode [class~='modal-title'] {
   color: var(--color-black);
-  font-family: 'Lato', sans-serif;
+  font-family: Lato, sans-serif;
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
   line-height: var(--line-height-tight);
 }
 
-.manageMode :global(.modal-header .btn-danger) {
+:global(.modal-header .btn-danger) {
   color: var(--color-red-500) !important;
 }
 
-.manageMode :global(.modal-header .btn-danger:hover) {
+:global(.modal-header .btn-danger:hover) {
   color: var(--color-red-500) !important;
 }
 
-.manageMode :global(.modal-body) {
+.manageMode [class~='modal-body'] {
   padding-top: calc(var(--space-2) + var(--space-1));
 }
 
-.manageMode :global(.modal-footer) {
+.manageMode [class~='modal-footer'] {
   border-top: none;
   padding: var(--space-0) var(--space-5) calc(var(--space-4) + var(--space-1));
 }
 
-.manageMode :global(.modal-footer .btn-secondary) {
+:global(.modal-footer .btn-secondary) {
   display: none !important;
 }
 
@@ -347,21 +348,21 @@
   margin-bottom: calc(var(--space-4) + var(--space-1));
 }
 
-.fieldRow :global(.mb-3) {
+.fieldRow [class~='mb-3'] {
   margin-bottom: 0 !important;
 }
 
-.fieldRow :global(label) {
+.fieldRow label {
   display: inline-block;
   margin-bottom: var(--space-3);
   color: var(--color-black);
-  font-family: 'Lato', sans-serif;
+  font-family: Lato, sans-serif;
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
   line-height: var(--line-height-tight);
 }
 
-.fieldRow :global(.form-control) {
+.fieldRow [class~='form-control'] {
   width: 100%;
   height: var(--folder-modal-input-height);
   border-radius: var(--radius-md);
@@ -369,18 +370,18 @@
   background: var(--color-gray-50);
   box-shadow: none;
   color: var(--color-black);
-  font-family: 'Lato', sans-serif;
+  font-family: Lato, sans-serif;
   font-size: var(--font-size-md);
   line-height: var(--line-height-tight);
   padding: var(--space-0) var(--folder-modal-input-padding-x);
 }
 
-.fieldRow :global(.form-control::placeholder) {
+.fieldRow [class~='form-control']::placeholder {
   color: var(--color-gray-600);
   opacity: 0.85;
 }
 
-.fieldRow :global(.form-control:focus) {
+.fieldRow [class~='form-control']:focus {
   border-color: var(--color-blue-300);
   box-shadow: var(--shadow-spread-none) var(--shadow-spread-none)
     var(--shadow-spread-none) var(--space-2) var(--color-blue-shadow-focus);

@@ -1,9 +1,9 @@
 /**
  * Component: TagNode
  *
- * This component renders a tag node that can be expanded to display its subtags.
- * It supports infinite scrolling for loading subtags and allows users to select tags
- * using checkboxes. The component is recursive, enabling nested subtags to be displayed.
+ * This component renders a tag-folder node that can be expanded to display child folders.
+ * It supports infinite scrolling for loading child folders and allows users to select tags
+ * using checkboxes. The component is recursive, enabling nested folder nodes to be displayed.
  *
  * @param props - The props for the TagNode component.
  * @param tag - The tag data to be displayed.
@@ -11,9 +11,9 @@
  * @param toggleTagSelection - Callback function to toggle the selection state of a tag.
  *
  * @remarks
- * - The component uses the `@apollo/client` `useQuery` hook to fetch subtags.
+ * - The component uses the `@apollo/client` `useQuery` hook to fetch child folders.
  * - Infinite scrolling is implemented using the `react-infinite-scroll-component` library.
- * - Displays a loader while fetching subtags and handles errors gracefully.
+ * - Displays a loader while fetching child folders and handles errors gracefully.
  *
  * @example
  * ```tsx
@@ -24,17 +24,17 @@
  * />
  * ```
  *
- * @returns A React functional component that renders a tag node with optional subtags.
+ * @returns A React functional component that renders a tag node with optional child folders.
  */
 // translation-check-keyPrefix: manageTag
 import { useQuery } from '@apollo/client';
-import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
+import { TAG_FOLDER_CHILD_FOLDERS_FOR_NODE } from 'GraphQl/Queries/userTagQueries';
 import React, { useState } from 'react';
 import type {
-  InterfaceQueryUserTagChildTags,
+  InterfaceQueryTagFolderChildFolders,
   InterfaceTagData,
 } from 'utils/interfaces';
-import type { InterfaceOrganizationSubTagsQuery } from 'utils/organizationTagsUtils';
+import type { InterfaceTagFolderChildFoldersQuery } from 'utils/organizationTagsUtils';
 import type { InterfaceTagNodeProps } from 'types/AdminPortal/TagActions/interface';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import styles from './TagNode.module.css';
@@ -44,7 +44,7 @@ import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
 import { useTranslation } from 'react-i18next';
 
 /**
- * Renders the Tags which can be expanded to list subtags.
+ * Renders tags that can be expanded to list child folders.
  */
 const TagNode: React.FC<InterfaceTagNodeProps> = ({
   tag,
@@ -55,39 +55,42 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
   const [expanded, setExpanded] = useState(false);
 
   const {
-    data: subTagsData,
-    loading: subTagsLoading,
-    error: subTagsError,
-    fetchMore: fetchMoreSubTags,
-  }: InterfaceOrganizationSubTagsQuery = useQuery(USER_TAG_SUB_TAGS, {
-    variables: { id: tag._id, first: TAGS_QUERY_DATA_CHUNK_SIZE },
-    skip: !expanded,
-  });
+    data: childFoldersData,
+    loading: childFoldersLoading,
+    error: childFoldersError,
+    fetchMore: fetchMoreChildFolders,
+  }: InterfaceTagFolderChildFoldersQuery = useQuery(
+    TAG_FOLDER_CHILD_FOLDERS_FOR_NODE,
+    {
+      variables: { id: tag._id, first: TAGS_QUERY_DATA_CHUNK_SIZE },
+      skip: !expanded,
+    },
+  );
 
-  const loadMoreSubTags = (): void => {
-    fetchMoreSubTags({
+  const loadMoreChildFolders = (): void => {
+    fetchMoreChildFolders({
       variables: {
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        after: subTagsData?.getChildTags.childTags.pageInfo.endCursor,
+        after: childFoldersData?.tagFolder.childFolders.pageInfo.endCursor,
       },
       updateQuery: (
-        prevResult: { getChildTags: InterfaceQueryUserTagChildTags },
+        prevResult: { tagFolder: InterfaceQueryTagFolderChildFolders },
         {
           fetchMoreResult,
         }: {
-          fetchMoreResult?: { getChildTags: InterfaceQueryUserTagChildTags };
+          fetchMoreResult?: { tagFolder: InterfaceQueryTagFolderChildFolders };
         },
       ) => {
         if (!fetchMoreResult) return prevResult;
 
         return {
-          getChildTags: {
-            ...fetchMoreResult.getChildTags,
-            childTags: {
-              ...fetchMoreResult.getChildTags.childTags,
+          tagFolder: {
+            ...fetchMoreResult.tagFolder,
+            childFolders: {
+              ...fetchMoreResult.tagFolder.childFolders,
               edges: [
-                ...prevResult.getChildTags.childTags.edges,
-                ...fetchMoreResult.getChildTags.childTags.edges,
+                ...prevResult.tagFolder.childFolders.edges,
+                ...fetchMoreResult.tagFolder.childFolders.edges,
               ],
             },
           },
@@ -96,21 +99,22 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
     });
   };
 
-  if (subTagsError) {
+  if (childFoldersError) {
     return (
       <div className={styles.errorContainer}>
         <div className={styles.errorMessage}>
           <WarningAmberRounded className={styles.errorIcon} />
           <h6 className={styles.loadingError}>
-            {t('errorOccurredWhileLoadingSubTags')}
+            {t('errorOccurredWhileLoadingChildFolders')}
           </h6>
         </div>
       </div>
     );
   }
 
-  const subTagsList =
-    subTagsData?.getChildTags.childTags.edges.map((edge) => edge.node) ?? [];
+  const childFolderNodes =
+    childFoldersData?.tagFolder.childFolders.edges.map((edge) => edge.node) ??
+    [];
 
   const handleTagClick = (): void => {
     setExpanded(!expanded);
@@ -129,8 +133,8 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
           <>
             <span
               onClick={handleTagClick}
-              className={styles.expandSubTags}
-              data-testid={`expandSubTags${tag._id}`}
+              className={styles.expandChildFolders}
+              data-testid={`expandChildFolders${tag._id}`}
               aria-label={expanded ? t('collapse') : t('expand')}
             >
               {expanded ? '▼' : '▶'}
@@ -164,35 +168,35 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
         {tag.name}
       </div>
 
-      {expanded && subTagsLoading && (
+      {expanded && childFoldersLoading && (
         <div className={styles.simpleLoaderContainer}>
           <div className={styles.simpleLoader}>
             <div className={styles.spinner} />
           </div>
         </div>
       )}
-      {expanded && subTagsList?.length && (
-        <div className={styles.subTagsScrollableContainer}>
+      {expanded && childFolderNodes?.length && (
+        <div className={styles.childFoldersScrollableContainer}>
           <div
             // i18n-ignore-next-line
-            id={`subTagsScrollableDiv${tag._id}`}
+            id={`childFoldersScrollableDiv${tag._id}`}
             // i18n-ignore-next-line
-            data-testid={`subTagsScrollableDiv${tag._id}`}
-            className={styles.subTagsScrollableDiv}
+            data-testid={`childFoldersScrollableDiv${tag._id}`}
+            className={styles.childFoldersScrollableDiv}
           >
             <InfiniteScroll
-              dataLength={subTagsList?.length ?? 0}
-              next={loadMoreSubTags}
+              dataLength={childFolderNodes?.length ?? 0}
+              next={loadMoreChildFolders}
               hasMore={
-                subTagsData?.getChildTags.childTags.pageInfo.hasNextPage ??
+                childFoldersData?.tagFolder.childFolders.pageInfo.hasNextPage ??
                 false
               }
               loader={<InfiniteScrollLoader />}
               // i18n-ignore-next-line
-              scrollableTarget={`subTagsScrollableDiv${tag._id}`}
+              scrollableTarget={`childFoldersScrollableDiv${tag._id}`}
             >
-              {subTagsList.map((tag: InterfaceTagData) => (
-                <div key={tag._id} data-testid="orgUserSubTags">
+              {childFolderNodes.map((tag: InterfaceTagData) => (
+                <div key={tag._id} data-testid="orgUserChildFolders">
                   <TagNode
                     tag={tag}
                     checkedTags={checkedTags}

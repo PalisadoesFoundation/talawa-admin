@@ -337,8 +337,8 @@
   --tagsBreadCrumbs-color-hover: #0000ff;
   --tagsBreadCrumbs-color: #808080;
 
-  --subTagsLink-color-hover: #5f7e91;
-  --subTagsLink-color: #0000ff;
+  --childFoldersLink-color-hover: #5f7e91;
+  --childFoldersLink-color: #0000ff;
 
   --orgUserTagsScrollableDiv-color: #9ca3af;
 
@@ -365,7 +365,7 @@
   --logintitle-color: #707070;
   --logintitle-border: #a8c7fa;
 
-  --subTagsScrollableDiv-color: #9ca3af;
+  --childFoldersScrollableDiv-color: #9ca3af;
 
   --customcell-bg: #eaebef;
   --customcell-color: #000000;
@@ -8657,24 +8657,24 @@ form {
   text-decoration: underline;
 }
 
-.subTagsLink i {
+.childFoldersLink i {
   visibility: hidden;
 }
 
-.subTagsLink:hover,
-.subTagsLink:focus {
-  color: var(--subTagsLink-color-hover);
+.childFoldersLink:hover,
+.childFoldersLink:focus {
+  color: var(--childFoldersLink-color-hover);
   font-weight: 600;
   text-decoration: underline;
 }
 
-.subTagsLink:hover i,
-.subTagsLink:focus i {
+.childFoldersLink:hover i,
+.childFoldersLink:focus i {
   visibility: visible;
 }
 
-.subTagsLink {
-  color: var(--subTagsLink-color);
+.childFoldersLink {
+  color: var(--childFoldersLink-color);
   font-weight: 500;
   cursor: pointer;
 
@@ -8887,11 +8887,11 @@ form {
   padding-bottom: 15px !important;
 }
 
-/* -- SubTags.tsx -- */
+/* -- Tags.tsx -- */
 
-.subTagsScrollableDiv {
+.childFoldersScrollableDiv {
   scrollbar-width: auto;
-  scrollbar-color: var(--subTagsScrollableDiv-color);
+  scrollbar-color: var(--childFoldersScrollableDiv-color);
   max-height: calc(100vh - 18rem);
   overflow: auto;
 }

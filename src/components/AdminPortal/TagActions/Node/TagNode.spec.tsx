@@ -6,7 +6,7 @@ import userEvent from '@testing-library/user-event';
 import { describe, test, expect, vi, afterEach, beforeEach } from 'vitest';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'utils/i18nForTest';
-import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
+import { TAG_FOLDER_CHILD_FOLDERS_FOR_NODE } from 'GraphQl/Queries/userTagQueries';
 import TagNode from './TagNode';
 import type { InterfaceTagData } from 'utils/interfaces';
 
@@ -42,26 +42,26 @@ const makeTag = (
 
 const parentTag = makeTag('1', 'Parent Tag', 2);
 
-const subTagPageOne = [
-  makeTag('subTag1', 'subTag 1', 0),
-  makeTag('subTag2', 'subTag 2', 0),
+const childFolderPageOne = [
+  makeTag('childFolder1', 'child folder 1', 0),
+  makeTag('childFolder2', 'child folder 2', 0),
 ];
-const subTagPageTwo = [makeTag('subTag11', 'subTag 11', 0)];
+const childFolderPageTwo = [makeTag('childFolder11', 'child folder 11', 0)];
 
 const createMocks = (): MockedResponse[] => [
   {
     request: {
-      query: USER_TAG_SUB_TAGS,
+      query: TAG_FOLDER_CHILD_FOLDERS_FOR_NODE,
       variables: { id: '1', first: 10 },
     },
     result: {
       data: {
-        getChildTags: {
-          childTags: {
-            edges: subTagPageOne.map((tag) => ({ node: tag })),
+        tagFolder: {
+          childFolders: {
+            edges: childFolderPageOne.map((tag) => ({ node: tag })),
             pageInfo: {
               hasNextPage: true,
-              endCursor: 'subTag2',
+              endCursor: 'childFolder2',
             },
           },
         },
@@ -70,17 +70,17 @@ const createMocks = (): MockedResponse[] => [
   },
   {
     request: {
-      query: USER_TAG_SUB_TAGS,
-      variables: { id: '1', first: 10, after: 'subTag2' },
+      query: TAG_FOLDER_CHILD_FOLDERS_FOR_NODE,
+      variables: { id: '1', first: 10, after: 'childFolder2' },
     },
     result: {
       data: {
-        getChildTags: {
-          childTags: {
-            edges: subTagPageTwo.map((tag) => ({ node: tag })),
+        tagFolder: {
+          childFolders: {
+            edges: childFolderPageTwo.map((tag) => ({ node: tag })),
             pageInfo: {
               hasNextPage: false,
-              endCursor: 'subTag11',
+              endCursor: 'childFolder11',
             },
           },
         },
@@ -89,17 +89,17 @@ const createMocks = (): MockedResponse[] => [
   },
   {
     request: {
-      query: USER_TAG_SUB_TAGS,
-      variables: { id: '1', first: 10, after: 'subTag11' },
+      query: TAG_FOLDER_CHILD_FOLDERS_FOR_NODE,
+      variables: { id: '1', first: 10, after: 'childFolder11' },
     },
     result: {
       data: {
-        getChildTags: {
-          childTags: {
+        tagFolder: {
+          childFolders: {
             edges: [],
             pageInfo: {
               hasNextPage: false,
-              endCursor: 'subTag11',
+              endCursor: 'childFolder11',
             },
           },
         },
@@ -108,17 +108,17 @@ const createMocks = (): MockedResponse[] => [
   },
   {
     request: {
-      query: USER_TAG_SUB_TAGS,
+      query: TAG_FOLDER_CHILD_FOLDERS_FOR_NODE,
       variables: { id: '1', first: 10 },
     },
     result: {
       data: {
-        getChildTags: {
-          childTags: {
-            edges: subTagPageOne.map((tag) => ({ node: tag })),
+        tagFolder: {
+          childFolders: {
+            edges: childFolderPageOne.map((tag) => ({ node: tag })),
             pageInfo: {
               hasNextPage: true,
-              endCursor: 'subTag2',
+              endCursor: 'childFolder2',
             },
           },
         },
@@ -130,10 +130,10 @@ const createMocks = (): MockedResponse[] => [
 const errorMocks: MockedResponse[] = [
   {
     request: {
-      query: USER_TAG_SUB_TAGS,
+      query: TAG_FOLDER_CHILD_FOLDERS_FOR_NODE,
       variables: { id: '1', first: 10 },
     },
-    error: new Error('Mock Graphql Error for subTags query'),
+    error: new Error('Mock Graphql Error for child folders query'),
   },
 ];
 
@@ -174,27 +174,29 @@ describe('TagNode', () => {
     expect(screen.getByText('Parent Tag')).toBeInTheDocument();
 
     await user.click(screen.getByTestId('checkTag1'));
-    expect(toggleTagSelection).toHaveBeenCalledWith(parentTag, true);
-  });
-
-  test('expands and shows subtags', async () => {
-    renderNode(createMocks());
-
-    await user.click(screen.getByTestId('expandSubTags1'));
-
     await waitFor(() => {
-      expect(screen.getByText('subTag 1')).toBeInTheDocument();
-      expect(screen.getByText('subTag 2')).toBeInTheDocument();
+      expect(toggleTagSelection).toHaveBeenCalledWith(parentTag, true);
     });
   });
 
-  test('handles load-more trigger without breaking subtag list', async () => {
+  test('expands and shows child folders', async () => {
     renderNode(createMocks());
 
-    await user.click(screen.getByTestId('expandSubTags1'));
+    await user.click(screen.getByTestId('expandChildFolders1'));
 
     await waitFor(() => {
-      expect(screen.getByText('subTag 1')).toBeInTheDocument();
+      expect(screen.getByText('child folder 1')).toBeInTheDocument();
+      expect(screen.getByText('child folder 2')).toBeInTheDocument();
+    });
+  });
+
+  test('handles load-more trigger without breaking child folder list', async () => {
+    renderNode(createMocks());
+
+    await user.click(screen.getByTestId('expandChildFolders1'));
+
+    await waitFor(() => {
+      expect(screen.getByText('child folder 1')).toBeInTheDocument();
     });
 
     await act(async () => {
@@ -202,19 +204,19 @@ describe('TagNode', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByText('subTag 1')).toBeInTheDocument();
-      expect(screen.getByText('subTag 2')).toBeInTheDocument();
+      expect(screen.getByText('child folder 1')).toBeInTheDocument();
+      expect(screen.getByText('child folder 2')).toBeInTheDocument();
     });
   });
 
-  test('renders error message when subtag query fails', async () => {
+  test('renders error message when child folder query fails', async () => {
     renderNode(errorMocks);
 
-    await user.click(screen.getByTestId('expandSubTags1'));
+    await user.click(screen.getByTestId('expandChildFolders1'));
 
     await waitFor(() => {
       expect(
-        screen.getByText('Error occurred while loading subTags tags'),
+        screen.getByText('Error occurred while loading child folders'),
       ).toBeInTheDocument();
     });
   });
@@ -224,6 +226,8 @@ describe('TagNode', () => {
     renderNode([], leafTag);
 
     expect(screen.getByText('Leaf Tag')).toBeInTheDocument();
-    expect(screen.queryByTestId('expandSubTagsleaf-1')).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId('expandChildFoldersleaf-1'),
+    ).not.toBeInTheDocument();
   });
 });

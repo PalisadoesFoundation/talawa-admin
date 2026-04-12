@@ -2,7 +2,7 @@
 
 ***
 
-# Interface: InterfaceOrganizationSubTagsQuery
+# Interface: InterfaceTagFolderChildFoldersQuery
 
 Defined in: [src/utils/organizationTagsUtils.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L64)
 
@@ -18,9 +18,9 @@ Defined in: [src/utils/organizationTagsUtils.ts:64](https://github.com/Palisadoe
 
 Defined in: [src/utils/organizationTagsUtils.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L65)
 
-#### getChildTags
+#### tagFolder
 
-> **getChildTags**: [`InterfaceQueryUserTagChildTags`](../../interfaces/interfaces/InterfaceQueryUserTagChildTags.md)
+> **tagFolder**: [`InterfaceQueryTagFolderChildFolders`](../../interfaces/interfaces/InterfaceQueryTagFolderChildFolders.md)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:68](https://github.com/Palisadoe
 
 ##### options
 
-`InterfaceBaseFetchMoreOptions`\<\{ `getChildTags`: [`InterfaceQueryUserTagChildTags`](../../interfaces/interfaces/InterfaceQueryUserTagChildTags.md); \}\>
+`InterfaceBaseFetchMoreOptions`\<\{ `tagFolder`: [`InterfaceQueryTagFolderChildFolders`](../../interfaces/interfaces/InterfaceQueryTagFolderChildFolders.md); \}\>
 
 #### Returns
 

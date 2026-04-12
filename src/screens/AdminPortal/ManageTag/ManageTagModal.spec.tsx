@@ -1,7 +1,7 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { MockedResponse } from '@apollo/client/testing';
-import { render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { vi, beforeEach, afterEach, describe, expect, test } from 'vitest';
@@ -30,11 +30,12 @@ describe('ManageTagModal', () => {
   const tag = { id: 'tag-1', name: 'Urgent' };
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
+    cleanup();
   });
 
   const renderModal = (
@@ -172,8 +173,10 @@ describe('ManageTagModal', () => {
 
     await user.click(screen.getByRole('button', { name: /view tag/i }));
 
-    expect(onClose).toHaveBeenCalled();
-    expect(onViewTag).toHaveBeenCalledWith('tag-1');
+    await waitFor(() => {
+      expect(onClose).toHaveBeenCalled();
+      expect(onViewTag).toHaveBeenCalledWith('tag-1');
+    });
   });
 
   test('resets local state when modal closes and reopens', async () => {

@@ -11,8 +11,14 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import ManageTag, { getManageTagErrorMessage } from './ManageTag';
-import { USER_TAGS_ASSIGNED_MEMBERS } from 'GraphQl/Queries/userTagQueries';
-import { UNASSIGN_USER_TAG } from 'GraphQl/Mutations/TagMutations';
+import {
+  USER_TAGS_ASSIGNED_MEMBERS,
+  USER_TAGS_MEMBERS_TO_ASSIGN_TO,
+} from 'GraphQl/Queries/userTagQueries';
+import {
+  ADD_PEOPLE_TO_TAG,
+  UNASSIGN_USER_TAG,
+} from 'GraphQl/Mutations/TagMutations';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import type { ApolloLink } from '@apollo/client';
 
@@ -23,27 +29,6 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
     warning: vi.fn(),
     info: vi.fn(),
   },
-}));
-
-vi.mock('components/AdminPortal/AddPeopleToTag/AddPeopleToTag', () => ({
-  default: ({
-    addPeopleToTagModalIsOpen,
-    hideAddPeopleToTagModal,
-  }: {
-    addPeopleToTagModalIsOpen: boolean;
-    hideAddPeopleToTagModal: () => void;
-  }) =>
-    addPeopleToTagModalIsOpen ? (
-      <div data-testid="addPeopleModal">
-        <button
-          type="button"
-          data-testid="closeAddPeopleModal"
-          onClick={hideAddPeopleToTagModal}
-        >
-          Close
-        </button>
-      </div>
-    ) : null,
 }));
 
 vi.mock('components/AdminPortal/TagActions/TagActions', () => ({
@@ -225,6 +210,60 @@ const emptyMocks = [
   },
 ];
 
+const membersToAssignQueryVariables = {
+  organizationId: 'orgId',
+  tagId: 'tag-123',
+  first: TAGS_QUERY_DATA_CHUNK_SIZE,
+};
+
+const membersToAssignQueryResult = {
+  data: {
+    organization: {
+      id: 'orgId',
+      members: {
+        edges: [
+          {
+            node: {
+              _id: 'user-3',
+              name: 'Charlie Brown',
+            },
+          },
+        ],
+        pageInfo: {
+          startCursor: 'user-3',
+          endCursor: 'user-3',
+          hasNextPage: false,
+          hasPreviousPage: false,
+        },
+      },
+    },
+    tag: {
+      id: 'tag-123',
+      assignees: {
+        edges: [{ node: { id: 'user-1' } }, { node: { id: 'user-2' } }],
+      },
+    },
+  },
+};
+
+const addPeopleModalMocks = [
+  ...baseMocks,
+  {
+    request: {
+      query: USER_TAGS_MEMBERS_TO_ASSIGN_TO,
+      variables: membersToAssignQueryVariables,
+    },
+    result: membersToAssignQueryResult,
+  },
+  {
+    request: {
+      query: USER_TAGS_MEMBERS_TO_ASSIGN_TO,
+      variables: membersToAssignQueryVariables,
+    },
+    result: membersToAssignQueryResult,
+  },
+];
+
 const renderManageTag = (link: ApolloLink) =>
   render(
     <MockedProvider link={link}>
@@ -321,7 +360,7 @@ describe('ManageTag', () => {
   });
 
   test('opens and closes add people modal', async () => {
-    const link = new StaticMockLink(baseMocks, true);
+    const link = new StaticMockLink(addPeopleModalMocks, true);
     const user = userEvent.setup();
     renderManageTag(link);
 
@@ -331,12 +370,61 @@ describe('ManageTag', () => {
 
     await user.click(screen.getByTestId('addPeopleToTagBtn'));
     await waitFor(() => {
-      expect(screen.getByTestId('addPeopleModal')).toBeInTheDocument();
+      expect(screen.getByTestId('assignPeopleBtn')).toBeInTheDocument();
     });
 
-    await user.click(screen.getByTestId('closeAddPeopleModal'));
+    await user.click(screen.getByTestId('closeAddPeopleToTagModal'));
     await waitFor(() => {
-      expect(screen.queryByTestId('addPeopleModal')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('assignPeopleBtn')).not.toBeInTheDocument();
+    });
+  });
+
+  test('regression #7247: add people flow triggers mutation and refreshes assigned members', async () => {
+    const user = userEvent.setup();
+    let addPeopleMutationCalled = false;
+
+    const integrationMocks = [
+      ...addPeopleModalMocks,
+      {
+        request: {
+          query: ADD_PEOPLE_TO_TAG,
+          variables: {
+            tagId: 'tag-123',
+            userId: 'user-3',
+          },
+        },
+        result: (variables: { tagId: string; userId: string }) => {
+          addPeopleMutationCalled =
+            variables.tagId === 'tag-123' && variables.userId === 'user-3';
+          return {
+            data: {
+              assignUserTag: true,
+            },
+          };
+        },
+      },
+    ];
+
+    const link = new StaticMockLink(integrationMocks, true);
+    renderManageTag(link);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('addPeopleToTagBtn')).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByTestId('addPeopleToTagBtn'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('selectMemberBtn')).toBeInTheDocument();
+      expect(screen.getByText('Charlie Brown')).toBeInTheDocument();
+    });
+
+    await user.click(screen.getByTestId('selectMemberBtn'));
+    await user.click(screen.getByTestId('assignPeopleBtn'));
+
+    await waitFor(() => {
+      expect(addPeopleMutationCalled).toBe(true);
+      expect(NotificationToast.success).toHaveBeenCalled();
     });
   });
 

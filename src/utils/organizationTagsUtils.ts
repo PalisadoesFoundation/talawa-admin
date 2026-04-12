@@ -4,7 +4,7 @@ import type { ApolloError } from '@apollo/client';
 import type {
   InterfaceQueryOrganizationUserTags,
   InterfaceQueryOrganizationUserTagsPG,
-  InterfaceQueryUserTagChildTags,
+  InterfaceQueryTagFolderChildFolders,
   InterfaceQueryUserTagsAssignedMembers,
   InterfaceQueryUserTagsMembersToAssignTo,
 } from './interfaces';
@@ -61,13 +61,13 @@ export interface InterfaceOrganizationTagsQueryPG extends InterfaceBaseQueryResu
   ) => void;
 }
 
-export interface InterfaceOrganizationSubTagsQuery extends InterfaceBaseQueryResult {
+export interface InterfaceTagFolderChildFoldersQuery extends InterfaceBaseQueryResult {
   data?: {
-    getChildTags: InterfaceQueryUserTagChildTags;
+    tagFolder: InterfaceQueryTagFolderChildFolders;
   };
   fetchMore: (
     options: InterfaceBaseFetchMoreOptions<{
-      getChildTags: InterfaceQueryUserTagChildTags;
+      tagFolder: InterfaceQueryTagFolderChildFolders;
     }>,
   ) => void;
 }

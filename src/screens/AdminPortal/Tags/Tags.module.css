@@ -251,29 +251,29 @@ form label,
   text-decoration: underline;
 }
 
-.subTagsLink i {
+.childFoldersLink i {
   visibility: hidden;
 }
 
-.subTagsLink:hover,
-.subTagsLink:focus {
+.childFoldersLink:hover,
+.childFoldersLink:focus {
   color: var(--color-blue-200);
   font-weight: var(--font-weight-semibold);
   text-decoration: underline;
 }
 
-.subTagsLink:hover i,
-.subTagsLink:focus i {
+.childFoldersLink:hover i,
+.childFoldersLink:focus i {
   visibility: visible;
 }
 
-.subTagsLink {
+.childFoldersLink {
   color: var(--color-blue-700);
   font-weight: var(--font-weight-medium);
   cursor: pointer;
 }
 
-.subTagsLink::after {
+.childFoldersLink::after {
   display: block;
   content: attr(data-text);
   font-weight: var(--font-weight-semibold);
@@ -299,7 +299,7 @@ form label,
   color: var(--color-gray-500);
 }
 
-.subTagsScrollableDiv {
+.childFoldersScrollableDiv {
   scrollbar-width: auto;
   scrollbar-color: var(--color-gray-400) var(--color-gray-100);
   max-height: calc(var(--vh-100) - var(--space-20));

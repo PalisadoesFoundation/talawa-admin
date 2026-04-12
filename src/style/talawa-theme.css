@@ -126,12 +126,12 @@
   --rowBackground-color: var(--color-gray-900);
   --orgUserTagsScrollableDiv-color: var(--color-gray-sub);
   --manageTagScrollableDiv-color: var(--color-gray-sub);
-  --subTagsScrollableDiv-color: var(--color-gray-sub);
+  --childFoldersScrollableDiv-color: var(--color-gray-sub);
   --searchIcon-color: var(--color-gray-mid);
   --tagsBreadCrumbs-color: var(--color-gray-mid);
   --tagsBreadCrumbs-color-hover: var(--color-blue-500);
-  --subTagsLink-color: var(--color-blue-500);
-  --subTagsLink-color-hover: var(--color-blue-450);
+  --childFoldersLink-color: var(--color-blue-500);
+  --childFoldersLink-color-hover: var(--color-blue-450);
   --eventsAttended-membername-color: var(--color-blue-500);
   --membername-color: var(--color-blue-500);
   --membername-color-hover: var(--color-blue-450);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, test, expect, vi, afterEach } from 'vitest';
 import { getRootFolderIds, renderFolderTree } from './tagTreeRenderer';
@@ -50,6 +50,8 @@ const createParams = (
   onToggleFolderExpansion: vi.fn(),
   onToggleTagSelection: vi.fn(),
   noTagsFoundText: 'No tags found',
+  expandFolderAriaLabel: 'Expand folder',
+  collapseFolderAriaLabel: 'Collapse folder',
 });
 
 describe('tagTreeRenderer visibility', () => {
@@ -154,6 +156,8 @@ describe('tagTreeRenderer visibility', () => {
       onToggleFolderExpansion: vi.fn(),
       onToggleTagSelection,
       noTagsFoundText: 'No tags found',
+      expandFolderAriaLabel: 'Expand folder',
+      collapseFolderAriaLabel: 'Collapse folder',
     });
 
     render(<ul>{items}</ul>);
@@ -164,7 +168,9 @@ describe('tagTreeRenderer visibility', () => {
     expect(tagCheckbox.closest('label')).toHaveClass('indent1');
 
     await user.click(tagCheckbox);
-    expect(onToggleTagSelection).toHaveBeenCalledWith(tag, false);
+    await waitFor(() => {
+      expect(onToggleTagSelection).toHaveBeenCalledWith(tag, false);
+    });
   });
 
   test('returns only root folder ids sorted by folder name', () => {
@@ -201,13 +207,17 @@ describe('tagTreeRenderer visibility', () => {
       onToggleFolderExpansion,
       onToggleTagSelection: vi.fn(),
       noTagsFoundText: 'No tags found',
+      expandFolderAriaLabel: 'Expand folder',
+      collapseFolderAriaLabel: 'Collapse folder',
     });
 
     render(<ul>{items}</ul>);
 
     await user.click(screen.getByTestId('expandFolderfolder-expand-1'));
 
-    expect(onToggleFolderExpansion).toHaveBeenCalledWith('folder-expand-1');
+    await waitFor(() => {
+      expect(onToggleFolderExpansion).toHaveBeenCalledWith('folder-expand-1');
+    });
   });
 
   test('renders child folder rows when parent folder is expanded', () => {
@@ -231,6 +241,8 @@ describe('tagTreeRenderer visibility', () => {
       onToggleFolderExpansion: vi.fn(),
       onToggleTagSelection: vi.fn(),
       noTagsFoundText: 'No tags found',
+      expandFolderAriaLabel: 'Expand folder',
+      collapseFolderAriaLabel: 'Collapse folder',
     });
 
     render(<ul>{items}</ul>);
@@ -259,6 +271,8 @@ describe('tagTreeRenderer visibility', () => {
       onToggleFolderExpansion: vi.fn(),
       onToggleTagSelection: vi.fn(),
       noTagsFoundText: 'No tags found',
+      expandFolderAriaLabel: 'Expand folder',
+      collapseFolderAriaLabel: 'Collapse folder',
     });
 
     const { container } = render(<ul>{items}</ul>);
@@ -288,6 +302,8 @@ describe('tagTreeRenderer visibility', () => {
       onToggleFolderExpansion: vi.fn(),
       onToggleTagSelection: vi.fn(),
       noTagsFoundText: 'No tags found',
+      expandFolderAriaLabel: 'Expand folder',
+      collapseFolderAriaLabel: 'Collapse folder',
     });
 
     const { container } = render(<ul>{items}</ul>);

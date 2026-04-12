@@ -13,6 +13,16 @@ import {
 import styles from './ManageFolderModal.module.css';
 import type { InterfaceManageFolderModalProps } from 'types/AdminPortal/Tags/interface';
 
+/**
+ * Modal component for viewing, editing, and deleting a tag folder.
+ *
+ * @param props - Component props typed by {@link InterfaceManageFolderModalProps}.
+ * @remarks
+ * `props.open` controls visibility, `props.folder` is the selected folder,
+ * `props.onClose` closes the modal, `props.onRefetch` refreshes folder/tag data,
+ * `props.onViewFolder` opens folder view, and the `*TestId` props provide stable selectors.
+ * @returns JSX element rendering edit/delete/view controls for a folder.
+ */
 function ManageFolderModal({
   open,
   folder,

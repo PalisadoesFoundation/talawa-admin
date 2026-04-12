@@ -1,11 +1,11 @@
 /**
- * SubTags Component
+ * TagFoldersHierarchy Component
  *
  * This component is responsible for managing and displaying the sub-tags
  * of a parent tag within an organization. It provides functionality to
  * view, search, and manage tags/folders within a folder hierarchy.
  *
- * @returns The rendered SubTags component.
+ * @returns The rendered TagFoldersHierarchy component.
  */
 import { useMutation, useQuery } from '@apollo/client';
 import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
@@ -104,7 +104,7 @@ function TagFoldersHierarchy(): JSX.Element {
     },
   });
 
-  const { data: organizationTagsData } =
+  const { data: organizationTagsData, refetch: organizationTagsRefetch } =
     useQuery<InterfaceOrganizationTagsWithFolderQuery>(
       ORGANIZATION_TAGS_WITH_FOLDER,
       {
@@ -136,7 +136,7 @@ function TagFoldersHierarchy(): JSX.Element {
 
       if (data) {
         NotificationToast.success(t('tagCreationSuccess') as string);
-        folderRefetch();
+        await Promise.allSettled([folderRefetch(), organizationTagsRefetch()]);
         setTagName('');
         createTagModal.close();
       }
@@ -163,7 +163,7 @@ function TagFoldersHierarchy(): JSX.Element {
 
       if (data) {
         NotificationToast.success(t('tagCreationSuccess') as string);
-        folderRefetch();
+        await Promise.allSettled([folderRefetch(), organizationTagsRefetch()]);
         setFolderName('');
         createFolderModal.close();
       }
@@ -501,7 +501,7 @@ function TagFoldersHierarchy(): JSX.Element {
                       variant="text"
                       className={styles.breadcrumbLinkButton}
                       onClick={() => redirectToChildFolders(tag.id)}
-                      data-testid="redirectToSubTags"
+                      data-testid="redirectToChildFolders"
                     >
                       {tag.name}
                     </Button>
@@ -527,8 +527,8 @@ function TagFoldersHierarchy(): JSX.Element {
 
           <div className="mb-2 ">
             <div
-              data-testid="subTagsScrollableDiv"
-              className={styles.subTagsScrollableDiv}
+              data-testid="childFoldersScrollableDiv"
+              className={styles.childFoldersScrollableDiv}
             >
               {!folderLoading && unifiedRows.length === 0 ? (
                 <EmptyState

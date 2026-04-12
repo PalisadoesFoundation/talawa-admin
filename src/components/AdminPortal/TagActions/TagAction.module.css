@@ -1,5 +1,5 @@
 .tagActionsScrollableDiv {
-  height: 300px;
+  height: var(--spacing-300);
   overflow: auto;
   list-style: none;
   padding: 0;
@@ -10,7 +10,7 @@
   cursor: pointer;
 }
 
-.subtagsScrollableDiv {
-  max-height: 300px;
+.childFoldersScrollableDiv {
+  max-height: var(--spacing-300);
   overflow: auto;
 }

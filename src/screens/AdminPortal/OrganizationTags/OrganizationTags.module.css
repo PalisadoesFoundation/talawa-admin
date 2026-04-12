@@ -53,23 +53,23 @@
   text-decoration: underline;
 }
 
-.subTagsLink i {
+.childFoldersLink i {
   visibility: hidden;
 }
 
-.subTagsLink:hover,
-.subTagsLink:focus {
+.childFoldersLink:hover,
+.childFoldersLink:focus {
   color: var(--color-gray-500);
   font-weight: var(--font-weight-semibold);
   text-decoration: underline;
 }
 
-.subTagsLink:hover i,
-.subTagsLink:focus i {
+.childFoldersLink:hover i,
+.childFoldersLink:focus i {
   visibility: visible;
 }
 
-.subTagsLink {
+.childFoldersLink {
   color: var(--color-blue-800);
   font-weight: var(--font-weight-medium);
   cursor: pointer;
@@ -178,6 +178,8 @@
     var(--space-10) + var(--space-1) + var(--space-0-5)
   );
 }
+
+/* :global() is required here to override third-party modal internals (for example, .createMode :global(.modal-dialog), .createMode :global(.modal-content), and .manageMode :global(.modal-footer)); overrides stay intentionally scoped under .createMode/.manageMode wrappers for maintainability. */
 
 .createMode :global(.modal-dialog) {
   width: min(var(--folder-modal-width), calc(var(--vw-100) - var(--space-8)));
