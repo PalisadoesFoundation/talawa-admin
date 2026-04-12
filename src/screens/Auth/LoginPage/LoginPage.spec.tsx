@@ -1783,12 +1783,54 @@ describe('Extra coverage for 100 %', () => {
         { data: undefined },
       ] as unknown as ReturnType<typeof ApolloClient.useLazyQuery>);
 
-    setLocationPath('/');
-    renderLoginPage();
-    await wait();
+    try {
+      setLocationPath('/');
+      renderLoginPage();
 
-    expect(fetchOrgsSpy).not.toHaveBeenCalled();
-    useLazyQuerySpy.mockRestore();
+      // Wait for stable DOM state: login form should be rendered
+      await waitFor(() => {
+        expect(screen.getByTestId('login-form-submit')).toBeInTheDocument();
+      });
+
+      // Assert fetchOrgs was not called on login tab
+      expect(fetchOrgsSpy).not.toHaveBeenCalled();
+    } finally {
+      useLazyQuerySpy.mockRestore();
+    }
+  });
+
+  it('triggers organizations lazy query when switching to register view with undefined data', async () => {
+    const fetchOrgsSpy = vi.fn();
+    const useLazyQuerySpy = vi
+      .spyOn(ApolloClient, 'useLazyQuery')
+      .mockReturnValue([
+        fetchOrgsSpy,
+        { data: undefined },
+      ] as unknown as ReturnType<typeof ApolloClient.useLazyQuery>);
+
+    try {
+      setLocationPath('/');
+      renderLoginPage();
+
+      // Wait for login form to render
+      await waitFor(() => {
+        expect(screen.getByTestId('login-form-submit')).toBeInTheDocument();
+      });
+
+      // Verify fetchOrgs has not been called on initial login view
+      expect(fetchOrgsSpy).not.toHaveBeenCalled();
+
+      // Switch to register view
+      const registerButton = await screen.findByTestId('goToRegisterPortion');
+      await user.click(registerButton);
+
+      // Wait for fetchOrgsSpy to be called exactly once when switching to register
+      await waitFor(() => {
+        expect(fetchOrgsSpy).toHaveBeenCalledTimes(1);
+      });
+    } finally {
+      useLazyQuerySpy.mockRestore();
+    }
   });
 
   it('sets document.title on render', async () => {
