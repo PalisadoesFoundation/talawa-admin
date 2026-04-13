@@ -26,7 +26,6 @@ vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
 describe('ManageTagModal', () => {
   const onClose = vi.fn();
   const onRefetch = vi.fn().mockResolvedValue(undefined);
-  const onViewTag = vi.fn();
   const tag = { id: 'tag-1', name: 'Urgent' };
 
   beforeEach(() => {
@@ -52,7 +51,6 @@ describe('ManageTagModal', () => {
             tag={customTag}
             onClose={onClose}
             onRefetch={onRefetch}
-            onViewTag={onViewTag}
             modalTestId="manageTagModal"
             inputTestId="manageTagNameInput"
             deleteModalTestId="deleteTagModal"
@@ -83,7 +81,7 @@ describe('ManageTagModal', () => {
 
     await user.clear(input);
     await user.type(input, 'Urgent Updated');
-    await user.click(screen.getByRole('button', { name: /edit/i }));
+    await user.click(screen.getByRole('button', { name: /save/i }));
 
     await waitFor(() => {
       expect(onRefetch).toHaveBeenCalled();
@@ -96,7 +94,7 @@ describe('ManageTagModal', () => {
     const user = userEvent.setup();
     renderModal();
 
-    await user.click(screen.getByRole('button', { name: /edit/i }));
+    await user.click(screen.getByRole('button', { name: /save/i }));
 
     await waitFor(() => {
       expect(onClose).toHaveBeenCalled();
@@ -114,7 +112,7 @@ describe('ManageTagModal', () => {
 
     await waitFor(() => {
       expect(screen.getByText(/required/i)).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /edit/i })).toBeDisabled();
+      expect(screen.getByRole('button', { name: /save/i })).toBeDisabled();
       expect(NotificationToast.error).not.toHaveBeenCalled();
     });
   });
@@ -167,18 +165,6 @@ describe('ManageTagModal', () => {
     });
   });
 
-  test('calls onViewTag and closes modal', async () => {
-    const user = userEvent.setup();
-    renderModal();
-
-    await user.click(screen.getByRole('button', { name: /view tag/i }));
-
-    await waitFor(() => {
-      expect(onClose).toHaveBeenCalled();
-      expect(onViewTag).toHaveBeenCalledWith('tag-1');
-    });
-  });
-
   test('resets local state when modal closes and reopens', async () => {
     const user = userEvent.setup();
     const { rerender } = renderModal();
@@ -201,7 +187,6 @@ describe('ManageTagModal', () => {
             tag={tag}
             onClose={onClose}
             onRefetch={onRefetch}
-            onViewTag={onViewTag}
             modalTestId="manageTagModal"
             inputTestId="manageTagNameInput"
             deleteModalTestId="deleteTagModal"
@@ -218,7 +203,6 @@ describe('ManageTagModal', () => {
             tag={tag}
             onClose={onClose}
             onRefetch={onRefetch}
-            onViewTag={onViewTag}
             modalTestId="manageTagModal"
             inputTestId="manageTagNameInput"
             deleteModalTestId="deleteTagModal"
@@ -242,7 +226,7 @@ describe('ManageTagModal', () => {
     const form = screen.getByTestId('manageTagNameInput').closest('form');
     expect(form).not.toBeNull();
 
-    await user.click(screen.getByRole('button', { name: /edit/i }));
+    await user.click(screen.getByRole('button', { name: /save/i }));
     await waitFor(() => {
       expect(onClose).not.toHaveBeenCalled();
       expect(onRefetch).not.toHaveBeenCalled();
@@ -284,7 +268,7 @@ describe('ManageTagModal', () => {
     const input = screen.getByTestId('manageTagNameInput') as HTMLInputElement;
     await user.clear(input);
     await user.type(input, 'Broken Update');
-    await user.click(screen.getByRole('button', { name: /edit/i }));
+    await user.click(screen.getByRole('button', { name: /save/i }));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith('Update failed');

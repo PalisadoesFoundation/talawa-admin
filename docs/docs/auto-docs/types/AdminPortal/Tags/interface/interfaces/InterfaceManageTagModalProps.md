@@ -12,7 +12,7 @@ Defined in: [src/types/AdminPortal/Tags/interface.ts:106](https://github.com/Pal
 
 > `optional` **deleteModalTestId**: `string`
 
-Defined in: [src/types/AdminPortal/Tags/interface.ts:114](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tags/interface.ts#L114)
+Defined in: [src/types/AdminPortal/Tags/interface.ts:113](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tags/interface.ts#L113)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/AdminPortal/Tags/interface.ts:114](https://github.com/Pal
 
 > `optional` **inputTestId**: `string`
 
-Defined in: [src/types/AdminPortal/Tags/interface.ts:113](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tags/interface.ts#L113)
+Defined in: [src/types/AdminPortal/Tags/interface.ts:112](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tags/interface.ts#L112)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/AdminPortal/Tags/interface.ts:113](https://github.com/Pal
 
 > `optional` **modalTestId**: `string`
 
-Defined in: [src/types/AdminPortal/Tags/interface.ts:112](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tags/interface.ts#L112)
+Defined in: [src/types/AdminPortal/Tags/interface.ts:111](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tags/interface.ts#L111)
 
 ***
 
@@ -53,24 +53,6 @@ Defined in: [src/types/AdminPortal/Tags/interface.ts:110](https://github.com/Pal
 #### Returns
 
 `unknown`
-
-***
-
-### onViewTag()
-
-> **onViewTag**: (`tagId`) => `void`
-
-Defined in: [src/types/AdminPortal/Tags/interface.ts:111](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tags/interface.ts#L111)
-
-#### Parameters
-
-##### tagId
-
-`string`
-
-#### Returns
-
-`void`
 
 ***
 

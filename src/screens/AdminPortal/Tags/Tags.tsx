@@ -453,6 +453,7 @@ function TagFoldersHierarchy(): JSX.Element {
             }
             className={styles.editButton}
           >
+            <i className="fa fa-edit me-1" aria-hidden="true" />
             {tCommon('manage')}
           </Button>
         );
@@ -615,7 +616,6 @@ function TagFoldersHierarchy(): JSX.Element {
         folder={managedFolder}
         onClose={hideManageFolderModal}
         onRefetch={folderRefetch}
-        onViewFolder={redirectToChildFolders}
         modalTestId="manageChildFolderModal"
         inputTestId="manageFolderNameInput"
         deleteModalTestId="delete-child-tag-folder-modal"
@@ -626,7 +626,6 @@ function TagFoldersHierarchy(): JSX.Element {
         tag={managedTag}
         onClose={hideManageTagModal}
         onRefetch={folderRefetch}
-        onViewTag={redirectToManageTag}
         modalTestId="manageTagModal"
         inputTestId="manageTagNameInput"
         deleteModalTestId="delete-tag-modal"

@@ -14,21 +14,20 @@ import styles from './ManageTagModal.module.css';
 import type { InterfaceManageTagModalProps } from 'types/AdminPortal/Tags/interface';
 
 /**
- * Modal component for viewing, editing, and deleting a tag.
+ * Modal component for editing and deleting a tag.
  *
  * @param props - Component props typed by {@link InterfaceManageTagModalProps}.
  * @remarks
  * `props.open` controls visibility, `props.tag` is the selected tag,
  * `props.onClose` closes the modal, `props.onRefetch` refreshes tag data,
- * `props.onViewTag` opens the tag view, and the `*TestId` props provide stable selectors.
- * @returns JSX element rendering edit/delete/view controls for a tag.
+ * and the `*TestId` props provide stable selectors.
+ * @returns JSX element rendering save/delete controls for a tag.
  */
 function ManageTagModal({
   open,
   tag,
   onClose,
   onRefetch,
-  onViewTag,
   modalTestId,
   inputTestId,
   deleteModalTestId,
@@ -122,12 +121,6 @@ function ManageTagModal({
     }
   };
 
-  const handleViewTag = (): void => {
-    if (!tag) return;
-    onClose();
-    onViewTag(tag.id);
-  };
-
   const submitDisabled = useMemo(() => Boolean(tagNameError), [tagNameError]);
 
   const handleDeleteConfirm = async (): Promise<void> => {
@@ -156,7 +149,7 @@ function ManageTagModal({
                 className={styles.editButton}
               >
                 <i className="fa fa-edit" />
-                {tCommon('edit') as string}
+                {tCommon('save') as string}
               </Button>
 
               <Button
@@ -169,16 +162,6 @@ function ManageTagModal({
                 {tCommon('delete') as string}
               </Button>
             </div>
-
-            <Button
-              type="button"
-              disabled={loading}
-              onClick={handleViewTag}
-              className={styles.viewButton}
-            >
-              <i className="fa fa-tag" />
-              {t('viewTag') as string}
-            </Button>
           </div>
         }
       >

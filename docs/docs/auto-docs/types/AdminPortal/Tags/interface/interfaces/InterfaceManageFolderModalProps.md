@@ -4,7 +4,7 @@
 
 # Interface: InterfaceManageFolderModalProps
 
-Defined in: [src/types/AdminPortal/Tags/interface.ts:122](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tags/interface.ts#L122)
+Defined in: [src/types/AdminPortal/Tags/interface.ts:121](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tags/interface.ts#L121)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/AdminPortal/Tags/interface.ts:122](https://github.com/Pal
 
 > `optional` **deleteModalTestId**: `string`
 
-Defined in: [src/types/AdminPortal/Tags/interface.ts:130](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tags/interface.ts#L130)
+Defined in: [src/types/AdminPortal/Tags/interface.ts:128](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tags/interface.ts#L128)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/AdminPortal/Tags/interface.ts:130](https://github.com/Pal
 
 > **folder**: [`InterfaceManageFolder`](InterfaceManageFolder.md)
 
-Defined in: [src/types/AdminPortal/Tags/interface.ts:124](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tags/interface.ts#L124)
+Defined in: [src/types/AdminPortal/Tags/interface.ts:123](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tags/interface.ts#L123)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/AdminPortal/Tags/interface.ts:124](https://github.com/Pal
 
 > `optional` **inputTestId**: `string`
 
-Defined in: [src/types/AdminPortal/Tags/interface.ts:129](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tags/interface.ts#L129)
+Defined in: [src/types/AdminPortal/Tags/interface.ts:127](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tags/interface.ts#L127)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/AdminPortal/Tags/interface.ts:129](https://github.com/Pal
 
 > `optional` **modalTestId**: `string`
 
-Defined in: [src/types/AdminPortal/Tags/interface.ts:128](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tags/interface.ts#L128)
+Defined in: [src/types/AdminPortal/Tags/interface.ts:126](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tags/interface.ts#L126)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/AdminPortal/Tags/interface.ts:128](https://github.com/Pal
 
 > **onClose**: () => `void`
 
-Defined in: [src/types/AdminPortal/Tags/interface.ts:125](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tags/interface.ts#L125)
+Defined in: [src/types/AdminPortal/Tags/interface.ts:124](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tags/interface.ts#L124)
 
 #### Returns
 
@@ -56,7 +56,7 @@ Defined in: [src/types/AdminPortal/Tags/interface.ts:125](https://github.com/Pal
 
 > **onRefetch**: () => `unknown`
 
-Defined in: [src/types/AdminPortal/Tags/interface.ts:126](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tags/interface.ts#L126)
+Defined in: [src/types/AdminPortal/Tags/interface.ts:125](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tags/interface.ts#L125)
 
 #### Returns
 
@@ -64,26 +64,8 @@ Defined in: [src/types/AdminPortal/Tags/interface.ts:126](https://github.com/Pal
 
 ***
 
-### onViewFolder()
-
-> **onViewFolder**: (`folderId`) => `void`
-
-Defined in: [src/types/AdminPortal/Tags/interface.ts:127](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tags/interface.ts#L127)
-
-#### Parameters
-
-##### folderId
-
-`string`
-
-#### Returns
-
-`void`
-
-***
-
 ### open
 
 > **open**: `boolean`
 
-Defined in: [src/types/AdminPortal/Tags/interface.ts:123](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tags/interface.ts#L123)
+Defined in: [src/types/AdminPortal/Tags/interface.ts:122](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tags/interface.ts#L122)

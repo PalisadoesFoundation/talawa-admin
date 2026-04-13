@@ -317,6 +317,7 @@ function OrganizationTags(): JSX.Element {
             className={styles.editButton}
             aria-label={`${tCommon('manage')} ${row.name ?? ''}`.trim()}
           >
+            <i className="fa fa-edit me-1" aria-hidden="true" />
             {tCommon('manage')}
           </Button>
         );
@@ -436,7 +437,6 @@ function OrganizationTags(): JSX.Element {
         folder={selectedFolder}
         onClose={hideManageFolderModal}
         onRefetch={orgTagFoldersRefetch}
-        onViewFolder={redirectToChildFolders}
         modalTestId="manageTagFolderModal"
         inputTestId="editTagFolderNameInput"
         deleteModalTestId="delete-tag-folder-modal"

@@ -22,10 +22,6 @@
   composes: deleteButton from './ManageTag.module.css';
 }
 
-.viewButton {
-  composes: viewButton from './ManageTag.module.css';
-}
-
 .fieldRow {
   composes: fieldRow from './ManageTag.module.css';
 }
