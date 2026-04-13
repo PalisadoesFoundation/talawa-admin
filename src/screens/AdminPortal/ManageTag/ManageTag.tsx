@@ -63,7 +63,10 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import styles from './ManageTag.module.css';
 import { DataTable } from 'shared-components/DataTable/DataTable';
 import { useTableData } from 'shared-components/DataTable/hooks/useTableData';
-import type { IColumnDef } from 'types/shared-components/DataTable/interface';
+import type {
+  IColumnDef,
+  Key,
+} from 'types/shared-components/DataTable/interface';
 import type { TagActionType } from 'utils/organizationTagsUtils';
 import type {
   InterfaceAssignedMemberRow,
@@ -204,6 +207,20 @@ function ManageTag(): JSX.Element {
 
   const redirectToFolder = (folderId: string): void => {
     navigate(`/admin/orgtags/${orgId}/tags/${folderId}`);
+  };
+
+  const handleBulkUnassignClick = (): void => {
+    const selectedIds = Array.from(selectedMemberKeys).map((key) =>
+      String(key),
+    );
+
+    if (selectedIds.length === 0) {
+      NotificationToast.error(t('noOneSelected'));
+      return;
+    }
+
+    setUnassignUserIds(selectedIds);
+    unassignUserTagModal.open();
   };
 
   const rowIndexMap = useMemo(() => {

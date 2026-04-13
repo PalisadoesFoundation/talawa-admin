@@ -136,11 +136,7 @@ describe('Organisation Tags Page', () => {
     await user.click(screen.getAllByTestId('selectMemberBtn')[0]);
 
     await waitFor(() => {
-      expect(screen.getAllByTestId('selectMemberBtn')[0]).toBeInTheDocument();
-    });
-    await user.click(screen.getAllByTestId('selectMemberBtn')[0]);
-
-    await waitFor(() => {
+      expect(screen.getAllByTestId('selectedMemberBtn')[0]).toBeDisabled();
       expect(
         screen.getAllByTestId('clearSelectedMember')[0],
       ).toBeInTheDocument();
@@ -148,9 +144,8 @@ describe('Organisation Tags Page', () => {
     await user.click(screen.getAllByTestId('clearSelectedMember')[0]);
 
     await waitFor(() => {
-      expect(screen.getAllByTestId('deselectMemberBtn')[0]).toBeInTheDocument();
+      expect(screen.getAllByTestId('selectMemberBtn')[0]).toBeInTheDocument();
     });
-    await user.click(screen.getAllByTestId('deselectMemberBtn')[0]);
   });
 
   it('searchs for tags where the firstName matches the provided firstName search input', async () => {
@@ -239,31 +234,12 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  it('Renders more members with infinite scroll', async () => {
-    const { getByText } = renderAddPeopleToTagModal(props);
+  it('renders members in a shared data table layout', async () => {
+    renderAddPeopleToTagModal(props);
 
     await waitFor(() => {
-      expect(getByText(translations.addPeople)).toBeInTheDocument();
-    });
-
-    const addPeopleToTagScrollableDiv = screen.getByTestId(
-      'addPeopleToTagScrollableDiv',
-    );
-
-    const initialMemberDataLength = screen.getAllByTestId('memberName').length;
-
-    await act(async () => {
-      addPeopleToTagScrollableDiv.scrollTop =
-        addPeopleToTagScrollableDiv.scrollHeight;
-      addPeopleToTagScrollableDiv.dispatchEvent(
-        new Event('scroll', { bubbles: true }),
-      );
-    });
-
-    await waitFor(() => {
-      const finalMemberDataLength = screen.getAllByTestId('memberName').length;
-      expect(finalMemberDataLength).toBeGreaterThan(initialMemberDataLength);
-      expect(getByText(translations.addPeople)).toBeInTheDocument();
+      expect(screen.getByRole('table')).toBeInTheDocument();
+      expect(screen.getAllByTestId('memberName').length).toBeGreaterThan(0);
     });
   });
 

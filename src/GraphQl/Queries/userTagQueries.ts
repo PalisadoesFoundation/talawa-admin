@@ -230,6 +230,13 @@ export const ORGANIZATION_TAGS_WITH_FOLDER = gql`
             folder {
               id
             }
+            assignees(first: 32) {
+              edges {
+                node {
+                  id
+                }
+              }
+            }
           }
         }
         pageInfo {

@@ -41,7 +41,7 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { USER_TAGS_MEMBERS_TO_ASSIGN_TO } from 'GraphQl/Queries/userTagQueries';
 import type { ChangeEvent } from 'react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Button from 'shared-components/Button';
 import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import { useParams } from 'react-router';
@@ -49,21 +49,19 @@ import styles from './AddPeopleToTag.module.css';
 import { ADD_PEOPLE_TO_TAG } from 'GraphQl/Mutations/TagMutations';
 import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
 import { useTranslation } from 'react-i18next';
-import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/InfiniteScrollLoader';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
+import { DataTable } from 'shared-components/DataTable/DataTable';
 import type {
   InterfaceAddPeopleToTagProps,
   InterfaceMemberData,
   InterfaceTagUsersToAssignToQuery,
 } from 'types/AdminPortal/Tag/interface';
-import {
-  TAGS_QUERY_DATA_CHUNK_SIZE,
-  dataGridStyle,
-} from 'types/AdminPortal/Tag/utils';
+import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'types/AdminPortal/Tag/utils';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-
-const GRID_COLUMN_MIN_WIDTH = 100;
+import type { IColumnDef } from 'types/shared-components/DataTable/interface';
+import { PAGE_SIZE } from 'types/ReportingTable/utils';
 
 const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   addPeopleToTagModalIsOpen,
@@ -117,35 +115,6 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
 
     wasAddPeopleModalOpenRef.current = addPeopleToTagModalIsOpen;
   }, [addPeopleToTagModalIsOpen, userTagsMembersToAssignToRefetch]);
-
-  const loadMoreMembersToAssignTo = (): void => {
-    fetchMoreMembersToAssignTo({
-      variables: {
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        after:
-          userTagsMembersToAssignToData?.organization?.members?.pageInfo
-            ?.endCursor, // Fetch after the last loaded cursor
-      },
-      updateQuery: (prevResult, { fetchMoreResult }) => {
-        if (!fetchMoreResult?.organization?.members) return prevResult;
-
-        return {
-          ...fetchMoreResult,
-          organization: {
-            ...fetchMoreResult.organization,
-            members: {
-              ...fetchMoreResult.organization.members,
-              edges: [
-                ...(prevResult.organization?.members?.edges ?? []),
-                ...(fetchMoreResult.organization?.members?.edges ?? []),
-              ],
-            },
-          },
-          tag: prevResult.tag,
-        };
-      },
-    });
-  };
 
   const assignedMemberIds = new Set(
     userTagsMembersToAssignToData?.tag?.assignees?.edges
@@ -271,26 +240,32 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
       },
     },
     {
-      field: 'userName',
-      headerName: t('userName'),
-      flex: 2,
-      minWidth: GRID_COLUMN_MIN_WIDTH,
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return <div data-testid="memberName">{params.row.name}</div>;
+      id: 'userName',
+      header: t('userName'),
+      accessor: 'name',
+      render: (value, row) => {
+        const isToBeAssigned = assignToMembers.some(
+          (member) => member._id === row._id,
+        );
+
+        return (
+          <span
+            data-testid="memberName"
+            className={isToBeAssigned ? styles.selectedMemberRow : ''}
+          >
+            {String(value)}
+          </span>
+        );
+      },
+      meta: {
+        sortable: false,
       },
     },
     {
-      field: 'actions',
-      headerName: t('actions'),
-      flex: 1,
-      align: 'center',
-      minWidth: GRID_COLUMN_MIN_WIDTH,
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
+      id: 'actions',
+      header: t('actions'),
+      accessor: '_id',
+      render: (_value, row) => {
         const isToBeAssigned = assignToMembers.some(
           (member) => member._id === row._id,
         );
