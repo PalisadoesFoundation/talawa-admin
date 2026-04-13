@@ -169,6 +169,10 @@
   color: var(--color-gray-500);
 }
 
+.topBreadcrumbSeparator::before {
+  content: '/';
+}
+
 .topBreadcrumbLink[class~='btn'] {
   padding: 0;
   margin: 0;

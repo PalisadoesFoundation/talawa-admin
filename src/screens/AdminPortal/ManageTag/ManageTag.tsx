@@ -190,18 +190,20 @@ function ManageTag(): JSX.Element {
       .startsWith(assignedMemberSearchInput.toLowerCase()),
   );
 
-  // get the ancestorTags array and push the current tag in it
-  // used for the tag breadcrumbs
-  const orgUserTagAncestors = [
-    ...(userTagAssignedMembersData?.getAssignedUsers?.ancestorTags ?? []),
-    { _id: currentTagId, name: currentTagName },
-  ];
+  const folderBreadcrumbs = useMemo(() => {
+    const breadcrumbs: Array<{ id: string; name: string }> = [];
+    let currentFolder = userTagAssignedMembersData?.getAssignedUsers?.folder;
 
-  const redirectToSubTags = (tagId: string): void => {
-    navigate(`/admin/orgtags/${orgId}/subTags/${tagId}`);
-  };
-  const redirectToManageTag = (tagId: string): void => {
-    navigate(`/admin/orgtags/${orgId}/manageTag/${tagId}`);
+    while (currentFolder) {
+      breadcrumbs.unshift({ id: currentFolder._id, name: currentFolder.name });
+      currentFolder = currentFolder.parentFolder ?? null;
+    }
+
+    return breadcrumbs;
+  }, [userTagAssignedMembersData]);
+
+  const redirectToFolder = (folderId: string): void => {
+    navigate(`/admin/orgtags/${orgId}/tags/${folderId}`);
   };
 
   const rowIndexMap = useMemo(() => {

@@ -478,38 +478,36 @@ function TagFoldersHierarchy(): JSX.Element {
     <>
       <Row>
         <div>
-          {folderBreadcrumbs.length > 0 && (
-            <div className={styles.pageBreadcrumb}>
-              <Button
-                type="button"
-                variant="text"
-                onClick={() => navigate(`/admin/orgtags/${orgId}`)}
-                className={styles.breadcrumbLinkButton}
-                data-testid="allTagsBtn"
-              >
-                {t('tags')}
-              </Button>
+          <div className={styles.pageBreadcrumb}>
+            <Button
+              type="button"
+              variant="text"
+              onClick={() => navigate(`/admin/orgtags/${orgId}`)}
+              className={styles.breadcrumbLinkButton}
+              data-testid="allTagsBtn"
+            >
+              {t('tags')}
+            </Button>
 
-              {folderBreadcrumbs.map((tag) => (
-                <React.Fragment key={tag.id}>
-                  <span className={styles.breadcrumbDivider}>/</span>
-                  {tag.id === parentFolderId ? (
-                    <span className={styles.breadcrumbCurrent}>{tag.name}</span>
-                  ) : (
-                    <Button
-                      type="button"
-                      variant="text"
-                      className={styles.breadcrumbLinkButton}
-                      onClick={() => redirectToChildFolders(tag.id)}
-                      data-testid="redirectToChildFolders"
-                    >
-                      {tag.name}
-                    </Button>
-                  )}
-                </React.Fragment>
-              ))}
-            </div>
-          )}
+            {folderBreadcrumbs.map((tag) => (
+              <React.Fragment key={tag.id}>
+                <span className={styles.breadcrumbDivider}>/</span>
+                {tag.id === parentFolderId ? (
+                  <span className={styles.breadcrumbCurrent}>{tag.name}</span>
+                ) : (
+                  <Button
+                    type="button"
+                    variant="text"
+                    className={styles.breadcrumbLinkButton}
+                    onClick={() => redirectToChildFolders(tag.id)}
+                    data-testid="redirectToChildFolders"
+                  >
+                    {tag.name}
+                  </Button>
+                )}
+              </React.Fragment>
+            ))}
+          </div>
 
           <Toolbar
             search={{
