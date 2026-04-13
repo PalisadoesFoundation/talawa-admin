@@ -14,21 +14,20 @@ import styles from './ManageFolderModal.module.css';
 import type { InterfaceManageFolderModalProps } from 'types/AdminPortal/Tags/interface';
 
 /**
- * Modal component for viewing, editing, and deleting a tag folder.
+ * Modal component for editing and deleting a tag folder.
  *
  * @param props - Component props typed by {@link InterfaceManageFolderModalProps}.
  * @remarks
  * `props.open` controls visibility, `props.folder` is the selected folder,
  * `props.onClose` closes the modal, `props.onRefetch` refreshes folder/tag data,
- * `props.onViewFolder` opens folder view, and the `*TestId` props provide stable selectors.
- * @returns JSX element rendering edit/delete/view controls for a folder.
+ * and the `*TestId` props provide stable selectors.
+ * @returns JSX element rendering save/delete controls for a folder.
  */
 function ManageFolderModal({
   open,
   folder,
   onClose,
   onRefetch,
-  onViewFolder,
   modalTestId,
   inputTestId,
   deleteModalTestId,
@@ -122,12 +121,6 @@ function ManageFolderModal({
     }
   };
 
-  const handleViewFolder = (): void => {
-    if (!folder) return;
-    onClose();
-    onViewFolder(folder.id);
-  };
-
   const submitDisabled = useMemo(
     () => Boolean(folderNameError),
     [folderNameError],
@@ -159,7 +152,7 @@ function ManageFolderModal({
                 className={styles.editButton}
               >
                 <i className="fa fa-edit" />
-                {tCommon('edit') as string}
+                {tCommon('save') as string}
               </Button>
 
               <Button
@@ -172,16 +165,6 @@ function ManageFolderModal({
                 {tCommon('delete') as string}
               </Button>
             </div>
-
-            <Button
-              type="button"
-              disabled={loading}
-              onClick={handleViewFolder}
-              className={styles.viewButton}
-            >
-              <i className="fa fa-folder-open" />
-              {t('viewFolder') as string}
-            </Button>
           </div>
         }
       >

@@ -108,7 +108,6 @@ export interface InterfaceManageTagModalProps {
   tag: InterfaceManageTag | null;
   onClose: () => void;
   onRefetch: () => Promise<unknown> | unknown;
-  onViewTag: (tagId: string) => void;
   modalTestId?: string;
   inputTestId?: string;
   deleteModalTestId?: string;
@@ -124,7 +123,6 @@ export interface InterfaceManageFolderModalProps {
   folder: InterfaceManageFolder | null;
   onClose: () => void;
   onRefetch: () => Promise<unknown> | unknown;
-  onViewFolder: (folderId: string) => void;
   modalTestId?: string;
   inputTestId?: string;
   deleteModalTestId?: string;

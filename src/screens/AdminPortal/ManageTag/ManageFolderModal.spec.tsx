@@ -26,7 +26,6 @@ vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
 describe('ManageFolderModal', () => {
   const onClose = vi.fn();
   const onRefetch = vi.fn().mockResolvedValue(undefined);
-  const onViewFolder = vi.fn();
   const folder = { id: 'folder-1', name: 'Operations' };
 
   beforeEach(() => {
@@ -51,7 +50,6 @@ describe('ManageFolderModal', () => {
             folder={customFolder}
             onClose={onClose}
             onRefetch={onRefetch}
-            onViewFolder={onViewFolder}
             modalTestId="manageFolderModal"
             inputTestId="manageFolderNameInput"
             deleteModalTestId="deleteFolderModal"
@@ -84,7 +82,7 @@ describe('ManageFolderModal', () => {
 
     await user.clear(input);
     await user.type(input, 'Operations Updated');
-    await user.click(screen.getByRole('button', { name: /edit/i }));
+    await user.click(screen.getByRole('button', { name: /save/i }));
 
     await waitFor(() => {
       expect(onRefetch).toHaveBeenCalled();
@@ -97,7 +95,7 @@ describe('ManageFolderModal', () => {
     const user = userEvent.setup();
     renderModal();
 
-    await user.click(screen.getByRole('button', { name: /edit/i }));
+    await user.click(screen.getByRole('button', { name: /save/i }));
 
     await waitFor(() => {
       expect(onClose).toHaveBeenCalled();
@@ -117,7 +115,7 @@ describe('ManageFolderModal', () => {
 
     await waitFor(() => {
       expect(screen.getByText(/required/i)).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /edit/i })).toBeDisabled();
+      expect(screen.getByRole('button', { name: /save/i })).toBeDisabled();
       expect(NotificationToast.error).not.toHaveBeenCalled();
     });
   });
@@ -170,18 +168,6 @@ describe('ManageFolderModal', () => {
     });
   });
 
-  test('calls onViewFolder and closes modal', async () => {
-    const user = userEvent.setup();
-    renderModal();
-
-    await user.click(screen.getByRole('button', { name: /view folder/i }));
-
-    await waitFor(() => {
-      expect(onClose).toHaveBeenCalled();
-      expect(onViewFolder).toHaveBeenCalledWith('folder-1');
-    });
-  });
-
   test('resets local state when modal closes and reopens', async () => {
     const user = userEvent.setup();
     const { rerender } = renderModal();
@@ -206,7 +192,6 @@ describe('ManageFolderModal', () => {
             folder={folder}
             onClose={onClose}
             onRefetch={onRefetch}
-            onViewFolder={onViewFolder}
             modalTestId="manageFolderModal"
             inputTestId="manageFolderNameInput"
             deleteModalTestId="deleteFolderModal"
@@ -223,7 +208,6 @@ describe('ManageFolderModal', () => {
             folder={folder}
             onClose={onClose}
             onRefetch={onRefetch}
-            onViewFolder={onViewFolder}
             modalTestId="manageFolderModal"
             inputTestId="manageFolderNameInput"
             deleteModalTestId="deleteFolderModal"
@@ -244,7 +228,7 @@ describe('ManageFolderModal', () => {
     const user = userEvent.setup();
     renderModal([], true, null);
 
-    await user.click(screen.getByRole('button', { name: /edit/i }));
+    await user.click(screen.getByRole('button', { name: /save/i }));
 
     await waitFor(() => {
       expect(onClose).not.toHaveBeenCalled();
@@ -291,7 +275,7 @@ describe('ManageFolderModal', () => {
     ) as HTMLInputElement;
     await user.clear(input);
     await user.type(input, 'Broken Update');
-    await user.click(screen.getByRole('button', { name: /edit/i }));
+    await user.click(screen.getByRole('button', { name: /save/i }));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith('Update failed');
