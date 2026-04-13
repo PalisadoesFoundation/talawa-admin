@@ -6,7 +6,7 @@
 
 > `const` **ORGANIZATION\_TAGS\_AND\_FOLDERS**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/userTagQueries.ts:252](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/userTagQueries.ts#L252)
+Defined in: [src/GraphQl/Queries/userTagQueries.ts:259](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/userTagQueries.ts#L259)
 
 GraphQL query to retrieve organization tags and tag folders.
 

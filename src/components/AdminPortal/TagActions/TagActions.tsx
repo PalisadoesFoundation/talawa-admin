@@ -1,31 +1,4 @@
-/**
- * Component for managing tag actions such as assigning or removing tags
- * for users within an organization. It provides a modal interface for
- * selecting tags, searching tags, and performing the desired action.
- *
- * @param props - The props for the component, which include:
- *   - tagActionsModalIsOpen: Determines if the modal is open
- *   - hideTagActionsModal: Function to close the modal
- *   - tagActionType: The type of action to perform ('assignToTags' or 'removeFromTags')
- *
- * @returns A React functional component.
- *
- * @remarks
- * - Uses Apollo Client's useQuery and useMutation hooks for fetching and mutating data.
- * - Uses CursorPaginationManager for standardized pagination with load more functionality.
- * - Handles ancestor tags to ensure hierarchical consistency when selecting or deselecting tags.
- * - ancestorTagsDataMap tracks reference counts for ancestor tags (state used internally, never read directly).
- *
- * @example
- * ```tsx
- * <TagActions
- *   tagActionsModalIsOpen={true}
- *   hideTagActionsModal={() => setModalOpen(false)}
- *   tagActionType="assignToTags"
- * />
- * ```
- *
- */
+/** Modal for moving/removing selected people across tag folders and tags. */
 // translation-check-keyPrefix: manageTag
 import { useApolloClient, useMutation, useQuery } from '@apollo/client';
 import type { FormEvent } from 'react';
@@ -45,9 +18,9 @@ import {
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/InfiniteScrollLoader';
-import { getRootFolderIds, renderFolderTree } from './tagTreeRenderer';
 import { loadFolderNode } from './tagFolderLoader';
+import TagActionsContent from './TagActionsContent';
+import { useTagActionsNavigation } from './useTagActionsNavigation';
 import type {
   InterfaceOrganizationTagsQuery,
   InterfaceRootFolderQuery,
@@ -65,6 +38,9 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   assigneeIds = [],
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'manageTag' });
+  const { t: tOrganizationTags } = useTranslation('translation', {
+    keyPrefix: 'organizationTags',
+  });
   const { t: tCommon } = useTranslation('common');
   const client = useApolloClient();
 
@@ -75,9 +51,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
     [],
   );
   const [checkedTags, setCheckedTags] = useState<Set<string>>(new Set());
-  const [expandedFolderIds, setExpandedFolderIds] = useState<Set<string>>(
-    new Set(),
-  );
+  const [currentFolderId, setCurrentFolderId] = useState<string | null>(null);
   const [folderStateMap, setFolderStateMap] = useState<
     Map<string, InterfaceTagFolderItem>
   >(new Map());
@@ -97,14 +71,17 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
     skip: !tagActionsModalIsOpen || !orgId,
   });
 
-  const { data: orgTagsData, fetchMore: fetchMoreTags } =
-    useQuery<InterfaceOrganizationTagsQuery>(ORGANIZATION_TAGS_WITH_FOLDER, {
-      variables: {
-        id: orgId,
-        first: 32,
-      },
-      skip: !tagActionsModalIsOpen || !orgId,
-    });
+  const {
+    data: orgTagsData,
+    fetchMore: fetchMoreTags,
+    refetch: refetchOrgTags,
+  } = useQuery<InterfaceOrganizationTagsQuery>(ORGANIZATION_TAGS_WITH_FOLDER, {
+    variables: {
+      id: orgId,
+      first: 32,
+    },
+    skip: !tagActionsModalIsOpen || !orgId,
+  });
 
   useEffect(() => {
     if (!tagActionsModalIsOpen || !orgId || !rootFoldersData?.organization) {
@@ -247,12 +224,20 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   }, [rootFoldersData, tagActionsModalIsOpen]);
 
   useEffect(() => {
+    if (!tagActionsModalIsOpen || !orgId) {
+      return;
+    }
+
+    void refetchOrgTags();
+  }, [orgId, refetchOrgTags, tagActionsModalIsOpen]);
+
+  useEffect(() => {
     if (!tagActionsModalIsOpen) {
       setFolderStateMap(new Map());
-      setExpandedFolderIds(new Set());
       setCheckedTags(new Set());
       setSelectedTags([]);
       setTagSearchName('');
+      setCurrentFolderId(null);
       loadingFolderIdsRef.current = new Set();
     }
   }, [tagActionsModalIsOpen]);
@@ -260,11 +245,23 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   const tagsByFolderMap = useMemo(() => {
     const grouped = new Map<string, InterfaceTagSelectionItem[]>();
     const term = tagSearchName.trim().toLowerCase();
+    const assigneeIdSet = new Set(assigneeIds);
 
     (orgTagsData?.organization?.tags?.edges ?? []).forEach((edge) => {
       const id = edge.node.id;
       if (id === currentTagId) {
         return;
+      }
+
+      if (tagActionType === 'removeFromTags') {
+        const hasSelectedAssignee =
+          edge.node.assignees?.edges?.some((assigneeEdge) =>
+            assigneeIdSet.has(assigneeEdge.node.id),
+          ) ?? false;
+
+        if (!hasSelectedAssignee) {
+          return;
+        }
       }
 
       const name = edge.node.name;
@@ -283,7 +280,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
     });
 
     return grouped;
-  }, [currentTagId, orgTagsData, tagSearchName]);
+  }, [assigneeIds, currentTagId, orgTagsData, tagActionType, tagSearchName]);
 
   useEffect(() => {
     setFolderStateMap((prev) => {
@@ -299,6 +296,23 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
       return next;
     });
   }, [tagsByFolderMap]);
+
+  const assigneeIdsByTagId = useMemo(() => {
+    const map = new Map<string, Set<string>>();
+
+    (orgTagsData?.organization?.tags?.edges ?? []).forEach((edge) => {
+      const tagId = edge.node.id;
+      const assigneeIdsForTag = new Set(
+        (edge.node.assignees?.edges ?? []).map(
+          (assigneeEdge) => assigneeEdge.node.id,
+        ),
+      );
+
+      map.set(tagId, assigneeIdsForTag);
+    });
+
+    return map;
+  }, [orgTagsData]);
 
   const [assignUserTag] = useMutation(ADD_PEOPLE_TO_TAG);
   const [unassignUserTag] = useMutation(UNASSIGN_USER_TAG);
@@ -341,12 +355,34 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
       const mutationFn =
         tagActionType === 'assignToTags' ? assignUserTag : unassignUserTag;
 
-      const tagAssigneePairs = selectedTags.flatMap((selectedTag) =>
-        assigneeIds.map((assigneeId) => ({
-          tagId: selectedTag.id,
-          assigneeId,
-        })),
-      );
+      const tagAssigneePairs = selectedTags.flatMap((selectedTag) => {
+        if (tagActionType === 'removeFromTags') {
+          const assignedAssignees =
+            assigneeIdsByTagId.get(selectedTag.id) ?? new Set<string>();
+
+          return assigneeIds
+            .filter((assigneeId) => assignedAssignees.has(assigneeId))
+            .map((assigneeId) => ({
+              tagId: selectedTag.id,
+              assigneeId,
+            }));
+        }
+
+        const assignedAssignees =
+          assigneeIdsByTagId.get(selectedTag.id) ?? new Set<string>();
+
+        return assigneeIds
+          .filter((assigneeId) => !assignedAssignees.has(assigneeId))
+          .map((assigneeId) => ({
+            tagId: selectedTag.id,
+            assigneeId,
+          }));
+      });
+
+      if (!tagAssigneePairs.length) {
+        NotificationToast.error(t('noAssignedMembersFound'));
+        return;
+      }
 
       const batchErrors: Error[] = [];
 
@@ -395,6 +431,8 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
         NotificationToast.success(t('successfullyRemovedFromTags'));
       }
 
+      await refetchOrgTags();
+
       hideTagActionsModal();
       setSelectedTags([]);
       setCheckedTags(new Set());
@@ -405,51 +443,44 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
     }
   };
 
-  const searchTerm = tagSearchName.trim().toLowerCase();
+  const ensureFolderLoaded = (folderId: string): void => {
+    const folder = folderStateMap.get(folderId);
 
-  const rootFolderIds = useMemo(
-    () => getRootFolderIds(folderStateMap),
-    [folderStateMap],
-  );
-
-  const toggleFolderExpansion = (folderId: string): void => {
-    const shouldExpand = !expandedFolderIds.has(folderId);
-
-    setExpandedFolderIds((prev) => {
-      const next = new Set(prev);
-
-      if (next.has(folderId)) {
-        next.delete(folderId);
-      } else {
-        next.add(folderId);
-      }
-
-      return next;
-    });
-
-    if (!shouldExpand) {
+    if (!folder || folder.loading || folder.loaded) {
       return;
     }
 
-    const folder = folderStateMap.get(folderId);
-    if (
-      folder &&
-      !folder.loading &&
-      (!folder.loaded ||
-        (folder.loaded &&
-          folder.childFolderIds.length === 0 &&
-          folder.tags.length === 0))
-    ) {
-      void loadFolderNode({
-        folderId,
-        loadingFolderIdsRef,
-        setFolderStateMap,
-        tagsByFolderMap,
-        client,
-        tCommon,
-      });
-    }
+    void loadFolderNode({
+      folderId,
+      loadingFolderIdsRef,
+      setFolderStateMap,
+      tagsByFolderMap,
+      client,
+      tCommon,
+    });
   };
+
+  const openFolder = (folderId: string): void => {
+    setCurrentFolderId(folderId);
+    ensureFolderLoaded(folderId);
+  };
+
+  const searchTerm = tagSearchName.trim().toLowerCase();
+
+  const {
+    rootFolderIds,
+    currentFolder,
+    breadcrumbFolderIds,
+    visibleFolderIds,
+    visibleTags,
+  } = useTagActionsNavigation({
+    currentFolderId,
+    folderStateMap,
+    searchTerm,
+    tagActionType,
+  });
+
+  const hasAssignees = assigneeIds.length > 0;
 
   const modalFooter = (
     <>
@@ -466,8 +497,9 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
         form="tagActionForm"
         data-testid="tagActionSubmitBtn"
         className={styles.addButton}
+        disabled={!hasAssignees}
       >
-        {tagActionType === 'assignToTags' ? t('assign') : t('remove')}
+        {tagActionType === 'assignToTags' ? t('move') : t('remove')}
       </Button>
     </>
   );
@@ -477,9 +509,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
       open={tagActionsModalIsOpen}
       onClose={hideTagActionsModal}
       title={
-        tagActionType === 'assignToTags'
-          ? t('assignToTags')
-          : t('removeFromTags')
+        tagActionType === 'assignToTags' ? t('moveToTags') : t('removeFromTags')
       }
       customFooter={modalFooter}
       data-testId="tagActionsModal"
@@ -523,49 +553,24 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
           />
         </div>
 
-        <div className={styles.listTitle}>{t('allTags')}</div>
-
-        <ul
-          id="scrollableDiv"
-          data-testid="scrollableDiv"
-          className={styles.tagActionsScrollableDiv}
-          aria-label={t('allTags')}
-        >
-          {rootFoldersLoading && rootFolderIds.length === 0 ? (
-            <div className={styles.loadingDiv}>
-              <InfiniteScrollLoader />
-            </div>
-          ) : rootFoldersError ? (
-            <div
-              className="text-danger mx-auto"
-              data-testid="tagsQueryErrorMessage"
-            >
-              {rootFoldersError.message}
-            </div>
-          ) : rootFolderIds.length === 0 ? (
-            <div
-              className="text-body-tertiary mx-auto"
-              data-testid="noTagsFoundMessage"
-            >
-              {t('noTagsFound')}
-            </div>
-          ) : (
-            rootFolderIds.flatMap((folderId) =>
-              renderFolderTree(folderId, 0, {
-                folderStateMap,
-                expandedFolderIds,
-                checkedTags,
-                searchTerm,
-                styles,
-                onToggleFolderExpansion: toggleFolderExpansion,
-                onToggleTagSelection: toggleTagSelection,
-                noTagsFoundText: t('noTagsFound'),
-                expandFolderAriaLabel: t('expandFolder'),
-                collapseFolderAriaLabel: t('collapseFolder'),
-              }),
-            )
-          )}
-        </ul>
+        <TagActionsContent
+          hasAssignees={hasAssignees}
+          currentFolderId={currentFolderId}
+          breadcrumbFolderIds={breadcrumbFolderIds}
+          folderStateMap={folderStateMap}
+          onOpenFolder={openFolder}
+          onGoToRoot={() => setCurrentFolderId(null)}
+          manageTagTranslator={t}
+          organizationTagsTranslator={tOrganizationTags}
+          rootFoldersLoading={rootFoldersLoading}
+          rootFolderIds={rootFolderIds}
+          rootFoldersError={rootFoldersError}
+          visibleFolderIds={visibleFolderIds}
+          currentFolder={currentFolder}
+          visibleTags={visibleTags}
+          checkedTags={checkedTags}
+          onToggleTagSelection={toggleTagSelection}
+        />
       </form>
     </CRUDModalTemplate>
   );

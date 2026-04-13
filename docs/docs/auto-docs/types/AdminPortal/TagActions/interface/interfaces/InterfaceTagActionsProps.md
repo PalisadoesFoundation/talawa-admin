@@ -4,7 +4,7 @@
 
 # Interface: InterfaceTagActionsProps
 
-Defined in: [src/types/AdminPortal/TagActions/interface.ts:86](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L86)
+Defined in: [src/types/AdminPortal/TagActions/interface.ts:93](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L93)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/AdminPortal/TagActions/interface.ts:86](https://github.co
 
 > `optional` **assigneeIds**: `string`[]
 
-Defined in: [src/types/AdminPortal/TagActions/interface.ts:90](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L90)
+Defined in: [src/types/AdminPortal/TagActions/interface.ts:97](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L97)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/AdminPortal/TagActions/interface.ts:90](https://github.co
 
 > **hideTagActionsModal**: () => `void`
 
-Defined in: [src/types/AdminPortal/TagActions/interface.ts:88](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L88)
+Defined in: [src/types/AdminPortal/TagActions/interface.ts:95](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L95)
 
 #### Returns
 
@@ -32,7 +32,7 @@ Defined in: [src/types/AdminPortal/TagActions/interface.ts:88](https://github.co
 
 > **tagActionsModalIsOpen**: `boolean`
 
-Defined in: [src/types/AdminPortal/TagActions/interface.ts:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L87)
+Defined in: [src/types/AdminPortal/TagActions/interface.ts:94](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L94)
 
 ***
 
@@ -40,4 +40,4 @@ Defined in: [src/types/AdminPortal/TagActions/interface.ts:87](https://github.co
 
 > **tagActionType**: [`TagActionType`](../../../../../utils/organizationTagsUtils/type-aliases/TagActionType.md)
 
-Defined in: [src/types/AdminPortal/TagActions/interface.ts:89](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L89)
+Defined in: [src/types/AdminPortal/TagActions/interface.ts:96](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L96)

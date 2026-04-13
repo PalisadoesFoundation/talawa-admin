@@ -4,7 +4,7 @@
 
 # Interface: InterfaceTagNodeProps
 
-Defined in: [src/types/AdminPortal/TagActions/interface.ts:93](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L93)
+Defined in: [src/types/AdminPortal/TagActions/interface.ts:100](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L100)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/AdminPortal/TagActions/interface.ts:93](https://github.co
 
 > **checkedTags**: `Set`\<`string`\>
 
-Defined in: [src/types/AdminPortal/TagActions/interface.ts:95](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L95)
+Defined in: [src/types/AdminPortal/TagActions/interface.ts:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L102)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/AdminPortal/TagActions/interface.ts:95](https://github.co
 
 > **tag**: [`InterfaceTagData`](../../../../../utils/interfaces/interfaces/InterfaceTagData.md)
 
-Defined in: [src/types/AdminPortal/TagActions/interface.ts:94](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L94)
+Defined in: [src/types/AdminPortal/TagActions/interface.ts:101](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L101)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/AdminPortal/TagActions/interface.ts:94](https://github.co
 
 > **toggleTagSelection**: (`tag`, `isSelected`) => `void`
 
-Defined in: [src/types/AdminPortal/TagActions/interface.ts:96](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L96)
+Defined in: [src/types/AdminPortal/TagActions/interface.ts:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/TagActions/interface.ts#L103)
 
 #### Parameters
 

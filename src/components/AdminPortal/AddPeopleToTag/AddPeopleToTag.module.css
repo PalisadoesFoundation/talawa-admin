@@ -42,6 +42,24 @@
   box-shadow: none;
 }
 
+.selectedMemberButton {
+  background-color: var(--color-gray-200);
+  color: var(--color-gray-500);
+  border-color: var(--color-gray-300);
+  cursor: not-allowed;
+}
+
+.selectedMemberButton:is(:hover, :active, :focus) {
+  background-color: var(--color-gray-200) !important;
+  color: var(--color-gray-500);
+  border-color: var(--color-gray-300);
+  box-shadow: none;
+}
+
+.selectedMemberRow {
+  color: var(--color-gray-500);
+}
+
 .removeButton {
   margin-bottom: var(--space-4);
   background-color: var(--color-red-100);

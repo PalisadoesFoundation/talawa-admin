@@ -63,7 +63,10 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import styles from './ManageTag.module.css';
 import { DataTable } from 'shared-components/DataTable/DataTable';
 import { useTableData } from 'shared-components/DataTable/hooks/useTableData';
-import type { IColumnDef } from 'types/shared-components/DataTable/interface';
+import type {
+  IColumnDef,
+  Key,
+} from 'types/shared-components/DataTable/interface';
 import type { TagActionType } from 'utils/organizationTagsUtils';
 import type {
   InterfaceAssignedMemberRow,
@@ -103,7 +106,10 @@ function ManageTag(): JSX.Element {
   const addPeopleToTagModal = useModalState();
   const tagActionsModal = useModalState();
 
-  const [unassignUserId, setUnassignUserId] = useState<string | null>(null);
+  const [unassignUserIds, setUnassignUserIds] = useState<string[]>([]);
+  const [selectedMemberKeys, setSelectedMemberKeys] = useState<
+    ReadonlySet<Key>
+  >(new Set());
   const [assignedMemberSearchInput, setAssignedMemberSearchInput] =
     useState('');
   // a state to specify whether we're assigning to tags or removing from tags
@@ -112,7 +118,7 @@ function ManageTag(): JSX.Element {
 
   const toggleUnassignUserTagModal = (): void => {
     if (unassignUserTagModal.isOpen) {
-      setUnassignUserId(null);
+      setUnassignUserIds([]);
     }
     unassignUserTagModal.toggle();
   };
@@ -148,11 +154,25 @@ function ManageTag(): JSX.Element {
 
   const handleUnassignUserTag = async (): Promise<void> => {
     try {
-      await unassignUserTag({
-        variables: { tagId: currentTagId, userId: unassignUserId },
-      });
+      const batchErrors: string[] = [];
+
+      for (const userId of unassignUserIds) {
+        try {
+          await unassignUserTag({
+            variables: { tagId: currentTagId, userId },
+          });
+        } catch (error: unknown) {
+          batchErrors.push(getManageTagErrorMessage(error));
+        }
+      }
+
+      if (batchErrors.length > 0) {
+        NotificationToast.error(batchErrors[0]);
+        return;
+      }
 
       userTagAssignedMembersRefetch();
+      setSelectedMemberKeys(new Set());
       toggleUnassignUserTagModal();
       NotificationToast.success({
         key: 'successfullyUnassigned',
@@ -187,6 +207,20 @@ function ManageTag(): JSX.Element {
 
   const redirectToFolder = (folderId: string): void => {
     navigate(`/admin/orgtags/${orgId}/tags/${folderId}`);
+  };
+
+  const handleBulkUnassignClick = (): void => {
+    const selectedIds = Array.from(selectedMemberKeys).map((key) =>
+      String(key),
+    );
+
+    if (selectedIds.length === 0) {
+      NotificationToast.error(t('noOneSelected'));
+      return;
+    }
+
+    setUnassignUserIds(selectedIds);
+    unassignUserTagModal.open();
   };
 
   const rowIndexMap = useMemo(() => {
@@ -249,19 +283,6 @@ function ManageTag(): JSX.Element {
                 {t('viewProfile')}
               </div>
             </Link>
-
-            <Button
-              size="sm"
-              variant="outline-danger"
-              onClick={() => {
-                setUnassignUserId(row?._id);
-                toggleUnassignUserTagModal();
-              }}
-              data-testid="unassignTagBtn"
-              className={styles.unassignButton}
-            >
-              {tCommon('unassign')}
-            </Button>
           </div>
         );
       },
@@ -375,6 +396,11 @@ function ManageTag(): JSX.Element {
                       error={userTagAssignedMembersError}
                       refetch={userTagAssignedMembersRefetch}
                       rowKey="_id"
+                      selectable
+                      selectedKeys={selectedMemberKeys}
+                      onSelectionChange={(next) =>
+                        setSelectedMemberKeys(new Set(next))
+                      }
                       paginationMode="client"
                       pageSize={PAGE_SIZE}
                       tableClassName={styles.listTable}
@@ -402,7 +428,7 @@ function ManageTag(): JSX.Element {
                         className={`fa fa-tag ${styles.actionButtonIcon}`}
                         aria-hidden="true"
                       />
-                      <span>{t('assignToTags')}</span>
+                      <span>{t('moveToTags')}</span>
                     </span>
                   </Button>
                   <Button
@@ -424,6 +450,23 @@ function ManageTag(): JSX.Element {
                     </span>
                   </Button>
                   <hr className={styles.tagActionsDivider} />
+
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={handleBulkUnassignClick}
+                    className={styles.bulkUnassignActionButton}
+                    data-testid="bulkUnassignBtn"
+                    disabled={selectedMemberKeys.size === 0}
+                  >
+                    <span className={styles.actionButtonContent}>
+                      <i
+                        className={`fa fa-user-minus ${styles.actionButtonIcon}`}
+                        aria-hidden="true"
+                      />
+                      <span>{`${tCommon('unassign')} ${tCommon('selected')}`}</span>
+                    </span>
+                  </Button>
                 </div>
               </Col>
             </Row>
@@ -437,7 +480,7 @@ function ManageTag(): JSX.Element {
         hideAddPeopleToTagModal={addPeopleToTagModal.close}
         refetchAssignedMembersData={userTagAssignedMembersRefetch}
       />
-      {/* Assign People To Tags Modal */}
+      {/* Move/Remove People To Tags Modal */}
       <TagActions
         tagActionsModalIsOpen={tagActionsModal.isOpen}
         hideTagActionsModal={tagActionsModal.close}

@@ -282,6 +282,42 @@
   border-color: transparent;
 }
 
+.bulkUnassignActionButton[class~='btn'],
+.bulkUnassignActionButton[class~='btn']:focus,
+.bulkUnassignActionButton[class~='btn']:active {
+  width: 90%;
+  height: calc(var(--space-10) - var(--space-2));
+  border: none;
+  border-radius: calc(var(--radius-md) - var(--space-1));
+  margin: var(--space-2) 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 var(--space-4);
+  font-family: Lato, sans-serif;
+  font-style: normal;
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-tight);
+  transition: background-color 0.15s ease;
+  box-shadow: none;
+  background: var(--color-red-100);
+  color: var(--color-red-500);
+  border-color: transparent;
+}
+
+.bulkUnassignActionButton[class~='btn']:is(:hover, :focus-visible) {
+  background: var(--color-red-500);
+  color: var(--color-white);
+  border-color: transparent;
+}
+
+.bulkUnassignActionButton[class~='btn']:disabled {
+  background: var(--color-red-100);
+  color: var(--color-red-500);
+  opacity: 0.6;
+}
+
 .actionButtonContent {
   display: flex;
   width: 100%;

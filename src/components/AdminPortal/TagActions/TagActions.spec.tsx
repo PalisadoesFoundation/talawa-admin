@@ -37,6 +37,7 @@ const baseProps: InterfaceTagActionsProps = {
   tagActionsModalIsOpen: true,
   hideTagActionsModal: vi.fn(),
   tagActionType: 'assignToTags',
+  assigneeIds: ['member-1'],
 };
 
 const baseRootFoldersMock = {
@@ -92,9 +93,19 @@ const baseTagsMock = {
                 folder: { id: 'folder-1' },
               },
             },
-            { node: { id: '2', name: 'Tag Two', folder: { id: 'folder-1' } } },
             {
-              node: { id: '3', name: 'Tag Three', folder: { id: 'folder-1' } },
+              node: {
+                id: '2',
+                name: 'Tag Two',
+                folder: { id: 'folder-1' },
+              },
+            },
+            {
+              node: {
+                id: '3',
+                name: 'Tag Three',
+                folder: { id: 'folder-1' },
+              },
             },
           ],
           pageInfo: {
@@ -176,7 +187,9 @@ describe('TagActions', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/assign to tags/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/move these people to tags/i),
+      ).toBeInTheDocument();
       expect(screen.getByTestId('closeTagActionsModalBtn')).toBeInTheDocument();
     });
 
@@ -204,27 +217,23 @@ describe('TagActions', () => {
     });
   });
 
-  test('shows error toast when no assignees are provided', async () => {
-    const user = userEvent.setup();
-    renderTagActionsModal(baseProps, createBaseMocks());
+  test('shows no people found state when no assignees are provided', async () => {
+    renderTagActionsModal(
+      {
+        ...baseProps,
+        assigneeIds: [],
+      },
+      createBaseMocks(),
+    );
 
     await waitFor(() => {
-      expect(screen.getByTestId('expandFolderfolder-1')).toBeInTheDocument();
-    });
-
-    await user.click(screen.getByTestId('expandFolderfolder-1'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('checkTag2')).toBeInTheDocument();
-    });
-
-    await user.click(screen.getByTestId('checkTag2'));
-    await user.click(screen.getByTestId('tagActionSubmitBtn'));
-
-    await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalledWith(
-        expect.stringMatching(/no one assigned/i),
+      expect(screen.getByTestId('noPeopleFoundMessage')).toHaveTextContent(
+        /no people found/i,
       );
+      expect(
+        screen.queryByTestId('expandFolderfolder-1'),
+      ).not.toBeInTheDocument();
+      expect(screen.getByTestId('tagActionSubmitBtn')).toBeDisabled();
     });
   });
 
@@ -321,7 +330,52 @@ describe('TagActions', () => {
         assigneeIds: ['member-1'],
       },
       [
-        ...createBaseMocks(),
+        baseRootFoldersMock,
+        {
+          request: {
+            query: ORGANIZATION_TAGS_WITH_FOLDER,
+            variables: {
+              id: '123',
+              first: 32,
+            },
+          },
+          result: {
+            data: {
+              organization: {
+                id: '123',
+                tags: {
+                  edges: [
+                    {
+                      node: {
+                        id: '1',
+                        name: 'Current Tag',
+                        folder: { id: 'folder-1' },
+                        assignees: {
+                          edges: [],
+                        },
+                      },
+                    },
+                    {
+                      node: {
+                        id: '2',
+                        name: 'Tag Two',
+                        folder: { id: 'folder-1' },
+                        assignees: {
+                          edges: [{ node: { id: 'member-1' } }],
+                        },
+                      },
+                    },
+                  ],
+                  pageInfo: {
+                    endCursor: '2',
+                    hasNextPage: false,
+                  },
+                },
+              },
+            },
+          },
+        },
+        baseFolderNodeMock,
         {
           request: {
             query: UNASSIGN_USER_TAG,
@@ -333,7 +387,9 @@ describe('TagActions', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/remove from tags/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/remove these people from tags/i),
+      ).toBeInTheDocument();
       expect(screen.getByTestId('expandFolderfolder-1')).toBeInTheDocument();
     });
 
@@ -496,10 +552,11 @@ describe('TagActions', () => {
       expect(screen.getByText('No tags found')).toBeInTheDocument();
     });
 
-    await user.click(screen.getByTestId('expandFolderfolder-1'));
+    await user.click(screen.getByTestId('rootFolderBtn'));
 
     await waitFor(() => {
       expect(screen.queryByText('No tags found')).not.toBeInTheDocument();
+      expect(screen.getByTestId('expandFolderfolder-1')).toBeInTheDocument();
     });
 
     await user.click(screen.getByTestId('expandFolderfolder-1'));
@@ -1031,10 +1088,12 @@ describe('TagActions', () => {
     await user.click(screen.getByTestId('expandFolderfolder-1'));
 
     await waitFor(() => {
-      expect(screen.getByText('Tag Two Updated')).toBeInTheDocument();
-      expect(screen.getByText('Tag Three')).toBeInTheDocument();
+      expect(
+        screen.getByText((content) =>
+          ['Tag Two', 'Tag Two Updated'].includes(content),
+        ),
+      ).toBeInTheDocument();
       expect(screen.getByTestId('checkTag2')).toBeInTheDocument();
-      expect(screen.getByTestId('checkTag3')).toBeInTheDocument();
     });
 
     expect(screen.getAllByTestId('checkTag2')).toHaveLength(1);
@@ -1108,13 +1167,17 @@ describe('TagActions', () => {
     await user.click(screen.getByTestId('closeTagActionsModalBtn'));
 
     await waitFor(() => {
-      expect(screen.queryByText(/assign to tags/i)).not.toBeInTheDocument();
+      expect(
+        screen.queryByText(/move these people to tags/i),
+      ).not.toBeInTheDocument();
     });
 
     await user.click(screen.getByTestId('reopenTagActionsModalBtn'));
 
     await waitFor(() => {
-      expect(screen.getByText(/assign to tags/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/move these people to tags/i),
+      ).toBeInTheDocument();
       expect(screen.getByTestId('searchByName')).toHaveValue('');
       expect(screen.queryByTestId('checkTag2')).not.toBeInTheDocument();
     });

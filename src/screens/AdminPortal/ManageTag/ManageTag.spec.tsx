@@ -325,6 +325,7 @@ describe('ManageTag', () => {
       expect(screen.getByText('Bob Stone')).toBeInTheDocument();
       expect(screen.getByTestId('assignToTags')).toBeInTheDocument();
       expect(screen.getByTestId('removeFromTags')).toBeInTheDocument();
+      expect(screen.getByTestId('bulkUnassignBtn')).toBeInTheDocument();
     });
   });
 
@@ -508,10 +509,11 @@ describe('ManageTag', () => {
     renderManageTag(link);
 
     await waitFor(() => {
-      expect(screen.getAllByTestId('unassignTagBtn')[0]).toBeInTheDocument();
+      expect(screen.getByTestId('select-row-user-1')).toBeInTheDocument();
     });
 
-    await user.click(screen.getAllByTestId('unassignTagBtn')[0]);
+    await user.click(screen.getByTestId('select-row-user-1'));
+    await user.click(screen.getByTestId('bulkUnassignBtn'));
 
     await waitFor(() => {
       expect(screen.getByTestId('unassignDeleteModal')).toBeInTheDocument();
@@ -530,10 +532,11 @@ describe('ManageTag', () => {
     renderManageTag(link);
 
     await waitFor(() => {
-      expect(screen.getAllByTestId('unassignTagBtn')[0]).toBeInTheDocument();
+      expect(screen.getByTestId('select-row-user-1')).toBeInTheDocument();
     });
 
-    await user.click(screen.getAllByTestId('unassignTagBtn')[0]);
+    await user.click(screen.getByTestId('select-row-user-1'));
+    await user.click(screen.getByTestId('bulkUnassignBtn'));
     await user.click(screen.getByTestId('confirmUnassign'));
 
     await waitFor(() => {
