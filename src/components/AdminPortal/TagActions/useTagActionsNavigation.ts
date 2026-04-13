@@ -7,6 +7,14 @@ import type {
   InterfaceUseTagActionsNavigationResult,
 } from 'types/AdminPortal/TagActions/interface';
 
+/**
+ * Recursively checks whether a folder subtree contains any selectable tags.
+ *
+ * @param folderId - Folder id to evaluate.
+ * @param folderStateMap - Indexed folder state tree.
+ * @param visited - Cycle guard for defensive traversal.
+ * @returns True when this folder or any descendant folder has visible tags.
+ */
 const hasVisibleDataInFolder = (
   folderId: string,
   folderStateMap: Map<string, InterfaceTagFolderItem>,
@@ -36,6 +44,12 @@ const hasVisibleDataInFolder = (
   );
 };
 
+/**
+ * Derives folder navigation state for the TagActions modal.
+ *
+ * @param params - Current folder context, folder map, search term, and action mode.
+ * @returns Root/current folder context, breadcrumbs, and filtered folders/tags to render.
+ */
 export const useTagActionsNavigation = ({
   currentFolderId,
   folderStateMap,

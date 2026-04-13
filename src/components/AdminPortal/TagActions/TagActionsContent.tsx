@@ -4,6 +4,12 @@ import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/Infinit
 import styles from './TagActionsContent.module.css';
 import type { InterfaceTagActionsContentProps } from 'types/AdminPortal/TagActions/interface';
 
+/**
+ * Renders breadcrumb + folder/tag list content inside the TagActions modal.
+ *
+ * @param props - Precomputed navigation state, callbacks, and translated label resolvers.
+ * @returns Modal content fragment for selecting folders and tags.
+ */
 const TagActionsContent: React.FC<InterfaceTagActionsContentProps> = ({
   hasAssignees,
   currentFolderId,
