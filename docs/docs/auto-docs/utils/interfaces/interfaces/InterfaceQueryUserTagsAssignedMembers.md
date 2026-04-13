@@ -26,6 +26,46 @@ Defined in: [src/utils/interfaces.ts:1167](https://github.com/PalisadoesFoundati
 
 ***
 
+### folder?
+
+> `optional` **folder**: `object`
+
+Defined in: [src/utils/interfaces.ts:1171](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1171)
+
+#### \_id
+
+> **\_id**: `string`
+
+#### name
+
+> **name**: `string`
+
+#### parentFolder?
+
+> `optional` **parentFolder**: `object`
+
+##### parentFolder.\_id
+
+> **\_id**: `string`
+
+##### parentFolder.name
+
+> **name**: `string`
+
+##### parentFolder.parentFolder?
+
+> `optional` **parentFolder**: `object`
+
+##### parentFolder.parentFolder.\_id
+
+> **\_id**: `string`
+
+##### parentFolder.parentFolder.name
+
+> **name**: `string`
+
+***
+
 ### name
 
 > **name**: `string`

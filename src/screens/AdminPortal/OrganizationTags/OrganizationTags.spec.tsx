@@ -90,6 +90,9 @@ describe('OrganizationTags', () => {
     renderOrganizationTags(link);
 
     await waitFor(() => {
+      expect(
+        screen.getByTestId('organizationTagsRootBreadcrumb'),
+      ).toBeInTheDocument();
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
       expect(screen.getByText('Operations')).toBeInTheDocument();
       expect(screen.getByText('Community')).toBeInTheDocument();

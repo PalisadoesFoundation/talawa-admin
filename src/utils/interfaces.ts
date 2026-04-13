@@ -1168,6 +1168,18 @@ export interface InterfaceQueryUserTagsAssignedMembers {
     _id: string;
     name: string;
   }[];
+  folder?: {
+    _id: string;
+    name: string;
+    parentFolder?: {
+      _id: string;
+      name: string;
+      parentFolder?: {
+        _id: string;
+        name: string;
+      } | null;
+    } | null;
+  } | null;
 }
 
 /**

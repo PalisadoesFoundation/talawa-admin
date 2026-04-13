@@ -6,4 +6,4 @@
 
 > **VoteType** = `"up_vote"` \| `"down_vote"` \| `null`
 
-Defined in: [src/utils/interfaces.ts:1674](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1674)
+Defined in: [src/utils/interfaces.ts:1686](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1686)

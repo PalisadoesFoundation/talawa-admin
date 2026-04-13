@@ -4,7 +4,7 @@
 
 # Interface: InterfaceUserCampaignNode
 
-Defined in: [src/utils/interfaces.ts:1245](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1245)
+Defined in: [src/utils/interfaces.ts:1257](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1257)
 
 Defines a fund node shape used by user campaign listing queries.
 
@@ -14,7 +14,7 @@ Defines a fund node shape used by user campaign listing queries.
 
 > `optional` **campaigns**: `object`
 
-Defined in: [src/utils/interfaces.ts:1247](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1247)
+Defined in: [src/utils/interfaces.ts:1259](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1259)
 
 #### edges
 
@@ -26,4 +26,4 @@ Defined in: [src/utils/interfaces.ts:1247](https://github.com/PalisadoesFoundati
 
 > `optional` **isArchived**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:1246](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1246)
+Defined in: [src/utils/interfaces.ts:1258](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1258)

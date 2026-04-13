@@ -283,6 +283,10 @@ const renderManageTag = (link: ApolloLink) =>
                 path="/admin/orgtags/:orgId/manageTag/tag-100"
                 element={<div data-testid="ancestorManageTagScreen" />}
               />
+              <Route
+                path="/admin/orgtags/:orgId/tags/:tagId"
+                element={<div data-testid="folderScreen" />}
+              />
             </Routes>
           </I18nextProvider>
         </Provider>
@@ -482,19 +486,19 @@ describe('ManageTag', () => {
     });
   });
 
-  test('navigates to ancestor manage tag from breadcrumb', async () => {
+  test('navigates to folder from breadcrumb', async () => {
     const link = new StaticMockLink(baseMocks, true);
     const user = userEvent.setup();
     renderManageTag(link);
 
     await waitFor(() => {
-      expect(screen.getByTestId('redirectToManageTag')).toBeInTheDocument();
+      expect(screen.getByTestId('redirectToFolder')).toBeInTheDocument();
     });
 
-    await user.click(screen.getByTestId('redirectToManageTag'));
+    await user.click(screen.getByTestId('redirectToFolder'));
 
     await waitFor(() => {
-      expect(screen.getByTestId('ancestorManageTagScreen')).toBeInTheDocument();
+      expect(screen.getByTestId('folderScreen')).toBeInTheDocument();
     });
   });
 

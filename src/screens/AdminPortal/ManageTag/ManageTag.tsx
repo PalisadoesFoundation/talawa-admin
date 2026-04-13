@@ -92,6 +92,9 @@ export const getManageTagErrorMessage = (error: unknown): string => {
 
 function ManageTag(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'manageTag' });
+  const { t: tOrganizationTags } = useTranslation('translation', {
+    keyPrefix: 'organizationTags',
+  });
   const { t: tCommon } = useTranslation('common');
   const { orgId, tagId: currentTagId } = useParams();
   const navigate = useNavigate();
@@ -170,15 +173,20 @@ function ManageTag(): JSX.Element {
       .startsWith(assignedMemberSearchInput.toLowerCase()),
   );
 
-  // get the ancestorTags array and push the current tag in it
-  // used for the tag breadcrumbs
-  const orgUserTagAncestors = [
-    ...(userTagAssignedMembersData?.getAssignedUsers?.ancestorTags ?? []),
-    { _id: currentTagId, name: currentTagName },
-  ];
+  const folderBreadcrumbs = useMemo(() => {
+    const breadcrumbs: Array<{ id: string; name: string }> = [];
+    let currentFolder = userTagAssignedMembersData?.getAssignedUsers?.folder;
 
-  const redirectToManageTag = (tagId: string): void => {
-    navigate(`/admin/orgtags/${orgId}/manageTag/${tagId}`);
+    while (currentFolder) {
+      breadcrumbs.unshift({ id: currentFolder._id, name: currentFolder.name });
+      currentFolder = currentFolder.parentFolder ?? null;
+    }
+
+    return breadcrumbs;
+  }, [userTagAssignedMembersData]);
+
+  const redirectToFolder = (folderId: string): void => {
+    navigate(`/admin/orgtags/${orgId}/tags/${folderId}`);
   };
 
   const rowIndexMap = useMemo(() => {
@@ -278,35 +286,41 @@ function ManageTag(): JSX.Element {
               className={styles.topBreadcrumbLink}
               onClick={() => navigate(`/admin/orgtags/${orgId}`)}
               data-testid="allTagsBtn"
-              aria-label={t('tags')}
+              aria-label={tOrganizationTags('tags')}
             >
-              {t('tags')}
+              {tOrganizationTags('tags')}
             </Button>
-            {orgUserTagAncestors.map((tag, index) => {
-              const isLast = index === orgUserTagAncestors.length - 1;
+
+            {folderBreadcrumbs.map((folder) => {
               return (
-                <div
-                  key={tag._id ?? index}
-                  className={styles.topBreadcrumbItemWrap}
-                >
-                  <span className={styles.topBreadcrumbSeparator}>/</span>
-                  {isLast ? (
-                    <span className={styles.topBreadcrumbCurrent}>
-                      {tag.name}
-                    </span>
-                  ) : (
-                    <Button
-                      variant="link"
-                      className={styles.topBreadcrumbLink}
-                      onClick={() => redirectToManageTag(tag._id as string)}
-                      data-testid="redirectToManageTag"
-                    >
-                      {tag.name}
-                    </Button>
-                  )}
+                <div key={folder.id} className={styles.topBreadcrumbItemWrap}>
+                  <span
+                    className={styles.topBreadcrumbSeparator}
+                    aria-hidden="true"
+                  />
+                  <Button
+                    variant="link"
+                    className={styles.topBreadcrumbLink}
+                    onClick={() => redirectToFolder(folder.id)}
+                    data-testid="redirectToFolder"
+                  >
+                    {folder.name}
+                  </Button>
                 </div>
               );
             })}
+
+            {currentTagName && (
+              <div className={styles.topBreadcrumbItemWrap}>
+                <span
+                  className={styles.topBreadcrumbSeparator}
+                  aria-hidden="true"
+                />
+                <span className={styles.topBreadcrumbCurrent}>
+                  {currentTagName}
+                </span>
+              </div>
+            )}
           </div>
 
           <div>

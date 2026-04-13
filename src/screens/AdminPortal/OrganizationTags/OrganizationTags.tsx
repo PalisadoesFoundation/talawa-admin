@@ -329,6 +329,14 @@ function OrganizationTags(): JSX.Element {
     <>
       <Row>
         <div>
+          <div
+            className={styles.pageBreadcrumb}
+            data-testid="organizationTagsRootBreadcrumb"
+          >
+            <span className={styles.breadcrumbCurrent}>{t('tags')}</span>
+            <span className={styles.breadcrumbDivider}>/</span>
+          </div>
+
           <div data-testid="organizationTags-header">
             <Toolbar
               search={{
