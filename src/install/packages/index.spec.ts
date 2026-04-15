@@ -11,7 +11,7 @@ vi.mock('../os/macos');
 
 describe('packages/index', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   afterEach(() => {

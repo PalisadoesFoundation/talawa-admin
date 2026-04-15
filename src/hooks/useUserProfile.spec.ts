@@ -48,7 +48,7 @@ describe('useUserProfile', () => {
   const mockLogoutMutation = vi.fn();
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
 
     (useNavigate as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
       mockNavigate,
@@ -72,7 +72,7 @@ describe('useUserProfile', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     cleanup();
   });
 

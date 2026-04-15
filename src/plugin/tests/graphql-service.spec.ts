@@ -54,7 +54,7 @@ describe('PluginGraphQLService', () => {
   let graphqlService: PluginGraphQLService;
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     graphqlService = new PluginGraphQLService(
       mockApolloClient as unknown as ApolloClient<unknown>,
     );
@@ -355,11 +355,11 @@ describe('PluginGraphQLService', () => {
 
 describe('GraphQL Hooks', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('useGetAllPlugins', () => {

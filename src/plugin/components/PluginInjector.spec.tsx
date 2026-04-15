@@ -42,7 +42,7 @@ const TestComponent = ({
 
 describe('PluginInjector', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   afterEach(() => {

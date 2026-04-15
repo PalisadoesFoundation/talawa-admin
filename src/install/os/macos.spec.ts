@@ -29,7 +29,7 @@ describe('macOS installers', () => {
   };
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     vi.mocked(createSpinner).mockReturnValue(spinnerMock);
   });
 

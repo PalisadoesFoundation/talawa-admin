@@ -48,7 +48,7 @@ describe('LifecycleManager Coverage Suite', () => {
   let originalFetch: typeof global.fetch;
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     // Capture original fetch to restore it later
     originalFetch = global.fetch;
     global.fetch = vi.fn().mockResolvedValue({

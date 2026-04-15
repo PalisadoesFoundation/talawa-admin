@@ -48,12 +48,12 @@ describe('PluginRouteRenderer', () => {
   );
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     vi.restoreAllMocks();
   });
 

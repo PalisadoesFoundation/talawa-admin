@@ -8,7 +8,7 @@ vi.mock('./exec');
 
 describe('checker', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   afterEach(() => {

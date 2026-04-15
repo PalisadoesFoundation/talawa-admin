@@ -16,7 +16,7 @@ vi.mock('./utils/exec');
 vi.mock('inquirer');
 
 afterEach(() => {
-  vi.clearAllMocks();
+  vi.restoreAllMocks();
 });
 
 describe('install/index', () => {

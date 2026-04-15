@@ -5,7 +5,7 @@ describe('EventManager', () => {
   let eventManager: EventManager;
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     eventManager = new EventManager();
   });
 

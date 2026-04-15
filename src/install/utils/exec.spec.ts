@@ -5,7 +5,7 @@ describe('exec', () => {
   let originalExec: typeof deps.exec;
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     // Save the original exec function
     originalExec = deps.exec;
     // Replace with a mock

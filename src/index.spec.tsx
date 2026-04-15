@@ -109,13 +109,13 @@ vi.mock('./utils/i18n', () => ({
 
 describe('Apollo Client Configuration', () => {
   beforeEach((): void => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     // Reset localStorage mock with default test token
     createLocalStorageMock('valid');
   });
 
   afterEach(() => {
-    vi.clearAllMocks(); // Only module mocks, no spies
+    vi.restoreAllMocks(); // Only module mocks, no spies
   });
 
   it('should create an Apollo Client with correct configuration', (): void => {
@@ -315,7 +315,7 @@ describe('Apollo Client Configuration', () => {
         writable: true,
       });
 
-      vi.clearAllMocks();
+      vi.restoreAllMocks();
     });
 
     it('should skip token refresh for SignIn operations', () => {
@@ -556,7 +556,7 @@ describe('Apollo Client Configuration', () => {
     });
 
     afterEach(() => {
-      vi.clearAllMocks();
+      vi.restoreAllMocks();
       getComputedStyleSpy.mockRestore();
       if (getElementByIdSpy) {
         getElementByIdSpy.mockRestore();
@@ -693,7 +693,7 @@ describe('Apollo Client Configuration', () => {
     });
 
     afterEach(() => {
-      vi.clearAllMocks();
+      vi.restoreAllMocks();
       getComputedStyleSpy.mockRestore();
       getElementByIdSpy.mockRestore();
     });

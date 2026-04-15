@@ -25,7 +25,7 @@ vi.mock('../manager', () => ({
 
 describe('Plugin Hooks', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     // Reset mock return values to ensure clean state
     mockPluginManager.getExtensionPoints.mockReturnValue([]);
     mockPluginManager.getLoadedPlugins.mockReturnValue([]);

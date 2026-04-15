@@ -14,7 +14,7 @@ describe('useFieldValidation', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('returns null error initially', () => {

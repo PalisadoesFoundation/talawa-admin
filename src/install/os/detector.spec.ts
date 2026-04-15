@@ -9,7 +9,7 @@ describe('detector', () => {
   let originalEnv: NodeJS.ProcessEnv;
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     originalPlatform = process.platform;
     originalEnv = { ...process.env };
   });

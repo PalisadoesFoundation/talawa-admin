@@ -4,7 +4,7 @@ import { usePasswordVisibility } from './usePasswordVisibility';
 
 describe('usePasswordVisibility', () => {
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('defaults showPassword to false', () => {
