@@ -118,8 +118,6 @@ const PluginStore = lazy(
   () => import('screens/AdminPortal/PluginStore/PluginStore'),
 );
 
-const { setItem } = useLocalStorage();
-
 /**
  * This is the main function for our application. It sets up all the routes and components,
  * defining how the user can navigate through the app. The function uses React Router's `Routes`
@@ -139,6 +137,7 @@ const { setItem } = useLocalStorage();
 
 function App(): React.ReactElement {
   const { data, loading } = useQuery(CURRENT_USER);
+  const { setItem } = useLocalStorage();
 
   const { t } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
