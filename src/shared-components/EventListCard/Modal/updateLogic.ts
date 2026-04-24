@@ -148,9 +148,10 @@ export const useUpdateEventHandler = () => {
 
       // Only include recurrence if it has actually changed
       // This prevents unnecessary splits when only updating metadata
+      // Note: recurrence can be null (e.g., changing to 'Does not repeat'),
+      // so we allow null when the recurrence has changed.
       if (
         updateOption === 'following' &&
-        recurrence !== null &&
         hasRecurrenceChanged
       ) {
         updateInput.recurrence = recurrence;
