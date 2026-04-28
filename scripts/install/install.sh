@@ -384,7 +384,7 @@ else
     log_info ""
     log_info "Next steps:"
     log_info "  1. Run 'pnpm run setup' to configure your application"
-    log_info "  2. Run 'pnpm run dev' to start the development server"
+    log_info "  2. Run 'pnpm run serve' to start the development server"
 
     # Shell config reminder for fnm
     if command_exists fnm; then
