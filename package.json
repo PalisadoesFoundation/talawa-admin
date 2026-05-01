@@ -167,7 +167,7 @@
     "knip": "^5.66.0",
     "lint-staged": "^16.2.7",
     "nyc": "^17.1.0",
-    "prettier": "^3.8.0",
+    "prettier": "^3.8.3",
     "sass": "^1.93.3",
     "ts-unused-exports": "^11.0.1",
     "tsx": "^4.21.0",
