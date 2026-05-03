@@ -8,6 +8,7 @@ import React, { useEffect, useCallback } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
+import SignOut from 'components/SignOut/SignOut';
 import { sanitizeAvatarURL } from 'utils/sanitizeAvatar';
 
 interface UserSidebarProps {
@@ -222,6 +223,8 @@ export default function UserSidebarComponent({
 
         <div className="sidebar-spacer" />
 
+        <SignOut hideDrawer={collapsed} />
+
         <div
           className="sidebar-profile"
           role="button"
@@ -285,6 +288,7 @@ function UserNavItem({
         className={`sidebar-nav-item ${active ? 'active' : ''}`}
         aria-current={active ? 'page' : undefined}
         data-tooltip={tooltip}
+        title={tooltip}
         onClick={(e) => {
           e.preventDefault();
           navigate(href);

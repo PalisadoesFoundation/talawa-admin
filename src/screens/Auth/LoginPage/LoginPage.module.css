@@ -71,6 +71,7 @@
   font-size: 16px;
   color: rgba(255, 255, 255, 0.45);
   max-width: 360px;
+  margin: 12px auto 0;
   line-height: 1.6;
 }
 
@@ -171,7 +172,16 @@
   width: auto;
   aspect-ratio: 1;
   display: block;
-  margin: 24px auto 28px;
+  margin: 24px auto 8px;
+}
+
+.talawaText {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  color: var(--gray-900, #111827);
+  margin-bottom: 28px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -256,9 +266,9 @@
 .forgotLink {
   display: block;
   text-align: right;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--green-600, #059669);
-  margin-top: -10px;
+  margin-top: 8px;
   margin-bottom: 20px;
   cursor: pointer;
   text-decoration: none;

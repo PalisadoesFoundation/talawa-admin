@@ -136,7 +136,7 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
 
   return (
     <form onSubmit={handleSubmit} data-testid={testId} aria-busy={loading}>
-      <h3 data-testid={`${testId}-heading`}>
+      <h3 className={styles.heading} data-testid={`${testId}-heading`}>
         {isAdmin ? t('adminLogin') : t('userLogin')}
       </h3>
       <EmailField
@@ -144,6 +144,7 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
         onChange={handleEmailChange}
         testId={`${testId}-email`}
         dataCy="loginEmail"
+        required={false}
       />
 
       <PasswordField

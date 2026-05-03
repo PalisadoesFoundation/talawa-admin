@@ -51,6 +51,7 @@ const SidebarNavItem = ({
   iconType,
   dataCy,
   iconSize,
+  tooltip,
 }: ISidebarNavItemProps): React.ReactElement => {
   const resolvedSize = iconSize ?? ICON_SIZE;
 
@@ -118,6 +119,7 @@ const SidebarNavItem = ({
       }}
       data-testid={testId}
       data-cy={dataCy}
+      title={hideDrawer ? (tooltip || label) : undefined}
     >
       {({ isActive }) => (
         <div className={styles.linkContent}>

@@ -70,6 +70,29 @@
 .sidebar.collapsed .context-btn { padding: 8px; font-size: 0; gap: 0; }
 .sidebar.collapsed .context-btn .icon svg { width: 16px; height: 16px; }
 .sidebar.collapsed .context-btn .ctx-label { display: none; }
+/* Collapsed sidebar — allow tooltips to overflow */
+.sidebar.collapsed { overflow: visible; }
+.sidebar.collapsed .sidebar-nav-item { position: relative; }
+.sidebar.collapsed .sidebar-nav-item::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--gray-900, #111827);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 1000;
+}
+.sidebar.collapsed .sidebar-nav-item:hover::after { opacity: 1; }
+
 body.sidebar-collapsed .topbar { left: var(--sidebar-collapsed-w); }
 body.sidebar-collapsed .main { margin-left: var(--sidebar-collapsed-w); }
 

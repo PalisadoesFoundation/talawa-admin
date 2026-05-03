@@ -338,11 +338,7 @@ const Users = (): React.ReactElement => {
                 hasMore={pageInfo?.hasNextPage ?? false}
                 className={styles.listBox}
                 data-testid="users-list"
-                endMessage={
-                  <div style={{ width: "100%" }}>
-                    <h5 style={{ margin: 0 }}>{tCommon('endOfResults')}</h5>
-                  </div>
-                }
+                endMessage={<></>}
               >
                 <table className="data-table">
                   <thead>

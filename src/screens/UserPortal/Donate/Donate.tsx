@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import DropDownButton from 'shared-components/DropDownButton';
-import Button from 'shared-components/Button';
 import { useQuery, useMutation, type ApolloError } from '@apollo/client';
-import SendIcon from '@mui/icons-material/Send';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
@@ -19,127 +17,36 @@ import {
 import styles from './Donate.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import { errorHandler } from 'utils/errorHandler';
-import PaginationList from 'shared-components/PaginationList/PaginationList';
-import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import type {
   InterfaceDonation,
-  IDonationTableRow,
 } from 'types/UserPortal/Donation/interface';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { DataTable } from 'shared-components/DataTable/DataTable';
-import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 
 const currencies = ['USD', 'INR', 'EUR'];
-const currencyOptions = currencies.map((currency) => ({
-  value: currency,
-  label: currency,
-}));
+const currencyOptions = currencies.map((c) => ({ value: c, label: c }));
+const presetAmounts = [10, 25, 50, 100];
 
-/**
- * Component for handling donations to an organization.
- * Allows users to make donations and view their donation history.
- *
- * @returns The Donate component.
- */
 export default function Donate(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'donate' });
-
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
   const userName = getItem('name');
-
   const { orgId: organizationId } = useParams();
 
   const [amount, setAmount] = useState('');
-  const [organizationDetails, setOrganizationDetails] = useState<{
-    name: string;
-  }>({ name: '' });
+  const [organizationDetails, setOrganizationDetails] = useState<{ name: string }>({ name: '' });
   const [donations, setDonations] = useState<InterfaceDonation[]>([]);
   const [selectedCurrency, setSelectedCurrency] = useState('USD');
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [searchText, setSearchText] = useState('');
 
-  const {
-    data: donationData,
-    loading,
-    refetch,
-  } = useQuery(ORGANIZATION_DONATION_CONNECTION_LIST, {
-    variables: { orgId: organizationId },
-  });
-
+  const { data: donationData, loading, refetch } = useQuery(
+    ORGANIZATION_DONATION_CONNECTION_LIST,
+    { variables: { orgId: organizationId } },
+  );
   const { data } = useQuery(ORGANIZATION_LIST, {
     variables: { id: organizationId },
   });
-
   const [donate] = useMutation(DONATE_TO_ORGANIZATION);
-  const [donateWithCurrency] = useMutation(
-    DONATE_TO_ORGANIZATION_WITH_CURRENCY,
-  );
-
-  const donationRows: IDonationTableRow[] = React.useMemo(
-    () =>
-      donations.map((donation) => ({
-        id: donation._id,
-        donor: donation.nameOfUser,
-        amount: Number(donation.amount),
-        updatedAt: donation.updatedAt,
-      })),
-    [donations],
-  );
-
-  const filteredDonationRows = React.useMemo(() => {
-    const query = searchText.trim().toLowerCase();
-    if (!query) {
-      return donationRows;
-    }
-
-    return donationRows.filter((donation) => {
-      const matchesDonor = donation.donor.toLowerCase().includes(query);
-      const matchesAmount = String(donation.amount).includes(query);
-      const matchesDate = donation.updatedAt.toLowerCase().includes(query);
-      return matchesDonor || matchesAmount || matchesDate;
-    });
-  }, [donationRows, searchText]);
-
-  const paginatedDonationRows = React.useMemo(
-    () =>
-      filteredDonationRows.slice(
-        page * rowsPerPage,
-        page * rowsPerPage + rowsPerPage,
-      ),
-    [filteredDonationRows, page, rowsPerPage],
-  );
-
-  const donationColumns: IColumnDef<IDonationTableRow>[] = React.useMemo(
-    () => [
-      {
-        id: 'donor',
-        header: t('donor'),
-        accessor: 'donor',
-        render: (value) => (
-          <span data-testid="donationCard">{String(value)}</span>
-        ),
-      },
-      {
-        id: 'amount',
-        header: t('amount'),
-        accessor: 'amount',
-        render: (value) => {
-          // ORGANIZATION_DONATION_CONNECTION_LIST does not yet return per-donation currencyCode.
-          // When it does, wire row currency formatting here (e.g., with `currencySymbols`) instead of `selectedCurrency`.
-          return Number(value);
-        },
-      },
-      {
-        id: 'updatedAt',
-        header: t('date'),
-        accessor: 'updatedAt',
-        render: (value) => dayjs(String(value)).format('YYYY-MM-DD HH:mm'),
-      },
-    ],
-    [t],
-  );
+  const [donateWithCurrency] = useMutation(DONATE_TO_ORGANIZATION_WITH_CURRENCY);
 
   useEffect(() => {
     if (data?.organizations?.length) {
@@ -153,31 +60,8 @@ export default function Donate(): JSX.Element {
     }
   }, [donationData]);
 
-  useEffect(() => {
-    setPage(0);
-  }, [searchText]);
-
-  const handleCurrencyChange = (currency: string): void => {
-    setSelectedCurrency(currency);
-    setPage(0);
-  };
-
-  /**
-   * Return true for backend responses that still require the legacy mutation.
-   * Performs case-insensitive matching on the combined error message because
-   * the server currently advertises currency awareness in free-form strings.
-   *
-   * Known patterns:
-   * - `unknown argument "currencycode"`
-   * - `unknown type "iso4217currencycode"`
-   * - `field "createdonation" argument "currencycode" is not defined`
-   *
-   * Once the backend schema explicitly supports `currencyCode` on
-   * `createDonation`, remove this fallback and its string checks.
-   */
   const shouldFallbackToLegacyDonationMutation = (error: unknown): boolean => {
     const apolloError = error as ApolloError;
-
     const combinedMessage = [
       apolloError?.message,
       ...(apolloError?.graphQLErrors?.map((e) => e?.message) ?? []),
@@ -185,74 +69,38 @@ export default function Donate(): JSX.Element {
       .filter(Boolean)
       .join(' ')
       .toLowerCase();
-
-    const shouldFallback =
+    return (
       combinedMessage.includes('unknown argument "currencycode"') ||
       combinedMessage.includes('unknown type "iso4217currencycode"') ||
-      combinedMessage.includes(
-        'field "createdonation" argument "currencycode" is not defined',
-      );
-
-    if (shouldFallback) {
-      console.error(
-        'Currency-aware donation unsupported by backend, falling back to legacy mutation',
-        {
-          error,
-          combinedMessage,
-        },
-      );
-    }
-
-    return shouldFallback;
+      combinedMessage.includes('field "createdonation" argument "currencycode" is not defined')
+    );
   };
 
   const donateToOrg = async (): Promise<void> => {
-    if (!userId || organizationId == null || !userName) {
-      console.error('Missing required donation identifiers for mutation.', {
-        userId,
-        organizationId,
-        userName,
-      });
-      return;
-    }
-
+    if (!userId || !organizationId || !userName) return;
     if (amount === '' || Number.isNaN(Number(amount))) {
       NotificationToast.error(t('invalidAmount'));
       return;
     }
-
-    const minDonation = 1;
-    const maxDonation = 10000000;
-
-    if (Number(amount) < minDonation || Number(amount) > maxDonation) {
-      NotificationToast.error(
-        t('donationOutOfRange', { min: minDonation, max: maxDonation }),
-      );
+    if (Number(amount) < 1 || Number(amount) > 10000000) {
+      NotificationToast.error(t('donationOutOfRange', { min: 1, max: 10000000 }));
       return;
     }
-
     try {
       try {
         await donateWithCurrency({
           variables: {
-            userId,
-            createDonationOrgId2: organizationId,
-            payPalId: 'paypalId',
-            nameOfUser: userName,
-            amount: Number(amount),
-            nameOfOrg: organizationDetails.name,
-            currencyCode: selectedCurrency,
+            userId, createDonationOrgId2: organizationId, payPalId: 'paypalId',
+            nameOfUser: userName, amount: Number(amount),
+            nameOfOrg: organizationDetails.name, currencyCode: selectedCurrency,
           },
         });
       } catch (error) {
         if (shouldFallbackToLegacyDonationMutation(error)) {
           await donate({
             variables: {
-              userId,
-              createDonationOrgId2: organizationId,
-              payPalId: 'paypalId',
-              nameOfUser: userName,
-              amount: Number(amount),
+              userId, createDonationOrgId2: organizationId, payPalId: 'paypalId',
+              nameOfUser: userName, amount: Number(amount),
               nameOfOrg: organizationDetails.name,
             },
           });
@@ -260,8 +108,8 @@ export default function Donate(): JSX.Element {
           throw error;
         }
       }
-
       await refetch();
+      setAmount('');
       NotificationToast.success(t('success') as string);
     } catch (error) {
       errorHandler(t, error);
@@ -270,109 +118,112 @@ export default function Donate(): JSX.Element {
 
   return (
     <div>
-      <div className="page-header">
-        <div className="page-header-left">
-          <h1 className="page-title">{t('donations')}</h1>
-          <p className="page-subtitle">{t('donateForThe')} {organizationDetails.name}</p>
-        </div>
-      </div>
+      {/* Two-column: donation form + history side by side */}
+      <div className={styles.layout}>
+        {/* Left: Donation form */}
+        <div className={styles.donateHero}>
+          <p className={styles.heroSubtitle}>
+            Support {organizationDetails.name} with a contribution.
+          </p>
 
-      {/* Active Campaign Card */}
-      <div className={styles.campaignGrid}>
-        <div className={styles.campaignCard}>
-          <div className={`${styles.campaignIcon} ${styles.campaignIconGreen}`}>
-            <SendIcon />
-          </div>
-          <div className={styles.campaignName}>
-            {t('donateForThe')} {organizationDetails.name}
-          </div>
-          <div className={styles.campaignDesc}>
-            {t('donateForThe')} {organizationDetails.name}
+          {/* Quick presets */}
+          <div className={styles.presets}>
+            {presetAmounts.map((preset) => (
+              <button
+                key={preset}
+                className={`${styles.presetBtn} ${amount === String(preset) ? styles.presetBtnActive : ''}`}
+                onClick={() => setAmount(String(preset))}
+              >
+                ${preset}
+              </button>
+            ))}
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '18px' }}>
+          {/* Currency + amount */}
+          <div className={styles.amountRow}>
             <DropDownButton
               id="currency-dropdown"
               options={currencyOptions}
               selectedValue={selectedCurrency}
-              onSelect={handleCurrencyChange}
-              variant="success"
-              btnStyle={`${styles.colorPrimary} ${styles.dropdown}`}
+              onSelect={(c) => setSelectedCurrency(c)}
               dataTestIdPrefix="currency-dropdown"
               buttonLabel={selectedCurrency}
               ariaLabel={t('selectCurrency')}
+              showCaret
+              btnStyle={styles.dropdown}
             />
-
-            <label htmlFor="donationAmountInput" className={styles.srOnly}>
-              {t('amount')}
-            </label>
-            <input
-              id="donationAmountInput"
-              type="text"
-              className="form-input"
-              data-testid="donationAmount"
-              placeholder={t('amount')}
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-            />
+            <div className={styles.amountInput}>
+              <label htmlFor="donationAmountInput" className={styles.srOnly}>
+                {t('amount')}
+              </label>
+              <input
+                id="donationAmountInput"
+                type="text"
+                className="form-input"
+                data-testid="donationAmount"
+                placeholder={t('amount')}
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                style={{ width: '100%' }}
+              />
+            </div>
           </div>
 
           <button
-            className="btn btn-primary"
-            style={{ width: '100%' }}
+            className={styles.donateBtn}
             data-testid="donateBtn"
             onClick={donateToOrg}
           >
             {t('donate')}
           </button>
         </div>
-      </div>
 
-      {/* Recent Donations */}
-      <h2 className={styles.sectionTitle}>{t('yourPreviousDonations')}</h2>
-      <div className={styles.sectionSubtitle}>Your donation history</div>
-
-      <div className="toolbar">
-        <SearchFilterBar
-          searchPlaceholder={t('searchDonations')}
-          searchValue={searchText}
-          onSearchChange={setSearchText}
-          searchInputTestId="searchInput"
-          searchButtonTestId="searchButton"
-          hasDropdowns={false}
-        />
-      </div>
-
-      <div className="card">
-        <div className="table-wrapper">
+        {/* Right: Donation history */}
+        <div className={styles.historyPanel}>
           {loading ? (
-            <div className="empty-state" data-testid="loading-state">
+            <div style={{ textAlign: 'center', padding: 32, color: 'var(--gray-400)' }}>
               <HourglassBottomIcon /> {t('loading')}
             </div>
+          ) : donations.length === 0 ? (
+            <div className={styles.emptyHistory}>
+              <div className={styles.emptyIcon}>{'💝'}</div>
+              <p className={styles.emptyText}>No donations yet</p>
+              <p className={styles.emptySubtext}>
+                Your history will appear here after your first contribution.
+              </p>
+            </div>
           ) : (
-            <DataTable<IDonationTableRow>
-              data={paginatedDonationRows}
-              columns={donationColumns}
-              rowKey="id"
-              paginationMode="none"
-              emptyMessage={t('nothingToShow')}
-            />
+            <>
+              <div className={styles.sectionHeader}>
+                <h3 className={styles.sectionTitle}>{t('yourPreviousDonations')}</h3>
+                <span className={styles.donationCount}>
+                  {donations.length} {donations.length === 1 ? 'donation' : 'donations'}
+                </span>
+              </div>
+              <div className="table-wrapper">
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th>{t('donor')}</th>
+                      <th>{t('amount')}</th>
+                      <th>{t('date')}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {donations.map((d) => (
+                      <tr key={d._id} data-testid="donationCard">
+                        <td style={{ fontWeight: 500 }}>{d.nameOfUser}</td>
+                        <td>${Number(d.amount).toLocaleString()}</td>
+                        <td>{dayjs(d.updatedAt).format('MMM D, YYYY')}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
           )}
         </div>
       </div>
-
-      {filteredDonationRows.length > 0 && (
-        <PaginationList
-          count={filteredDonationRows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={(_, p) => setPage(p)}
-          onRowsPerPageChange={(e) => {
-            setRowsPerPage(parseInt(e.target.value, 10));
-            setPage(0);
-          }}
-        />
-      )}
     </div>
   );
 }

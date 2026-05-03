@@ -25,4 +25,6 @@ export interface ISidebarNavItemProps {
   dataCy?: string;
   /* (Optional) Override the rendered icon size in pixels (react-icons and SVG). Use to compensate for icons with non-square viewBoxes. */
   iconSize?: number;
+  /* (Optional) Tooltip text shown on hover when sidebar is collapsed */
+  tooltip?: string;
 }

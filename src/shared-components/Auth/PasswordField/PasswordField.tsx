@@ -50,7 +50,19 @@ export const PasswordField: React.FC<InterfacePasswordFieldProps> = ({
       onClick={togglePassword}
       aria-label={showPassword ? t('hidePassword') : t('showPassword')}
       aria-pressed={showPassword}
-      className="input-group-text border-start-0"
+      style={{
+        background: 'none',
+        border: 'none',
+        padding: '0 10px',
+        cursor: 'pointer',
+        color: 'var(--gray-400, #9ca3af)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: 18,
+        height: '100%',
+        alignSelf: 'center',
+      }}
     >
       {showPassword ? (
         <AiOutlineEyeInvisible aria-hidden />

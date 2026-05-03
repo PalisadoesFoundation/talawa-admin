@@ -1,63 +1,120 @@
-.editButton {
-  background-color: var(--editButton-bg);
-  color: var(--editButton-font);
-  border-color: var(--editButton-border);
+/* UsersTableItem — user row + manage modal */
+
+.manageBtn {
+  padding: 5px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--green-600, #16a34a);
+  background: none;
+  border: 1px solid var(--green-500, #3ecf8e);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
 }
 
-.editButton:is(:hover, :active) {
-  background-color: var(--editButton-bg-hover);
-  border-color: var(--editButton-border-hover);
-  box-shadow: none;
+.manageBtn:hover {
+  background: var(--green-500, #3ecf8e);
+  color: #000;
+}
+
+/* Org list inside modal */
+.orgList {
+  display: flex;
+  flex-direction: column;
+}
+
+.orgRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--gray-100, #f3f4f6);
+}
+
+.orgRow:last-child {
+  border-bottom: none;
+}
+
+.orgRowLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.orgAvatar {
+  flex-shrink: 0;
+}
+
+.orgInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.orgName {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gray-900, #111827);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.orgName:hover {
+  color: var(--green-600, #16a34a);
+}
+
+.orgMeta {
+  display: flex;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--gray-400, #9ca3af);
+  margin-top: 2px;
+}
+
+.orgRowRight {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .removeButton {
-  margin-bottom: 10px;
-  background-color: var(--removeButton-bg);
-  color: var(--removeButton-color);
-  margin-right: 10px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--red-50, #fef2f2);
+  color: var(--red-600, #dc2626);
+  border: 1px solid var(--red-200, #fecaca);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
 }
 
-.removeButton:is(:hover, :active, :focus) {
-  background-color: var(--removeButton-bg-hover) !important;
-  border-color: var(--removeButton-border-hover);
-  color: var(--removeButton-color-hover);
-}
-
-.modalHeader {
-  border: none;
-  background-color: var(--modalHeader-bg) !important;
-  padding: 1rem;
-  color: var(--modalHeader-color);
+.removeButton:hover {
+  background: var(--red-500, #ef4444) !important;
+  color: #fff;
+  border-color: var(--red-500, #ef4444);
 }
 
 .notJoined {
-  height: 300px;
+  padding: 40px 24px;
   display: flex;
   justify-content: center;
   align-items: center;
+  text-align: center;
 }
 
-.modalTable {
-  max-height: 220px;
-  overflow-y: auto;
-}
-
-.modalTable img[alt='creator'] {
-  height: 24px;
-  width: 24px;
-  object-fit: contain;
-  border-radius: 12px;
-  margin-right: 0.4rem;
-}
-
-.modalTable img[alt='orgImage'] {
-  height: 28px;
-  width: 28px;
-  object-fit: contain;
-  border-radius: 4px;
-  margin-right: 0.4rem;
+.notJoined p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--gray-500, #6b7280);
 }
 
 .divider {
   margin: 0;
+  border-color: var(--gray-200, #e5e7eb);
 }

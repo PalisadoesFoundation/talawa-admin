@@ -309,6 +309,7 @@ const LoginPage = (): JSX.Element => {
                 showTab === 'REGISTER' ? styles.marginTopForReg : ''
               }`}
             />
+            <div className={styles.talawaText}>Talawa</div>
 
             {/* LOGIN TAB */}
             <div

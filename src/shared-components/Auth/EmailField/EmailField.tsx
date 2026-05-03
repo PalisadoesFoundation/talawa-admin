@@ -41,6 +41,7 @@ export const EmailField: React.FC<InterfaceEmailFieldProps> = ({
   error,
   testId,
   dataCy,
+  required = true,
 }) => {
   const { t } = useTranslation('common');
 
@@ -55,7 +56,7 @@ export const EmailField: React.FC<InterfaceEmailFieldProps> = ({
       error={error}
       testId={testId}
       dataCy={dataCy}
-      required
+      required={required}
     />
   );
 };

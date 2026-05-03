@@ -31,4 +31,7 @@ export interface InterfaceEmailFieldProps {
 
   /** Optional data-cy for e2e (Cypress) selectors */
   dataCy?: string;
+
+  /** Whether the field is required — defaults to true */
+  required?: boolean;
 }

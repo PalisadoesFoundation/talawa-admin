@@ -434,13 +434,15 @@ export default function Organizations(): React.JSX.Element {
                         )
                       : myOrgs
                     ).map((organization: IOrganization, index) => (
-                      <div
+                      <a
+                        href={`/user/organization/${organization.id}`}
                         className={styles.orgCard}
                         key={index}
                         data-testid="organization-card"
                         data-organization-name={organization.name}
                         data-membership-status={organization.membershipRequestStatus}
                         data-cy="orgCard"
+                        style={{ textDecoration: 'none', color: 'inherit' }}
                       >
                         <div
                           data-testid={`membership-status-${organization.name}`}
@@ -459,15 +461,13 @@ export default function Organizations(): React.JSX.Element {
                             {role === 'administrator' ? 'Admin' : 'Member'}
                           </span>
                         </div>
-                        <a href={`/user/organization/${organization.id}`} className="btn btn-primary btn-sm">
-                        </a>
                         <span
                           data-testid={`org-name-${organization.name}`}
                           className={styles.srOnly}
                         >
                           {organization.name}
                         </span>
-                      </div>
+                      </a>
                     ))}
                   </div>
                 )}

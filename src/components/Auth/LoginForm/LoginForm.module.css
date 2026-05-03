@@ -1,4 +1,14 @@
+/* LoginForm */
+
+.heading {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--gray-900, #111827);
+  letter-spacing: -0.03em;
+  margin: 0 0 20px;
+}
+
 .submitBtn {
   width: 100%;
-  margin-top: var(--space-5);
+  margin-top: 8px;
 }

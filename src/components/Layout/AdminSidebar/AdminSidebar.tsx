@@ -19,6 +19,7 @@ import { useLocation, useNavigate, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
 import { sanitizeAvatarURL } from 'utils/sanitizeAvatar';
+import SignOut from 'components/SignOut/SignOut';
 
 interface AdminSidebarProps {
   collapsed: boolean;
@@ -311,6 +312,9 @@ export default function AdminSidebar({
 
         <div className="sidebar-spacer" />
 
+        {/* Sign Out */}
+        <SignOut hideDrawer={collapsed} />
+
         {/* Profile */}
         <div
           className="sidebar-profile"
@@ -376,6 +380,7 @@ function NavItem({
         className={`sidebar-nav-item ${active ? 'active' : ''}`}
         aria-current={active ? 'page' : undefined}
         data-tooltip={tooltip}
+        title={tooltip}
         onClick={(e) => {
           e.preventDefault();
           navigate(href);

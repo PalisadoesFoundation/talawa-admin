@@ -1,36 +1,45 @@
+/* SignOut — sidebar logout button */
+
 .signOutContainer {
   display: flex;
   align-items: center;
+  gap: 10px;
   width: 100%;
-  text-align: start;
-  margin-bottom: 0.8rem;
+  padding: 9px 12px;
   border-radius: 8px;
-  font-size: 16px;
-  padding: 0.8rem;
-  padding-left: 0.8rem;
-  outline: none;
   border: none;
-  background-color: var(--signOut-container-bg);
-  margin-top: 1rem;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
   cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+  margin-bottom: 4px;
+}
+
+.signOutContainer:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.signOutContainer svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
 }
 
 .signOutButton {
-  background-color: var(--signOutBtn-bg) !important;
-  border: none !important;
-  border-radius: 5px !important;
-  margin-left: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
 }
 
 .signOutDisabled {
-  opacity: 0.5;
+  opacity: 0.4;
   pointer-events: none;
   cursor: not-allowed;
 }
 
 .sidebarText {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: var(--primaryText-color);
+  /* inherits from signOutButton */
 }
