@@ -1,34 +1,8 @@
 /**
- * Action item category management component with CRUD operations,
- *              search, filtering, and sorting capabilities.
- *
- * @param  orgId - Organization UUID for fetching categories
- *
- * Features:
- * - Create/Read/Update/Delete action item categories
- * - Real-time search by category name
- * - Sort by creation date (ASC/DESC)
- * - Filter by status (Active/Disabled/All)
- * - Responsive DataGrid with Material-UI
- * - Modal-based category management
- * - Toast notifications for operations
- * - Comprehensive error handling
- *
- * @example
- * <OrgActionItemCategories orgId="550e8400-e29b-41d4-a716-446655440000" />
- *
- * Dependencies:
- * - React 18+, Apollo Client, Material-UI, React Bootstrap
- * - react-i18next, dayjs, react-toastify
- *
- * GraphQL Operations:
- * - Query: ACTION_ITEM_CATEGORY_LIST
- * - Mutations: CREATE/UPDATE/DELETE_ACTION_ITEM_CATEGORY_MUTATION
+ * Action item category management — CRUD, search, filter, sort.
  */
-
 import type { FC } from 'react';
 import React, { useCallback, useEffect, useState } from 'react';
-import Button from 'shared-components/Button';
 import styles from './OrgActionItemCategories.module.css';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@apollo/client';
@@ -36,14 +10,7 @@ import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/Queries';
 import type { IActionItemCategoryInfo } from 'types/shared-components/ActionItems/interface';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
-import {
-  DataGrid,
-  type GridCellParams,
-  convertTokenColumns,
-  type TokenAwareGridColDef,
-} from 'shared-components/DataGridWrapper';
 import dayjs from 'dayjs';
-import Stack from '@mui/material/Stack';
 import CategoryModal from './Modal/ActionItemCategoryModal';
 import CategoryViewModal from './Modal/ActionItemCategoryViewModal';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
@@ -51,21 +18,34 @@ import SortingButton from 'shared-components/SortingButton/SortingButton';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 import { useModalState } from 'shared-components/CRUDModalTemplate';
 
-/** Category status for filtering */
 enum CategoryStatus {
   Active = 'active',
   Disabled = 'disabled',
 }
 
-/** Component props interface */
 interface IActionItemCategoryProps {
   orgId: string;
 }
 
-/**
- * Represents the component for managing organization action item categories.
- * This component allows creating, updating, enabling, and disabling action item categories.
- */
+/** SVG icons */
+const EyeIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+    <circle cx="12" cy="12" r="3" />
+  </svg>
+);
+const PencilIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
+  </svg>
+);
+const PlusIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="12" y1="5" x2="12" y2="19" />
+    <line x1="5" y1="12" x2="19" y2="12" />
+  </svg>
+);
+
 const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgActionItemCategories',
@@ -73,343 +53,217 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
-  // State management
-  const [category, setCategory] = useState<IActionItemCategoryInfo | null>(
-    null,
-  );
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const [sortBy, setSortBy] = useState<'createdAt_ASC' | 'createdAt_DESC'>(
-    'createdAt_DESC',
-  );
+  const [category, setCategory] = useState<IActionItemCategoryInfo | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortBy, setSortBy] = useState<'createdAt_ASC' | 'createdAt_DESC'>('createdAt_DESC');
   const [status, setStatus] = useState<CategoryStatus | null>(null);
   const [categories, setCategories] = useState<IActionItemCategoryInfo[]>([]);
   const [modalMode, setModalMode] = useState<'edit' | 'create'>('create');
   const categoryModal = useModalState();
   const viewModal = useModalState();
 
-  // Query to fetch action item categories
   const {
     data: catData,
     loading: catLoading,
     error: catError,
     refetch: refetchCategories,
   }: {
-    data?: {
-      actionCategoriesByOrganization: IActionItemCategoryInfo[];
-    };
+    data?: { actionCategoriesByOrganization: IActionItemCategoryInfo[] };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => void;
   } = useQuery(ACTION_ITEM_CATEGORY_LIST, {
-    variables: {
-      input: {
-        organizationId: orgId,
-      },
-    },
+    variables: { input: { organizationId: orgId } },
   });
 
-  /** Open category modal in create/edit mode */
   const handleOpenModal = useCallback(
-    (
-      category: IActionItemCategoryInfo | null,
-      mode: 'edit' | 'create',
-    ): void => {
-      setCategory(category);
+    (cat: IActionItemCategoryInfo | null, mode: 'edit' | 'create') => {
+      setCategory(cat);
       setModalMode(mode);
       categoryModal.open();
     },
     [categoryModal],
   );
 
-  /** Apply client-side filtering and sorting */
   useEffect(() => {
-    if (catData && catData.actionCategoriesByOrganization) {
-      let filteredCategories = catData.actionCategoriesByOrganization;
+    if (!catData?.actionCategoriesByOrganization) return;
 
-      // Search filter (case-insensitive)
-      if (searchTerm) {
-        filteredCategories = filteredCategories.filter(
-          (cat) =>
-            cat.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            (cat.description &&
-              cat.description.toLowerCase().includes(searchTerm.toLowerCase())),
-        );
-      }
+    let filtered = catData.actionCategoriesByOrganization;
 
-      // Status filter
-      if (status !== null) {
-        filteredCategories = filteredCategories.filter((cat) => {
-          if (status === CategoryStatus.Active) {
-            return !cat.isDisabled;
-          }
-          return cat.isDisabled;
-        });
-      }
-
-      // Date sorting
-      filteredCategories = [...filteredCategories].sort((a, b) => {
-        const dateA = new Date(a.createdAt);
-        const dateB = new Date(b.createdAt);
-
-        if (sortBy === 'createdAt_DESC') {
-          return dateB.getTime() - dateA.getTime();
-        } else {
-          return dateA.getTime() - dateB.getTime();
-        }
-      });
-
-      setCategories(filteredCategories);
+    if (searchTerm) {
+      const q = searchTerm.toLowerCase();
+      filtered = filtered.filter(
+        (c) =>
+          c.name.toLowerCase().includes(q) ||
+          c.description?.toLowerCase().includes(q),
+      );
     }
+
+    if (status !== null) {
+      filtered = filtered.filter((c) =>
+        status === CategoryStatus.Active ? !c.isDisabled : c.isDisabled,
+      );
+    }
+
+    filtered = [...filtered].sort((a, b) => {
+      const d = new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      return sortBy === 'createdAt_DESC' ? d : -d;
+    });
+
+    setCategories(filtered);
   }, [catData, searchTerm, status, sortBy]);
 
-  // Error state
   if (catError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
-        <WarningAmberRounded
-          className={styles.iconOrgActionItemCategories}
-          fontSize="large"
-        />
-        <h6 className="fw-bold text-danger text-center">
+        <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+        <div className={styles.errorText}>
           {tErrors('errorLoading', { entity: 'Action Item Categories' })}
           <br />
-          {`${catError.message}`}
-        </h6>
+          {catError.message}
+        </div>
       </div>
     );
   }
 
-  /** DataGrid column configuration */
-  const columns: TokenAwareGridColDef[] = [
-    {
-      field: 'serialNumber',
-      headerName: 'Sr. No.',
-      flex: 1,
-      minWidth: 'space-13',
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return <div>{params.row.serialNumber}</div>;
-      },
-    },
-    {
-      field: 'name',
-      headerName: 'Category',
-      flex: 2,
-      align: 'center',
-      minWidth: 'space-13',
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div
-            className="d-flex justify-content-center fw-bold"
-            data-testid="categoryName"
-          >
-            {params.row.name}
-          </div>
-        );
-      },
-    },
-    {
-      field: 'isDisabled',
-      headerName: 'Status',
-      flex: 1,
-      align: 'center',
-      minWidth: 'space-13',
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <StatusBadge
-            variant={params.row.isDisabled ? 'disabled' : 'active'}
-            size="sm"
-            dataTestId="statusChip"
-          />
-        );
-      },
-    },
-    {
-      field: 'createdAt',
-      headerName: 'Created On',
-      align: 'center',
-      minWidth: 'space-13',
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      flex: 1,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div data-testid="createdOn">
-            {dayjs(params.row.createdAt).format('DD/MM/YYYY')}
-          </div>
-        );
-      },
-    },
-    {
-      field: 'action',
-      headerName: 'Action',
-      flex: 1.5,
-      align: 'center',
-      minWidth: 'space-13',
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div className="d-flex gap-2 justify-content-center align-items-center h-100">
-            <Button
-              variant="success"
-              size="sm"
-              className={styles.editButton}
-              data-testid={'viewCategoryBtn' + params.row.serialNumber}
-              onClick={() => {
-                setCategory(params.row as IActionItemCategoryInfo);
-                viewModal.open();
-              }}
-            >
-              <i className="fa fa-eye" />
-            </Button>
-            <Button
-              variant="success"
-              size="sm"
-              className={styles.editButton}
-              data-testid={'editCategoryBtn' + params.row.serialNumber}
-              onClick={() =>
-                handleOpenModal(params.row as IActionItemCategoryInfo, 'edit')
-              }
-            >
-              <i className="fa fa-edit" />
-            </Button>
-          </div>
-        );
-      },
-    },
-  ];
-
   return (
     <LoadingState isLoading={catLoading} variant="spinner">
-      <div className="mx-4">
-        {/* Header: Search, Sort, Filter, Create */}
-        <div
-          className={`${styles.btnsContainerOrgActionItemCategories} gap-4 flex-wrap`}
+      {/* Toolbar */}
+      <div className={styles.toolbar}>
+        <SearchBar
+          placeholder={tCommon('searchByName')}
+          onSearch={setSearchTerm}
+          inputTestId="searchByName"
+          buttonTestId="searchBtn"
+          showSearchButton={false}
+          showLeadingIcon
+          showClearButton
+        />
+        <SortingButton
+          title={tCommon('sort')}
+          sortingOptions={[
+            { label: tCommon('createdLatest'), value: 'createdAt_DESC' },
+            { label: tCommon('createdEarliest'), value: 'createdAt_ASC' },
+          ]}
+          selectedOption={
+            sortBy === 'createdAt_DESC'
+              ? tCommon('createdLatest')
+              : tCommon('createdEarliest')
+          }
+          onSortChange={(v) => setSortBy(v as 'createdAt_DESC' | 'createdAt_ASC')}
+          dataTestIdPrefix="sort"
+          buttonLabel={tCommon('sort')}
+          type="sort"
+        />
+        <SortingButton
+          title={t('status')}
+          sortingOptions={[
+            { label: tCommon('all'), value: 'all' },
+            { label: tCommon('active'), value: CategoryStatus.Active },
+            { label: tCommon('disabled'), value: CategoryStatus.Disabled },
+          ]}
+          selectedOption={
+            status === null
+              ? tCommon('all')
+              : status === CategoryStatus.Active
+                ? tCommon('active')
+                : tCommon('disabled')
+          }
+          onSortChange={(v) =>
+            setStatus(v === 'all' ? null : (v as CategoryStatus))
+          }
+          dataTestIdPrefix="filter"
+          buttonLabel={t('status')}
+          type="filter"
+        />
+        <div className={styles.toolbarSpacer} />
+        <button
+          className={styles.createBtn}
+          onClick={() => handleOpenModal(null, 'create')}
+          data-testid="createActionItemCategoryBtn"
         >
-          <SearchBar
-            placeholder={tCommon('searchByName')}
-            onSearch={setSearchTerm}
-            inputTestId="searchByName"
-            buttonTestId="searchBtn"
-          />
-          <div className="d-flex gap-4 mb-1">
-            <div className="d-flex justify-space-between align-items-center gap-4">
-              {/* Sort by creation date */}
-              <SortingButton
-                title={tCommon('sort')}
-                sortingOptions={[
-                  { label: tCommon('createdLatest'), value: 'createdAt_DESC' },
-                  { label: tCommon('createdEarliest'), value: 'createdAt_ASC' },
-                ]}
-                selectedOption={
-                  sortBy === 'createdAt_DESC'
-                    ? tCommon('createdLatest')
-                    : tCommon('createdEarliest')
-                }
-                onSortChange={(value) =>
-                  setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC')
-                }
-                dataTestIdPrefix="sort"
-                buttonLabel={tCommon('sort')}
-                className={styles.dropdown}
-              />
-
-              {/* Filter by status */}
-              <SortingButton
-                title={t('status')}
-                sortingOptions={[
-                  { label: tCommon('all'), value: 'all' },
-                  { label: tCommon('active'), value: CategoryStatus.Active },
-                  {
-                    label: tCommon('disabled'),
-                    value: CategoryStatus.Disabled,
-                  },
-                ]}
-                selectedOption={
-                  status === null
-                    ? tCommon('all')
-                    : status === CategoryStatus.Active
-                      ? tCommon('active')
-                      : tCommon('disabled')
-                }
-                onSortChange={(value) =>
-                  setStatus(value === 'all' ? null : (value as CategoryStatus))
-                }
-                dataTestIdPrefix="filter"
-                buttonLabel={t('status')}
-                className={styles.dropdown}
-              />
-            </div>
-
-            {/* Create button */}
-            <div>
-              <Button
-                variant="success"
-                onClick={() => handleOpenModal(null, 'create')}
-                className={`${styles.createButton} ${styles.marginTopSm}`}
-                data-testid="createActionItemCategoryBtn"
-              >
-                <i className={'fa fa-plus me-2'} />
-                {tCommon('create')}
-              </Button>
-            </div>
-          </div>
-        </div>
-
-        {/* Categories DataGrid */}
-        <DataGrid
-          disableColumnMenu
-          columnBufferPx={6}
-          hideFooter={true}
-          getRowId={(row) => row.id}
-          slots={{
-            noRowsOverlay: () => (
-              <Stack height="100%" alignItems="center" justifyContent="center">
-                {t('noActionItemCategories')}
-              </Stack>
-            ),
-          }}
-          className={styles.actionItemCategoriesDataGrid}
-          getRowClassName={() => `${styles.rowBackground}`}
-          autoHeight
-          rowHeight={65}
-          rows={categories.map((category, index) => ({
-            ...category,
-            serialNumber: index + 1,
-          }))}
-          columns={convertTokenColumns(columns)}
-          isRowSelectable={() => false}
-        />
-
-        {/* Category Modal */}
-        <CategoryModal
-          isOpen={categoryModal.isOpen}
-          hide={categoryModal.close}
-          refetchCategories={refetchCategories}
-          category={category}
-          orgId={orgId}
-          mode={modalMode}
-        />
-
-        {/* Category View Modal */}
-        <CategoryViewModal
-          isOpen={viewModal.isOpen}
-          hide={viewModal.close}
-          category={category}
-        />
+          <PlusIcon />
+          {tCommon('create')}
+        </button>
       </div>
+
+      {/* Table */}
+      <div className={styles.tableWrapper}>
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>{tCommon('category')}</th>
+              <th>{t('status')}</th>
+              <th>{tCommon('createdOn')}</th>
+              <th>{tCommon('actions')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {categories.length === 0 ? (
+              <tr>
+                <td colSpan={5} className={styles.emptyRow}>
+                  {t('noActionItemCategories')}
+                </td>
+              </tr>
+            ) : (
+              categories.map((cat, i) => (
+                <tr key={cat.id}>
+                  <td>{i + 1}</td>
+                  <td>
+                    <span className={styles.categoryName}>{cat.name}</span>
+                  </td>
+                  <td>
+                    <StatusBadge
+                      variant={cat.isDisabled ? 'disabled' : 'active'}
+                      size="sm"
+                      dataTestId="statusChip"
+                    />
+                  </td>
+                  <td>{dayjs(cat.createdAt).format('DD/MM/YYYY')}</td>
+                  <td>
+                    <div className={styles.actionBtns}>
+                      <button
+                        className={styles.iconBtn}
+                        data-testid={`viewCategoryBtn${i + 1}`}
+                        onClick={() => {
+                          setCategory(cat);
+                          viewModal.open();
+                        }}
+                        title={tCommon('view')}
+                      >
+                        <EyeIcon />
+                      </button>
+                      <button
+                        className={styles.iconBtn}
+                        data-testid={`editCategoryBtn${i + 1}`}
+                        onClick={() => handleOpenModal(cat, 'edit')}
+                        title={tCommon('edit')}
+                      >
+                        <PencilIcon />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      <CategoryModal
+        isOpen={categoryModal.isOpen}
+        hide={categoryModal.close}
+        refetchCategories={refetchCategories}
+        category={category}
+        orgId={orgId}
+        mode={modalMode}
+      />
+      <CategoryViewModal
+        isOpen={viewModal.isOpen}
+        hide={viewModal.close}
+        category={category}
+      />
     </LoadingState>
   );
 };

@@ -1,57 +1,141 @@
+/* OrgActionItemCategories — action item categories tab */
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.toolbarSpacer {
+  flex: 1;
+}
+
+.createBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  background: var(--green-500, #3ecf8e);
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+
+.createBtn:hover {
+  background: var(--green-400, #4ade80);
+}
+
+.createBtnIcon {
+  width: 14px;
+  height: 14px;
+}
+
+/* Table */
+.tableWrapper {
+  border: 1px solid var(--gray-200, #e5e7eb);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th {
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gray-500, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: var(--gray-50, #fafafa);
+  border-bottom: 1px solid var(--gray-200, #e5e7eb);
+}
+
+.table td {
+  padding: 14px 16px;
+  font-size: 14px;
+  color: var(--gray-700, #374151);
+  border-bottom: 1px solid var(--gray-100, #f3f4f6);
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.table tr:hover td {
+  background: var(--gray-50, #fafafa);
+}
+
+.categoryName {
+  font-weight: 600;
+  color: var(--gray-900, #111827);
+}
+
+.actionBtns {
+  display: flex;
+  gap: 6px;
+}
+
+.iconBtn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--gray-200, #e5e7eb);
+  border-radius: 8px;
+  background: var(--surface, #fff);
+  color: var(--gray-500, #6b7280);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  padding: 0;
+}
+
+.iconBtn:hover {
+  background: var(--gray-50, #fafafa);
+  border-color: var(--gray-300, #d1d5db);
+  color: var(--gray-700, #374151);
+}
+
+.iconBtn svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* Empty / error states */
+.emptyRow {
+  text-align: center;
+  padding: 40px 16px;
+  color: var(--gray-400, #9ca3af);
+  font-size: 14px;
+}
+
 .message {
-  margin-top: 25%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  padding: 48px 24px;
 }
 
-.iconOrgActionItemCategories {
-  transform: scale(1.5);
-  color: var(--color-blue-500);
-  margin-bottom: var(--space-4);
+.errorIcon {
+  color: var(--red-500, #ef4444);
+  margin-bottom: 12px;
 }
 
-.tableHeader {
-  background-color: var(--color-red-500);
-}
-
-.editButton {
-  background-color: var(--color-blue-200);
-  color: var(--color-gray-600);
-  border-color: var(--color-gray-100);
-}
-
-.btnsContainerOrgActionItemCategories {
-  display: flex;
-  margin: var(--space-2) 0 var(--space-4) 0;
-  align-items: stretch;
-  gap: var(--space-1);
-  flex-wrap: wrap;
-}
-
-.dropdown {
-  background-color: var(--color-white);
-  min-width: var(--space-16);
-  color: var(--color-gray-600);
-  position: relative;
-  display: inline-block;
-}
-
-.createButton {
-  background-color: var(--color-gray-50);
-  color: var(--color-gray-600);
-  border-color: var(--color-gray-600);
-  padding: var(--space-4) var(--space-6);
-}
-
-.marginTopSm {
-  margin-top: var(--space-9);
-}
-
-.rowBackground {
-  background-color: var(--color-white);
-  color: var(--color-gray-600);
-  max-height: var(--space-24);
-  overflow-y: auto;
+.errorText {
+  font-weight: 600;
+  color: var(--red-500, #ef4444);
+  text-align: center;
+  font-size: 14px;
 }

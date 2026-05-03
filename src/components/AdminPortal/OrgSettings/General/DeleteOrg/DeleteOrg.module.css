@@ -1,65 +1,79 @@
+/* DeleteOrg — danger zone card */
+
 .DeleteOrgCard {
-  --color-black-rgb: 0, 0, 0;
-  border-radius: var(--space-3);
-  box-shadow: 0 var(--space-1) var(--space-2)
-    rgba(var(--color-black-rgb), 0.075);
-  border: none;
-  height: var(--space-20) !important;
-  width: 98% !important;
+  background: var(--surface, #fff);
+  border: 1px solid var(--red-200, #fecaca);
+  border-radius: 14px;
+  overflow: hidden;
 }
 
 .deleteCardHeader {
-  background-color: var(--color-gray-100);
-  border-top-left-radius: var(--radius-sm) !important;
-  border-top-right-radius: var(--radius-sm) !important;
-  padding-top: var(--space-5);
-  padding-bottom: var(--space-5);
+  padding: 14px 20px;
+  background: var(--red-50, #fef2f2);
+  border-bottom: 1px solid var(--red-200, #fecaca);
 }
 
 .textBox {
-  padding-top: var(--space-3);
-  padding-bottom: var(--space-3);
+  font-size: 14px;
+  color: var(--gray-600, #4b5563);
+  line-height: 1.6;
+  margin-bottom: 16px;
 }
 
 .deleteButton {
-  background-color: var(--color-red-100);
-  color: var(--color-red-500);
-  border: var(--border-1) solid var(--color-red-500);
-  padding: var(--space-2) var(--space-10);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  background: var(--red-50, #fef2f2);
+  color: var(--red-600, #dc2626);
+  border: 1px solid var(--red-200, #fecaca);
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
-  display: block;
-  margin: var(--space-4) auto;
-  border-radius: var(--radius-sm);
-  height: var(--space-11);
-  text-align: center;
+  transition: all 0.15s;
 }
 
-.deleteButton:hover,
-.deleteButton:active,
-.deleteButton:focus {
-  background-color: var(--color-red-100) !important;
-  color: var(--color-red-500);
-  box-shadow: var(--border-shadow-xs) var(--hover-shadow);
-  outline: none;
+.deleteButton:hover {
+  background: var(--red-500, #ef4444);
+  color: #fff;
+  border-color: var(--red-500, #ef4444);
 }
 
 .icon {
-  margin-right: var(--space-3);
+  font-size: 16px;
 }
 
+/* Modal styles */
 .modalHeaderDelete {
-  background-color: var(--color-blue-500);
-  color: var(--color-white);
+  background: var(--red-50, #fef2f2);
+  border-bottom: 1px solid var(--red-200, #fecaca);
 }
 
 .btnDelete {
-  background-color: var(--color-gray-100);
-  border: var(--border-1) solid var(--active-item-color) !important;
-  color: var(--color-black);
+  padding: 8px 16px;
+  background: var(--surface, #fff);
+  border: 1px solid var(--gray-200, #e5e7eb);
+  border-radius: 10px;
+  color: var(--gray-700, #374151);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
 }
 
 .btnConfirmDelete {
-  background-color: var(--color-red-100);
-  color: var(--color-red-500);
+  padding: 8px 16px;
+  background: var(--red-500, #ef4444);
+  color: #fff;
   border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btnConfirmDelete:hover {
+  background: var(--red-600, #dc2626);
 }

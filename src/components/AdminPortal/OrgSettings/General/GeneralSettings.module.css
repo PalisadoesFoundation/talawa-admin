@@ -1,46 +1,56 @@
-.settingsBody {
-  margin: 2.5rem 0;
-  padding: 0;
+/* GeneralSettings — org settings general tab */
+
+.layout {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 24px;
+  align-items: start;
 }
 
-.mainCard {
-  /* Card wrapper — visual overrides applied inline */
+.rightColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.deleteCardHeader {
-  background-color: var(--activeTab-bg);
-  border-top-left-radius: 1rem !important;
-  border-top-right-radius: 1rem !important;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+.card {
+  background: var(--surface, #fff);
+  border: 1px solid var(--gray-200, #e5e7eb);
+  border-radius: 14px;
+  overflow: hidden;
 }
 
-.cardHeading {
-  padding-left: 0.3rem !important;
+.cardHeader {
+  padding: 14px 20px;
+  background: var(--gray-50, #fafafa);
+  border-bottom: 1px solid var(--gray-200, #e5e7eb);
+}
+
+.cardHeaderTitle {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--gray-900, #111827);
 }
 
 .cardBody {
-  padding: 1rem 0rem;
+  padding: 24px;
+}
+
+.languageRow {
   display: flex;
-  width: 100% !important;
-  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
 }
 
-@media (max-width: 600px) {
-  .cardBody {
-    min-height: 120px;
+.languageLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray-700, #374151);
+}
+
+@media (max-width: 860px) {
+  .layout {
+    grid-template-columns: 1fr;
   }
-}
-
-.orgCardSettings {
-  width: 95% !important;
-}
-
-.cardTitle {
-  /* Wrapper for heading */
-}
-
-.textBox {
-  padding-top: 20px;
-  padding-bottom: 20px;
 }

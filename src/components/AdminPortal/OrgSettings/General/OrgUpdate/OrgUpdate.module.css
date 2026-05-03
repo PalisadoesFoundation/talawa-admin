@@ -1,125 +1,100 @@
+/* OrgUpdate — edit organization form */
+
+.ss {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 .message {
-  margin-top: 25%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  padding: 48px 24px;
+  text-align: center;
 }
 
 .icon {
-  margin: var(--space-1);
+  color: var(--red-500, #ef4444);
+  margin-bottom: 12px;
 }
 
 .descriptionTextField {
-  background-color: var(--color-white);
-  color: var(--color-gray-600);
-  margin-bottom: var(--space-5);
   width: 100%;
-  resize: none;
-  height: var(--space-13);
+  resize: vertical;
+  min-height: 80px;
 }
 
 .textFields {
-  background-color: var(--color-white);
-  color: var(--color-gray-600);
-  margin-bottom: var(--space-5);
   width: 100%;
 }
 
 .customFileInput {
-  background-color: var(--color-white);
-  color: var(--color-gray-600);
-  padding: var(--space-2) var(--space-3);
-  border: var(--border-1) solid var(--color-gray-200);
-  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  border: 1.5px solid var(--gray-200, #e5e7eb);
+  border-radius: 10px;
   cursor: pointer;
-  font-size: var(--font-size-sm);
-  transition: border-color 0.2s ease;
+  font-size: 13px;
+  transition: border-color 0.15s;
   width: 100%;
-  max-width: var(--space-22);
-  margin-left: var(--space-8);
+  background: var(--surface, #fff);
+  color: var(--gray-700, #374151);
 }
 
 .customFileInput:hover {
-  border-color: var(--color-gray-400);
+  border-color: var(--gray-300, #d1d5db);
 }
 
 .customFileInput:focus {
   outline: none;
-  border-color: var(--color-blue-500);
-  box-shadow: 0 0 0 var(--border-1) var(--color-blue-500);
-  opacity: 0.8;
+  border-color: var(--green-500, #3ecf8e);
+  box-shadow: 0 0 0 3px rgba(62, 207, 142, 0.12);
 }
 
 .customFileInput::file-selector-button {
-  background-color: var(--color-blue-500);
-  color: var(--color-white);
-  border: var(--border-0);
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-sm);
+  background: var(--green-500, #3ecf8e);
+  color: #000;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 8px;
   cursor: pointer;
-  font-weight: var(--font-weight-semibold);
-  margin-right: var(--space-2);
-  transition: background-color 0.2s ease;
+  font-weight: 600;
+  font-size: 13px;
+  margin-right: 10px;
+  transition: background 0.15s;
 }
 
 .customFileInput::file-selector-button:hover {
-  background-color: var(--color-blue-600);
-  opacity: 0.9;
+  background: var(--green-400, #4ade80);
 }
 
-/* ── Checkbox row ────────────────────────────────────────────────────────────── */
-/* Bootstrap's .form-check-input uses a negative margin-left that depends on   */
-/* .form-check having padding-left: 1.5em.  When the parent is a flex container */
-/* that assumption breaks and the input overlaps the label.  Reset to flex.     */
-.checkboxField :global(.form-check) {
+.checkboxField {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
-  padding-left: 0;
-}
-
-.checkboxField :global(.form-check-input) {
-  position: static;
-  margin: 0;
-  flex-shrink: 0;
-}
-
-.checkboxField :global(.form-check-label) {
-  margin: 0;
-  padding: 0;
-  cursor: pointer;
-}
-
-/* ── Action buttons ──────────────────────────────────────────────────────────── */
-.resetChangesBtn {
-  border-width: var(--border-2);
-  border-color: var(--color-gray-400);
-  color: var(--color-gray-400);
-  padding: var(--space-3) var(--space-5);
-  border-radius: var(--radius-md);
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  height: var(--space-10);
-  width: var(--space-16);
-  font-size: var(--font-size-xs);
-}
-
-.syncIconStyle {
-  transform: rotate(135deg) scale(1.2);
-  width: var(--space-3);
-  height: var(--space-3);
-  stroke: var(--color-blue-500);
-  stroke-width: var(--border-1);
-  fill: var(--color-blue-500);
+  gap: 8px;
 }
 
 .saveChangesBtn {
-  color: var(--color-white);
-  border: var(--border-0);
-  height: var(--space-10);
-  width: var(--space-22);
-  font-size: var(--font-size-xs);
-  background-color: var(--color-blue-500);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 20px;
+  background: var(--green-500, #3ecf8e);
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.saveChangesBtn:hover {
+  background: var(--green-400, #4ade80);
+}
+
+.saveChangesBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }

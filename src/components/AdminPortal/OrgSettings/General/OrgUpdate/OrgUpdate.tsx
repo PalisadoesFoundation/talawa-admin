@@ -192,7 +192,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     return (
       <div className={styles.message}>
         <WarningAmberRounded fontSize="large" className={styles.icon} />
-        <h6 style={{ fontWeight: 'bold', color: '#dc3545', textAlign: 'center' }}>
+        <h6 style={{ fontWeight: 600, color: 'var(--red-500, #ef4444)', textAlign: 'center' }}>
           {t('errorLoadingOrganizationData')}
           <br />
           {`${error.message}`}
@@ -271,7 +271,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             />
           </FormFieldGroup>
 
-          <div style={{ marginTop: '1rem' }}>
+          <div>
             <div className={styles.checkboxField}>
               <FormCheckField
                 name="isPublic"
@@ -291,22 +291,17 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             </div>
           </div>
 
-          <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', marginTop: '1.5rem' }}>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', width: '100%' }}>
-              <div style={{ flex: '1 1 0' }}></div>
-              <div style={{ flex: '1 1 0', display: 'flex', justifyContent: 'flex-end' }}>
-                <Button
-                  className={styles.saveChangesBtn}
-                  value="savechanges"
-                  data-testid="save-org-changes-btn"
-                  onClick={onSaveChangesClicked}
-                  disabled={isSaving}
-                >
-                  <SaveIcon style={{ marginRight: '0.25rem' }} />
-                  {isSaving ? tCommon('saving') : tCommon('saveChanges')}
-                </Button>
-              </div>
-            </div>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 8 }}>
+            <Button
+              className={styles.saveChangesBtn}
+              value="savechanges"
+              data-testid="save-org-changes-btn"
+              onClick={onSaveChangesClicked}
+              disabled={isSaving}
+            >
+              <SaveIcon style={{ width: 16, height: 16 }} />
+              {isSaving ? tCommon('saving') : tCommon('saveChanges')}
+            </Button>
           </div>
         </form>
       </div>

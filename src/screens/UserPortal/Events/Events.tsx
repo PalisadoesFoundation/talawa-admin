@@ -1,64 +1,17 @@
 /**
- * The `Events` component is responsible for managing and displaying events for a user portal.
- * It includes functionality for creating, viewing, and managing events within an organization.
- *
- * @remarks
- * - Utilizes Apollo Client for GraphQL queries and mutations.
- * - Integrates with `react-bootstrap` for UI components and modals.
- * - Uses `dayjs` for date and time manipulation.
- * - Includes localization support via `react-i18next`.
- *
- * Dependencies:
- * - `EventCalendar`: Displays events in a calendar view.
- * - `EventHeader`: Provides controls for calendar view and event creation.
- * - `EventForm`: Form component for event creation with validation.
- *
- * State:
- * - `dateRange`: Selected date range with `startDate` and `endDate` controlling event queries.
- * - `viewType`: Current calendar view type (e.g., month, week).
- * - `createEventModal`: Controls visibility of the event creation modal.
- * - `formResetKey`: Key used to reset the event form after successful creation.
- * Computed Values:
- * - `calendarMonth`: Derived from `dateRange.startDate` for calendar display.
- * - `calendarYear`: Derived from `dateRange.startDate` for calendar display.
- *
- * Methods:
- * - `handleCreateEvent`: Handles the creation of a new event by submitting a GraphQL mutation.
- * - `closeCreateEventModal`: Closes the event creation modal.
- * - `showInviteModal`: Opens the event creation modal.
- * - `handleChangeView`: Updates the calendar view type.
- *
- * Hooks:
- * - `useQuery`: Fetches events and organization details.
- * - `useMutation`: Executes the event creation mutation.
- * - `useLocalStorage`: Retrieves user details from local storage.
- * - `useEffect`: Handles error logging for event query failures (rate-limit aware).
- *
- * @returns The rendered events component.
- *
- * @example
- * ```tsx
- * // Returns current month/year
- * const { month, year } = computeCalendarFromStartDate(null);
- *
- * // Returns June 2025 (month = 5)
- * const { month, year } = computeCalendarFromStartDate(new Date(2025, 5, 15));
- * ```
- * <Events />
- *
+ * User Portal Events — mirrors the admin OrganizationEvents layout.
+ * Calendar view (default) + Card view toggle, Upcoming/Past/Recurring tabs.
  */
 import { useMutation, useQuery } from '@apollo/client';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/EventMutations';
 import {
   ORGANIZATIONS_LIST_BASIC,
-  GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
+  GET_ORGANIZATION_EVENTS_PG,
 } from 'GraphQl/Queries/Queries';
 import EventCalendar from 'components/EventCalender/Monthly/EventCalender';
-import EventHeader from 'components/EventCalender/Header/EventHeader';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import React from 'react';
-
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   CRUDModalTemplate,
   useModalState,
@@ -68,7 +21,7 @@ import { useParams } from 'react-router';
 import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
-import type { IEventEdge, IEventFormInput } from 'types/Event/interface';
+import type { InterfaceEvent } from 'types/Event/interface';
 import { mapCreateEventInputToMutationInput } from 'types/Event/createEventInput';
 import styles from './Events.module.css';
 import EventForm, {
@@ -78,72 +31,72 @@ import type {
   IEventFormSubmitPayload,
   IEventFormValues,
 } from 'types/EventForm/interface';
+import type { IEventFormInput } from 'types/Event/interface';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
+import { Button } from 'shared-components/Button';
+import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';
+
 dayjs.extend(utc);
 
-export function computeCalendarFromStartDate(
-  startDate: Date | null,
-  refDate: Date = new Date(),
-): {
-  month: number;
-  year: number;
-} {
-  if (!startDate) {
-    const now = dayjs(refDate);
-    return {
-      month: now.month(),
-      year: now.year(),
-    };
-  }
-
-  const d = dayjs(startDate);
-  return {
-    month: d.month(),
-    year: d.year(),
+interface IEventEdge {
+  node: {
+    id: string;
+    name: string;
+    description?: string | null;
+    startAt: string | null;
+    endAt: string | null;
+    allDay: boolean;
+    location?: string | null;
+    isPublic: boolean;
+    isRegisterable: boolean;
+    isInviteOnly?: boolean;
+    isRecurringEventTemplate?: boolean;
+    baseEvent?: { id: string; name: string } | null;
+    sequenceNumber?: number | null;
+    totalCount?: number | null;
+    hasExceptions?: boolean;
+    progressLabel?: string | null;
+    recurrenceDescription?: string | null;
+    recurrenceRule?: InterfaceRecurrenceRule | null;
+    creator?: { id: string; name: string };
+    attendees?: Array<{ id: string; name: string }>;
   };
+  cursor: string;
 }
 
 export default function Events(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userEvents' });
   const { t: tCommon } = useTranslation('common');
-
   const { getItem } = useLocalStorage();
-
-  const [viewType, setViewType] = React.useState<ViewType>(ViewType.MONTH);
-  const createEventModal = useModalState();
   const { orgId: organizationId } = useParams();
-  const [dateRange, setDateRange] = React.useState<{
-    startDate: Date | null;
-    endDate: Date | null;
-  }>({
-    startDate: dayjs().startOf('month').toDate(),
-    endDate: dayjs().endOf('month').toDate(),
-  });
-  // Defensive fallback: startDate is typed as nullable, but is always initialized
-  // and cannot be set to null via DateRangePicker in normal usage.
-  // Kept for future-proofing; null handling is covered at the utility level
-  // (computeCalendarFromStartDate) to avoid unrealistic UI scenarios.
-  const { month: calendarMonth, year: calendarYear } = React.useMemo(
-    () => computeCalendarFromStartDate(dateRange.startDate, new Date()),
-    [dateRange.startDate],
-  );
 
-  // Query to fetch events for the organization
+  const createEventModal = useModalState();
+  const [viewMode, setViewMode] = useState<'calendar' | 'cards'>('calendar');
+  const [eventFilter, setEventFilter] = useState<'upcoming' | 'past' | 'recurring'>('upcoming');
+  const [searchByName, setSearchByName] = useState('');
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+  const [formResetKey, setFormResetKey] = useState(0);
+
+  const startDate = dayjs(new Date(currentYear, currentMonth, 1)).startOf('month').toISOString();
+  const endDate = dayjs(new Date(currentYear, currentMonth, 1)).endOf('month').toISOString();
+
+  const userId = (getItem('userId') || getItem('id') || '') as string;
+  const storedRole = getItem('role') as string | null;
+  const userRole = storedRole === 'administrator' ? 'ADMINISTRATOR' : 'REGULAR';
+
+  // Use the same query as admin (no broken startDate/endDate fields on event node)
   const {
-    data,
+    data: eventData,
     error: eventDataError,
     refetch,
-  } = useQuery(GET_ORGANIZATION_EVENTS_USER_PORTAL_PG, {
+  } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
     variables: {
       id: organizationId,
       first: 100,
       after: null,
-      startDate: dateRange.startDate
-        ? dayjs(dateRange.startDate).startOf('day').toISOString()
-        : null,
-      endDate: dateRange.endDate
-        ? dayjs(dateRange.endDate).endOf('day').toISOString()
-        : null,
+      startDate,
+      endDate,
       includeRecurring: true,
     },
     notifyOnNetworkStatusChange: true,
@@ -151,74 +104,109 @@ export default function Events(): JSX.Element {
     fetchPolicy: 'cache-and-network',
   });
 
-  // Basic org fields only (avoids admin-only metadata). No variables; current org resolved via orgData.organizations.find(organizationId).
   const { data: orgData } = useQuery(ORGANIZATIONS_LIST_BASIC);
+  const [create] = useMutation(CREATE_EVENT_MUTATION, { errorPolicy: 'all' });
 
-  // Mutation to create a new event
-  const [create] = useMutation(CREATE_EVENT_MUTATION, {
-    errorPolicy: 'all',
+  useEffect(() => {
+    if (eventDataError) {
+      const msg = eventDataError.message?.toLowerCase() || '';
+      if (msg.includes('rate limit') || msg.includes('too many requests')) return;
+      console.warn('Events query error:', eventDataError.message);
+    }
+  }, [eventDataError]);
+
+  const mapNodeToEvent = (node: IEventEdge['node']): InterfaceEvent => ({
+    id: node.id,
+    name: node.name,
+    description: node.description || '',
+    startAt: node.startAt,
+    endAt: node.endAt,
+    startDate: null,
+    endDate: null,
+    startTime: node.allDay ? null : node.startAt ? dayjs(node.startAt).format('HH:mm:ss') : null,
+    endTime: node.allDay ? null : node.endAt ? dayjs(node.endAt).format('HH:mm:ss') : null,
+    allDay: node.allDay,
+    location: node.location || '',
+    isPublic: node.isPublic,
+    isRegisterable: node.isRegisterable,
+    isInviteOnly: Boolean(node.isInviteOnly),
+    isRecurringEventTemplate: node.isRecurringEventTemplate,
+    baseEvent: node.baseEvent,
+    sequenceNumber: node.sequenceNumber,
+    totalCount: node.totalCount,
+    hasExceptions: node.hasExceptions,
+    progressLabel: node.progressLabel,
+    recurrenceDescription: node.recurrenceDescription,
+    recurrenceRule: node.recurrenceRule,
+    creator: { id: node.creator?.id || '', name: node.creator?.name || '' },
+    attendees: node.attendees || [],
   });
 
-  // Get user details from local storage
-  const userId = (getItem('userId') || getItem('id') || '') as string;
+  const allEvents: InterfaceEvent[] = (eventData?.organization?.events?.edges || []).map(
+    (edge: IEventEdge) => mapNodeToEvent(edge.node),
+  );
 
-  const storedRole = getItem('role') as string | null;
-  const userRole = storedRole === 'administrator' ? 'ADMINISTRATOR' : 'REGULAR';
+  // Search filter
+  const searchedEvents = useMemo(() => {
+    if (!searchByName.trim()) return allEvents;
+    const q = searchByName.toLowerCase();
+    return allEvents.filter(
+      (e) =>
+        e.name.toLowerCase().includes(q) ||
+        e.description.toLowerCase().includes(q) ||
+        e.location.toLowerCase().includes(q),
+    );
+  }, [allEvents, searchByName]);
 
+  // Tab filter
+  const filteredEvents = useMemo(() => {
+    if (eventFilter === 'upcoming') {
+      return searchedEvents.filter((e) => {
+        const s = e.startAt ? dayjs(e.startAt) : null;
+        return s && s.isAfter(dayjs());
+      });
+    }
+    if (eventFilter === 'past') {
+      return searchedEvents.filter((e) => {
+        const s = e.startAt ? dayjs(e.startAt) : null;
+        return s && s.isBefore(dayjs());
+      });
+    }
+    if (eventFilter === 'recurring') {
+      return searchedEvents.filter((e) => e.isRecurringEventTemplate);
+    }
+    return searchedEvents;
+  }, [searchedEvents, eventFilter]);
+
+  // Create event
   const buildDefaultEventValues = (): IEventFormValues => {
     const now = new Date();
     const nextHour = new Date(now);
-    const nextHourValue = Math.min(now.getHours() + 1, 23);
-    nextHour.setHours(nextHourValue, 0, 0, 0);
-    const twoHoursLater = new Date(nextHour);
-    const twoHoursLaterValue = Math.min(nextHourValue + 2, 23);
-    twoHoursLater.setHours(twoHoursLaterValue, 0, 0, 0);
+    nextHour.setHours(Math.min(now.getHours() + 1, 23), 0, 0, 0);
+    const twoLater = new Date(nextHour);
+    twoLater.setHours(Math.min(nextHour.getHours() + 2, 23), 0, 0, 0);
     return {
-      name: '',
-      description: '',
-      location: '',
-      startDate: new Date(),
-      endDate: new Date(),
+      name: '', description: '', location: '',
+      startDate: new Date(), endDate: new Date(),
       startTime: nextHour.toTimeString().split(' ')[0],
-      endTime: twoHoursLater.toTimeString().split(' ')[0],
-      allDay: true,
-      isPublic: false,
-      isInviteOnly: true,
-      isRegisterable: true,
-      recurrenceRule: null,
-      createChat: false,
+      endTime: twoLater.toTimeString().split(' ')[0],
+      allDay: true, isPublic: false, isInviteOnly: true,
+      isRegisterable: true, recurrenceRule: null, createChat: false,
     };
   };
 
-  const [defaultEventValues, setDefaultEventValues] =
-    React.useState<IEventFormValues>(buildDefaultEventValues);
-  const [formResetKey, setFormResetKey] = React.useState(0);
+  const [defaultEventValues, setDefaultEventValues] = useState<IEventFormValues>(buildDefaultEventValues);
 
-  const handleCreateEvent = async (
-    payload: IEventFormSubmitPayload,
-  ): Promise<void> => {
+  const handleCreateEvent = async (payload: IEventFormSubmitPayload): Promise<void> => {
     try {
       const recurrenceInput = payload.recurrenceRule
         ? formatRecurrenceForPayload(payload.recurrenceRule, payload.startDate)
         : undefined;
-
-      // Build input object with shared typed interface
-      // All-day events: use startDate/endDate (YYYY-MM-DD strings)
-      // Timed events: use startAt/endAt (ISO timestamps)
       const input: IEventFormInput = {
         name: payload.name,
         ...(payload.allDay
-          ? {
-              // Backend expects all-day endDate to be exclusive (strictly greater than startDate).
-              startDate: dayjs(payload.startDate).format('YYYY-MM-DD'),
-              endDate: dayjs(payload.endDate)
-                .add(1, 'day')
-                .format('YYYY-MM-DD'),
-            }
-          : {
-              startAt: payload.startAtISO,
-              endAt: payload.endAtISO,
-            }),
+          ? { startDate: dayjs(payload.startDate).format('YYYY-MM-DD'), endDate: dayjs(payload.endDate).add(1, 'day').format('YYYY-MM-DD') }
+          : { startAt: payload.startAtISO, endAt: payload.endAtISO }),
         organizationId,
         allDay: payload.allDay,
         isPublic: payload.isPublic,
@@ -228,27 +216,14 @@ export default function Events(): JSX.Element {
         ...(payload.location && { location: payload.location }),
         ...(recurrenceInput && { recurrence: recurrenceInput }),
       };
-
       const mutationInput = mapCreateEventInputToMutationInput(input);
-
-      const { data: createEventData, errors } = await create({
-        variables: { input: mutationInput },
-      });
-
-      // Handle partial success: prioritize data over errors
-      // If createEventData exists, treat as success even if errors are present
-      // This handles GraphQL partial success scenarios where mutation succeeds
-      // but some non-critical fields may have issues
-      if (createEventData?.createEvent) {
+      const { data: createData, errors } = await create({ variables: { input: mutationInput } });
+      if (createData?.createEvent) {
         NotificationToast.success(t('eventCreated') as string);
-        try {
-          await refetch();
-        } catch {
-          // Refetch failure is non-critical, suppressing error
-        }
-        setFormResetKey((prev) => prev + 1);
+        try { await refetch(); } catch { /* non-critical */ }
+        setFormResetKey((p) => p + 1);
         createEventModal.close();
-      } else if (errors && errors.length > 0) {
+      } else if (errors?.length) {
         throw new Error(errors[0].message);
       }
     } catch (error: unknown) {
@@ -256,222 +231,165 @@ export default function Events(): JSX.Element {
     }
   };
 
-  const closeCreateEventModal = (): void => createEventModal.close();
-
-  // Normalize event data for EventCalendar with proper typing
-  const events = (data?.organization?.events?.edges || []).map(
-    (edge: IEventEdge) => ({
-      id: edge.node.id || '',
-
-      name: edge.node.name || '',
-      description: edge.node.description || '',
-      startAt: edge.node.startAt,
-      endAt: edge.node.endAt,
-      startDate: edge.node.startDate,
-      endDate: edge.node.endDate,
-      startTime: edge.node.allDay
-        ? null
-        : edge.node.startAt
-          ? dayjs(edge.node.startAt).format('HH:mm:ss')
-          : null,
-      endTime: edge.node.allDay
-        ? null
-        : edge.node.endAt
-          ? dayjs(edge.node.endAt).format('HH:mm:ss')
-          : null,
-      allDay: edge.node.allDay,
-      location: edge.node.location || '',
-      isPublic: edge.node.isPublic,
-      isRegisterable: edge.node.isRegisterable,
-      isInviteOnly: edge.node.isInviteOnly,
-      // Add recurring event information
-      isRecurringEventTemplate: edge.node.isRecurringEventTemplate,
-      baseEvent: edge.node.baseEvent,
-      sequenceNumber: edge.node.sequenceNumber,
-      totalCount: edge.node.totalCount,
-      hasExceptions: edge.node.hasExceptions,
-      progressLabel: edge.node.progressLabel,
-      recurrenceDescription: edge.node.recurrenceDescription,
-      recurrenceRule: edge.node.recurrenceRule,
-      creator: edge.node.creator || {
-        id: '',
-        name: '',
-      },
-      attendees: edge.node.attendees || [],
-    }),
-  ); // Handle errors gracefully
-  React.useEffect(() => {
-    if (eventDataError) {
-      // Check if we have valid data (partial data scenario)
-      const hasData =
-        Array.isArray(data?.organization?.events?.edges) &&
-        data.organization.events.edges.length > 0;
-
-      // Handle rate limiting and auth errors
-      const errorMessage = eventDataError.message?.toLowerCase() || '';
-      const isRateLimitError =
-        errorMessage.includes('too many requests') ||
-        errorMessage.includes('rate limit') ||
-        eventDataError.message?.includes('Please try again later');
-      const isAuthError = errorMessage.includes('not authorized');
-      const isServerError =
-        errorMessage.includes('internal server error') ||
-        errorMessage.includes('500');
-
-      // Suppress rate limit errors or auth errors if we have partial data
-      if (isRateLimitError || ((isAuthError || isServerError) && hasData)) {
-        return;
-      }
-
-      // For other errors (like empty results), handle them properly
-      errorHandler(t, eventDataError);
-    }
-  }, [eventDataError, data, t]);
-
-  /**
-   * Shows the modal for creating a new event.
-   *
-   * @returns Void.
-   */
-
-  const showInviteModal = (): void => {
-    setDefaultEventValues(buildDefaultEventValues());
-    createEventModal.open();
-  };
-
-  /**
-   * Updates the calendar view type.
-   *
-   * @param item - The view type to set, or null to reset.
-   * @returns Void.
-   */
-  const handleChangeView = (item: string | null): void => {
-    if (item) {
-      setViewType(item as ViewType);
-    }
-  };
+  // Color palette for card date strips
+  const dateStripColors = [
+    'linear-gradient(135deg, #3ecf8e, #15803d)',
+    'linear-gradient(135deg, #3b82f6, #2563eb)',
+    'linear-gradient(135deg, #a855f7, #7c3aed)',
+    'linear-gradient(135deg, #f97316, #ea580c)',
+    'linear-gradient(135deg, #6b7280, #4b5563)',
+  ];
 
   return (
     <>
       <div data-testid="events-screen">
         <div className="page-header">
           <div className="page-header-left">
-            <h1 className="page-title">{t('title')}</h1>
+            <h1 className="page-title">
+              {t('title')}{' '}
+              <span className="count-badge">{allEvents.length}</span>
+            </h1>
             <p className="page-subtitle">{t('createEventTitle')}</p>
           </div>
+          <div className="page-header-actions">
+            <Button
+              onClick={() => { setDefaultEventValues(buildDefaultEventValues()); createEventModal.open(); }}
+              data-testid="createEventModalBtn"
+              className="btn btn-primary"
+            >
+              + {tCommon('create')}
+            </Button>
+          </div>
         </div>
+
+        {/* Tabs: Upcoming / Past / Recurring */}
+        <div className="tabs" role="tablist">
+          <button className={`tab ${eventFilter === 'upcoming' ? 'active' : ''}`} role="tab" aria-selected={eventFilter === 'upcoming'} onClick={() => setEventFilter('upcoming')}>
+            Upcoming
+          </button>
+          <button className={`tab ${eventFilter === 'past' ? 'active' : ''}`} role="tab" aria-selected={eventFilter === 'past'} onClick={() => setEventFilter('past')}>
+            Past
+          </button>
+          <button className={`tab ${eventFilter === 'recurring' ? 'active' : ''}`} role="tab" aria-selected={eventFilter === 'recurring'} onClick={() => setEventFilter('recurring')}>
+            Recurring
+          </button>
+        </div>
+
+        {/* View toggle */}
+        <div className={styles.viewToggle}>
+          <button
+            className={`${styles.viewToggleBtn} ${viewMode === 'calendar' ? styles.viewToggleBtnActive : ''}`}
+            onClick={() => setViewMode('calendar')}
+          >
+            Calendar View
+          </button>
+          <button
+            className={`${styles.viewToggleBtn} ${viewMode === 'cards' ? styles.viewToggleBtnActive : ''}`}
+            onClick={() => setViewMode('cards')}
+          >
+            Card View
+          </button>
+        </div>
+
+        {/* Search */}
         <div className="toolbar">
-          <EventHeader
-            viewType={viewType}
-            showInviteModal={showInviteModal}
-            handleChangeView={handleChangeView}
-          />
+          <div className="search-bar">
+            <span className="search-icon">
+              <svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </span>
+            <input
+              type="text"
+              placeholder="Search events..."
+              aria-label="Search events"
+              data-testid="searchEvent"
+              value={searchByName}
+              onChange={(e) => setSearchByName(e.target.value)}
+            />
+          </div>
         </div>
       </div>
 
-      {/* Event Cards Grid */}
-      <div className={styles.eventGrid}>
-        {events.map(
-          (event: {
-            id: string;
-            name: string;
-            description: string;
-            startDate: string;
-            startAt: string;
-            endAt: string;
-            allDay: boolean;
-            location: string;
-            attendees: { id: string }[];
-          }) => {
-            const eventDate = event.startAt
-              ? dayjs(event.startAt)
-              : event.startDate
-                ? dayjs(event.startDate)
-                : dayjs();
-            const monthStr = eventDate.format('MMM');
-            const dayStr = eventDate.format('DD');
-            const timeStr = event.allDay
-              ? 'All Day'
-              : `${eventDate.format('dddd, MMMM D')} at ${eventDate.format('h:mm A')}`;
-            const isAttending =
-              event.attendees?.some(
-                (a: { id: string }) => a.id === userId,
-              ) ?? false;
+      {/* Card View */}
+      {viewMode === 'cards' && (
+        filteredEvents.length === 0 ? (
+          <div className="empty-state">
+            <div className="empty-state-icon">📅</div>
+            <p className="empty-state-title">No events found</p>
+            <p className="empty-state-text">Try a different filter or create a new event.</p>
+          </div>
+        ) : (
+          <div className="grid-3">
+            {filteredEvents.map((event, index) => {
+              const start = event.startAt ? dayjs(event.startAt) : null;
+              const end = event.endAt ? dayjs(event.endAt) : null;
+              const monthLabel = start ? start.format('MMM') : '';
+              const dayLabel = start ? start.format('DD') : '';
+              const dateRange = start && end
+                ? `${start.format('MMM D')} - ${end.format('MMM D, YYYY')}`
+                : start ? start.format('MMM D, YYYY') : '';
+              const attendeeCount = event.attendees?.length ?? 0;
+              const isUpcoming = start && start.isAfter(dayjs());
 
-            return (
-              <div className={styles.eventCard} key={event.id}>
-                <div className={styles.eventCardBody}>
-                  <div className={styles.eventDateRow}>
-                    <div className={styles.eventDateBadge}>
-                      <span className={styles.eventDateMonth}>{monthStr}</span>
-                      <span className={styles.eventDateDay}>{dayStr}</span>
-                    </div>
-                    <div className={styles.eventDateInfo}>
-                      <div className={styles.eventCardTitle}>{event.name}</div>
-                      <div className={styles.eventCardTime}>{timeStr}</div>
-                    </div>
+              return (
+                <div className="event-card" key={event.id}>
+                  <div className="event-date-strip" style={{ background: dateStripColors[index % dateStripColors.length] }}>
+                    <div className="month">{monthLabel}</div>
+                    <div className="day">{dayLabel}</div>
                   </div>
-                  {event.description && (
-                    <div className={styles.eventCardDesc}>
-                      {event.description}
+                  <div className="event-card-body">
+                    <div className="event-card-title">{event.name}</div>
+                    <div className="event-card-detail">
+                      <span className="event-card-detail-icon">
+                        <svg aria-hidden="true" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                      </span>{' '}{dateRange}
                     </div>
-                  )}
-                  <div className={styles.eventCardFooter}>
-                    <div className={styles.eventLocation}>
-                      <svg
-                        viewBox="0 0 24 24"
-                        aria-hidden="true"
-                      >
-                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                        <circle cx="12" cy="10" r="3" />
-                      </svg>
-                      {event.location || 'No location'}
-                    </div>
-                    {isAttending ? (
-                      <button
-                        className={`btn btn-sm ${styles.btnAttending}`}
-                      >
-                        Attending &#10003;
-                      </button>
-                    ) : (
-                      <button className="btn btn-sm btn-primary">
-                        Register
-                      </button>
+                    {event.location && (
+                      <div className="event-card-detail">
+                        <span className="event-card-detail-icon">
+                          <svg aria-hidden="true" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        </span>{' '}{event.location}
+                      </div>
                     )}
+                    <div className="event-card-footer">
+                      <span className="attendee-badge">
+                        <svg aria-hidden="true" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ verticalAlign: '-2px', marginRight: '2px' }}><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>{' '}
+                        {attendeeCount} attendees
+                      </span>
+                      <span className={`badge ${isUpcoming ? 'badge-green' : 'badge-gray'}`}>
+                        {isUpcoming ? 'Upcoming' : 'Past'}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          },
-        )}
-      </div>
+              );
+            })}
+          </div>
+        )
+      )}
 
-      <EventCalendar
-        viewType={viewType}
-        eventData={events}
-        refetchEvents={refetch}
-        orgData={orgData?.organizations?.find(
-          (o: { id: string }) => o.id === organizationId,
-        )}
-        userRole={userRole}
-        userId={userId}
-        onMonthChange={(month, year) => {
-          // month assumed 0-indexed (align with Date.getMonth / dayjs().month()).
-          const start = dayjs(new Date(year, month, 1))
-            .startOf('month')
-            .toDate();
-          const end = dayjs(new Date(year, month, 1))
-            .endOf('month')
-            .toDate();
-          setDateRange({ startDate: start, endDate: end });
-        }}
-        currentMonth={calendarMonth}
-        currentYear={calendarYear}
-      />
+      {/* Calendar View */}
+      {viewMode === 'calendar' && (
+        <EventCalendar
+          viewType={ViewType.MONTH}
+          eventData={allEvents}
+          refetchEvents={refetch}
+          orgData={orgData?.organizations?.find(
+            (o: { id: string }) => o.id === organizationId,
+          )}
+          userRole={userRole}
+          userId={userId}
+          onMonthChange={(month, year) => {
+            setCurrentMonth(month);
+            setCurrentYear(year);
+          }}
+          currentMonth={currentMonth}
+          currentYear={currentYear}
+        />
+      )}
 
       <CRUDModalTemplate
         open={createEventModal.isOpen}
-        onClose={closeCreateEventModal}
+        onClose={createEventModal.close}
         title={t('eventDetails')}
         data-testid="createEventModal"
         showFooter={false}
@@ -480,7 +398,7 @@ export default function Events(): JSX.Element {
           key={formResetKey}
           initialValues={defaultEventValues}
           onSubmit={handleCreateEvent}
-          onCancel={closeCreateEventModal}
+          onCancel={createEventModal.close}
           submitLabel={tCommon('create')}
           showCreateChat
           showRegisterable
