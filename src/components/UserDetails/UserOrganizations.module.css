@@ -1,9 +1,12 @@
+/* UserOrganizations — organizations tab */
+
 .peopleTabUserOrganizationsContainer {
   width: 100%;
 }
 
 .peopleTabUserOrganizationsGrid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 16px;
+  margin-top: 16px;
 }

@@ -127,21 +127,20 @@ const Security = (): JSX.Element => {
 
   return (
     <>
-      <div className="w-100">
-        <div className={`mt-4 ${styles.securityCard}`}>
-          <div className={styles.securityCardBody}>
-            <div>
-              <h5 className="mb-1 fw-semibold">{t('password')}</h5>
-            </div>
-
-            <Button
-              variant="outline-secondary"
-              onClick={() => setOpen(true)}
-              data-testid="changePasswordBtn"
-            >
-              {t('changePassword')}
-            </Button>
-          </div>
+      <div className={styles.securityCard}>
+        <div className={styles.securityCardHeader}>{t('password')}</div>
+        <div className={styles.securityCardBody}>
+          <p style={{ fontSize: 14, color: 'var(--gray-600, #4b5563)', margin: 0 }}>
+            {t('changePassword')}
+          </p>
+          <Button
+            variant="outline-secondary"
+            onClick={() => setOpen(true)}
+            data-testid="changePasswordBtn"
+            style={{ alignSelf: 'flex-start' }}
+          >
+            {t('updatePassword')}
+          </Button>
         </div>
       </div>
 

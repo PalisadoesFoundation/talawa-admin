@@ -1,155 +1,59 @@
-/* PluginStore — card grid + inline upload section */
+/* UploadPluginView — inline upload with reference panel */
 
-/* ── Toolbar ── */
-.toolbar {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+.backRow {
   margin-bottom: 24px;
-  flex-wrap: wrap;
 }
 
-.searchWrapper {
-  flex: 1;
-  min-width: 200px;
-  max-width: 400px;
-  position: relative;
-}
-
-.searchIcon {
-  position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--gray-400, #9ca3af);
-  pointer-events: none;
-  width: 16px;
-  height: 16px;
-}
-
-.searchInput {
-  width: 100%;
-  padding: 9px 12px 9px 36px;
-  border: 1.5px solid var(--gray-200, #e5e7eb);
-  border-radius: 10px;
-  font-size: 14px;
-  background: var(--surface, #fff);
-  color: var(--gray-900, #111827);
-  outline: none;
-  transition: border-color 0.15s, box-shadow 0.15s;
-}
-
-.searchInput:focus {
-  border-color: var(--green-500, #3ecf8e);
-  box-shadow: 0 0 0 3px rgba(62, 207, 142, 0.12);
-}
-
-.searchInput::placeholder {
-  color: var(--gray-400, #9ca3af);
-}
-
-.filterSelect {
-  padding: 9px 12px;
-  border: 1.5px solid var(--gray-200, #e5e7eb);
-  border-radius: 10px;
-  font-size: 14px;
-  background: var(--surface, #fff);
-  color: var(--gray-700, #374151);
-  outline: none;
-  cursor: pointer;
-  min-width: 160px;
-}
-
-.filterSelect:focus {
-  border-color: var(--green-500, #3ecf8e);
-}
-
-/* ── Plugin grid ── */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
-}
-
-/* ── Pagination ── */
-.paginationRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 24px;
-  font-size: 13px;
-  color: var(--gray-500, #6b7280);
-}
-
-.paginationControls {
-  display: flex;
+.backBtn {
+  display: inline-flex;
   align-items: center;
   gap: 6px;
-}
-
-.paginationBtn {
-  padding: 6px 10px;
+  padding: 6px 14px;
   border: 1px solid var(--gray-200, #e5e7eb);
   border-radius: 8px;
   background: var(--surface, #fff);
-  color: var(--gray-700, #374151);
-  font-size: 14px;
+  color: var(--gray-600, #4b5563);
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
-  line-height: 1;
 }
 
-.paginationBtn:hover:not(:disabled) {
+.backBtn:hover {
   background: var(--gray-50, #fafafa);
   border-color: var(--gray-300, #d1d5db);
+  color: var(--gray-900, #111827);
 }
 
-.paginationBtn:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
-}
-
-/* ──────────────────────────────────────────────── */
-/* Upload section — always visible below the grid   */
-/* ──────────────────────────────────────────────── */
-.uploadSection {
-  margin-top: 48px;
-  padding-top: 32px;
-  border-top: 1px solid var(--gray-200, #e5e7eb);
-}
-
-.uploadHeader {
-  margin-bottom: 24px;
-}
-
-.uploadTitle {
-  font-size: 18px;
+.title {
+  font-size: 20px;
   font-weight: 700;
   color: var(--gray-900, #111827);
   margin: 0 0 4px;
 }
 
-.uploadSubtitle {
+.subtitle {
   font-size: 14px;
   color: var(--gray-500, #6b7280);
-  margin: 0;
+  margin: 0 0 28px;
 }
 
-.uploadColumns {
+/* Two-column layout: upload form + reference guide */
+.columns {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 24px;
+  gap: 28px;
   align-items: start;
 }
 
 @media (max-width: 860px) {
-  .uploadColumns {
+  .columns {
     grid-template-columns: 1fr;
   }
 }
 
-/* ── Left: upload form ── */
-.uploadLeft {
+/* Left column: upload form */
+.uploadPanel {
   background: var(--surface, #fff);
   border: 1px solid var(--gray-200, #e5e7eb);
   border-radius: 14px;
@@ -159,7 +63,7 @@
 .dropzone {
   border: 2px dashed var(--gray-200, #e5e7eb);
   border-radius: 12px;
-  padding: 32px 24px;
+  padding: 36px 24px;
   text-align: center;
   background: var(--gray-50, #fafafa);
   cursor: pointer;
@@ -193,6 +97,10 @@
   color: var(--gray-400, #9ca3af);
 }
 
+.hiddenInput {
+  display: none;
+}
+
 .errorBox {
   margin-top: 16px;
   padding: 12px 16px;
@@ -208,10 +116,10 @@
 
 .errorIcon {
   flex-shrink: 0;
-  margin-top: 2px;
+  margin-top: 1px;
 }
 
-/* Parsed plugin info card */
+/* Plugin info card after parsing */
 .pluginInfo {
   margin-top: 20px;
   border: 1px solid var(--gray-200, #e5e7eb);
@@ -262,11 +170,21 @@
   font-size: 11px;
 }
 
+/* Detected files */
 .detectedFiles {
   margin-top: 16px;
 }
 
-.codeBlockGreen {
+.detectedLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gray-500, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.detectedCode {
   background: var(--gray-900, #111827);
   color: var(--green-400, #4ade80);
   padding: 14px 16px;
@@ -283,7 +201,7 @@
   margin-top: 20px;
 }
 
-/* ── Right: reference guide ── */
+/* Right column: reference guide */
 .referencePanel {
   background: var(--surface, #fff);
   border: 1px solid var(--gray-200, #e5e7eb);
@@ -328,4 +246,11 @@
   overflow-x: auto;
   margin: 0;
   white-space: pre;
+}
+
+.refNote {
+  font-size: 12px;
+  color: var(--gray-400, #9ca3af);
+  line-height: 1.5;
+  margin-top: 4px;
 }

@@ -1,18 +1,112 @@
+/* UserContactDetails — overview tab */
+
 .twoColGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-  margin-top: 0.25rem;
+  gap: 24px;
 }
 
 .cardWrapper {
   min-width: 0;
 }
 
+.card {
+  background: var(--surface, #fff);
+  border: 1px solid var(--gray-200, #e5e7eb);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.cardHeader {
+  padding: 14px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--gray-50, #fafafa);
+  border-bottom: 1px solid var(--gray-200, #e5e7eb);
+}
+
+.cardHeaderTitle {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--gray-900, #111827);
+  margin: 0;
+}
+
+.roleBadge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: rgba(62, 207, 142, 0.1);
+  color: var(--green-700, #15803d);
+  border: none;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.cardBody {
+  padding: 24px;
+}
+
+/* Avatar section */
+.avatarSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.avatarWrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.avatarImage {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatarEditBtn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--surface, #fff);
+  border: 1.5px solid var(--gray-200, #e5e7eb);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  padding: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.avatarEditBtn:hover {
+  background: var(--gray-50, #fafafa);
+  border-color: var(--gray-300, #d1d5db);
+}
+
+.avatarEditBtn svg {
+  width: 14px;
+  height: 14px;
+  color: var(--gray-600, #4b5563);
+}
+
+.hiddenFileInput {
+  display: none;
+}
+
+/* Form grid */
 .formGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
+  gap: 16px;
 }
 
 .formCol6 {
@@ -23,10 +117,34 @@
   grid-column: span 2;
 }
 
-.cardBodyPadding {
-  padding: 0.75rem;
+.fieldLabel {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray-700, #374151);
+  margin-bottom: 6px;
 }
 
+/* Dropdown fields — make them fill width */
+.dropdownField {
+  width: 100%;
+}
+
+.dropdownField > div {
+  width: 100%;
+}
+
+.dropdownField button {
+  width: 100%;
+  justify-content: flex-start;
+}
+
+/* Date picker field */
+.dateField {
+  width: 100%;
+}
+
+/* Footer actions */
 .footerActions {
   grid-column: 1 / -1;
 }
@@ -34,10 +152,11 @@
 .footerActionsInner {
   display: flex;
   justify-content: flex-end;
-  gap: 0.5rem;
-  padding: 0.75rem 0.5rem;
+  gap: 8px;
+  padding-top: 20px;
 }
 
+/* Responsive */
 @media (max-width: 768px) {
   .twoColGrid {
     grid-template-columns: 1fr;
@@ -47,76 +166,8 @@
     grid-template-columns: 1fr;
   }
 
-  .formCol6 {
-    grid-column: span 1;
-  }
-
+  .formCol6,
   .formCol12 {
     grid-column: span 1;
   }
-}
-
-.allRound {
-  border-radius: var(--space-4);
-  background: var(--surface);
-  box-shadow: var(--shadow-card);
-  border: 1px solid var(--border);
-  overflow: hidden;
-}
-
-.cardControl {
-  margin-bottom: var(--space-5);
-  display: none;
-}
-
-.inputColor {
-  background: var(--color-gray-100);
-}
-
-.saveChangesBtn {
-  background-color: var(--color-primary-200);
-  color: var(--color-gray-700);
-}
-
-.topRadius {
-  border-top-left-radius: var(--space-6);
-  border-top-right-radius: var(--space-6);
-  color: var(--color-gray-700);
-  background: var(--color-gray-200);
-}
-
-.userContactDetailPersonalCardHeader {
-  padding: var(--space-4) var(--space-5);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-top-left-radius: var(--space-2);
-  border-top-right-radius: var(--space-2);
-  background: var(--color-gray-200);
-}
-
-.userContactDetailContactAvatarUrl {
-  width: var(--space-8);
-  height: var(--space-8);
-  object-fit: cover;
-}
-
-.userContactDetailContactAvatarEditIcon {
-  cursor: pointer;
-  font-size: var(--font-size-md);
-  border: none;
-}
-
-.dateboxMemberDetail {
-  border-radius: var(--space-2);
-  border-color: var(--color-gray-300);
-  outline: none;
-  box-shadow: none;
-  background: var(--color-gray-100);
-  display: flex;
-  align-items: center;
-}
-
-.dropdownField button span {
-  font-size: var(--font-size-sm);
 }

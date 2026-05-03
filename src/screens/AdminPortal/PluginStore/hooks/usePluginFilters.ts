@@ -9,6 +9,24 @@ import type { IPluginMeta, IInstalledPlugin } from 'plugin';
 
 import type { IPlugin } from 'plugin/graphql-service';
 
+/** Convert camelCase pluginId to human-readable name */
+function formatPluginName(pluginId: string): string {
+  return pluginId
+    .replace(/([A-Z])/g, ' $1')
+    .replace(/^./, (c) => c.toUpperCase())
+    .trim();
+}
+
+/** Known plugin descriptions — keyed by pluginId */
+const PLUGIN_DESCRIPTIONS: Record<string, string> = {
+  analytics: 'Track engagement, growth, and activity metrics across your organization.',
+  volunteerTracker: 'Track volunteer hours, manage sign-ups, and generate reports.',
+  chatExtended: 'Real-time messaging with threads, reactions, and file sharing.',
+  donationManager: 'Accept and manage online donations and pledges.',
+  calendarSync: 'Sync events with Google Calendar and Outlook.',
+  emailNotifications: 'Send automated email alerts for organization activities.',
+};
+
 interface IUsePluginFiltersProps {
   pluginData?: { getPlugins: IPlugin[] };
 }
@@ -120,10 +138,10 @@ export function usePluginFilters({ pluginData }: IUsePluginFiltersProps) {
         )
         .map((gqlPlugin: IPlugin) => ({
           id: gqlPlugin.pluginId,
-          name: gqlPlugin.pluginId,
-          description: `Plugin ${gqlPlugin.pluginId}`,
-          author: 'Unknown',
-          icon: '/images/logo512.png',
+          name: formatPluginName(gqlPlugin.pluginId),
+          description: PLUGIN_DESCRIPTIONS[gqlPlugin.pluginId] || `Extends your organization with ${formatPluginName(gqlPlugin.pluginId).toLowerCase()} capabilities.`,
+          author: 'Talawa',
+          icon: '',
         })),
     ];
 

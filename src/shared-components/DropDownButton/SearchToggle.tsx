@@ -27,7 +27,7 @@ const SearchToggle = React.forwardRef<
     ref,
   ) => (
     <div
-      className={`${className ?? ''} ${styles.searchToggleContainer} d-flex align-items-center border rounded p-0 bg-light`}
+      className={`${className ?? ''} ${styles.searchToggleContainer}`}
       ref={ref}
     >
       {icon && (

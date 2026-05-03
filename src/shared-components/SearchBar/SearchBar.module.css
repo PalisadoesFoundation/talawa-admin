@@ -1,10 +1,9 @@
 .searchBarContainer {
   display: flex;
   align-items: center;
-  border: var(--border-1) solid var(--color-gray-200);
-  border-radius: var(--radius-lg);
-  background-color: var(--color-white);
-  box-shadow: 0 var(--space-0-5) var(--space-3) var(--color-black-4);
+  border: 1.5px solid var(--gray-200, #e5e7eb);
+  border-radius: 10px;
+  background-color: var(--surface, #fff);
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease;
@@ -12,21 +11,21 @@
   flex-grow: 1;
   flex-shrink: 1;
   width: auto;
-  min-width: var(--space-16);
-  height: var(--space-10-5);
+  min-width: 200px;
+  height: 40px;
   margin: 0;
-  max-width: var(--space-27);
-  gap: var(--space-3);
+  max-width: 480px;
+  gap: 4px;
 }
 
 .searchBarContainer > :first-child {
-  flex: 1 1 var(--space-21);
-  min-width: var(--space-18);
+  flex: 1 1 200px;
+  min-width: 160px;
   max-width: 100%;
 }
 
 .searchBarContainerWithButton {
-  padding-right: var(--space-0);
+  padding-right: 0;
 }
 
 .searchBarContainer:focus-within {
@@ -39,15 +38,15 @@
   flex: 1;
   display: flex;
   align-items: center;
-  min-height: var(--space-10);
-  min-width: var(--space-21);
-  padding: var(--space-3) var(--space-9) var(--space-3) var(--space-5);
+  min-height: 38px;
+  min-width: 160px;
+  padding: 0 8px 0 0;
   background-color: transparent;
 }
 
 .searchBarVariantFilled {
   border-color: transparent;
-  background-color: var(--color-gray-100);
+  background-color: var(--gray-100, #f3f4f6);
 }
 
 .searchBarVariantGhost {
@@ -57,7 +56,7 @@
 }
 
 .searchBarInputWrapperWithButton {
-  padding-right: var(--space-6);
+  padding-right: 8px;
 }
 
 .searchBarInput {
@@ -65,9 +64,9 @@
   border: none;
   background: transparent;
   padding: 0;
-  padding-left: var(--space-10) !important;
-  font-size: var(--font-size-base);
-  color: var(--color-gray-900);
+  padding-left: 34px !important;
+  font-size: var(--font-size-base, 14px);
+  color: var(--color-gray-900, #111827);
   outline: none;
   width: 100%;
   height: 100%;
@@ -84,90 +83,90 @@
 }
 
 .searchBarInput::placeholder {
-  color: var(--color-gray-500);
+  color: var(--gray-400, #9ca3af);
 }
 
 .searchBarInputSm {
-  padding-top: var(--space-2);
-  padding-bottom: var(--space-2);
-  font-size: var(--font-size-sm);
+  padding-top: 4px;
+  padding-bottom: 4px;
+  font-size: 13px;
 }
 
 .searchBarInputLg {
-  padding-top: var(--space-4);
-  padding-bottom: var(--space-4);
-  font-size: var(--font-size-md);
+  padding-top: 8px;
+  padding-bottom: 8px;
+  font-size: 15px;
 }
 
 .searchBarNoIcon {
-  padding-left: var(--space-5) !important;
+  padding-left: 12px !important;
 }
 
 .searchBarIcon {
   position: absolute;
-  left: var(--space-4);
+  left: 10px;
   top: 50%;
   transform: translateY(-50%);
-  color: var(--color-gray-400);
+  color: var(--color-gray-400, #9ca3af);
   display: inline-flex;
-  font-size: var(--font-size-md);
+  font-size: 16px;
   pointer-events: none;
 }
 
 .searchBarTrailingIcon {
   position: absolute;
-  right: var(--space-0);
-  top: var(--space-0);
-  bottom: var(--space-0);
-  background-color: var(--color-blue-200);
-  color: var(--color-gray-700);
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: var(--gray-100, #f3f4f6);
+  color: var(--gray-600, #4b5563);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0 var(--space-3);
-  border-top-right-radius: var(--radius-md);
-  border-bottom-right-radius: var(--radius-md);
+  padding: 0 8px;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
 }
 
 .searchBarClearButton {
   position: absolute;
-  right: var(--space-2);
+  right: 6px;
   border: none;
   background: transparent;
-  color: var(--color-gray-400);
+  color: var(--gray-400, #9ca3af);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-0-5);
+  padding: 2px;
 }
 
 .searchBarClearButton:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 var(--border-2) var(--color-blue-shadow-focus-strong);
-  border-radius: var(--radius-full);
+  box-shadow: 0 0 0 2px rgba(62, 207, 142, 0.3);
+  border-radius: 50%;
 }
 
 .searchBarButton {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-1);
+  gap: 2px;
   border: none;
-  border-radius: var(--radius-none);
-  background-color: var(--color-blue-200);
-  color: var(--color-gray-700);
-  width: var(--space-10);
-  height: var(--space-10);
-  font-weight: var(--font-weight-semibold);
+  border-radius: 0;
+  background-color: var(--gray-100, #f3f4f6);
+  color: var(--gray-600, #4b5563);
+  width: 40px;
+  height: 38px;
+  font-weight: 600;
   transition:
     background-color 0.2s ease,
     transform 0.1s ease;
-  border-left: var(--border-1) solid var(--color-gray-200);
+  border-left: 1px solid var(--gray-200, #e5e7eb);
 }
 
 .searchBarButton:hover:not(:disabled) {
-  background-color: var(--color-blue-300);
+  background-color: var(--gray-200, #e5e7eb);
 }
 
 .searchBarButton:active:not(:disabled) {
@@ -181,29 +180,29 @@
 }
 
 .searchBarButtonSm {
-  width: var(--space-10);
-  height: var(--space-10);
-  font-size: var(--font-size-sm);
+  width: 36px;
+  height: 36px;
+  font-size: 13px;
 }
 
 .searchBarButtonLg {
-  width: var(--space-16);
-  height: var(--space-16);
-  font-size: var(--font-size-md);
+  width: 48px;
+  height: 48px;
+  font-size: 15px;
 }
 
 .searchBarIconButton {
-  width: var(--space-11);
-  height: var(--space-10-5);
-  padding: var(--space-0);
+  width: 40px;
+  height: 38px;
+  padding: 0;
 }
 
 .searchBarSpinner {
-  width: var(--space-4);
-  height: var(--space-4);
-  border: var(--border-2) solid var(--color-white-60);
-  border-top-color: var(--color-white);
-  border-radius: var(--radius-full);
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
   animation: searchBarSpin 0.8s linear infinite;
 }
 
@@ -215,11 +214,11 @@
 
 .searchBarSrOnly {
   position: absolute;
-  width: var(--space-1);
-  height: var(--space-1);
-  padding: var(--space-0);
-  margin: calc(var(--space-0) - var(--space-0-5));
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
-  border: var(--border-0);
+  border: 0;
 }

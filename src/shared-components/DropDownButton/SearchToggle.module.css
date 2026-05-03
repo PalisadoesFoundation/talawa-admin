@@ -1,43 +1,52 @@
-.dropdownToggle {
-  min-width: var(--space-18);
-  display: inline-flex;
+/* SearchToggle — searchable dropdown trigger */
+
+.searchToggleContainer {
+  display: flex;
   align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-4);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  border-radius: var(--radius-md);
-  transition:
-    background-color 0.2s,
-    border-color 0.2s,
-    box-shadow 0.2s;
+  border: 1.5px solid var(--gray-200, #e5e7eb);
+  border-radius: 10px;
+  background: var(--surface, #fff);
+  padding: 0;
+  height: 40px;
+  transition: border-color 0.15s;
 }
 
-.dropdownToggle:focus-visible {
-  outline: var(--border-2) solid var(--color-blue-500);
-  outline-offset: var(--space-2);
+.searchToggleContainer:focus-within {
+  border-color: var(--green-500, #3ecf8e);
+  box-shadow: 0 0 0 3px rgba(62, 207, 142, 0.12);
 }
 
-.dropdownToggle:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+.searchToggleInput {
+  border: none;
+  background: transparent;
+  outline: none;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--gray-700, #374151);
+  flex: 1;
+  min-width: 0;
 }
 
-.dropdownCaret {
-  transition: transform 0.2s;
-  margin-right: var(--space-3);
+.searchToggleInput::placeholder {
+  color: var(--gray-400, #9ca3af);
 }
 
 .dropdownIcon {
   display: inline-flex;
   align-items: center;
-  margin-left: var(--space-3);
+  margin-left: 10px;
+  color: var(--gray-500, #6b7280);
+  font-size: 18px;
 }
 
-.searchToggleContainer {
-  position: relative;
+.dropdownIcon svg {
+  width: 18px;
+  height: 18px;
 }
 
-.searchToggleInput {
-  background: transparent;
+.dropdownCaret {
+  font-size: 8px;
+  color: var(--gray-400, #9ca3af);
+  margin-right: 10px;
+  transition: transform 0.2s;
 }

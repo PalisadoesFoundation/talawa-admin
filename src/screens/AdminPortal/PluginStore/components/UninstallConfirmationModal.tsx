@@ -20,11 +20,10 @@ export default function UninstallConfirmationModal({
   const { t: tCommon } = useTranslation('common');
 
   const customFooter = (
-    <>
+    <div style={{ display: 'flex', gap: 8 }}>
       <Button
         variant="secondary"
         onClick={onClose}
-        className="me-2"
         data-testid="uninstall-cancel-btn"
       >
         {tCommon('cancel')}
@@ -36,7 +35,7 @@ export default function UninstallConfirmationModal({
       >
         {tCommon('removePermanently')}
       </Button>
-    </>
+    </div>
   );
 
   return (
@@ -50,12 +49,17 @@ export default function UninstallConfirmationModal({
       centered
     >
       <div>
-        <div data-testid="uninstall-modal-title" className="mb-3">
+        <div
+          data-testid="uninstall-modal-title"
+          style={{ marginBottom: 12, fontSize: 14, color: 'var(--gray-900, #111827)' }}
+        >
           {t('uninstallPluginMsg', {
             pluginName: plugin?.name || '',
           })}
         </div>
-        <div className="text-muted">{t('uninstallPluginWarning')}</div>
+        <div style={{ fontSize: 13, color: 'var(--gray-500, #6b7280)' }}>
+          {t('uninstallPluginWarning')}
+        </div>
       </div>
     </BaseModal>
   );

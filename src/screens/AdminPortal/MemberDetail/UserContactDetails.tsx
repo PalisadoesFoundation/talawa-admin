@@ -1,29 +1,8 @@
 /**
- * UserContactDetails component
+ * UserContactDetails — Overview tab for /user/settings
  *
- * Renders the personal and contact information section of a member’s profile.
- * Allows users or administrators to view and update details such as avatar,
- * personal information, contact numbers, address, and other profile attributes.
- *
- * Features include avatar upload with validation, form state management,
- * conditional update actions, and localized labels.
- *
- * @param props - Component props.
- * Optional {@link InterfaceMemberDetailProps.id | id} may be provided to fetch
- * and update the corresponding member’s contact details.
- *
- * @returns The rendered UserContactDetails component.
- *
- * @remarks
- * - Uses Apollo Client hooks for fetching and updating user data.
- * - Handles avatar uploads with file type and size validation.
- * - Uses plain HTML elements and MUI-based date pickers for UI.
- * - Supports localization via react-i18next.
- *
- * @example
- * ```tsx
- * <UserContactDetails id="12345" />
- * ```
+ * Two-column layout: Personal Details (left) + Contact Information (right).
+ * Avatar upload, form fields, dropdowns for enums, date picker for DOB.
  */
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
@@ -56,6 +35,14 @@ import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup'
 import { InterfaceMemberDetailProps } from 'types/AdminPortal/MemberDetail/interface';
 import { resolveAvatarFile } from './resolveAvatarFile';
 import { phoneFieldConfigs, addressFieldConfigs } from './fieldConfigs';
+
+/** Pencil edit icon SVG */
+const PencilIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
+  </svg>
+);
+
 const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
   id,
 }): JSX.Element => {
@@ -97,7 +84,6 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
     workPhoneNumber: '',
   });
 
-  // Handle preview URL for selected avatar file
   useEffect(() => {
     if (selectedAvatar) {
       const url = URL.createObjectURL(selectedAvatar);
@@ -108,11 +94,8 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
     }
   }, [selectedAvatar]);
 
-  // Compute the avatar URL to display
   const avatarDisplayUrl = useMemo(() => {
-    if (previewUrl) {
-      return previewUrl;
-    }
+    if (previewUrl) return previewUrl;
     return formState.avatarURL && formState.avatarURL !== 'null'
       ? formState.avatarURL
       : undefined;
@@ -122,15 +105,13 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
   useEffect(() => {
     document.title = t('title');
   }, [t]);
+
   const [updateUser] = useMutation(UPDATE_USER_MUTATION);
   const { data, loading, error } = useQuery(GET_USER_BY_ID, {
-    variables: {
-      input: {
-        id: resolvedUserId,
-      },
-    },
+    variables: { input: { id: resolvedUserId } },
     fetchPolicy: 'no-cache',
   });
+
   useEffect(() => {
     if (error) {
       NotificationToast.error(tCommon('failedToLoadUserData'));
@@ -144,6 +125,7 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
       birthDate: birthDate ? dayjs(birthDate).format('YYYY-MM-DD') : '',
     }));
   }, [data, error, t]);
+
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target?.files?.[0];
     if (!file) return;
@@ -159,14 +141,17 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
     setSelectedAvatar(sanitizedFile);
     setisUpdated(true);
   };
+
   const handleFieldChange = (fieldName: string, value: string) => {
     setisUpdated(true);
     setFormState((prev) => ({ ...prev, [fieldName]: sanitizeInput(value) }));
   };
+
   const onAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     handleFileUpload(e);
     setNewAvatarUploaded(true);
   };
+
   const handleUserUpdate = async (): Promise<void> => {
     const removeEmptyFields = <T extends Record<string, string | File | null>>(
       obj: T,
@@ -183,7 +168,7 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
       avatarURL: formState.avatarURL,
     });
 
-    const data: Omit<typeof formState, 'avatarURL' | 'emailAddress'> & {
+    const payload: Omit<typeof formState, 'avatarURL' | 'emailAddress'> & {
       id?: string;
     } = {
       addressLine1: formState.addressLine1,
@@ -207,7 +192,7 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
       ...(resolvedUserId ? { id: resolvedUserId } : {}),
     };
 
-    const input = removeEmptyFields(data);
+    const input = removeEmptyFields(payload);
     try {
       const { data: updateData } = await updateUser({
         variables: { input },
@@ -231,82 +216,85 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
       errorHandler(t, e);
     }
   };
+
   const resetChanges = (): void => {
     setisUpdated(false);
     setSelectedAvatar(null);
     setNewAvatarUploaded(false);
     if (data?.user) setFormState({ ...data.user });
   };
+
   if (loading) {
     return <div data-testid="loader">{tCommon('loading')}</div>;
   }
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <div className={styles.twoColGrid}>
+        {/* ── Personal Details ── */}
         <div className={styles.cardWrapper}>
-          <div className={`${styles.allRound}`}>
-            <div className={styles.userContactDetailPersonalCardHeader}>
-              <h3 className="m-0 font-black">{t('personalDetailsHeading')}</h3>
-              <Button
-                variant="light"
-                size="sm"
-                disabled
-                className="rounded-pill fw-bolder"
-              >
+          <div className={styles.card}>
+            <div className={styles.cardHeader}>
+              <h3 className={styles.cardHeaderTitle}>
+                {t('personalDetailsHeading')}
+              </h3>
+              <span className={styles.roleBadge}>
                 {data?.user?.role === 'administrator'
                   ? tCommon('admin')
                   : tCommon('user')}
-              </Button>
+              </span>
             </div>
-            <div className={styles.cardBodyPadding}>
-              <div className="mb-2">
-                <div className="text-center mb-3">
-                  <div className="position-relative d-inline-block">
-                    <ProfileAvatarDisplay
-                      imageUrl={avatarDisplayUrl}
-                      fallbackName={sanitizeInput(formState.name) || t('user')}
-                      size="custom"
-                      customSize={60}
-                      shape="circle"
-                      objectFit="cover"
-                      dataTestId="profile-picture"
-                      crossOrigin="anonymous"
-                      className={styles.userContactDetailContactAvatarUrl}
-                      enableEnlarge={true}
-                    />
-                    <Button
-                      type="button"
-                      className={`fas fa-edit position-absolute bottom-0 right-0 p-2 bg-white rounded-circle ${styles.userContactDetailContactAvatarEditIcon}`}
-                      onClick={() => fileInputRef.current?.click()}
-                      data-testid="uploadImageBtn"
-                      title={tCommon('userEditProfilePicture')}
-                      aria-label={tCommon('userEditProfilePicture')}
-                    />
-                  </div>
-                </div>
-                <FormFieldGroup name="photo" label={''}>
-                  <input
-                    accept="image/*"
-                    id="postphoto"
-                    name="photo"
-                    type="file"
-                    className={styles.cardControl}
-                    data-testid="fileInput"
-                    multiple={false}
-                    ref={fileInputRef}
-                    onChange={onAvatarChange}
+
+            <div className={styles.cardBody}>
+              {/* Avatar */}
+              <div className={styles.avatarSection}>
+                <div className={styles.avatarWrapper}>
+                  <ProfileAvatarDisplay
+                    imageUrl={avatarDisplayUrl}
+                    fallbackName={sanitizeInput(formState.name) || t('user')}
+                    size="custom"
+                    customSize={80}
+                    shape="circle"
+                    objectFit="cover"
+                    dataTestId="profile-picture"
+                    crossOrigin="anonymous"
+                    className={styles.avatarImage}
+                    enableEnlarge={true}
                   />
-                </FormFieldGroup>
+                  <button
+                    type="button"
+                    className={styles.avatarEditBtn}
+                    onClick={() => fileInputRef.current?.click()}
+                    data-testid="uploadImageBtn"
+                    title={tCommon('userEditProfilePicture')}
+                    aria-label={tCommon('userEditProfilePicture')}
+                  >
+                    <PencilIcon />
+                  </button>
+                </div>
+                <input
+                  accept="image/*"
+                  id="postphoto"
+                  name="photo"
+                  type="file"
+                  className={styles.hiddenFileInput}
+                  data-testid="fileInput"
+                  multiple={false}
+                  ref={fileInputRef}
+                  onChange={onAvatarChange}
+                />
               </div>
+
+              {/* Fields */}
               <div className={styles.formGrid}>
                 <div className={styles.formCol6}>
-                  <label htmlFor="name" className="form-label">
+                  <label htmlFor="name" className={styles.fieldLabel}>
                     {tCommon('name')}
                   </label>
                   <input
                     id="name"
                     value={formState.name}
-                    className={`form-input ${styles.inputColor}`}
+                    className="form-input"
                     type="text"
                     name="name"
                     data-testid="inputName"
@@ -316,7 +304,7 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
                   />
                 </div>
                 <div className={styles.formCol6} data-testid="gender">
-                  <label htmlFor="gender" className="form-label">
+                  <label htmlFor="gender" className={styles.fieldLabel}>
                     {t('gender')}
                   </label>
                   <div className={styles.dropdownField}>
@@ -335,38 +323,38 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
                       }
                       ariaLabel={t('gender')}
                       dataTestIdPrefix="inputNatalSex"
-                      variant="outline-secondary"
                     />
                   </div>
                 </div>
                 <div className={styles.formCol6}>
-                  <label htmlFor="birthDate" className="form-label">
+                  <label htmlFor="birthDate" className={styles.fieldLabel}>
                     {t('birthDate')}
                   </label>
-                  <DatePicker
-                    className={`${styles.dateboxMemberDetail} w-100`}
-                    value={
-                      formState.birthDate ? dayjs(formState.birthDate) : null
-                    }
-                    onChange={(date) =>
-                      handleFieldChange(
-                        'birthDate',
-                        date ? date.format('YYYY-MM-DD') : '',
-                      )
-                    }
-                    data-testid="birthDate"
-                    slotProps={{
-                      textField: {
-                        inputProps: {
-                          'data-testid': 'birthDate',
-                          'aria-label': t('birthDate'),
+                  <div className={styles.dateField}>
+                    <DatePicker
+                      value={
+                        formState.birthDate ? dayjs(formState.birthDate) : null
+                      }
+                      onChange={(date) =>
+                        handleFieldChange(
+                          'birthDate',
+                          date ? date.format('YYYY-MM-DD') : '',
+                        )
+                      }
+                      data-testid="birthDate"
+                      slotProps={{
+                        textField: {
+                          inputProps: {
+                            'data-testid': 'birthDate',
+                            'aria-label': t('birthDate'),
+                          },
                         },
-                      },
-                    }}
-                  />
+                      }}
+                    />
+                  </div>
                 </div>
                 <div className={styles.formCol6}>
-                  <label htmlFor="grade" className="form-label">
+                  <label htmlFor="grade" className={styles.fieldLabel}>
                     {t('educationGrade')}
                   </label>
                   <div className={styles.dropdownField}>
@@ -385,12 +373,11 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
                       }
                       ariaLabel={t('educationGrade')}
                       dataTestIdPrefix="inputEducationGrade"
-                      variant="outline-secondary"
                     />
                   </div>
                 </div>
                 <div className={styles.formCol6}>
-                  <label htmlFor="empStatus" className="form-label">
+                  <label htmlFor="empStatus" className={styles.fieldLabel}>
                     {t('employmentStatus')}
                   </label>
                   <div className={styles.dropdownField}>
@@ -409,12 +396,11 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
                       }
                       ariaLabel={t('employmentStatus')}
                       dataTestIdPrefix="employmentstatus-dropdown-btn"
-                      variant="outline-secondary"
                     />
                   </div>
                 </div>
                 <div className={styles.formCol6}>
-                  <label htmlFor="maritalStatus" className="form-label">
+                  <label htmlFor="maritalStatus" className={styles.fieldLabel}>
                     {t('maritalStatus')}
                   </label>
                   <div className={styles.dropdownField}>
@@ -433,18 +419,17 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
                       }
                       ariaLabel={t('maritalStatus')}
                       dataTestIdPrefix="marital-status-btn"
-                      variant="outline-secondary"
                     />
                   </div>
                 </div>
                 <div className={styles.formCol12}>
-                  <label htmlFor="description" className="form-label">
+                  <label htmlFor="description" className={styles.fieldLabel}>
                     {tCommon('description')}
                   </label>
                   <input
                     id="description"
                     value={formState.description}
-                    className={`form-input ${styles.inputColor}`}
+                    className="form-input"
                     type="text"
                     name="description"
                     data-testid="inputDescription"
@@ -459,21 +444,26 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
             </div>
           </div>
         </div>
+
+        {/* ── Contact Information ── */}
         <div className={styles.cardWrapper}>
-          <div className={`${styles.allRound}`}>
-            <div className={`${styles.topRadius}`} style={{ padding: '0.75rem 1rem' }}>
-              <h3 className="m-0 font-black">{t('contactInfoHeading')}</h3>
+          <div className={styles.card}>
+            <div className={styles.cardHeader}>
+              <h3 className={styles.cardHeaderTitle}>
+                {t('contactInfoHeading')}
+              </h3>
             </div>
-            <div className={styles.cardBodyPadding}>
+
+            <div className={styles.cardBody}>
               <div className={styles.formGrid}>
                 <div className={styles.formCol12}>
-                  <label htmlFor="email" className="form-label">
+                  <label htmlFor="email" className={styles.fieldLabel}>
                     {tCommon('email')}
                   </label>
                   <input
                     id="email"
                     value={data?.user?.emailAddress}
-                    className={`form-input ${styles.inputColor}`}
+                    className="form-input"
                     type="email"
                     name="email"
                     data-testid="inputEmail"
@@ -483,7 +473,7 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
                 </div>
                 {phoneFieldConfigs.map((field) => (
                   <div className={styles.formCol12} key={field.id}>
-                    <label htmlFor={field.id} className="form-label">
+                    <label htmlFor={field.id} className={styles.fieldLabel}>
                       {t(field.key)}
                     </label>
                     <input
@@ -493,7 +483,7 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
                           field.key as keyof typeof formState
                         ] as string) || ''
                       }
-                      className={`form-input ${styles.inputColor}`}
+                      className="form-input"
                       type="tel"
                       data-testid={field.testId}
                       name={field.id}
@@ -505,8 +495,15 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
                   </div>
                 ))}
                 {addressFieldConfigs.map((field) => (
-                  <div className={field.colSize === 12 ? styles.formCol12 : styles.formCol6} key={field.id}>
-                    <label htmlFor={field.id} className="form-label">
+                  <div
+                    className={
+                      field.colSize === 12
+                        ? styles.formCol12
+                        : styles.formCol6
+                    }
+                    key={field.id}
+                  >
+                    <label htmlFor={field.id} className={styles.fieldLabel}>
                       {t(field.key)}
                     </label>
                     <input
@@ -516,7 +513,7 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
                           field.key as keyof typeof formState
                         ] as string) || ''
                       }
-                      className={`form-input ${styles.inputColor}`}
+                      className="form-input"
                       type="text"
                       name={field.id}
                       data-testid={field.testId}
@@ -534,50 +531,51 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
                   </div>
                 ))}
                 <div className={styles.formCol12}>
-                  <FormFieldGroup name="country" label={tCommon('country')}>
-                    <select
-                      id="country"
-                      className={`form-input ${styles.inputColor}`}
-                      value={formState.countryCode}
-                      data-testid="inputCountry"
-                      onChange={(e) =>
-                        handleFieldChange('countryCode', e.target.value)
-                      }
-                    >
-                      <option value="" disabled>
-                        {tCommon('select')} {tCommon('country')}
-                      </option>
-
-                      {[...countryOptions]
-                        .sort((a, b) => a.label.localeCompare(b.label))
-                        .map((country) => (
-                          <option
-                            key={country.value.toUpperCase()}
-                            value={country.value.toLowerCase()}
-                          >
-                            {String(country.label)}
-                          </option>
-                        ))}
-                    </select>
-                  </FormFieldGroup>
+                  <label htmlFor="country" className={styles.fieldLabel}>
+                    {tCommon('country')}
+                  </label>
+                  <select
+                    id="country"
+                    className="form-input"
+                    value={formState.countryCode}
+                    data-testid="inputCountry"
+                    onChange={(e) =>
+                      handleFieldChange('countryCode', e.target.value)
+                    }
+                  >
+                    <option value="" disabled>
+                      {tCommon('select')} {tCommon('country')}
+                    </option>
+                    {[...countryOptions]
+                      .sort((a, b) => a.label.localeCompare(b.label))
+                      .map((country) => (
+                        <option
+                          key={country.value.toUpperCase()}
+                          value={country.value.toLowerCase()}
+                        >
+                          {String(country.label)}
+                        </option>
+                      ))}
+                  </select>
                 </div>
               </div>
             </div>
           </div>
         </div>
+
+        {/* ── Save / Reset ── */}
         {isUpdated && (
           <div className={styles.footerActions}>
             <div className={styles.footerActionsInner}>
               <Button
-                variant="outline-secondary"
+                variant="secondary"
                 onClick={resetChanges}
                 data-testid="resetChangesBtn"
               >
                 {tCommon('resetChanges')}
               </Button>
               <Button
-                variant="outline"
-                className={styles.saveChangesBtn}
+                variant="primary"
                 onClick={handleUserUpdate}
                 data-testid="saveChangesBtn"
               >

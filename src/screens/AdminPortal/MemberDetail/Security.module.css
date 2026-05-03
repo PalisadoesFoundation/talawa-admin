@@ -1,14 +1,37 @@
+/* Security tab */
+
 .securityCard {
-  border-radius: var(--radius-xl);
+  border-radius: 14px;
   width: 100%;
-  background: var(--surface);
-  box-shadow: var(--shadow-card);
-  border: 1px solid var(--border);
+  background: var(--surface, #fff);
+  border: 1px solid var(--gray-200, #e5e7eb);
+  overflow: hidden;
+}
+
+.securityCardHeader {
+  padding: 14px 20px;
+  background: var(--gray-50, #fafafa);
+  border-bottom: 1px solid var(--gray-200, #e5e7eb);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gray-900, #111827);
 }
 
 .securityCardBody {
+  padding: 20px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 1.25rem;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.fieldRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .fieldRow {
+    grid-template-columns: 1fr;
+  }
 }

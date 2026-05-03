@@ -2460,7 +2460,9 @@
     "failedToParsePluginZip": "Failed to parse plugin ZIP",
     "pluginUploadedSuccess": "Plugin uploaded successfully! ({{components}} components) - You can now install it from the plugin list.",
     "configure": "Configure",
-    "enable": "Enable"
+    "enable": "Enable",
+    "searchPlugins": "Search plugins...",
+    "showingPlugins": "Showing {{start}}-{{end}} of {{total}} plugins"
   },
   "pluginInjector": {
     "notFoundOrDisabled": "Plugin Not Found or Disabled",

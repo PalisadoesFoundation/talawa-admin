@@ -26,6 +26,36 @@ interface IUploadPluginModalProps {
   onHide: () => void;
 }
 
+const EXPECTED_STRUCTURE = `plugin.zip
+├── admin/          (optional)
+│   ├── manifest.json
+│   ├── index.tsx
+│   └── pages/
+│       ├── ComponentA.tsx
+│       └── ComponentB.tsx
+└── api/            (optional)
+    ├── manifest.json
+    ├── index.ts
+    └── graphql/
+        └── resolvers.ts`;
+
+const MANIFEST_EXAMPLE = `{
+  "name": "Plugin Name",
+  "pluginId": "pluginName",
+  "version": "1.0.0",
+  "description": "Plugin description",
+  "author": "Author Name",
+  "main": "index.tsx",
+  "extensionPoints": {
+    "routes": [{
+      "pluginId": "pluginName",
+      "path": "/plugin-path",
+      "component": "ComponentName",
+      "exact": true
+    }]
+  }
+}`;
+
 const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
   show,
   onHide,
@@ -54,7 +84,6 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
       setPluginFiles([]);
 
       try {
-        // Validate the plugin zip structure
         const structure = await validateAdminPluginZip(file);
 
         if (!structure.hasAdminFolder && !structure.hasApiFolder) {
@@ -63,20 +92,17 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
           );
         }
 
-        // Format files for display
         const filesList: string[] = [];
-
         if (structure.hasAdminFolder) {
           filesList.push('admin/');
           Object.keys(structure.files).forEach((file) => {
-            filesList.push(`    ${file}`);
+            filesList.push(`  ${file}`);
           });
         }
-
         if (structure.hasApiFolder) {
           filesList.push('api/');
           structure.apiFiles?.forEach((file) => {
-            filesList.push(`    ${file}`);
+            filesList.push(`  ${file}`);
           });
         }
 
@@ -137,14 +163,12 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
       open={show}
       onClose={handleClose}
       title={t('uploadPlugin')}
-      size="xl"
+      size="lg"
       showFooter={false}
-      className={styles.container}
     >
-      {/* Left Panel - Upload */}
-      <div className={`${styles.panel} ${styles.leftPanel}`}>
+      <div className={styles.content}>
+        {/* Upload area */}
         <div className={styles.section}>
-          <h3 className={styles.sectionTitle}>{t('uploadPlugin')}</h3>
           <p className={styles.sectionDescription}>
             {t('uploadPluginDescription')}
           </p>
@@ -172,6 +196,7 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
           onChange={handleFileSelect}
         />
 
+        {/* Error */}
         {error && (
           <div className={styles.errorBox}>
             <FaExclamationTriangle className={styles.inlineIcon} />
@@ -179,9 +204,10 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
           </div>
         )}
 
+        {/* Parsed plugin info */}
         {manifest && pluginStructure && (
           <div className={styles.pluginInfoSection}>
-            <h5 className={styles.pluginInfoTitle}>{t('pluginInfo')}</h5>
+            <div className={styles.pluginInfoHeader}>{t('pluginInfo')}</div>
             <div className={styles.pluginInfoBody}>
               <div className={styles.infoRow}>
                 <strong>{tCommon('name')}:</strong> {manifest.name}
@@ -196,11 +222,7 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
                 <strong>{tCommon('description')}:</strong>{' '}
                 {manifest.description}
               </div>
-              <div className={styles.infoRow}>
-                <strong>{t('pluginId')}:</strong> {manifest.pluginId}
-              </div>
 
-              {/* Show detected components */}
               <div className={styles.componentsSection}>
                 <strong>{t('componentsToInstall')}</strong>
                 <div className={styles.componentsList}>
@@ -222,6 +244,32 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
           </div>
         )}
 
+        {/* Detected files or expected structure */}
+        <div className={styles.structureSection}>
+          {pluginFiles.length > 0 ? (
+            <>
+              <div className={styles.structureLabel}>{t('detectedFiles')}</div>
+              <pre className={styles.codeBlock}>{pluginFiles.join('\n')}</pre>
+            </>
+          ) : (
+            <>
+              <div className={styles.structureLabel}>
+                {t('expectedDirectoryStructure')}
+              </div>
+              <pre className={styles.codeBlock}>{EXPECTED_STRUCTURE}</pre>
+
+              <div
+                className={styles.structureLabel}
+                style={{ marginTop: 16 }}
+              >
+                {t('requiredManifestFields')}
+              </div>
+              <pre className={styles.codeBlock}>{MANIFEST_EXAMPLE}</pre>
+            </>
+          )}
+        </div>
+
+        {/* Upload button */}
         <div className={styles.uploadButtonWrapper}>
           <Button
             variant="primary"
@@ -233,77 +281,6 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
             {isInstalling ? t('uploading') : t('uploadPlugin')}
           </Button>
         </div>
-      </div>
-
-      {/* Right Panel - Plugin Structure */}
-      <div className={styles.panel}>
-        <div className={styles.section}>
-          <h3 className={styles.sectionTitle}>{t('pluginStructure')}</h3>
-          <p className={styles.sectionDescription}>
-            {t('pluginStructureDescription')}
-          </p>
-        </div>
-
-        {pluginFiles.length > 0 ? (
-          <div className={styles.codeSection}>
-            <div className={styles.codeHeading}>{t('detectedFiles')}</div>
-            <div className={styles.codeText}>
-              <pre className={styles.codeBlock}>{pluginFiles.join('\n')}</pre>
-            </div>
-          </div>
-        ) : (
-          <>
-            <div className={styles.codeSection}>
-              <div className={styles.codeHeading}>
-                {t('expectedDirectoryStructure')}
-              </div>
-              <div className={styles.codeText}>
-                <pre className={styles.codeBlock}>
-                  {`plugin.zip
-                  ├── admin/ (optional)
-                  │   ├── manifest.json    
-                  │   ├── index.tsx        
-                  │   └── pages/           
-                  │       ├── ComponentA.tsx
-                  │       └── ComponentB.tsx
-                  └── api/ (optional)
-                      ├── manifest.json
-                      ├── index.ts
-                      └── graphql/
-                          └── resolvers.ts`}
-                </pre>
-              </div>
-            </div>
-
-            <div>
-              <div className={styles.codeHeading}>
-                {t('requiredManifestFields')}
-              </div>
-              <div className={styles.codeText}>
-                <pre className={styles.codeBlock}>
-                  {`{
-                    "name": "Plugin Name",
-                    "pluginId": "pluginName",
-                    "version": "1.0.0",
-                    "description": "Plugin description",
-                    "author": "Author Name",
-                    "main": "index.tsx",
-                    "extensionPoints": {
-                      "routes": [
-                        {
-                          "pluginId": "pluginName",
-                          "path": "/plugin-path",
-                          "component": "ComponentName",
-                          "exact": true
-                        }
-                      ]
-                    }
-                  }`}
-                </pre>
-              </div>
-            </div>
-          </>
-        )}
       </div>
     </CRUDModalTemplate>
   );

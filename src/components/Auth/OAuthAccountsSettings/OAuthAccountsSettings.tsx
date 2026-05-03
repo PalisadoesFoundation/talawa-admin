@@ -143,76 +143,76 @@ const OAuthAccountsSettings: React.FC<OAuthAccountsSettingsProps> = ({
 
   return (
     <div className={styles.wrapper}>
-      <div className={styles.oauthCard}>
-        <div>
-          <div className={styles.row}>
+      {/* Link accounts */}
+      {missingProviders.length > 0 && (
+        <div className={styles.oauthCard}>
+          <div className={styles.cardHeader}>
             <h6 className={styles.heading}>{t('missingOauthProviders')}</h6>
-            {missingProviders.length === 0 ? (
-              <p className={styles.message}>{t('bothGoogleAndGitHubLinked')}</p>
-            ) : (
-              <div className={styles.buttons}>
-                {hasMissingGoogle && (
-                  <GoogleOAuthButton mode="link" size="sm" />
-                )}
-                {hasMissingGitHub && (
-                  <GitHubOAuthButton mode="link" size="sm" />
-                )}
-              </div>
-            )}
+          </div>
+          <div className={styles.cardBody}>
+            <div className={styles.buttons}>
+              {hasMissingGoogle && (
+                <GoogleOAuthButton mode="link" size="sm" />
+              )}
+              {hasMissingGitHub && (
+                <GitHubOAuthButton mode="link" size="sm" />
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
+      {/* Connected accounts */}
       <div className={styles.oauthCard}>
-        <div>
-          <div className={styles.row}>
-            <h6 className={styles.heading}>{t('connectedOauthAccounts')}</h6>
-            {connectedAccounts.length === 0 ? (
-              <p className={styles.message}>{t('noConnectedOauthAccounts')}</p>
-            ) : (
-              <div className={styles.connectedList}>
-                {connectedAccounts.map((account) => {
-                  const provider = account.provider?.toUpperCase() as
-                    | OAuthProviderKey
-                    | undefined;
+        <div className={styles.cardHeader}>
+          <h6 className={styles.heading}>{t('connectedOauthAccounts')}</h6>
+        </div>
+        <div className={styles.cardBody}>
+          {connectedAccounts.length === 0 ? (
+            <p className={styles.message}>{t('noConnectedOauthAccounts')}</p>
+          ) : (
+            <div className={styles.connectedList}>
+              {connectedAccounts.map((account) => {
+                const provider = account.provider?.toUpperCase() as
+                  | OAuthProviderKey
+                  | undefined;
 
-                  if (!provider) {
-                    return null;
-                  }
+                if (!provider) {
+                  return null;
+                }
 
-                  return (
-                    <div key={provider} className={styles.connectedItem}>
-                      <div className={styles.accountInfo}>
-                        <span className={styles.providerName}>{provider}</span>
-                        <div className={styles.metaList}>
-                          <span className={styles.metaItem}>
-                            {t('emailLabel')}: {account.email}
-                          </span>
-                          <span className={styles.metaItem}>
-                            {t('linkedAtLabel')}: {formatDate(account.linkedAt)}
-                          </span>
-                          <span className={styles.metaItem}>
-                            {t('lastUsedAtLabel')}:{' '}
-                            {formatDate(account.lastUsedAt)}
-                          </span>
-                        </div>
+                return (
+                  <div key={provider} className={styles.connectedItem}>
+                    <div className={styles.accountInfo}>
+                      <span className={styles.providerName}>{provider}</span>
+                      <div className={styles.metaList}>
+                        <span className={styles.metaItem}>
+                          {t('emailLabel')}: {account.email}
+                        </span>
+                        <span className={styles.metaItem}>
+                          {t('linkedAtLabel')}: {formatDate(account.linkedAt)}
+                        </span>
+                        <span className={styles.metaItem}>
+                          {t('lastUsedAtLabel')}:{' '}
+                          {formatDate(account.lastUsedAt)}
+                        </span>
                       </div>
-                      <Button
-                        type="button"
-                        size="sm"
-                        variant="outline-danger"
-                        onClick={() => handleUnlink(provider)}
-                        disabled={unlinkingProvider === provider}
-                        isLoading={unlinkingProvider === provider}
-                      >
-                        {t('Unlink')}
-                      </Button>
                     </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline-danger"
+                      onClick={() => handleUnlink(provider)}
+                      disabled={unlinkingProvider === provider}
+                      isLoading={unlinkingProvider === provider}
+                    >
+                      {t('Unlink')}
+                    </Button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
     </div>

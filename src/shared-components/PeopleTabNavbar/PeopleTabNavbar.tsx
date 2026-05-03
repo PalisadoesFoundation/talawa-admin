@@ -125,8 +125,8 @@ export default function PeopleTabNavbar({
             onSearch={search.onSearch}
             inputTestId={search.inputTestId}
             buttonTestId={search.buttonTestId}
-            showSearchButton={true} //  true
-            showLeadingIcon={true} //  true (Magnifying glass)
+            showSearchButton={false}
+            showLeadingIcon={true}
             showClearButton={true}
           />
         )}

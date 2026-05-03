@@ -1,14 +1,12 @@
+/* UserEvents — events tab */
+
 .peopleTabUserEventsContainer {
   width: 100%;
 }
 
 .peoplePageUserEventCardBody {
   display: grid;
-  gap: var(--space-1);
-  justify-content: center;
-  grid-template-columns: repeat(2, minmax(550px, 1fr));
-}
-
-.peopleTabNavbarAlignment {
-  margin-left: var(--space-10);
+  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  margin-top: 16px;
 }
