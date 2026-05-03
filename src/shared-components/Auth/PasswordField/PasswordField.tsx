@@ -53,15 +53,15 @@ export const PasswordField: React.FC<InterfacePasswordFieldProps> = ({
       style={{
         background: 'none',
         border: 'none',
-        padding: '0 10px',
+        padding: '0 12px',
         cursor: 'pointer',
         color: 'var(--gray-400, #9ca3af)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        fontSize: 18,
-        height: '100%',
-        alignSelf: 'center',
+        fontSize: 22,
+        minHeight: 40,
+        alignSelf: 'stretch',
       }}
     >
       {showPassword ? (

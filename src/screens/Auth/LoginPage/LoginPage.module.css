@@ -60,11 +60,17 @@
   position: relative;
   z-index: 1;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .loginLeftBrand a {
   color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .loginLeftBrand p {
@@ -83,6 +89,8 @@
   width: var(--logo-lg, 200px);
   height: auto;
   filter: brightness(0.9);
+  display: block;
+  margin: 0 auto;
 }
 
 .loginLeftFooter {
@@ -229,28 +237,33 @@
   display: flex;
   background: var(--gray-100, #f3f4f6);
   border-radius: var(--radius-md, 10px);
-  padding: 3px;
+  padding: 4px;
   margin-bottom: 24px;
+  border: 1px solid var(--gray-200, #e5e7eb);
 }
 
 .segmentedToggle button {
   flex: 1;
-  padding: 8px 0;
+  padding: 10px 0;
   border: none;
   background: transparent;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   font-family: inherit;
-  color: var(--gray-500, #6b7280);
-  border-radius: var(--radius-sm, 6px);
+  color: var(--gray-400, #9ca3af);
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.15s;
 }
 
+.segmentedToggle button:hover {
+  color: var(--gray-700, #374151);
+}
+
 .segmentedActive {
-  background: var(--surface, #fff);
-  color: var(--gray-900, #111827);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  background: var(--green-500, #3ecf8e) !important;
+  color: #000 !important;
+  box-shadow: 0 1px 4px rgba(62, 207, 142, 0.3);
 }
 
 /* ── Register heading ──────────────────────────────────────────────────────── */
