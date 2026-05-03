@@ -1,15 +1,60 @@
+/* CreateDirectChat — new chat member picker */
+
 .modalContent {
-  width: var(--space-25);
+  max-width: 420px;
 }
 
 .inputContainer {
-  position: relative;
-  flex: 1;
-  margin: var(--space-0);
+  margin-bottom: 12px;
 }
 
 .tableContainer {
-  height: var(--space-23);
+  max-height: 360px;
   overflow-y: auto;
   overflow-x: hidden;
+  border: 1px solid var(--gray-200, #e5e7eb);
+  border-radius: 12px;
+}
+
+/* Hide the table header — context is clear from the search bar */
+.tableContainer thead {
+  display: none;
+}
+
+.tableContainer table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tableContainer td {
+  padding: 10px 16px;
+  font-size: 14px;
+  color: var(--gray-700, #374151);
+  border-bottom: 1px solid var(--gray-100, #f3f4f6);
+  vertical-align: middle;
+}
+
+.tableContainer tr:last-child td {
+  border-bottom: none;
+}
+
+.tableContainer tr:hover td {
+  background: var(--gray-50, #fafafa);
+}
+
+/* "Chat" button in each row */
+.tableContainer button {
+  padding: 5px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 8px;
+  background: var(--green-500, #3ecf8e);
+  color: #000;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.tableContainer button:hover {
+  background: var(--green-400, #4ade80);
 }

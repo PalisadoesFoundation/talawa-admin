@@ -178,10 +178,10 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
       ) : null}
 
       {/* A Multi-select dropdown enables admin to invite a member as volunteer  */}
-      <div className="d-flex mb-3 w-100">
+      <div style={{ width: "100%" }}>
         <Autocomplete
           id="membersSelect"
-          className={`${styles.noOutline} w-100`}
+          className={`${styles.noOutline}`}
           limitTags={2}
           dataTestId="membersSelect"
           options={members}
@@ -198,7 +198,7 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
             <FormFieldGroup name="members" label={tCommon('members')}>
               <div
                 ref={params.InputProps.ref}
-                className="d-flex w-100 align-items-center"
+                style={{ width: "100%" }}
               >
                 {params.InputProps.startAdornment}
                 <input

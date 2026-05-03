@@ -18,9 +18,7 @@ export default function EmptyChatState({
   message,
 }: InterfaceEmptyChatStateProps): JSX.Element {
   return (
-    <div
-      className={`d-flex flex-column justify-content-center align-items-center w-100 h-100 ${styles.container}`}
-    >
+    <div className={styles.container}>
       <h6 className={styles.message} data-testid="noChatSelected">
         {message}
       </h6>

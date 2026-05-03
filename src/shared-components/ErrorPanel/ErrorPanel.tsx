@@ -145,7 +145,7 @@ const ErrorPanel: React.FC<InterfaceErrorPanelProps> = ({
       ariaLabelProps: isCustomLabel ? { 'aria-label': customLabel } : {},
       ariaLiveProps: role !== 'alert' ? { 'aria-live': ariaLive } : {},
       containerClassName:
-        `${styles.container} bg-white rounded-4 my-3 ${className}`.trim(),
+        `${styles.container} rounded-4 my-3 ${className}`.trim(),
     };
   }, [
     tCommon,
@@ -161,7 +161,7 @@ const ErrorPanel: React.FC<InterfaceErrorPanelProps> = ({
     <div className={containerClassName} role={role} {...ariaLiveProps}>
       <div className={styles.message} data-testid={testId}>
         <WarningAmberRounded className={styles.errorIcon} />
-        <h6 className="fw-bold text-danger text-center">
+        <h6 style={{ textAlign: "center" }}>
           {message}
           {displayErrorMessage && (
             <>
@@ -170,7 +170,7 @@ const ErrorPanel: React.FC<InterfaceErrorPanelProps> = ({
             </>
           )}
         </h6>
-        <div className="text-center mt-3">
+        <div style={{ textAlign: "center" }}>
           <Button
             variant="outline-danger"
             size="sm"

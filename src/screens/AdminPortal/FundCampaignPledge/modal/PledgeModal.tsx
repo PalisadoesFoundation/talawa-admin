@@ -198,7 +198,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
       >
         <Autocomplete<InterfaceUserInfoPG>
           id="pledger-select"
-          className={`${styles.noOutlinePledge} w-100`}
+          className={`${styles.noOutlinePledge}`}
           data-testid="pledgerSelect"
           options={pledgers}
           value={formState.pledgeUsers[0] || null}
@@ -308,7 +308,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
             disabled={isSubmitting || !isAmountValid}
             data-testid="modal-submit-btn"
           >
-            <i className="fa fa-pencil me-1" />
+            <i className="fa fa-pencil" />
             {tCommon('create')}
           </Button>
         }

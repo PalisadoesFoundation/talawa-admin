@@ -60,7 +60,7 @@ const AttendedEventList: React.FC<Partial<InterfaceEvent>> = ({ id }) => {
         render: (_, row) => (
           <Link
             to={`/admin/event/${currentOrg}/${row.id}`}
-            className="d-flex justify-items-center align-items-center text-primary text-decoration-none"
+            className="justify-items-center text-primary text-decoration-none"
             aria-label={`${tCommon('event')}: ${row.name}`}
           >
             <DateIcon
@@ -68,7 +68,7 @@ const AttendedEventList: React.FC<Partial<InterfaceEvent>> = ({ id }) => {
               fill="var(--bs-gray-600)"
               width={25}
               height={25}
-              className="mx-2 rounded-full"
+              className="rounded-full"
             />
             <div>
               <div>{row.name}</div>

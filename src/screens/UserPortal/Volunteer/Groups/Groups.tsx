@@ -163,7 +163,7 @@ function Groups(): JSX.Element {
     return (
       <div className={styles.message} data-testid="errorMsg">
         <WarningAmberRounded className={styles.icon} />
-        <h6 className="fw-bold text-danger text-center">
+        <h6 style={{ textAlign: "center" }}>
           {tErrors('errorLoading', { entity: t('volunteerGroups') })}
         </h6>
       </div>
@@ -182,7 +182,7 @@ function Groups(): JSX.Element {
       renderCell: (params: GridCellParams) => {
         return (
           <div
-            className="d-flex justify-content-center fw-bold"
+            style={{ justifyContent: "center" }}
             data-testid="groupName"
           >
             {params.row.name}
@@ -203,7 +203,7 @@ function Groups(): JSX.Element {
         const { id, name, avatarURL } = params.row.leader;
         return (
           <div
-            className="d-flex fw-bold align-items-center ms-2"
+            style={{ alignItems: "center" }}
             data-testid="leaderName"
           >
             {avatarURL ? (
@@ -239,7 +239,7 @@ function Groups(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <div className="d-flex justify-content-center fw-bold">
+          <div style={{ justifyContent: "center" }}>
             {params.row.volunteers.length}
           </div>
         );
@@ -260,7 +260,7 @@ function Groups(): JSX.Element {
             <Button
               variant="success"
               size="sm"
-              className={`${styles.groupsViewButton} me-2 rounded`}
+              className={`${styles.groupsViewButton} rounded`}
               data-testid="viewGroupBtn"
               onClick={() => handleViewClick(params.row)}
               aria-label={t('viewGroup')}
@@ -271,7 +271,7 @@ function Groups(): JSX.Element {
               <Button
                 variant="success"
                 size="sm"
-                className="me-2 rounded"
+                className="rounded"
                 data-testid="editGroupBtn"
                 onClick={() => handleEditClick(params.row)}
                 aria-label={t('editGroup')}

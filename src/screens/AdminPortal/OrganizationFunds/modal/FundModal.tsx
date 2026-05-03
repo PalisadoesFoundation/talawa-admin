@@ -240,7 +240,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
   const isCreateMode = mode === 'create';
   const isEditMode = mode === 'edit';
   const isFormValid = !fundNameError && !fundRefError;
-  const modalClassName = `${styles.fundModal} ${isCreateMode ? styles.createMode : ''} ${isEditMode ? styles.editMode : ''}`;
+  const modalClassName = styles.fundModal;
 
   const formContent = (
     <>
@@ -278,12 +278,10 @@ const FundModal: React.FC<InterfaceFundModal> = ({
 
       <div className={styles.switchRow}>
         <div className={styles.switchField}>
-          <label htmlFor="isTaxDeductibleSwitch">{t('taxDeductible')}</label>
-          <div className={`form-check form-switch ms-2 ${styles.switch}`}>
+          <div className={styles.switch}>
             <input
               type="checkbox"
               id="isTaxDeductibleSwitch"
-              className="form-check-input"
               checked={formState.isTaxDeductible}
               data-testid="setisTaxDeductibleSwitch"
               onChange={() =>
@@ -294,15 +292,14 @@ const FundModal: React.FC<InterfaceFundModal> = ({
               }
             />
           </div>
+          <label htmlFor="isTaxDeductibleSwitch">{t('taxDeductible')}</label>
         </div>
 
         <div className={styles.switchField}>
-          <label htmlFor="isDefaultSwitch">{t('defaultFund')}</label>
-          <div className={`form-check form-switch ms-2 ${styles.switch}`}>
+          <div className={styles.switch}>
             <input
               type="checkbox"
               id="isDefaultSwitch"
-              className="form-check-input"
               checked={formState.isDefault}
               data-testid="setDefaultSwitch"
               onChange={() =>
@@ -313,6 +310,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
               }
             />
           </div>
+          <label htmlFor="isDefaultSwitch">{t('defaultFund')}</label>
         </div>
       </div>
     </>
@@ -328,8 +326,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
           className={styles.editActionButton}
           data-testid="modal-submit-btn"
         >
-          <i className="fa fa-edit" />
-          {tCommon('edit')}
+          {tCommon('saveChanges')}
         </Button>
 
         <Button
@@ -339,7 +336,6 @@ const FundModal: React.FC<InterfaceFundModal> = ({
           className={styles.deleteActionButton}
           data-testid="modal-delete-btn"
         >
-          <i className="fa fa-trash" />
           {tCommon('delete')}
         </Button>
       </div>
@@ -351,7 +347,6 @@ const FundModal: React.FC<InterfaceFundModal> = ({
         className={styles.archiveActionButton}
         data-testid="modal-archive-btn"
       >
-        <i className="fa fa-archive" />
         {formState.isArchived ? t('unarchive') : t('archived')}
       </Button>
     </div>

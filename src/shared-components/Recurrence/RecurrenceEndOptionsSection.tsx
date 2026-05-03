@@ -46,7 +46,7 @@ export const RecurrenceEndOptionsSection: React.FC<
   const { t: tRoot } = useTranslation();
   return (
     <div className={styles.endOptionsContainer}>
-      <span className="fw-semibold text-secondary">{tRoot('ends')}</span>
+      <span className="text-secondary">{tRoot('ends')}</span>
       <div className={styles.radioGroupContainer}>
         <div>
           {recurrenceEndOptions

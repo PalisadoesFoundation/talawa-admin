@@ -140,7 +140,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
         title={t('title')}
       >
         <form onSubmit={handleSubmit} data-testid="onspot-attendee-form">
-          <div className="d-flex justify-content-between">
+          <div style={{ justifyContent: "space-between" }}>
             <FormTextField
               name="firstName"
               label={tCommon('firstName')}
@@ -197,7 +197,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
             <Button
               variant="success"
               type="submit"
-              className={`border-1 mx-4 ${styles.addButton}`}
+              className={`border-1 ${styles.addButton}`}
               disabled={isSubmitting}
             >
               {t('addAttendee')}

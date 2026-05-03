@@ -49,7 +49,7 @@ const CategoryViewModal: FC<ICategoryViewModalProps> = ({
       customFooter={modalFooter}
       data-testId="categoryViewModal"
     >
-      <form className="p-3">
+      <form style={{ padding: 12 }}>
         {/* Category Name */}
 
         {/* Category Name */}
@@ -98,7 +98,7 @@ const CategoryViewModal: FC<ICategoryViewModalProps> = ({
                     ? 'var(--errorIcon-color)'
                     : 'var(--bs-success)',
                 }}
-                className="me-2"
+                style={{ marginRight: 8 }}
               />
             }
             disabled

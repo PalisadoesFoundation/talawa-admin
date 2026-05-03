@@ -143,7 +143,7 @@ const AcceptInvitation = (): JSX.Element => {
       size="xl"
       data-testid="invitation-loading"
     >
-      <div className="container py-5">
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "24px 16px" }}>
         <div className="card p-4">
           <h3>
             {invite?.eventId
@@ -187,7 +187,7 @@ const AcceptInvitation = (): JSX.Element => {
                         'Please login or create an account to accept this invitation.',
                     })}
                   </p>
-                  <div className="d-flex gap-2">
+                  <div style={{ gap: 8 }}>
                     <Button onClick={handleLogin}>
                       {t('login', { defaultValue: 'Log in' })}
                     </Button>
@@ -208,7 +208,7 @@ const AcceptInvitation = (): JSX.Element => {
                   )}
 
                   {requiresConfirmation && (
-                    <div className="mb-3 form-check">
+                    <div className="form-check">
                       <input
                         id="confirmIsInvitee"
                         type="checkbox"
@@ -229,7 +229,7 @@ const AcceptInvitation = (): JSX.Element => {
                   )}
 
                   {requiresConfirmation && (
-                    <div className="mb-3">
+                    <div style={{ marginBottom: 12 }}>
                       <Button
                         variant="outline-secondary"
                         onClick={() => {
@@ -248,7 +248,7 @@ const AcceptInvitation = (): JSX.Element => {
                     </div>
                   )}
 
-                  <div className="d-flex gap-2">
+                  <div style={{ gap: 8 }}>
                     <LoadingState
                       isLoading={isSubmitting}
                       variant="inline"

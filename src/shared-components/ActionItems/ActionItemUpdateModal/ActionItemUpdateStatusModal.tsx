@@ -318,7 +318,7 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
       customFooter={renderFooter()}
       data-testid="updateStatusModal"
     >
-      <div className="mb-2 d-flex align-items-center gap-2">
+      <div style={{ gap: 8 }}>
         <StatusBadge
           variant={isCompleted ? 'completed' : 'pending'}
           size="md"

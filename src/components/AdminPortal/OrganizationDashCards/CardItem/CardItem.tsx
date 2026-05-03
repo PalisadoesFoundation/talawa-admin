@@ -104,7 +104,7 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
 
           <div className={styles.rightCard}>
             {location && (
-              <span className={`${styles.location} fst-normal fw-semibold`}>
+              <span className={`${styles.location} fst-normal`}>
                 <MarkerIcon
                   title={tCommon('location')}
                   stroke="var(--green-500)"
@@ -115,7 +115,7 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
               </span>
             )}
             {type == 'Event' && startdate && enddate && (
-              <span className={`${styles.time} fst-normal fw-semibold`}>
+              <span className={`${styles.time} fst-normal`}>
                 {type === 'Event' && (
                   <DateIcon
                     title={tCommon('eventDate')}

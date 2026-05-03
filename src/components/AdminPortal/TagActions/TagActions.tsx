@@ -254,21 +254,21 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
         <form id="tagActionForm" onSubmit={handleTagAction}>
           <div className="pb-0">
             <div
-              className={`d-flex flex-wrap align-items-center border border-2 border-dark-subtle bg-light-subtle rounded-3 p-2 ${styles.scrollContainer}`}
+              className={`border border-2 border-dark-subtle-subtle rounded-3 ${styles.scrollContainer}`}
             >
               {selectedTags.length === 0 ? (
-                <div className="text-body-tertiary mx-auto">
+                <div style={{ color: "var(--gray-400, #9ca3af)", margin: "0 auto", textAlign: "center" }}>
                   {t('noTagSelected')}
                 </div>
               ) : (
                 selectedTags.map((tag: InterfaceTagData) => (
                   <div
                     key={tag._id}
-                    className={`badge bg-dark-subtle text-secondary-emphasis lh-lg my-2 ms-2 d-flex align-items-center ${styles.tagBadge}`}
+                    className={`badge bg-dark-subtle text-secondary-emphasis lh-lg ${styles.tagBadge}`}
                   >
                     {tag.name}
                     <Button
-                      className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary border-0 bg-transparent p-0`}
+                      className={`${styles.removeFilterIcon} fa fa-times text-body-tertiary border-0 bg-transparent`}
                       onClick={() => deSelectTag(tag)}
                       data-testid={`clearSelectedTag${tag._id}`}
                       aria-label={t('remove')}
@@ -281,7 +281,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
               )}
             </div>
 
-            <div className="mt-3">
+            <div style={{ marginTop: 12 }}>
               <SearchBar
                 value={tagSearchName}
                 onChange={(val) => setTagSearchName(val.trim())}
@@ -294,7 +294,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
               />
             </div>
 
-            <div className="mt-3 mb-2 fs-5 fw-semibold text-dark-emphasis">
+            <div className="fs-5 text-dark-emphasis">
               {t('allTags')}
             </div>
             <ul
@@ -313,9 +313,9 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                   dataPath="organizations.0.userTags"
                   itemsPerPage={TAGS_QUERY_DATA_CHUNK_SIZE}
                   renderItem={(tag: InterfaceTagData) => (
-                    <li key={tag._id} className="position-relative w-100">
+                    <li key={tag._id} className="position-relative">
                       <div
-                        className="d-inline-block w-100"
+                        className="d-inline-block"
                         data-testid="orgUserTag"
                       >
                         <TagNode
@@ -326,16 +326,16 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                       </div>
 
                       {tag.parentTag && (
-                        <div className="position-absolute end-0 top-0 d-flex flex-row mt-2 me-3 pt-0 text-secondary">
+                        <div className="position-absolute end-0 topt-0 text-secondary">
                           <>{'('}</>
                           {tag.ancestorTags?.map((ancestorTag) => (
                             <span
                               key={ancestorTag._id}
-                              className="ms-2 my-0"
+                              style={{ margin: "0" }}
                               data-testid="ancestorTagsBreadCrumbs"
                             >
                               {ancestorTag.name}
-                              <i className="ms-2 fa fa-caret-right" />
+                              <i className="fa fa-caret-right" />
                             </span>
                           ))}
                           <>{')'}</>
@@ -351,7 +351,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                   }
                   emptyStateComponent={
                     <div
-                      className="text-body-tertiary mx-auto"
+                      style={{ color: "var(--gray-400, #9ca3af)", margin: "0 auto", textAlign: "center" }}
                       data-testid="noTagsFoundMessage"
                     >
                       {t('noTagsFound')}

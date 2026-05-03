@@ -166,7 +166,7 @@ function EventAttendance(): JSX.Element {
         sortable: false,
         filterable: false,
         renderCell: (params) => (
-          <div className="d-flex align-items-center">
+          <div style={{ alignItems: "center" }}>
             <ProfileAvatarDisplay
               imageUrl={params.row.avatarURL}
               fallbackName={params.row.name || t('unknownMember')}
@@ -176,7 +176,7 @@ function EventAttendance(): JSX.Element {
             <Link
               to={`/admin/member/${currentUrl}/${params.row.id}`}
               state={{ id: params.row.id }}
-              className={`${styles.membername} ms-2`}
+              className={`${styles.membername}`}
             >
               {params.row.name}
             </Link>
@@ -274,7 +274,7 @@ function EventAttendance(): JSX.Element {
   );
 
   return (
-    <div className="">
+    <div>
       <AttendanceStatisticsModal
         show={show}
         statistics={statistics}
@@ -282,16 +282,16 @@ function EventAttendance(): JSX.Element {
         memberData={filteredAttendees}
         t={t}
       />
-      <div className="d-flex justify-content-between align-items-center mb-3">
+      <div style={{ alignItems: "center" }}>
         <Button
-          className={`border-1 bg-white text-success ${styles.createButton}`}
+          className={`border-1 text-success ${styles.createButton}`}
           onClick={showModal}
           data-testid="stats-modal"
         >
           {t('historical_statistics')}
         </Button>
-        <div className="d-flex align-items-center">
-          <div className={`${styles.input} me-3`}>
+        <div style={{ alignItems: "center" }}>
+          <div className={`${styles.input}`}>
             <SearchBar
               placeholder={t('Search member')}
               onChange={(value) => searchEventAttendees(value)}
@@ -315,7 +315,7 @@ function EventAttendance(): JSX.Element {
               )
             }
             dataTestIdPrefix="filter-dropdown"
-            className={`${styles.dropdown} mx-4`}
+            className={`${styles.dropdown}`}
             buttonLabel={tCommon('filter')}
           />
           <SortingButton

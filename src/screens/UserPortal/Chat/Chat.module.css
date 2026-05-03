@@ -218,23 +218,37 @@
 }
 
 .newChatBtn {
-  width: 32px;
-  height: 32px;
-  border-radius: 10px;
-  border: none;
-  background: var(--green-500, #3ecf8e);
-  color: #000;
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  border-radius: 8px !important;
+  border: none !important;
+  background: var(--green-500, #3ecf8e) !important;
+  color: #000 !important;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  gap: 0 !important;
   font-size: 18px;
   transition: background 0.12s;
   flex-shrink: 0;
+  overflow: hidden !important;
+}
+
+/* Hide the text label span so only the icon is visible */
+.newChatBtn > span + span {
+  display: none !important;
+}
+
+/* Center the icon wrapper */
+.newChatBtn > span:first-child {
+  margin: 0 !important;
 }
 
 .newChatBtn:hover {
-  background: var(--green-400, #4ade80);
+  background: var(--green-400, #4ade80) !important;
 }
 
 /* ── Mobile ────────────────────────────────────────────────────── */

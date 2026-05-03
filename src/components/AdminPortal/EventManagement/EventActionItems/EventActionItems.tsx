@@ -218,7 +218,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
     return (
       <div className={styles.message} data-testid="errorMsg">
         <WarningAmberRounded className={`${styles.icon} ${styles.iconLarge}`} />
-        <h6 className="fw-bold text-danger text-center">
+        <h6 style={{ textAlign: "center" }}>
           {tErrors('errorLoading', { entity: 'Action Items' })}
         </h6>
       </div>
@@ -254,7 +254,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
 
         return (
           <div
-            className={`d-flex fw-bold align-items-center ms-2 ${styles.assigneeCellContainer}`}
+            className={`${styles.assigneeCellContainer}`}
             data-testid="assigneeName"
           >
             <div className={styles.TableImage}>
@@ -266,7 +266,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
             {isGroup && (
               <Group
                 fontSize="small"
-                className={`ms-1 ${styles.groupIconSecondary}`}
+                className={`${styles.groupIconSecondary}`}
                 data-testid="groupIcon"
               />
             )}
@@ -286,7 +286,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       renderCell: (params: GridCellParams) => {
         return (
           <div
-            className="d-flex justify-content-center fw-bold"
+            style={{ justifyContent: "center" }}
             data-testid="categoryName"
           >
             {params.row.category?.name || t('noCategory')}
@@ -385,7 +385,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <div className="d-flex align-items-center justify-content-center mt-3">
+          <div style={{ alignItems: "center" }}>
             <input
               type="checkbox"
               data-testid={`statusCheckbox${params.row.id}`}
@@ -406,7 +406,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
 
   return (
     <div>
-      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
+      <div className={`${styles.btnsContainer}`}>
         <SearchBar
           placeholder={tCommon('searchBy', {
             item:
@@ -420,7 +420,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
           inputTestId="searchBy"
           buttonTestId="searchBtn"
         />
-        <div className="d-flex gap-3">
+        <div style={{ gap: 12 }}>
           <SortingButton
             title={tCommon('searchBy')}
             sortingOptions={[
@@ -485,7 +485,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
             data-testid="createActionItemBtn"
             data-cy="createActionItemBtn"
           >
-            <i className={'fa fa-plus me-2'} />
+            <i className={'fa fa-plus'} />
             {tCommon('create')}
           </Button>
         </div>

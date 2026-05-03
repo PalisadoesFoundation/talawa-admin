@@ -208,7 +208,7 @@ const CategoryModal: FC<IActionItemCategoryModal> = ({
       >
         <form
           onSubmit={mode === 'create' ? handleCreate : handleEdit}
-          className="p-2"
+          style={{ padding: 8 }}
         >
           {/* Category Name Input */}
           <FormTextField
@@ -246,14 +246,14 @@ const CategoryModal: FC<IActionItemCategoryModal> = ({
             type="checkbox"
             checked={isDisabled}
             data-testid="isDisabledSwitch"
-            className="form-check-input mt-2 ms-2"
+            className="form-check-input"
             onChange={() =>
               setFormState({ ...formState, isDisabled: !isDisabled })
             }
           />
 
           {/* Action Buttons */}
-          <div className="d-flex gap-2 justify-content-between">
+          <div className="gajustify-content-between">
             {/* Delete Button - Only show in edit mode */}
             {mode === 'edit' && (
               <Button
@@ -261,7 +261,7 @@ const CategoryModal: FC<IActionItemCategoryModal> = ({
                 onClick={handleDelete}
                 data-testid="deleteCategoryButton"
               >
-                <i className="fa fa-trash me-2" />
+                <i className="fa fa-trash" />
                 {tCommon('delete')}
               </Button>
             )}

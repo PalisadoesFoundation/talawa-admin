@@ -188,29 +188,18 @@ export default function createDirectChatModal({
   >(
     () => [
       {
-        id: 'index',
-        header: tCommon('hash', { defaultValue: '#' }),
-        accessor: 'index',
-        meta: { align: 'center' },
-      },
-      {
         id: 'user',
-        header: t('user', { defaultValue: 'User' }),
+        header: tCommon('name'),
         accessor: 'name',
-        meta: { align: 'center' },
         render: (value, row) => (
-          <>
-            {row.name}
-            <br />
-            {row.role || t('role.member', { defaultValue: 'Member' })}
-          </>
+          <span style={{ fontWeight: 500 }}>{row.name}</span>
         ),
       },
       {
         id: 'action',
-        header: t('chat', { defaultValue: 'Chat' }),
+        header: '',
         accessor: 'id',
-        meta: { align: 'center' },
+        meta: { align: 'right' },
         render: (_, row) => (
           <Button
             onClick={() => {
@@ -230,7 +219,7 @@ export default function createDirectChatModal({
             }}
             data-testid="addBtn"
           >
-            {t('add', { defaultValue: 'Add' })}
+            {t('chat', { defaultValue: 'Chat' })}
           </Button>
         ),
       },
@@ -271,7 +260,7 @@ export default function createDirectChatModal({
         dataTestId="createDirectChatModal"
         show={createDirectChatModalisOpen}
         onHide={toggleCreateDirectChatModal}
-        title={t('chat', { defaultValue: 'Chat' })}
+        title={t('newChat', { defaultValue: 'New Chat' })}
         className={styles.modalContent}
         headerTestId="createDirectChat"
       >
@@ -285,7 +274,7 @@ export default function createDirectChatModal({
             <div className={styles.inputContainer}>
               <SearchBar
                 placeholder={t('searchFullName', {
-                  defaultValue: 'Search full name',
+                  defaultValue: 'Search by name...',
                 })}
                 value={userName}
                 onChange={(value) => setUserName(value)}
@@ -296,6 +285,9 @@ export default function createDirectChatModal({
                 }}
                 inputTestId="searchUser"
                 buttonTestId="submitBtn"
+                showSearchButton={false}
+                showLeadingIcon
+                showClearButton
               />
             </div>
             <div className={styles.tableContainer}>

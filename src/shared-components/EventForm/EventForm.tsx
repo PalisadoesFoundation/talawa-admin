@@ -494,7 +494,7 @@ const EventForm: React.FC<IEventFormProps> = ({
         <div className={styles.checkboxdivEvents}>
           <div className={styles.dispflexEvents}>
             <FormCheckField
-              className={`me-4 ${styles.switch}`}
+              className={`${styles.switch}`}
               id="allday"
               name="allDay"
               label={t('allDay')}
@@ -508,7 +508,7 @@ const EventForm: React.FC<IEventFormProps> = ({
           {showRecurrenceToggle && (
             <div className={styles.dispflexEvents}>
               <FormCheckField
-                className={`me-4 ${styles.switch}`}
+                className={`${styles.switch}`}
                 id="recurring"
                 name="recurring"
                 label={t('recurring')}
@@ -523,7 +523,7 @@ const EventForm: React.FC<IEventFormProps> = ({
           {showRegisterable && (
             <div className={styles.dispflexEvents}>
               <FormCheckField
-                className={`me-4 ${styles.switch}`}
+                className={`${styles.switch}`}
                 id="registrable"
                 name="registrable"
                 label={t('registerable')}
@@ -543,7 +543,7 @@ const EventForm: React.FC<IEventFormProps> = ({
           {showCreateChat && (
             <div className={styles.dispflexEvents}>
               <FormCheckField
-                className={`me-4 ${styles.switch}`}
+                className={`${styles.switch}`}
                 id="chat"
                 name="createChat"
                 label={t('createChat')}

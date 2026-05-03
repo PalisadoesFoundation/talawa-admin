@@ -155,11 +155,33 @@ const organizationFunds = (): JSX.Element => {
     navigate(`/admin/orgfundcampaign/${orgId}/${fundId}`);
   };
 
+  // Compute aggregated campaign data for each fund
+  const fundAggregates = useMemo(() => {
+    const map = new Map<string, { totalGoal: number; totalRaised: number; nearestEnd: string | null }>();
+    for (const f of filteredAndSortedFunds) {
+      const campaigns = f.campaigns?.edges || [];
+      let totalGoal = 0;
+      let totalRaised = 0;
+      let nearestEnd: string | null = null;
+      for (const edge of campaigns) {
+        totalGoal += edge.node.goalAmount || 0;
+        totalRaised += edge.node.amountRaised || 0;
+        if (edge.node.endAt && (!nearestEnd || edge.node.endAt < nearestEnd)) {
+          nearestEnd = edge.node.endAt;
+        }
+      }
+      map.set(f.id, { totalGoal, totalRaised, nearestEnd });
+    }
+    return map;
+  }, [filteredAndSortedFunds]);
+
   // Header titles for the funds table (used by TableLoader during loading)
   const headerTitles: string[] = [
     t('funds.fundName'),
-    tCommon('createdOn'),
+    t('funds.goal') || 'Goal',
+    t('funds.progress') || 'Progress',
     tCommon('status'),
+    t('funds.endDate') || 'End Date',
     tCommon('action'),
   ];
 
@@ -170,7 +192,7 @@ const organizationFunds = (): JSX.Element => {
           <WarningAmberRounded
             className={`${styles.errorIcon} ${styles.errorIconLarge}`}
           />
-          <h6 className="fw-bold text-danger text-center">
+          <h6 style={{ textAlign: "center" }}>
             {t('funds.errorLoadingFundsData')}
             <br />
             {fundError.message}
@@ -262,10 +284,7 @@ const organizationFunds = (): JSX.Element => {
           />
         </div>
       ) : (
-        <div className="card">
-          <div className="card-header">
-            <span className="card-title">{t('funds.allCampaigns')}</span>
-          </div>
+        <div>
           {fundLoading ? (
             <TableLoader headerTitles={headerTitles} noOfRows={PAGE_SIZE} />
           ) : (
@@ -274,46 +293,90 @@ const organizationFunds = (): JSX.Element => {
                 <thead>
                   <tr>
                     <th scope="col">{t('funds.fundName')}</th>
-                    <th scope="col">{tCommon('createdOn')}</th>
+                    <th scope="col">{t('funds.goal') || 'Goal'}</th>
+                    <th scope="col">{t('funds.progress') || 'Progress'}</th>
                     <th scope="col">{tCommon('status')}</th>
+                    <th scope="col">{t('funds.endDate') || 'End Date'}</th>
                     <th scope="col">{tCommon('action')}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredAndSortedFunds.map((fundItem) => (
-                    <tr key={fundItem.id}>
-                      <td
-                        className="cell-primary"
-                        style={{ cursor: 'pointer' }}
-                        data-testid="fundName"
-                        onClick={() => handleClick(fundItem.id)}
-                      >
-                        {fundItem.name}
-                      </td>
-                      <td data-testid="createdOn">
-                        {dayjs(fundItem.createdAt).format('MMM D, YYYY')}
-                      </td>
-                      <td>
-                        <span
-                          className={`badge ${fundItem.isArchived ? 'badge-gray' : 'badge-green'}`}
+                  {filteredAndSortedFunds.map((fundItem) => {
+                    const agg = fundAggregates.get(fundItem.id);
+                    const totalGoal = agg?.totalGoal || 0;
+                    const totalRaised = agg?.totalRaised || 0;
+                    const progress = totalGoal > 0 ? Math.round((totalRaised / totalGoal) * 100) : 0;
+                    const nearestEnd = agg?.nearestEnd;
+
+                    return (
+                      <tr key={fundItem.id}>
+                        <td
+                          className="cell-primary"
+                          style={{ cursor: 'pointer' }}
+                          data-testid="fundName"
+                          onClick={() => handleClick(fundItem.id)}
                         >
-                          {fundItem.isArchived ? t('funds.archived') : tCommon('active')}
-                        </span>
-                      </td>
-                      <td>
-                        <button
-                          className="btn btn-secondary btn-sm"
-                          data-testid="editFundBtn"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleOpenModal(fundItem, 'edit');
-                          }}
-                        >
-                          {t('funds.editFund')}
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                          {fundItem.name}
+                        </td>
+                        <td data-testid="fundGoal">
+                          {totalGoal > 0 ? (
+                            <span>
+                              <span style={{ fontWeight: 600, color: 'var(--gray-900, #111827)' }}>
+                                ${totalRaised.toLocaleString()}
+                              </span>
+                              <span style={{ color: 'var(--gray-400, #9ca3af)' }}>
+                                {' '}/ ${totalGoal.toLocaleString()}
+                              </span>
+                            </span>
+                          ) : (
+                            <span style={{ color: 'var(--gray-400, #9ca3af)' }}>—</span>
+                          )}
+                        </td>
+                        <td data-testid="fundProgress" style={{ minWidth: 120 }}>
+                          {totalGoal > 0 ? (
+                            <div>
+                              <div className={styles.progressBarBg}>
+                                <div
+                                  className={styles.progressBarFill}
+                                  style={{ width: `${Math.min(progress, 100)}%` }}
+                                />
+                              </div>
+                              <span style={{ fontSize: 12, color: 'var(--gray-500, #6b7280)' }}>
+                                {progress}%
+                              </span>
+                            </div>
+                          ) : (
+                            <span style={{ color: 'var(--gray-400, #9ca3af)' }}>—</span>
+                          )}
+                        </td>
+                        <td>
+                          <span
+                            className={`badge ${fundItem.isArchived ? 'badge-gray' : 'badge-green'}`}
+                          >
+                            {fundItem.isArchived ? t('funds.archived') : tCommon('active')}
+                          </span>
+                        </td>
+                        <td data-testid="fundEndDate">
+                          {nearestEnd
+                            ? dayjs(nearestEnd).format('MMM D, YYYY')
+                            : <span style={{ color: 'var(--gray-400, #9ca3af)' }}>—</span>
+                          }
+                        </td>
+                        <td>
+                          <button
+                            className="btn btn-secondary btn-sm"
+                            data-testid="editFundBtn"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleOpenModal(fundItem, 'edit');
+                            }}
+                          >
+                            {t('funds.editFund')}
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

@@ -68,7 +68,7 @@ export const getPledgeColumns = ({
       const extraUsers = users.slice(1);
 
       return (
-        <div className={`d-flex ${styles.flexWrapGap} ${styles.maxHeight120}`}>
+        <div className={`${styles.flexWrapGap} ${styles.maxHeight120}`}>
           {mainUsers.map((user: InterfaceUserInfoPG, index: number) => (
             <div
               className={styles.pledgerContainer}
@@ -135,7 +135,7 @@ export const getPledgeColumns = ({
     accessor: 'amount',
     render: (value, row) => (
       <div
-        className="d-flex justify-content-center fw-bold"
+        style={{ justifyContent: "center" }}
         data-testid="amountCell"
       >
         {currencySymbols[row.currency as keyof typeof currencySymbols] || ''}
@@ -153,7 +153,7 @@ export const getPledgeColumns = ({
     accessor: 'amount',
     render: (_value, row) => (
       <div
-        className="d-flex justify-content-center fw-bold"
+        style={{ justifyContent: "center" }}
         data-testid="paidCell"
       >
         {currencySymbols[row.currency as keyof typeof currencySymbols]}0
@@ -175,7 +175,7 @@ export const getPledgeColumns = ({
         data-testid="editPledgeBtn"
         onClick={() => handleOpenModal(row.original, 'edit')}
       >
-        <i className="fa fa-edit me-1" />
+        <i className="fa fa-edit" />
         {labels.edit}
       </Button>
     ),

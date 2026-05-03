@@ -99,10 +99,10 @@ function EventAgenda(props: { eventId: string }): JSX.Element {
       'Unknown error';
 
     return (
-      <div className={`${styles.container} bg-white rounded-4 my-3`}>
+      <div className={`${styles.container} rounded-4 my-3`}>
         <div className={styles.message}>
           <WarningAmberRounded className={styles.errorIcon} />
-          <h6 className="fw-bold text-danger text-center">
+          <h6 style={{ textAlign: "center" }}>
             Error occurred while loading{' '}
             {agendaFolderError ? 'Agenda Folders' : 'Agenda Items'}
             <br />
@@ -119,13 +119,13 @@ function EventAgenda(props: { eventId: string }): JSX.Element {
       variant="spinner"
     >
       <div className={styles.eventAgendaItemContainer}>
-        <div className={`bg-white rounded-4 my-3`}>
-          <div className={`pt-4 mx-4`}>
+        <div className={`rounded-4 my-3`}>
+          <div className={`pt-4`}>
             <div className={styles.btnsContainer}>
-              <div className=" d-none d-lg-inline grow d-flex align-items-center bg-light-subtle rounded-3">
+              <div className=" d-none d-lg-inline grow-subtle rounded-3">
                 {/* <input
                     type="search"
-                    className="form-input border-0 bg-light-subtle"
+                    className="form-input border-0-subtle"
                     placeholder={t('search')}
                     onChange={(e) => setSearchValue(e.target.value)}
                     value={searchValue}

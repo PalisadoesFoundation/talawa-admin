@@ -379,7 +379,7 @@ export default function GroupChatDetails({
                 variant="outline-danger"
                 size="sm"
                 aria-label={t('deleteChat')}
-                className="mx-5"
+                style={{ margin: "0 24px" }}
                 onClick={async () => {
                   if (window.confirm(t('deleteChatConfirmation'))) {
                     try {

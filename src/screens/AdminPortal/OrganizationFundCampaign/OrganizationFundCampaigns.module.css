@@ -1,162 +1,110 @@
-.progressPie {
-  --pie-fill-color: var(--blue-500);
-  width: var(--space-8);
-  height: var(--space-8);
-  display: block;
+/* OrganizationFundCampaigns — campaign list for a fund */
+
+.container {
+  margin: 4px 0;
 }
 
-.progressTrack {
-  fill: var(--gray-100);
-}
-
-.progressSlice {
-  fill: var(--pie-fill-color);
-}
-
-.progressComplete {
-  --pie-fill-color: var(--green-500);
-}
-
-.progressHalf {
-  --pie-fill-color: var(--yellow-500);
-}
-
-.progressLow {
-  --pie-fill-color: var(--blue-500);
-}
-
-.progressTypography {
-  font-weight: var(--font-weight-bold);
-}
-
-.progressCellContainer {
+.toolbar {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: var(--space-3);
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
-.whiteContainer {
-  background-color: var(--surface);
-  border-radius: var(--radius-xl);
-  margin-top: var(--space-5);
-  margin-bottom: var(--space-5);
+.toolbarSpacer {
+  flex: 1;
 }
 
+.createBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  background: var(--green-500, #3ecf8e);
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+}
+
+.createBtn:hover {
+  background: var(--green-400, #4ade80);
+}
+
+.createBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Progress bar (inline in table cells) */
+.progressBarBg {
+  width: 100%;
+  min-width: 80px;
+  height: 6px;
+  background: var(--gray-200, #e5e7eb);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 3px;
+}
+
+.progressBarFill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.progressGreen {
+  background: var(--green-500, #3ecf8e);
+}
+
+.progressYellow {
+  background: #eab308;
+}
+
+.progressBlue {
+  background: #3b82f6;
+}
+
+.progressText {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gray-600, #4b5563);
+}
+
+/* Campaign name link */
+.campaignLink {
+  color: var(--green-600, #16a34a);
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: none;
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+}
+
+.campaignLink:hover {
+  text-decoration: underline;
+  color: var(--green-700, #15803d);
+}
+
+/* Error state */
 .message {
-  margin-top: 25%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  padding: 48px 24px;
 }
 
-.errorIcon {
-  font-size: var(--font-size-4xl);
-  color: var(--red-500);
-  margin-bottom: var(--space-5);
-
-  &::before {
-    content: '⚠️';
-    margin-right: var(--space-3);
-  }
-}
-
-.errorIconLarge {
-  font-size: var(--font-size-3xl);
-}
-
-.tableHeader {
-  background-color: var(--gray-100);
-  color: var(--gray-900);
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-bold);
-}
-
-.requestsTableItemIndex {
-  vertical-align: middle;
-}
-
-.campaignNameButton {
-  color: var(--blue-500);
-  cursor: pointer;
-  padding: 0;
-  text-decoration: none;
-  font-weight: var(--font-weight-regular);
-}
-
-.campaignNameButton:hover {
-  color: var(--blue-500);
-  text-decoration: underline;
-}
-
-.editButton {
-  background-color: var(--blue-50);
-  color: var(--gray-700);
-  border: none;
-  border-radius: var(--radius-sm);
-  font-weight: var(--font-weight-semibold);
-  padding: var(--space-3) var(--space-5);
-}
-
-.editButton:is(:hover, :active) {
-  background-color: var(--blue-500);
-  color: var(--gray-700);
-  border-color: transparent;
-  box-shadow: none;
-}
-
-.organizationFundCampaignContainer {
-  margin: var(--space-3) 0;
-}
-
-.rowBackgroundOrganizationFundCampaign {
-  background-color: var(--surface);
-  max-height: var(--space-14);
-}
-
-.searchContainerRow {
-  display: flex;
-  align-items: center;
-  margin-bottom: var(--space-5);
-  gap: var(--space-5);
-}
-
-.createButton {
-  background-color: var(--gray-50);
-  color: var(--gray-700);
-  border: 1px solid var(--gray-700);
-  margin: var(--space-2) var(--space-4);
-  width: var(--space-16);
-  height: var(--space-10);
-}
-
-.createButton:hover {
-  background-color: var(--gray-400);
-  border-color: var(--gray-300);
-  color: var(--surface);
-  box-shadow: none;
-}
-
-.createButton:active {
-  color: var(--gray-400);
-  background-color: var(--gray-100);
-  border: 1px solid var(--gray-400);
-}
-
-.buttonNoWrap {
-  white-space: nowrap;
-}
-
-.buttonMarginReset {
-  margin: 0;
-}
-
-.listBox {
-  width: 100%;
-  flex: 1;
-}
-
-.listTable {
-  margin-top: var(--space-5);
+.errorText {
+  font-weight: 600;
+  color: var(--red-500, #ef4444);
+  text-align: center;
+  font-size: 14px;
 }

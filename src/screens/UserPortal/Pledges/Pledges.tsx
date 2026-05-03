@@ -229,7 +229,7 @@ const Pledges = (): JSX.Element => {
           data-testid="editPledgeBtn"
           onClick={() => handleOpenModal(row.original)}
         >
-          <i className="fa fa-edit me-1" />
+          <i className="fa fa-edit" />
           {tCommon('edit')}
         </Button>
       ),
@@ -243,10 +243,10 @@ const Pledges = (): JSX.Element => {
 
   if (pledgeError && !isNoPledgesFoundError) {
     return (
-      <div className={styles.container + ' bg-white rounded-4 my-3'}>
+      <div className={styles.container + ' rounded-4 my-3'}>
         <div className={styles.message} data-testid="errorMsg">
           <WarningAmberRounded className={styles.errorIcon} />
-          <h6 className="fw-bold text-danger text-center">
+          <h6 style={{ textAlign: "center" }}>
             {tErrors('errorLoading', { entity: 'Pledges' })}
             <br />
             {pledgeError.message}
@@ -259,7 +259,7 @@ const Pledges = (): JSX.Element => {
   return (
     <LoadingState isLoading={pledgeLoading} variant="spinner">
       <div className={styles.contentWrapper}>
-        <div className="mb-4">
+        <div style={{ marginBottom: 16 }}>
           <SearchFilterBar
             searchPlaceholder={tCommon('searchBy', {
               item: t('campaigns'),

@@ -1,36 +1,45 @@
+/* EventAttendance — attendance tracking tab */
+
 .membername {
-  font-size: 16px;
-  font-weight: bold;
-  color: var(--membername-color);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gray-900, #111827);
   text-decoration: none;
 }
 
+.membername:hover {
+  color: var(--green-600, #16a34a);
+}
+
 .eventsAttended {
-  color: var(--eventsAttended-membername-color);
+  color: var(--green-600, #16a34a);
+  cursor: pointer;
 }
 
 .createButton {
-  background-color: var(--createButton-bg) !important;
-  color: var(--createButton-color) !important;
-  border: 1px solid var(--createButton-border) !important;
-  margin: 5px 10px;
-  width: 10rem;
-  height: 3rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: var(--green-500, #3ecf8e);
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.createButton:hover {
+  background: var(--green-400, #4ade80);
 }
 
 .input {
   flex: 1;
-  position: relative;
-  padding-right: 30px;
-  padding-inline-end: 30px;
-  width: 425px;
+  max-width: 400px;
 }
 
 .dropdown {
-  background-color: var(--dropdown-bg) !important;
-  min-width: 150px;
-  border: 1px solid var(--dropdown-border);
-  color: var(--dropdown-font-color) !important;
-  position: relative;
-  display: inline-block;
+  /* handled by DropDownButton component */
 }

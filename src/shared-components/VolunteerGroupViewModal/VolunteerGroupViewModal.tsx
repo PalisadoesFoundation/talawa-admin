@@ -91,7 +91,7 @@ const VolunteerGroupViewModal: React.FC<
         </div>
         {/* Input field to enter the group description */}
         {description && (
-          <div className="mb-3">
+          <div style={{ marginBottom: 12 }}>
             <FormTextField
               name="description"
               label={tCommon('description')}
@@ -178,10 +178,10 @@ const VolunteerGroupViewModal: React.FC<
               <Table aria-label={t('groupTable')}>
                 <TableHead>
                   <TableRow>
-                    <TableCell className="fw-bold">
+                    <TableCell style={{ fontWeight: 600 }}>
                       {tCommon('serialNumber')}
                     </TableCell>
-                    <TableCell className="fw-bold">{tCommon('name')}</TableCell>
+                    <TableCell style={{ fontWeight: 600 }}>{tCommon('name')}</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>

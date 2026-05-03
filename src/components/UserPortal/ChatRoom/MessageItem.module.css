@@ -1,75 +1,105 @@
+/* MessageItem — chat bubbles matching prototype */
+
 .messageSentContainer {
   display: flex;
   justify-content: flex-end;
+  margin-bottom: 6px;
+  max-width: 68%;
+  align-self: flex-end;
 }
 
 .messageReceivedContainer {
   display: flex;
   align-items: flex-end;
+  margin-bottom: 6px;
+  max-width: 68%;
+  align-self: flex-start;
 }
 
 .messageReceived {
-  border: var(--space-1) solid var(--color-gray-300);
-  border-radius: var(--space-3) var(--space-3) var(--space-3) var(--space-0);
-  padding: var(--space-2) var(--space-3);
-  margin: var(--space-2) var(--space-3);
-  width: fit-content;
-  max-width: 75%;
-  min-width: var(--space-6);
-  padding-bottom: 0;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border-bottom-left-radius: 4px;
+  background: var(--surface, #fff);
+  color: var(--gray-800, #1f2937);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  border: none;
   display: flex;
-  justify-content: space-between;
+  gap: 6px;
+  min-width: 40px;
 }
 
 .messageSent {
-  border: var(--space-1) solid var(--color-gray-300);
-  border-radius: var(--space-3) var(--space-3) var(--space-0) var(--space-3);
-  padding: var(--space-2) var(--space-3);
-  margin: var(--space-2) var(--space-3);
-  width: fit-content;
-  max-width: 75%;
-  background-color: rgba(196, 255, 211, 0.3);
-  min-width: var(--space-6);
-  padding-bottom: 0;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border-bottom-right-radius: 4px;
+  background: var(--green-50, #ecfdf5);
+  color: var(--gray-800, #1f2937);
+  border: 1px solid var(--green-100, #d1fae5);
   display: flex;
-  justify-content: space-between;
-}
-
-.contactImage {
-  height: var(--space-9) !important;
-  border-radius: 100%;
+  gap: 6px;
+  min-width: 40px;
 }
 
 .messageContent {
-  margin-bottom: var(--space-1);
   display: flex;
-  align-items: flex-start;
   flex-direction: column;
+  align-items: flex-start;
   justify-content: center;
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.messageTime {
+  font-size: 11px;
+  color: var(--gray-400, #9ca3af);
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  margin: 0;
+  margin-left: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .senderInfo {
-  margin: var(--space-1) var(--space-1) var(--space-0) var(--space-1);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gray-500, #6b7280);
+  margin: 0 0 2px 0;
 }
 
+.contactImage {
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Reply-to block */
 .replyToMessage {
-  border-left: var(--space-2) solid pink;
-  border-radius: var(--space-3);
-  margin: var(--space-3) var(--space-0);
-  padding: var(--space-3);
-  background-color: var(--color-green-100);
+  border-left: 3px solid var(--green-400, #4ade80);
+  border-radius: 6px;
+  margin: 4px 0;
+  padding: 6px 10px;
+  background: rgba(62, 207, 142, 0.06);
+  font-size: 12px;
+  color: var(--gray-600, #4b5563);
 }
 
 .messageReceived .replyToMessage {
-  background-color: var(--color-gray-100);
+  background: var(--gray-50, #fafafa);
+  border-left-color: var(--gray-300, #d1d5db);
 }
 
 .replyToMessageSender {
   margin: 0;
+  font-weight: 600;
+  font-size: 11px;
 }
 
+/* Message actions (three-dot menu) */
 .messageAttributes {
   display: flex;
   flex-direction: column;
@@ -86,9 +116,8 @@
   min-width: 24px;
   height: 24px;
   border-radius: 50%;
-  transition:
-    opacity 0.15s ease,
-    visibility 0.15s ease;
+  cursor: pointer;
+  transition: opacity 0.15s, visibility 0.15s;
 }
 
 .messageReceived:hover .customToggle,
@@ -98,12 +127,12 @@
 }
 
 .customToggle:hover {
-  background-color: rgba(0, 0, 0, 0.05);
+  background: rgba(0, 0, 0, 0.05);
 }
 
 .customToggle svg {
-  color: var(--color-black);
-  font-size: var(--font-size-lg);
+  color: var(--gray-600, #4b5563);
+  font-size: 16px;
 }
 
 .customToggle::after,
@@ -119,42 +148,27 @@
 }
 
 .closeBtn svg {
-  color: var(--color-black);
-  font-size: var(--font-size-lg);
+  color: var(--gray-600, #4b5563);
+  font-size: 16px;
 }
 
 .customToggle:hover,
 .customToggle:focus,
 .customToggle:active {
-  background: none;
+  background: rgba(0, 0, 0, 0.05);
   border: none;
 }
 
-.messageSent:target {
-  scroll-margin-top: var(--space-10);
-  animation-name: test;
-  animation-duration: 1s;
-}
-
+/* Target highlight animation */
+.messageSent:target,
 .messageReceived:target {
-  scroll-margin-top: var(--space-10);
-  animation-name: test;
-  animation-duration: 1s;
+  scroll-margin-top: 40px;
+  animation: highlightMsg 1s ease;
 }
 
-@keyframes test {
-  from {
-    background-color: var(--color-white);
-  }
-
-  to {
-    background-color: var(--color-gray-600);
-  }
-}
-
-a {
-  color: currentColor;
-  width: 100%;
+@keyframes highlightMsg {
+  from { background: var(--green-50, #ecfdf5); }
+  to { background: transparent; }
 }
 
 .dropdownCursor {
@@ -162,14 +176,10 @@ a {
 }
 
 .deleteMenuItem {
-  color: red;
+  color: var(--red-500, #ef4444);
 }
 
-.messageTime {
-  font-size: var(--font-size-xs);
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
-  margin-bottom: var(--space-0);
-  margin-left: var(--space-3);
+a {
+  color: currentColor;
+  width: 100%;
 }

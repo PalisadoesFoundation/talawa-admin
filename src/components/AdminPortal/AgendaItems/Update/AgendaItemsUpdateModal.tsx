@@ -255,7 +255,7 @@ const AgendaItemsUpdateModal: React.FC<
             ariaLabel="Folder"
             dataTestIdPrefix="folder-dropdown"
             variant="light"
-            btnStyle="w-100 justify-content-between bg-light border text-dark"
+            btnStyle="border text-dark"
             parentContainerStyle="w-100"
           />
         </div>
@@ -281,7 +281,7 @@ const AgendaItemsUpdateModal: React.FC<
             ariaLabel="Category"
             dataTestIdPrefix="category-dropdown"
             variant="light"
-            btnStyle="w-100 justify-content-between bg-light border text-dark"
+            btnStyle="border text-dark"
             parentContainerStyle="w-100"
           />
         </div>

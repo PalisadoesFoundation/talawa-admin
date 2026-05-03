@@ -1,51 +1,45 @@
+/* EventListCard — event pill/chip inside calendar cells */
+
 .cardsEventListCard {
-  background-color: var(--green-50, #ecfdf5);
+  background: var(--green-50, #ecfdf5);
   border: none;
-  border-radius: 8px;
+  border-left: 3px solid var(--green-500, #3ecf8e);
+  border-radius: 4px;
   overflow: hidden;
-  height: 28px;
+  min-height: 24px;
   cursor: pointer;
-  padding: 0 8px;
-  transition: transform 0.15s;
+  padding: 2px 8px;
+  transition: background 0.15s;
   display: flex;
   align-items: center;
-  justify-content: center;
 }
 
 .cardsEventListCard:hover {
-  transform: scale(1.02);
+  background: var(--green-100, #d1fae5);
 }
 
 .cardsEventListCard > p {
   font-size: 11px;
-  margin-top: 0;
-  margin-bottom: 4px;
+  margin: 0;
 }
 
 .cardsEventListCard a {
   color: var(--green-700, #15803d);
   font-weight: 600;
   text-decoration: none;
+  font-size: 11px;
 }
 
 .cardsEventListCard a:hover {
   color: var(--green-600, #16a34a);
 }
 
-.cardsEventListCard:last-child:nth-last-child(odd) {
-  grid-column: auto / span 2;
-}
-
-.cardsEventListCard:first-child:nth-last-child(even) {
-  grid-column: auto / span 1;
-}
-
 .dispflexEventListCard {
   display: flex;
   cursor: pointer;
-  justify-content: center;
   width: 100%;
   margin: 0;
+  overflow: hidden;
 }
 
 .dispflexEventListCard > input {
@@ -56,20 +50,19 @@
 }
 
 .eventtitle {
-  margin-bottom: 0;
+  margin: 0;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
   font-size: 11px;
+  font-weight: 600;
   color: var(--green-700, #15803d);
-  text-align: center;
+  line-height: 1.4;
 }
 
 .eventTime {
   font-size: 10px;
   color: var(--gray-500, #6b7280);
-  opacity: 0.8;
-  margin-top: 2px;
-  text-align: center;
-  width: 100%;
+  margin-left: 4px;
+  white-space: nowrap;
 }

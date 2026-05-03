@@ -66,7 +66,7 @@ export const ReviewStats = ({ data }: InterfaceStatsModal): JSX.Element => {
           <h5>{t('filledByCount', { count: reviews.length })}</h5>
           {reviews.length ? (
             reviews.map((review) => (
-              <div className="card user-review m-1" key={review._id}>
+              <div style={{ background: "var(--surface, #fff)", borderRadius: 12, border: "1px solid var(--gray-200, #e5e7eb)", padding: 16, margin: 4 }} key={review._id}>
                 <div className="card-body">
                   <Rating name="read-only" value={review.rating} readOnly />
                   <p className="card-text">{review.review}</p>

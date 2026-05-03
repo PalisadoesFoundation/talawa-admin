@@ -227,7 +227,7 @@ function Volunteers(): JSX.Element {
           className={`${styles.icon} ${styles.iconLg}`}
           aria-hidden="true"
         />
-        <h6 className="fw-bold text-danger text-center">
+        <h6 style={{ textAlign: "center" }}>
           {tErrors('errorLoading', { entity: 'Volunteers' })}
         </h6>
       </div>
@@ -248,7 +248,7 @@ function Volunteers(): JSX.Element {
         const { id, name, avatarURL } = params.row.user;
         return (
           <div
-            className="d-flex fw-bold align-items-center justify-content-center ms-2"
+            style={{ alignItems: "center" }}
             data-testid="volunteerName"
           >
             {avatarURL ? (
@@ -307,7 +307,7 @@ function Volunteers(): JSX.Element {
       renderCell: (params: GridCellParams) => {
         return (
           <div
-            className="d-flex justify-content-center fw-bold"
+            style={{ justifyContent: "center" }}
             data-testid="categoryName"
           >
             {params.row.hoursVolunteered ?? '-'}
@@ -326,7 +326,7 @@ function Volunteers(): JSX.Element {
     //   renderCell: (params: GridCellParams) => {
     //     return (
     //       <div
-    //         className="d-flex justify-content-center fw-bold"
+    //         style={{ justifyContent: "center" }}
     //         data-testid="actionNos"
     //       >
     //         {params.row.assignments.length}
@@ -349,7 +349,7 @@ function Volunteers(): JSX.Element {
             <Button
               variant="success"
               size="sm"
-              className={`me-2 rounded ${styles.iconButton}`}
+              className={`rounded ${styles.iconButton}`}
               data-testid="viewItemBtn"
               onClick={() => handleOpenViewModal(params.row)}
               aria-label={t('eventVolunteers.viewDetails', {
@@ -437,7 +437,7 @@ function Volunteers(): JSX.Element {
               className={styles.actionsButton}
               data-testid="addVolunteerBtn"
             >
-              <i className="fa fa-plus me-2" />
+              <i className="fa fa-plus" />
               {t('eventVolunteers.add')}
             </Button>
           }

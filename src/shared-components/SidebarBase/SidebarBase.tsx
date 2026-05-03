@@ -107,7 +107,7 @@ const SidebarBase = ({
       {headerContent}
 
       {/* Main Content Area (Navigation Items) */}
-      <div className={`d-flex flex-column ${styles.sidebarcompheight}`}>
+      <div className={`${styles.sidebarcompheight}`}>
         <div className={styles.optionList}>{children}</div>
       </div>
 

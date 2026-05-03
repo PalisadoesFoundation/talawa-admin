@@ -125,7 +125,8 @@ export default function MessageInput({
 
       <FormTextField
         name="messageInput"
-        label={sendMessagePlaceholder}
+        label=""
+        hideLabel
         placeholder={sendMessagePlaceholder}
         value={newMessage}
         onChange={(value) => {

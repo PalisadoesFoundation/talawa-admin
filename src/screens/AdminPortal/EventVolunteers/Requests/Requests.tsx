@@ -139,12 +139,12 @@ function Requests(): JSX.Element {
   if (requestsError) {
     // Displays an error message if there is an issue loading the requests
     return (
-      <div className={`${styles.container} bg-white rounded-4 my-3`}>
+      <div className={`${styles.container} rounded-4 my-3`}>
         <div className={styles.message} data-testid="errorMsg">
           <WarningAmberRounded
             className={`${styles.errorIcon} ${styles.iconLg}`}
           />
-          <h6 className="fw-bold text-danger text-center">
+          <h6 style={{ textAlign: "center" }}>
             {tErrors('errorLoading', {
               entity: t('eventVolunteers.volunteershipRequests'),
             })}
@@ -181,7 +181,7 @@ function Requests(): JSX.Element {
         const { name, avatarURL } = params.row.volunteer.user;
         return (
           <div
-            className="d-flex fw-bold align-items-center justify-content-center ms-2"
+            style={{ alignItems: "center" }}
             data-testid="volunteerName"
           >
             {avatarURL ? (
@@ -219,13 +219,13 @@ function Requests(): JSX.Element {
       renderCell: (params: GridCellParams) => {
         const { group } = params.row;
         return (
-          <div className="d-flex flex-column align-items-center">
-            <span className="fw-bold">
+          <div style={{ flexDirection: "column" }}>
+            <span style={{ fontWeight: 600 }}>
               {group
                 ? t('eventVolunteers.groups')
                 : t('eventVolunteers.individuals')}
             </span>
-            {group && <small className="text-muted">{group.name}</small>}
+            {group && <small style={{ color: "var(--gray-500, #6b7280)" }}>{group.name}</small>}
           </div>
         );
       },
@@ -258,7 +258,7 @@ function Requests(): JSX.Element {
             <Button
               variant="success"
               size="sm"
-              className={`${styles.iconButton} me-2 rounded`}
+              className={`${styles.iconButton} rounded`}
               data-testid="acceptBtn"
               onClick={() => updateMembershipStatus(params.row.id, 'accepted')}
             >

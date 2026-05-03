@@ -107,8 +107,8 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
         {tCommon('address')}
       </label>
 
-      <div className="row mb-1">
-        <div className="col-sm-6 mb-1">
+      <div className="row">
+        <div className="col-sm-6">
           <select
             id="countrySelect"
             required
@@ -120,7 +120,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                 setFormState({ ...formState, countryCode: inputText });
               }
             }}
-            className={`form-input mb-3 ${styles.inputField}`}
+            className={`form-input ${styles.inputField}`}
           >
             <option value="" disabled>
               {tCommon('selectACountry')}
@@ -136,7 +136,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           </select>
         </div>
 
-        <div className="col-sm-6 mb-1">
+        <div className="col-sm-6">
           <FormTextField
             name="state"
             label={tCommon('state')}
@@ -154,8 +154,8 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
         </div>
       </div>
 
-      <div className="row mb-1">
-        <div className="col-sm-6 mb-1">
+      <div className="row">
+        <div className="col-sm-6">
           <FormTextField
             name="city"
             label={tCommon('city')}
@@ -172,7 +172,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           />
         </div>
 
-        <div className="col-sm-6 mb-1">
+        <div className="col-sm-6">
           <FormTextField
             name="postalCode"
             label={tCommon('postalCode')}
@@ -189,8 +189,8 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
         </div>
       </div>
 
-      <div className="row mb-1">
-        <div className="col-sm-6 mb-1">
+      <div className="row">
+        <div className="col-sm-6">
           <FormTextField
             name="addressLine1"
             label={tCommon('addressLine1')}
@@ -207,7 +207,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           />
         </div>
 
-        <div className="col-sm-6 mb-1">
+        <div className="col-sm-6">
           <FormTextField
             name="addressLine2"
             label={tCommon('addressLine2')}
@@ -231,7 +231,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
       <input
         accept="image/*"
         id="orgphoto"
-        className={`form-input mb-3 ${styles.inputField}`}
+        className={`form-input ${styles.inputField}`}
         name="photo"
         type="file"
         data-testid="organisationImage"

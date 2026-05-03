@@ -508,9 +508,9 @@ const ItemModal: FC<IItemModalProps> = ({
         !actionItem.isInstanceException && (
           <ApplyToSelector applyTo={applyTo} onChange={setApplyTo} />
         )}
-      <div className="d-flex gap-3 mb-3">
+      <div style={{ gap: 12 }}>
         <Autocomplete
-          className={`${styles.noOutline} w-100`}
+          className={`${styles.noOutline}`}
           data-testid="categorySelect"
           data-cy="categorySelect"
           options={actionItemCategories}
@@ -570,9 +570,9 @@ const ItemModal: FC<IItemModalProps> = ({
           />
 
           {assignmentType === 'volunteer' && (
-            <div className="mb-3 w-100">
+            <div style={{ width: "100%" }}>
               <Autocomplete
-                className={`${styles.noOutline} w-100`}
+                className={`${styles.noOutline}`}
                 data-testid="volunteerSelect"
                 data-cy="volunteerSelect"
                 options={volunteers}
@@ -631,9 +631,9 @@ const ItemModal: FC<IItemModalProps> = ({
           )}
 
           {assignmentType === 'volunteerGroup' && (
-            <div className="mb-3 w-100">
+            <div style={{ width: "100%" }}>
               <Autocomplete
-                className={`${styles.noOutline} w-100`}
+                className={`${styles.noOutline}`}
                 data-testid="volunteerGroupSelect"
                 data-cy="volunteerGroupSelect"
                 options={volunteerGroups}
@@ -689,7 +689,7 @@ const ItemModal: FC<IItemModalProps> = ({
             </div>
           )}
 
-          <div className="d-flex gap-3 mx-auto mb-3">
+          <div className="gamx-auto">
             <DatePicker
               format="DD/MM/YYYY"
               label={t('assignmentDate')}

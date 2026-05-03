@@ -233,12 +233,12 @@ const UpcomingEvents = (): JSX.Element => {
 
   if (eventsError) {
     return (
-      <div className={`${styles.container} bg-white rounded-4 my-3`}>
+      <div className={`${styles.container} rounded-4 my-3`}>
         <div className={styles.message} data-testid="errorMsg">
           <span className={styles.errorIcon} aria-hidden="true">
             <WarningAmberRounded />
           </span>
-          <h6 className="fw-bold text-danger text-center">
+          <h6 style={{ textAlign: "center" }}>
             {tErrors('errorLoading', { entity: 'Events' })}
           </h6>
         </div>
@@ -284,13 +284,13 @@ const UpcomingEvents = (): JSX.Element => {
           const status = getVolunteerStatus(event._id);
           const Icon = status.icon;
           return (
-            <Accordion key={event._id} className="mt-3 rounded">
+            <Accordion key={event._id} className="rounded">
               <AccordionSummary expandIcon={<ExpandMore />}>
                 <div
                   className={styles.titleContainerVolunteer}
                   data-testid={`detailContainer${index + 1}`}
                 >
-                  <div className="d-flex align-items-center gap-2">
+                  <div style={{ gap: 8 }}>
                     <h3 data-testid="eventTitle">{event.title}</h3>
                     {status.status !== 'none' && (
                       <StatusBadge
@@ -302,37 +302,37 @@ const UpcomingEvents = (): JSX.Element => {
                   </div>
                 </div>
               </AccordionSummary>
-              <AccordionDetails className="d-flex gap-3 flex-column">
-                <div className="d-flex justify-content-between align-items-center">
-                  <div className="d-flex gap-3 flex-column">
+              <AccordionDetails className="gaflex-column">
+                <div style={{ alignItems: "center" }}>
+                  <div className="gaflex-column">
                     {event.description && (
-                      <div className="d-flex gap-3">
+                      <div style={{ gap: 12 }}>
                         <span>{t('description')}: </span>
                         <span>{event.description}</span>
                       </div>
                     )}
-                    <div className="d-flex gap-3">
+                    <div style={{ gap: 12 }}>
                       <span>
-                        <IoLocationOutline className="me-1 mb-1" />
+                        <IoLocationOutline style={{ marginRight: 4 }} />
                         {tCommon('location')}:{' '}
                         {event.location || t('notSpecified')}
                       </span>
                     </div>
                     {event.recurring ? (
-                      <div className="d-flex gap-3">
+                      <div style={{ gap: 12 }}>
                         <span>
                           {t('recurrence')}: {event.recurrenceRule?.frequency}
                         </span>
                       </div>
                     ) : (
                       <>
-                        <div className="d-flex gap-3">
+                        <div style={{ gap: 12 }}>
                           <span>
                             {t('startDate')}:{' '}
                             {new Date(event.startDate).toLocaleDateString()}
                           </span>
                         </div>
-                        <div className="d-flex gap-3">
+                        <div style={{ gap: 12 }}>
                           <span>
                             {t('endDate')}:{' '}
                             {new Date(event.endDate).toLocaleDateString()}
@@ -342,7 +342,7 @@ const UpcomingEvents = (): JSX.Element => {
                     )}
                     {event.volunteerGroups &&
                       event.volunteerGroups.length > 0 && (
-                        <div className="d-flex gap-3">
+                        <div style={{ gap: 12 }}>
                           <span>
                             {t('volunteerGroups')}:{' '}
                             {t('groupsAvailable', {
@@ -368,13 +368,13 @@ const UpcomingEvents = (): JSX.Element => {
                       )
                     }
                   >
-                    <Icon className="me-1" />
+                    <Icon style={{ marginRight: 4 }} />
                     {status.buttonText}
                   </Button>
                 </div>
                 {event.volunteerGroups?.length > 0 && (
-                  <div className="mt-3">
-                    <h6 className="fw-bold">{t('volunteerGroups')}</h6>
+                  <div style={{ marginTop: 12 }}>
+                    <h6 style={{ fontWeight: 600 }}>{t('volunteerGroups')}</h6>
                     {event.volunteerGroups.map((group) => {
                       const groupStatus = getVolunteerStatus(
                         event._id,
@@ -384,11 +384,11 @@ const UpcomingEvents = (): JSX.Element => {
                       return (
                         <div
                           key={group._id}
-                          className="d-flex justify-content-between align-items-center p-2 border rounded mb-2"
+                          className="border rounded"
                         >
-                          <div className="d-flex flex-column gap-1">
-                            <div className="d-flex align-items-center gap-2">
-                              <span className="fw-semibold">{group.name}</span>
+                          <div style={{ gap: 4 }}>
+                            <div style={{ gap: 8 }}>
+                              <span style={{ fontWeight: 600 }}>{group.name}</span>
                               {groupStatus.status !== 'none' && (
                                 <StatusBadge
                                   {...getStatusBadgeProps(groupStatus.status)}
@@ -398,11 +398,11 @@ const UpcomingEvents = (): JSX.Element => {
                               )}
                             </div>
                             {group.description && (
-                              <span className="text-muted">
+                              <span style={{ color: "var(--gray-500, #6b7280)" }}>
                                 {group.description}
                               </span>
                             )}
-                            <span className="text-muted">
+                            <span style={{ color: "var(--gray-500, #6b7280)" }}>
                               {t('volunteersRequired')}:{' '}
                               {group.volunteersRequired}, {t('signedUp')}:{' '}
                               {group.volunteers.length}
@@ -424,7 +424,7 @@ const UpcomingEvents = (): JSX.Element => {
                               )
                             }
                           >
-                            <GroupIcon className="me-1" />
+                            <GroupIcon style={{ marginRight: 4 }} />
                             {groupStatus.buttonText}
                           </Button>
                         </div>

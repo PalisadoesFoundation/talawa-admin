@@ -111,7 +111,7 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
         icon={
           languages.find((lang) => lang.code === currentLanguageCode) && (
             <span
-              className={`fi fi-${languages.find((lang) => lang.code === currentLanguageCode)?.country_code} me-2`}
+              className={`fi fi-${languages.find((lang) => lang.code === currentLanguageCode)?.country_code}`}
             ></span>
           )
         }

@@ -74,8 +74,8 @@ function VolunteerContainer(): JSX.Element {
               : []),
         ]}
       />
-      <div className="mt-2 mb-4 d-flex justify-content-between">
-        <div className="ms-auto">
+      <div style={{ justifyContent: "space-between" }}>
+        <div style={{ marginLeft: "auto" }}>
           <div
             className={`btn-group ${styles.toggleGroup}`}
             role="group"
@@ -94,7 +94,7 @@ function VolunteerContainer(): JSX.Element {
               htmlFor="individualRadio"
               data-testid="individualRadio"
             >
-              <HiUser className="me-1" />
+              <HiUser style={{ marginRight: 4 }} />
               {t('individuals')}
             </label>
 
@@ -111,7 +111,7 @@ function VolunteerContainer(): JSX.Element {
               htmlFor="groupsRadio"
               data-testid="groupsRadio"
             >
-              <HiUserGroup className="me-1" />
+              <HiUserGroup style={{ marginRight: 4 }} />
               {t('groups')}
             </label>
 
@@ -128,7 +128,7 @@ function VolunteerContainer(): JSX.Element {
               htmlFor="requestsRadio"
               data-testid="requestsRadio"
             >
-              <FaRegFile className="me-1 mb-1" />
+              <FaRegFile style={{ marginRight: 4 }} />
               {t('requests')}
             </label>
           </div>

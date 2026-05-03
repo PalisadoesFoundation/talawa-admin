@@ -285,10 +285,10 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   const formContent = (
     <>
       {userData?.user?.role !== 'regular' && (
-        <div className="d-flex mb-3 w-100">
+        <div style={{ width: "100%" }}>
           <Autocomplete
             id="pledgerSelect"
-            className={`${styles.noOutline} w-100`}
+            className={`${styles.noOutline}`}
             dataTestId="pledgerSelect"
             options={[...pledgers, ...pledgeUsers].filter(
               (v, i, a) => a.findIndex((t) => t.id === v.id) === i,

@@ -45,13 +45,13 @@ const AssignmentTypeSelector: React.FC<
   };
 
   return (
-    <Box className="mb-3">
-      <Typography variant="subtitle2" className="mb-2" id={labelId}>
+    <Box style={{ marginBottom: 12 }}>
+      <Typography variant="subtitle2" style={{ marginBottom: 8 }} id={labelId}>
         {t('assignTo')}
       </Typography>
       <Box
         component="fieldset"
-        className="d-flex gap-2 border-0 p-0 m-0"
+        className="gaborder-0"
         aria-labelledby={labelId}
       >
         <Chip

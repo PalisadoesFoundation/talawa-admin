@@ -113,10 +113,10 @@ export const TableRow = ({
     >
       {data.isCheckedIn ? (
         <div>
-          <Button variant="contained" disabled className="m-2 p-2">
+          <Button variant="contained" disabled style={{ margin: 8, padding: 8 }}>
             {t('checkedIn')}
           </Button>
-          <Button variant="contained" className="m-2 p-2" onClick={notify}>
+          <Button variant="contained" style={{ margin: 8, padding: 8 }} onClick={notify}>
             {t('downloadTag')}
           </Button>
         </div>

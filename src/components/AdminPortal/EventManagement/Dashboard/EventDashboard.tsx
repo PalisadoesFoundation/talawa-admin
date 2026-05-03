@@ -157,7 +157,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
             className={`${styles.ctacards}`}
             data-testid="registrations-card"
           >
-            <img src="/images/svg/attendees.svg" alt="userImage" className="" />
+            <img src="/images/svg/attendees.svg" alt="userImage" />
             <div>
               <h1>
                 <b data-testid="registrations-count">N/A</b>
@@ -166,7 +166,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
             </div>
           </div>
           <div className={`${styles.ctacards}`} data-testid="attendees-card">
-            <img src="/images/svg/attendees.svg" alt="userImage" className="" />
+            <img src="/images/svg/attendees.svg" alt="userImage" />
             <div>
               <h1>
                 <b data-testid="attendees-count">N/A</b>
@@ -175,7 +175,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
             </div>
           </div>
           <div className={`${styles.ctacards}`} data-testid="feedback-card">
-            <img src="/images/svg/feedback.svg" alt="userImage" className="" />
+            <img src="/images/svg/feedback.svg" alt="userImage" />
             <div>
               <h1>
                 <b data-testid="feedback-rating">N/A</b>

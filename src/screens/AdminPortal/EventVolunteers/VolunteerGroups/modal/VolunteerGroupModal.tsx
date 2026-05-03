@@ -230,7 +230,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
   const formContent = (
     <>
       {isRecurring && mode === 'create' ? (
-        <fieldset className={`mb-3 ${styles.radioFieldset}`}>
+        <fieldset className={`${styles.radioFieldset}`}>
           <legend className={styles.radioLegend}>{t('applyTo')}</legend>
           <div className={styles.radioGroup}>
             <div className={styles.radioOption}>
@@ -284,7 +284,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
         data-testid="groupDescriptionInput"
       />
 
-      <div className="d-flex mb-3 w-100">
+      <div style={{ width: "100%" }}>
         <FormFieldGroup
           name="leaderSelect"
           label={t('leader')}
@@ -293,7 +293,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
         >
           <Autocomplete
             id="leaderSelect"
-            className={`${styles.noOutline} w-100`}
+            className={`${styles.noOutline}`}
             limitTags={2}
             dataTestId="leaderSelect"
             options={members}
@@ -311,8 +311,8 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
               });
             }}
             renderInput={(params) => (
-              <div ref={params.InputProps.ref} className="w-100">
-                <div className="d-flex align-items-center gap-2">
+              <div ref={params.InputProps.ref} style={{ width: "100%" }}>
+                <div style={{ gap: 8 }}>
                   {params.InputProps.startAdornment}
                   <input
                     {...params.inputProps}
@@ -329,11 +329,11 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
         </FormFieldGroup>
       </div>
 
-      <div className="d-flex mb-3 w-100">
+      <div style={{ width: "100%" }}>
         <Autocomplete
           id="volunteerSelect"
           multiple
-          className={`${styles.noOutline} w-100`}
+          className={`${styles.noOutline}`}
           limitTags={2}
           dataTestId="volunteerSelect"
           options={availableVolunteers}
@@ -355,7 +355,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
             <FormFieldGroup name="volunteers" label={t('volunteers')} required>
               <div
                 ref={params.InputProps.ref}
-                className="d-flex align-items-center w-100"
+                style={{ width: "100%" }}
               >
                 {params.InputProps.startAdornment}
                 <input

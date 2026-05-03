@@ -339,8 +339,8 @@ const Users = (): React.ReactElement => {
                 className={styles.listBox}
                 data-testid="users-list"
                 endMessage={
-                  <div className="w-100 text-center my-4">
-                    <h5 className="m-0">{tCommon('endOfResults')}</h5>
+                  <div style={{ width: "100%" }}>
+                    <h5 style={{ margin: 0 }}>{tCommon('endOfResults')}</h5>
                   </div>
                 }
               >

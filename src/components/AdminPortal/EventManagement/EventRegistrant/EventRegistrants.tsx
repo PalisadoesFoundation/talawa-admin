@@ -242,7 +242,7 @@ function EventRegistrants(): JSX.Element {
       render: (_value: unknown, row) => {
         const name = row.name || tCommon('unknownMember');
         return (
-          <div className="d-flex align-items-center">
+          <div style={{ alignItems: "center" }}>
             <ProfileAvatarDisplay
               imageUrl={row.user?.avatarURL ?? undefined}
               fallbackName={row.name || 'N/A'}
@@ -253,7 +253,7 @@ function EventRegistrants(): JSX.Element {
               enableEnlarge={true}
               dataTestId="profile-avatar-display"
             />
-            <span className="ms-2">{name}</span>
+            <span style={{ marginLeft: 8 }}>{name}</span>
           </div>
         );
       },
@@ -309,7 +309,7 @@ function EventRegistrants(): JSX.Element {
       resetButtonText={tErrors('resetButton')}
     >
       <div>
-        <div className="d-flex justify-content-between align-items-center">
+        <div style={{ alignItems: "center" }}>
           {eventId ? (
             <CheckInWrapper
               eventId={eventId.toString()}

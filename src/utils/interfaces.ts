@@ -1315,6 +1315,17 @@ export interface InterfaceCampaignInfoPG {
 /**
  * Defines the structure for fund information.
  */
+export interface InterfaceFundCampaignEdge {
+  node: {
+    id: string;
+    name: string;
+    goalAmount: number;
+    amountRaised?: number;
+    endAt: string;
+    currencyCode: string;
+  };
+}
+
 export interface InterfaceFundInfo {
   id: string;
   name: string;
@@ -1328,6 +1339,9 @@ export interface InterfaceFundInfo {
   organization: { name: string };
   updater: {
     name: string;
+  };
+  campaigns?: {
+    edges: InterfaceFundCampaignEdge[];
   };
   edges: {
     node: {

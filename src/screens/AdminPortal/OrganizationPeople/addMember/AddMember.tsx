@@ -367,7 +367,7 @@ function AddMember({
               data-testid="addBtn"
               className={styles.addButton}
             >
-              <i className={'fa fa-plus me-2'} />
+              <i className={'fa fa-plus'} />
               {translateAddMember('addMember.add')}
             </Button>
           ),
@@ -453,7 +453,7 @@ function AddMember({
         }
         data-testid="addNewUserModal"
       >
-        <div className="my-3">
+        <div style={{ margin: "12px 0" }}>
           <div>
             <div>
               <h6>{translateAddMember('addMember.enterName')}</h6>

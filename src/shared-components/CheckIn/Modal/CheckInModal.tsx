@@ -140,7 +140,7 @@ export const CheckInModal = ({
         headerClassName={styles.checkInModalHeader}
         title={t('eventCheckInManagement')}
       >
-        <div className="p-2">
+        <div style={{ padding: 8 }}>
           <SearchBar
             placeholder={t('searchAttendees')}
             value={userFilterQuery}

@@ -27,7 +27,7 @@ const PageNotFound = (): JSX.Element => {
 
   return (
     <section className={styles.pageNotFound}>
-      <div className="container text-center">
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 16px" }}>
         <div className="brand">
           <img src={Logo} alt={t('logoAlt')} className="img-fluid" />
         </div>

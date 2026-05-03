@@ -42,8 +42,8 @@ export default function OrganizationTransactions(): JSX.Element {
           },
         ]}
       />
-      <div className={`d-flex flex-row mt-4`}>
-        <div className={`${styles.mainContainer50} me-4`}>
+      <div className={`mt-4`}>
+        <div className={`${styles.mainContainer50}`}>
           <PluginInjector injectorType="G2" />
         </div>
       </div>

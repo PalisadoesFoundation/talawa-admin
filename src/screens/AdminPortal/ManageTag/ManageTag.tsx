@@ -280,10 +280,10 @@ function ManageTag(): JSX.Element {
 
   if (userTagAssignedMembersError) {
     return (
-      <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
+      <div className={`${styles.errorContainer} rounded-4 my-3`}>
         <div className={styles.errorMessage}>
           <WarningAmberRounded className={styles.errorIcon} />
-          <h6 className="fw-bold text-danger text-center">
+          <h6 style={{ textAlign: "center" }}>
             {t('errorLoadingAssignedMembers')}
           </h6>
         </div>
@@ -365,7 +365,7 @@ function ManageTag(): JSX.Element {
               data-testid="viewProfileBtn"
             >
               <div
-                className={`btn btn-sm btn-primary me-3 ${styles.editButton}`}
+                className={`btn btn-sm btn-primary ${styles.editButton}`}
               >
                 {t('viewProfile')}
               </div>

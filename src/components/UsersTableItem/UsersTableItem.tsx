@@ -247,7 +247,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         }
       >
         {memberOrgs.length !== 0 && (
-          <div className="mb-4">
+          <div style={{ marginBottom: 16 }}>
             <SearchBar
               placeholder={t('searchByOrgName')}
               value={searchByNameJoinedOrgs}
@@ -452,7 +452,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         }
       >
         {blockedOrgs.length !== 0 && (
-          <div className="search-bar-container">
+          <div style={{ display: "flex", gap: 8 }}>
             <SearchBar
               placeholder={t('searchByOrgName')}
               value={searchByNameBlockedOrgs}

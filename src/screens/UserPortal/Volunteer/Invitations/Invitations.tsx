@@ -145,10 +145,10 @@ const Invitations = (): JSX.Element => {
   if (invitationError) {
     // Displays an error message if there is an issue loading the invitations
     return (
-      <div className={`${styles.container} bg-white rounded-4 my-3`}>
+      <div className={`${styles.container} rounded-4 my-3`}>
         <div className={styles.message} data-testid="errorMsg">
           <WarningAmberRounded className={styles.errorIcon} />
-          <h6 className="fw-bold text-danger text-center">
+          <h6 style={{ textAlign: "center" }}>
             {tErrors('errorLoading', { entity: 'Volunteership Invitations' })}
           </h6>
         </div>
@@ -209,11 +209,11 @@ const Invitations = (): JSX.Element => {
       ) : (
         invitations.map((invite: InterfaceVolunteerMembership) => (
           <div
-            className="bg-white p-4  rounded shadow-sm d-flex justify-content-between mb-3"
+            className="p-4  rounded shadow-sm"
             key={invite.id}
           >
-            <div className="d-flex flex-column gap-2">
-              <div className="fw-bold" data-testid="inviteSubject">
+            <div style={{ gap: 8 }}>
+              <div style={{ fontWeight: 600 }} data-testid="inviteSubject">
                 {invite.group && invite.group.id ? (
                   // Group invitation
                   <>
@@ -234,12 +234,12 @@ const Invitations = (): JSX.Element => {
                   </>
                 )}
               </div>
-              <div className="d-flex gap-3">
+              <div style={{ gap: 12 }}>
                 {invite.group && invite.group.id && (
                   <>
                     <div>
-                      <FaUserGroup className="mb-1 me-1 text-secondary" />
-                      <span className="text-muted">{t('group')}:</span>{' '}
+                      <FaUserGroup className="text-secondary" />
+                      <span style={{ color: "var(--gray-500, #6b7280)" }}>{t('group')}:</span>{' '}
                       <span>{invite.group.name} </span>
                     </div>
                     |
@@ -247,21 +247,21 @@ const Invitations = (): JSX.Element => {
                 )}
                 <div>
                   <TbCalendarEvent
-                    className="mb-1 me-1 text-secondary"
+                    className="text-secondary"
                     size={20}
                   />
-                  <span className="text-muted">{t('event')}:</span>{' '}
+                  <span style={{ color: "var(--gray-500, #6b7280)" }}>{t('event')}:</span>{' '}
                   <span>{invite.event.name}</span>
                 </div>
                 |
                 <div>
-                  <FaRegClock className="mb-1 me-1 text-secondary" />
-                  <span className="text-muted">{t('received')}:</span>{' '}
+                  <FaRegClock className="text-secondary" />
+                  <span style={{ color: "var(--gray-500, #6b7280)" }}>{t('received')}:</span>{' '}
                   {new Date(invite.createdAt).toLocaleString()}
                 </div>
               </div>
             </div>
-            <div className="d-flex gap-2 align-items-center">
+            <div className="gaalign-items-center">
               <StatusBadge
                 {...mapVolunteerStatusToVariant(invite.status)}
                 size="sm"

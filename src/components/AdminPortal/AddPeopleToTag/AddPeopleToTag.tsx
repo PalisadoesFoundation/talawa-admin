@@ -218,10 +218,10 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
 
   if (userTagsMembersToAssignToError) {
     return (
-      <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
+      <div className={`${styles.errorContainer} rounded-4 my-3`}>
         <div className={styles.errorMessage}>
           <WarningAmberRounded className={`${styles.errorIcon} fs-1`} />
-          <h6 className="fw-bold text-danger text-center">
+          <h6 style={{ textAlign: "center" }}>
             {t('errorOccurredWhileLoadingMembers')}
             <br />
             {userTagsMembersToAssignToError.message}
@@ -331,22 +331,22 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
       >
         <form onSubmit={addPeopleToCurrentTag} id="addPeopleToTagForm">
           <div
-            className={`d-flex flex-wrap align-items-center border border-2 border-dark-subtle bg-light-subtle rounded-3 p-2 ${styles.scrollContainer}`}
+            className={`border border-2 border-dark-subtle-subtle rounded-3 ${styles.scrollContainer}`}
           >
             {assignToMembers.length === 0 ? (
-              <div className="text-body-tertiary mx-auto">
+              <div style={{ color: "var(--gray-400, #9ca3af)", margin: "0 auto", textAlign: "center" }}>
                 {t('noOneSelected')}
               </div>
             ) : (
               assignToMembers.map((member) => (
                 <div
                   key={member._id}
-                  className={`badge bg-dark-subtle text-secondary-emphasis lh-lg my-2 ms-2 d-flex align-items-center ${styles.memberBadge}`}
+                  className={`badge bg-dark-subtle text-secondary-emphasis lh-lg ${styles.memberBadge}`}
                 >
                   {member.firstName} {member.lastName}
                   <Button
                     type="button"
-                    className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary`}
+                    className={`${styles.removeFilterIcon} fa fa-times text-body-tertiary`}
                     onClick={() => removeMember(member._id)}
                     data-testid="clearSelectedMember"
                     aria-label={t('removeMember')}
@@ -356,7 +356,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
             )}
           </div>
 
-          <div className="my-3 d-flex flex-wrap gap-3">
+          <div style={{ margin: "12px 0" }}>
             <div className="flex-grow-1">
               <SearchBar
                 placeholder={tCommon('firstName')}

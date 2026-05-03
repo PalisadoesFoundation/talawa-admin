@@ -319,7 +319,7 @@ const AgendaItemsCreateModal: React.FC<
             placeholder={t('folderName')}
             ariaLabel="Folder"
             dataTestIdPrefix="create-folder-dropdown"
-            btnStyle="w-100 justify-content-between bg-light border text-dark"
+            btnStyle="border text-dark"
             parentContainerStyle="w-100"
             variant="light"
           />
@@ -345,7 +345,7 @@ const AgendaItemsCreateModal: React.FC<
             placeholder={t('categoryName')}
             ariaLabel="Category"
             dataTestIdPrefix="create-category-dropdown"
-            btnStyle="w-100 justify-content-between bg-light border text-dark"
+            btnStyle="border text-dark"
             parentContainerStyle="w-100"
             variant="light"
           />

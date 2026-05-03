@@ -27,11 +27,11 @@ export const RecurrenceWeeklySection: React.FC<
   }
 
   return (
-    <div className="mb-4">
-      <span className="fw-semibold text-secondary">{t('repeatsOn')}</span>
+    <div style={{ marginBottom: 16 }}>
+      <span className="text-secondary">{t('repeatsOn')}</span>
       <br />
       <div
-        className="mx-2 mt-3 d-flex gap-1"
+        style={{ gap: 4 }}
         role="group"
         aria-label={t('repeatsOn')}
       >

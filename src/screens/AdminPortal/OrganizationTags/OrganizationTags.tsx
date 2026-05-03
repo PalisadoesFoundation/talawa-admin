@@ -143,10 +143,10 @@ function OrganizationTags(): JSX.Element {
 
   const showErrorMessage = (message: string): JSX.Element => {
     return (
-      <div className={styles.errorContainer + ' bg-white rounded-4 my-3'}>
+      <div className={styles.errorContainer + ' rounded-4 my-3'}>
         <div className={styles.errorMessage}>
           <WarningAmberRounded fontSize="large" className={styles.errorIcon} />
-          <h6 className="fw-bold text-danger text-center">
+          <h6 style={{ textAlign: "center" }}>
             {t('errorLoadingTagsData')}
             <br />
             {message}

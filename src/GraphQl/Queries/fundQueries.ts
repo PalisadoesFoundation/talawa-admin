@@ -30,6 +30,18 @@ export const FUND_LIST = gql`
             }
             createdAt
             isArchived
+            campaigns(first: 20) {
+              edges {
+                node {
+                  id
+                  name
+                  goalAmount
+                  amountRaised
+                  endAt
+                  currencyCode
+                }
+              }
+            }
           }
         }
       }

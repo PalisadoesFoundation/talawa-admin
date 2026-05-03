@@ -29,8 +29,8 @@ export default function Transactions(): JSX.Element {
 
   return (
     <>
-      <div className={`d-flex flex-row mt-4`}>
-        <div className={`${styles.mainContainer50} me-4`}>
+      <div className={`mt-4`}>
+        <div className={`${styles.mainContainer50}`}>
           <PluginInjector injectorType="G1" />
         </div>
       </div>

@@ -177,7 +177,7 @@ const Campaigns = (): JSX.Element => {
             className={`${styles.errorIcon} ${styles.errorIconLarge}`}
             aria-hidden="true"
           />
-          <h6 className="fw-bold text-danger text-center">
+          <h6 style={{ textAlign: "center" }}>
             {tErrors('errorLoading', { entity: 'Campaigns' })}
             <br />
             {campaignError.message}
@@ -259,7 +259,7 @@ const Campaigns = (): JSX.Element => {
       header: t('fundGoal'),
       accessor: 'fundingGoal',
       render: (value, row) => (
-        <div className="fw-bold" data-testid="goalCell">
+        <div style={{ fontWeight: 600 }} data-testid="goalCell">
           {currencySymbols[row.currency]}
           {value as number}
         </div>
@@ -274,7 +274,7 @@ const Campaigns = (): JSX.Element => {
       header: t('amountRaised'),
       accessor: 'amountRaised',
       render: (value, row) => (
-        <div className="fw-bold" data-testid="raisedCell">
+        <div style={{ fontWeight: 600 }} data-testid="raisedCell">
           {currencySymbols[row.currency]}
           {(value as number) ?? 0}
         </div>
@@ -370,7 +370,7 @@ const Campaigns = (): JSX.Element => {
               !canCreatePledge && isEnded ? t('campaignEnded') : t('addPledge')
             }
           >
-            <i className="fa fa-plus me-1" aria-hidden="true" />
+            <i className="fa fa-plus" aria-hidden="true" />
             {t('addPledge')}
           </Button>
         );

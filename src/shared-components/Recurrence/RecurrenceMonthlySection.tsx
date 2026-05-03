@@ -64,10 +64,10 @@ export const RecurrenceMonthlySection: React.FC<
   }
 
   return (
-    <div className="mb-4">
-      <span className="fw-semibold text-secondary">{t('monthlyOn')}</span>
+    <div style={{ marginBottom: 16 }}>
+      <span className="text-secondary">{t('monthlyOn')}</span>
       <br />
-      <div className="mx-2 mt-3">
+      <div style={{ margin: "0 8px" }}>
         <DropDownButton
           id="monthly-dropdown"
           options={options}

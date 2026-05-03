@@ -1,614 +1,179 @@
+/* FundModal — create/edit fund */
+
 .fundModal {
-  width: 100%;
-  max-width: none;
-  --fund-modal-width: var(--space-25);
-  --fund-modal-content-min-height: calc(
-    var(--space-24) + var(--space-5) + var(--space-4) + 1px
-  );
-  --fund-modal-content-radius: var(--radius-xl);
-  --fund-modal-header-padding-top: var(--space-6);
-  --fund-modal-header-padding-right: var(--space-5);
-  --fund-modal-header-padding-bottom: var(--space-3);
-  --fund-modal-header-padding-left: calc(var(--space-6) + var(--space-1));
-  --fund-modal-body-padding-top: calc(var(--space-2) + var(--space-1));
-  --fund-modal-body-padding-right: var(--space-5);
-  --fund-modal-body-padding-bottom: calc(var(--space-4) + var(--space-1));
-  --fund-modal-body-padding-left: var(--space-5);
-  --fund-modal-label-line-height: var(--line-height-tight);
-  --fund-modal-input-height: calc(var(--space-10) + var(--space-2));
-  --fund-modal-input-padding-x: calc(var(--space-5) + var(--space-1));
-  --fund-modal-action-width: calc(
-    var(--space-24) + var(--space-2) + var(--space-0-5)
-  );
-  --fund-modal-action-height: calc(
-    var(--space-10) + var(--space-1) + var(--space-0-5)
-  );
-  --fund-modal-edit-action-height: calc(
-    var(--space-8) + var(--space-3) + var(--space-1)
-  );
-  --fund-modal-archive-height: var(--space-10-75);
-}
-
-.createModeDialog {
-  width: min(var(--fund-modal-width), calc(100vw - var(--space-8)));
-  max-width: var(--fund-modal-width);
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.createModeContent {
-  width: 100%;
-  min-height: var(--fund-modal-content-min-height);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-card);
-  border-radius: var(--fund-modal-content-radius);
-}
-
-.createModeHeader {
-  align-items: center;
-  min-height: auto;
-  padding: var(--fund-modal-header-padding-top)
-    var(--fund-modal-header-padding-right)
-    var(--fund-modal-header-padding-bottom)
-    var(--fund-modal-header-padding-left);
-  border-bottom: none;
-}
-
-.createModeTitle {
-  margin: 0;
-  color: var(--gray-900);
-  font-family: 'Lato', sans-serif;
-  font-size: var(--font-size-2xl);
-  font-style: normal;
-  font-weight: var(--font-weight-bold);
-  line-height: var(--line-height-tight);
-  display: flex;
-  align-items: center;
-}
-
-.createModeDangerBtn {
-  right: var(--space-5);
-  top: var(--space-4);
-  color: var(--red-500);
-}
-
-.createModeDangerBtn:hover {
-  color: var(--red-500);
-}
-
-.createModeBody {
-  padding: var(--fund-modal-body-padding-top)
-    var(--fund-modal-body-padding-right) var(--fund-modal-body-padding-bottom)
-    var(--fund-modal-body-padding-left);
-}
-
-.createModeForm {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.titlemodal {
-  color: var(--gray-500);
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-3xl);
-  width: 65%;
-  margin-bottom: 0;
-}
-
-.noOutline input {
-  outline: none;
-}
-
-.noOutline input:disabled {
-  -webkit-text-fill-color: var(--gray-600);
-}
-
-.noOutline textarea:disabled {
-  color: var(--gray-600);
-  opacity: 1;
-}
-
-.noOutline:is(:hover, :focus, :active, :focus-visible, .show) {
-  outline: none;
-}
-
-.switch input {
-  background-image: none;
-}
-
-.switch input:checked {
-  background-color: var(--blue-500);
-  border-color: var(--blue-500);
-  box-shadow: 0 0 2px 1px rgba(59, 130, 246, 0.3);
-}
-
-.switch input:focus {
-  border-color: var(--gray-200);
-}
-
-.switch {
-  padding-left: var(--space-13);
-  white-space: nowrap;
-}
-
-.switch .switchInput {
-  margin-left: calc(-1 * var(--space-11));
-  margin-top: var(--space-4);
-  flex-shrink: 0;
+  max-width: 460px;
 }
 
 .fieldRow {
-  width: 100%;
-  margin: 0;
-  margin-bottom: calc(var(--space-4) + var(--space-1));
-}
-
-.fieldRowInner {
-  margin-bottom: 0;
+  margin-bottom: 16px;
 }
 
 .fieldRow label {
-  display: inline-block;
-  margin-bottom: var(--space-3);
-  color: var(--gray-900);
-  font-family: 'Lato', sans-serif;
-  font-size: var(--font-size-md);
-  font-style: normal;
-  font-weight: var(--font-weight-bold);
-  line-height: var(--fund-modal-label-line-height);
-  align-items: center;
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray-700, #374151);
+  margin-bottom: 6px;
 }
 
-.fieldRow input,
-.fieldRow textarea {
+.fieldRow input {
   width: 100%;
-  max-width: 100%;
-  height: var(--fund-modal-input-height);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--gray-200);
-  background: var(--gray-50);
-  box-shadow: none;
-  color: var(--gray-900);
-  font-family: 'Lato', sans-serif;
-  font-size: var(--font-size-md);
-  font-style: normal;
-  font-weight: var(--font-weight-regular);
-  line-height: var(--fund-modal-label-line-height);
-  padding: 0 var(--fund-modal-input-padding-x);
+  padding: 9px 12px;
+  border: 1.5px solid var(--gray-200, #e5e7eb);
+  border-radius: 10px;
+  font-size: 14px;
+  background: var(--surface, #fff);
+  color: var(--gray-900, #111827);
+  outline: none;
+  transition: border-color 0.15s;
 }
 
-.fieldRow input::placeholder,
-.fieldRow textarea::placeholder {
-  color: var(--gray-600);
-  font-family: 'Lato', sans-serif;
-  font-weight: var(--font-weight-regular);
-  font-size: var(--font-size-md);
-  line-height: var(--fund-modal-label-line-height);
-  opacity: 0.85;
+.fieldRow input::placeholder {
+  color: var(--gray-400, #9ca3af);
 }
 
-.fieldRow input:focus,
-.fieldRow textarea:focus {
-  border-color: var(--blue-500);
-  box-shadow: 0 0 0 var(--space-2) rgba(59, 130, 246, 0.15);
-  background: var(--gray-50);
+.fieldRow input:focus {
+  border-color: var(--green-500, #3ecf8e);
+  box-shadow: 0 0 0 3px rgba(62, 207, 142, 0.12);
 }
 
-.fieldRow .invalidFeedback {
-  margin-top: var(--space-2);
-  margin-bottom: 0;
-  font-size: var(--font-size-xs);
-  line-height: var(--line-height-tight);
-}
-
+/* Toggle switches */
 .switchRow {
   display: flex;
   align-items: center;
+  gap: 24px;
   flex-wrap: wrap;
-  gap: var(--space-3) var(--space-6);
-  margin-top: var(--space-1);
-  margin-bottom: calc(var(--space-3) + var(--space-1));
+  margin-top: 4px;
+  margin-bottom: 8px;
 }
 
 .switchField {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: 8px;
 }
 
 .switchField > label {
-  margin-bottom: 0;
-  color: var(--gray-900);
-  font-family: 'Inter', sans-serif;
-  font-style: normal;
-  font-weight: var(--font-weight-regular);
-  font-size: var(--font-size-md);
-  line-height: var(--fund-modal-label-line-height);
-}
-
-.createModeFooter {
-  min-height: auto;
-  justify-content: center;
-  align-items: center;
-  gap: 0;
-  padding: calc(var(--space-2) + var(--space-1)) 0
-    calc(var(--space-4) + var(--space-1));
-  border-top: none;
-}
-
-.createModeFooterSecondaryBtn {
-  display: none;
-}
-
-.createModeFooterCancelBtn {
-  display: none;
-}
-
-.createModeFooterBtn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: var(--fund-modal-action-width);
-  min-width: 0;
-  height: var(--fund-modal-action-height);
-  border-radius: var(--radius-sm);
-  border: none;
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--line-height-none);
-  padding: 0 var(--space-5);
-}
-
-.createModeFooterBtn > span {
-  width: 100%;
-  justify-content: center;
-}
-
-.createModeFooterBtn > span > span {
-  justify-content: center;
-}
-
-.createModeSecondaryBtn {
-  background-color: var(--gray-400);
-  color: var(--surface);
-}
-
-.createModeSecondaryBtn:hover {
-  background-color: var(--gray-500);
-}
-
-.createModePrimaryBtn {
-  background-color: var(--blue-50);
-  color: var(--gray-700);
-}
-
-.createModePrimaryBtn:hover {
-  background-color: var(--blue-500);
-}
-
-.createModeFooterBtn:disabled {
-  opacity: 1;
-}
-
-.editModeDialog {
-  width: min(var(--fund-modal-width), calc(100vw - var(--space-8)));
-  max-width: var(--fund-modal-width);
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.editModeContent {
-  width: 100%;
-  min-height: auto;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-card);
-  border-radius: var(--fund-modal-content-radius);
-}
-
-.editModeHeader {
-  align-items: center;
-  min-height: auto;
-  padding: var(--fund-modal-header-padding-top)
-    var(--fund-modal-header-padding-right)
-    var(--fund-modal-header-padding-bottom)
-    var(--fund-modal-header-padding-left);
-  border-bottom: none;
-}
-
-.editModeTitle {
   margin: 0;
-  color: var(--gray-900);
-  font-family: 'Lato', sans-serif;
-  font-size: var(--font-size-2xl);
-  font-style: normal;
-  font-weight: var(--font-weight-bold);
-  line-height: var(--line-height-tight);
-  display: flex;
-  align-items: center;
+  font-size: 14px;
+  color: var(--gray-700, #374151);
+  cursor: pointer;
 }
 
-.editModeDangerBtn {
-  right: var(--space-5);
-  top: var(--space-4);
-  color: var(--red-500);
+.switch {
+  padding: 0;
+  margin: 0;
 }
 
-.editModeDangerBtn:hover {
-  color: var(--red-500);
+.switch input[type="checkbox"] {
+  width: 40px;
+  height: 22px;
+  appearance: none;
+  background: var(--gray-200, #e5e7eb);
+  border-radius: 11px;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.2s;
+  border: none;
+  outline: none;
 }
 
-.editModeBody {
-  padding: var(--fund-modal-body-padding-top)
-    var(--fund-modal-body-padding-right) var(--fund-modal-body-padding-right)
-    var(--fund-modal-body-padding-left);
+.switch input[type="checkbox"]::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s;
 }
 
-.editModeForm {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
+.switch input[type="checkbox"]:checked {
+  background: var(--green-500, #3ecf8e);
 }
 
-.editMode .switchRow {
-  margin-bottom: var(--space-6);
+.switch input[type="checkbox"]:checked::after {
+  transform: translateX(18px);
 }
 
-.editModeFooter {
-  min-height: auto;
-  justify-content: center;
-  align-items: center;
-  gap: 0;
-  padding: var(--space-4) 0 calc(var(--space-4) + var(--space-1));
-  border-top: none;
-}
-
+/* Edit mode footer actions */
 .editFooterActions {
-  width: var(--fund-modal-action-width);
   display: flex;
   flex-direction: column;
-  gap: calc(var(--space-4) + var(--space-1));
+  gap: 10px;
+  width: 100%;
 }
 
 .editActionRow {
-  width: 100%;
   display: flex;
-  gap: var(--space-4);
-}
-
-.editActionButton,
-.deleteActionButton {
-  flex: 1;
-  height: var(--fund-modal-edit-action-height);
-  border-radius: calc(var(--radius-sm) + var(--space-1));
-  border: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: calc(var(--space-3) + var(--space-1));
-  font-family: 'Lato', sans-serif;
-  font-style: normal;
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-md);
-  line-height: var(--fund-modal-label-line-height);
+  gap: 8px;
 }
 
 .editActionButton {
-  background: var(--blue-50);
-  color: var(--gray-700);
-}
-
-.editActionButton:hover {
-  background: var(--blue-500);
-  color: var(--gray-700);
-}
-
-.deleteActionButton {
-  background: var(--red-50);
-  color: var(--red-500);
-}
-
-.deleteActionButton:hover {
-  background: var(--red-50);
-  color: var(--red-500);
-}
-
-.archiveActionButton {
-  width: var(--fund-modal-action-width);
-  height: var(--fund-modal-archive-height);
-  border-radius: var(--radius-sm);
+  flex: 1;
+  padding: 8px 16px;
+  border-radius: 10px;
   border: none;
-  background: var(--gray-100);
-  color: var(--gray-700);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-4);
-  font-family: 'Lato', sans-serif;
-  font-style: normal;
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-md);
-  line-height: var(--fund-modal-label-line-height);
+  gap: 6px;
+  background: var(--green-500, #3ecf8e);
+  color: #000;
+  transition: background 0.15s;
+}
+
+.editActionButton:hover {
+  background: var(--green-400, #4ade80);
+}
+
+.deleteActionButton {
+  flex: 1;
+  padding: 8px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--red-200, #fecaca);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--red-50, #fef2f2);
+  color: var(--red-600, #dc2626);
+  transition: all 0.15s;
+}
+
+.deleteActionButton:hover {
+  background: var(--red-500, #ef4444);
+  color: #fff;
+  border-color: var(--red-500, #ef4444);
+}
+
+.archiveActionButton {
+  width: 100%;
+  padding: 8px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--gray-200, #e5e7eb);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--surface, #fff);
+  color: var(--gray-700, #374151);
+  transition: all 0.15s;
 }
 
 .archiveActionButton:hover {
-  background: var(--gray-200);
-  color: var(--gray-700);
-}
-
-.editActionButton i,
-.archiveActionButton i {
-  color: var(--gray-700);
-}
-
-.deleteActionButton i {
-  color: var(--red-500);
-}
-
-@media (max-width: 991px) {
-  .createModeDialog {
-    max-width: min(
-      calc(100vw - var(--space-8)),
-      var(--fund-modal-width)
-    );
-  }
-
-  .createModeHeader,
-  .createModeBody,
-  .createModeFooter {
-    padding-left: var(--space-5);
-    padding-right: var(--space-5);
-  }
-
-  .createModeTitle {
-    font-size: var(--font-size-2xl);
-    line-height: var(--line-height-tight);
-  }
-
-  .fieldRow label,
-  .switchField > label {
-    font-size: var(--font-size-15);
-  }
-
-  .fieldRow input,
-  .fieldRow textarea {
-    width: 100%;
-    height: var(--fund-modal-input-height);
-    font-size: var(--font-size-15);
-  }
-
-  .createModeFooterBtn {
-    width: 100%;
-    max-width: var(--fund-modal-action-width);
-    height: var(--fund-modal-action-height);
-    font-size: var(--font-size-15);
-  }
-
-  .editModeDialog {
-    max-width: min(
-      calc(100vw - var(--space-8)),
-      var(--fund-modal-width)
-    );
-  }
-
-  .editModeHeader,
-  .editModeBody,
-  .editModeFooter {
-    padding-left: var(--space-5);
-    padding-right: var(--space-5);
-  }
-
-  .editModeTitle {
-    font-size: var(--font-size-2xl);
-    line-height: var(--line-height-tight);
-  }
-
-  .editModeFooterBtn {
-    font-size: var(--font-size-15);
-  }
-
-  .editFooterActions,
-  .archiveActionButton {
-    width: 100%;
-  }
-
-  .editActionRow {
-    gap: var(--space-4);
-  }
-
-  .editActionButton,
-  .deleteActionButton {
-    width: calc(50% - calc(var(--space-2) + var(--space-1)));
-    height: var(--fund-modal-edit-action-height);
-  }
-
-  .archiveActionButton {
-    height: calc(var(--space-10) + var(--space-3));
-  }
-}
-
-@media (max-width: 575px) {
-  .fundModal {
-    max-width: calc(100vw - var(--space-5));
-  }
-
-  .createModeHeader {
-    padding-top: var(--space-5);
-    padding-bottom: calc(var(--space-2) + var(--space-1));
-  }
-
-  .createModeTitle {
-    font-size: calc(var(--font-size-xl) + var(--space-2));
-    line-height: var(--line-height-tight);
-  }
-
-  .switchRow {
-    gap: var(--space-3) var(--space-4);
-  }
-
-  .createModeFooter {
-    padding-top: var(--space-2);
-    padding-bottom: calc(var(--space-7) + var(--space-1));
-  }
-
-  .createModeFooterBtn {
-    height: var(--space-10);
-    font-size: var(--font-size-sm);
-  }
-
-  .editModeHeader {
-    padding-top: var(--space-5);
-    padding-bottom: calc(var(--space-2) + var(--space-1));
-  }
-
-  .editModeTitle {
-    font-size: calc(var(--font-size-xl) + var(--space-2));
-    line-height: var(--line-height-tight);
-  }
-
-  .editModeFooter {
-    padding-top: var(--space-2);
-    padding-bottom: var(--space-4);
-  }
-
-  .editActionRow {
-    flex-direction: column;
-    gap: calc(var(--space-3) + var(--space-1));
-  }
-
-  .editActionButton,
-  .deleteActionButton,
-  .archiveActionButton {
-    width: 100%;
-  }
-
-  .editActionButton,
-  .deleteActionButton {
-    height: var(--fund-modal-edit-action-height);
-  }
-
-  .archiveActionButton {
-    height: var(--fund-modal-input-height);
-    font-size: var(--font-size-sm);
-  }
-}
-
-.addButton {
-  margin-bottom: var(--space-4);
-  color: var(--gray-700);
-  background-color: var(--blue-50);
-  border-color: var(--blue-50);
-}
-
-.addButton:is(:hover, :active, :focus) {
-  background-color: var(--blue-500);
-  border-color: var(--gray-700);
-}
-
-.addButton:disabled {
-  margin-bottom: var(--space-4);
-  background-color: var(--gray-50);
-  border-color: var(--blue-50);
+  background: var(--gray-50, #fafafa);
+  border-color: var(--gray-300, #d1d5db);
 }

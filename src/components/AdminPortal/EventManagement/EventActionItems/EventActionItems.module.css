@@ -1,157 +1,150 @@
+/* EventActionItems — action items tab */
+
 .message {
-  margin-top: 25%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  padding: 48px 24px;
 }
 
 .icon {
-  margin-right: var(--space-3);
+  margin-right: 6px;
 }
 
 .iconLarge {
-  font-size: var(--font-size-4xl);
+  font-size: 32px;
+  color: var(--red-500, #ef4444);
 }
 
 .TableImage {
   object-fit: cover;
-  margin-right: var(--space-3);
-  width: var(--logo-xs);
-  height: var(--logo-xs);
-  border-radius: var(--radius-full);
+  margin-right: 8px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
 }
 
 .assigneeCellContainer {
   display: flex;
   align-items: center;
-  font-weight: var(--font-weight-bold);
-  margin-inline-start: var(--space-3);
+  font-weight: 600;
+  margin-left: 8px;
 }
 
 .groupIconSecondary {
-  background-color: var(--color-gray-300);
-  margin-inline-start: var(--space-2);
+  background: var(--gray-200, #e5e7eb);
+  margin-left: 4px;
 }
 
 .tableHeader {
-  background-color: var(--color-red-500);
-  font-weight: bold;
+  background: var(--gray-50, #fafafa);
 }
 
 .infoButton {
-  background-color: var(--infoButton-bg) !important;
-  border-color: var(--infoButton-border);
-  color: var(--infoButton-color);
-  margin-right: var(--space-3);
-  border-radius: var(--radius-sm);
+  padding: 4px 8px;
+  background: var(--surface, #fff);
+  border: 1px solid var(--gray-200, #e5e7eb);
+  border-radius: 8px;
+  color: var(--gray-600, #4b5563);
+  cursor: pointer;
+  margin-right: 4px;
+  transition: all 0.15s;
 }
 
 .infoButton:hover {
-  background-color: var(--infoButton-bg-hover);
-  border-color: var(--infoButton-border-hover);
-  color: var(--infoButton-color) !important;
-  box-shadow: var(--drop-shadow);
+  background: var(--gray-50, #fafafa);
+  border-color: var(--gray-300, #d1d5db);
 }
 
 .actionItemDeleteButton {
-  background-color: var(--actionItemDeleteButton-bg) !important;
-  color: var(--actionItemDeleteButton-color) !important;
+  padding: 4px 8px;
+  background: var(--red-50, #fef2f2);
+  color: var(--red-500, #ef4444);
+  border: 1px solid var(--red-200, #fecaca);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
 }
 
 .actionItemDeleteButton:hover {
-  box-shadow: var(--drop-shadow);
+  background: var(--red-500, #ef4444);
+  color: #fff;
 }
 
 .checkboxButton input:checked {
-  background-color: var(--checkboxButton-checked-bg);
-  border-color: var(--checkboxButton-checked-color);
-}
-
-.checkboxButton input:hover {
-  box-shadow: var(--drop-shadow);
+  background: var(--green-500, #3ecf8e);
+  border-color: var(--green-500, #3ecf8e);
 }
 
 .checkboxButton input:focus {
-  border-color: var(--checkbox-focus-border);
-  outline: var(--border-2) solid var(--checkbox-focus-border);
-  outline-offset: var(--space-1);
-}
-
-.dropdown {
-  background-color: var(--dropdown-bg) !important;
-  min-width: var(--space-15);
-  border: var(--border-1) solid var(--dropdown-border);
-  color: var(--dropdown-font-color) !important;
-  position: relative;
-  display: inline-block;
-}
-
-.createButton {
-  background-color: var(--createButton-bg);
-  color: var(--createButton-color);
-  border: var(--border-1) solid var(--createButton-border);
-  margin: var(--space-3) var(--space-4);
-  width: var(--space-16);
-  height: var(--space-10);
-}
-
-.rowBackground {
-  background-color: var(--rowBackground-bg);
-  color: var(--rowBackground-color);
-  max-height: var(--space-14);
-  overflow-y: auto;
+  border-color: var(--green-500, #3ecf8e);
+  outline: 2px solid rgba(62, 207, 142, 0.3);
+  outline-offset: 2px;
 }
 
 .btnsContainer {
   display: flex;
-  margin: var(--space-9) var(--space-0);
   align-items: center;
-  gap: var(--space-5);
+  gap: 10px;
+  margin-bottom: 20px;
   flex-wrap: wrap;
 }
 
-@media (max-width: 520px) {
-  .btnsContainer {
-    margin-bottom: 0;
-  }
+.createButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  background: var(--green-500, #3ecf8e);
+  color: #000;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
 }
 
-@media (max-width: 1020px) {
-  .btnsContainer {
-    flex-direction: column;
-    margin: var(--space-7) var(--space-0);
-  }
+.createButton:hover {
+  background: var(--green-400, #4ade80);
 }
 
-@media (max-width: 768px) {
-  .btnsContainer {
-    margin-bottom: 0;
-    display: flex;
-    flex-direction: column;
-  }
+.rowBackground {
+  background: var(--surface, #fff);
 }
 
 .loadingHeading {
-  font-weight: var(--font-weight-bold);
-  color: var(--color-red-500);
+  font-weight: 600;
+  color: var(--red-500, #ef4444);
   text-align: center;
 }
 
 .categoryName {
   display: flex;
   justify-content: center;
-  font-weight: var(--font-weight-bold);
+  font-weight: 600;
 }
 
 .statusCheckBox {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: var(--space-5);
+  margin-top: 8px;
 }
 
 .searchByContainer {
   display: flex;
-  gap: var(--space-4);
+  gap: 8px;
+}
+
+.dropdown {
+  /* handled by DropDownButton component */
+}
+
+@media (max-width: 768px) {
+  .btnsContainer {
+    flex-direction: column;
+    align-items: stretch;
+  }
 }

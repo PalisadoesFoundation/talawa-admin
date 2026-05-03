@@ -250,7 +250,7 @@ export default function CreateGroupChat({
           </Button>
         </div>
         <form>
-          <div className="mb-3">
+          <div style={{ marginBottom: 12 }}>
             <FormFieldGroup
               name="groupTitleInput"
               label={t('title', { defaultValue: 'Title' })}
@@ -271,7 +271,7 @@ export default function CreateGroupChat({
               />
             </FormFieldGroup>
           </div>
-          <div className="mb-3">
+          <div style={{ marginBottom: 12 }}>
             <FormFieldGroup
               name="groupDescriptionInput"
               label={tCommon('description', { defaultValue: 'Description' })}

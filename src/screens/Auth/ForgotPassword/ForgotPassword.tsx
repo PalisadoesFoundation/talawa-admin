@@ -158,8 +158,8 @@ const ForgotPassword = (): JSX.Element => {
       variant="spinner"
     >
       <div className={styles.pageWrapper}>
-        <div className="row container-fluid d-flex justify-content-center items-center">
-          <div className="col-12 col-lg-4 px-0">
+        <div style={{ display: "flex", flexWrap: "wrap", width: "100%", alignItems: "center" }}>
+          <div style={{ flex: "0 0 33.33%", maxWidth: "33.33%", padding: 0 }}>
             <div className={styles.cardTemplate}>
               <div className={styles.keyWrapper}>
                 <div className={styles.themeOverlay} />
@@ -169,12 +169,12 @@ const ForgotPassword = (): JSX.Element => {
                 />
               </div>
 
-              <h3 className="text-center fw-bold">
+              <h3 style={{ textAlign: "center" }}>
                 {tCommon('forgotPassword')}
               </h3>
 
               {showEnterEmail ? (
-                <div className="mt-4">
+                <div style={{ marginTop: 16 }}>
                   <form onSubmit={getOTP}>
                     <FormTextField
                       name="registeredEmail"
@@ -189,7 +189,7 @@ const ForgotPassword = (): JSX.Element => {
 
                     <Button
                       type="submit"
-                      className={`mt-4 w-100 ${styles.login_btn}`}
+                      className={`${styles.login_btn}`}
                       data-testid="getOtpBtn"
                     >
                       {t('getOtp')}
@@ -197,7 +197,7 @@ const ForgotPassword = (): JSX.Element => {
                   </form>
                 </div>
               ) : (
-                <div className="mt-4">
+                <div style={{ marginTop: 16 }}>
                   <form onSubmit={submitForgotPassword}>
                     <FormTextField
                       name="userOtp"
@@ -249,17 +249,17 @@ const ForgotPassword = (): JSX.Element => {
                       data-testid="confirmNewPassword"
                     />
 
-                    <Button type="submit" className="mt-2 w-100">
+                    <Button type="submit" style={{ width: "100%" }}>
                       {t('changePassword')}
                     </Button>
                   </form>
                 </div>
               )}
 
-              <div className="d-flex justify-content-between items-center mt-4">
+              <div className="items-center">
                 <Link
                   to="/"
-                  className="mx-auto d-flex items-center text-secondary"
+                  style={{ margin: "0 auto", display: "flex", alignItems: "center", color: "var(--gray-500, #6b7280)" }}
                 >
                   <ArrowRightAlt
                     fontSize="medium"

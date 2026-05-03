@@ -69,7 +69,7 @@ const RecurringEventVolunteerModal: React.FC<
       primaryText={t('submitRequest')}
       data-testid="recurringEventModal"
     >
-      <p className="mb-4">{description}</p>
+      <p style={{ marginBottom: 16 }}>{description}</p>
 
       <fieldset className={styles.radioFieldset}>
         <legend className={styles.radioLegend}>{t('volunteerScope')}</legend>

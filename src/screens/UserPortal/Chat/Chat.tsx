@@ -210,7 +210,7 @@ export default function Chat(): JSX.Element {
         <aside className={styles.chatSidebar}>
           <div className={styles.chatSidebarHeader}>
             <div className={styles.chatSidebarTitle}>
-              <span>{t('title')}</span>
+              <span>{t('messages') || 'Messages'}</span>
               <DropDownButton
                 id="newChatDropdown"
                 options={newChatOptions}
@@ -218,8 +218,10 @@ export default function Chat(): JSX.Element {
                 ariaLabel={t('newChat')}
                 dataTestIdPrefix="dropdown"
                 icon={<AddIcon data-testid="new-chat-icon" style={{ fontSize: 18 }} />}
-                buttonLabel=""
+                buttonLabel=" "
+                placeholder=""
                 btnStyle={styles.newChatBtn}
+                showCaret={false}
               />
             </div>
             <div className={styles.chatSearch}>

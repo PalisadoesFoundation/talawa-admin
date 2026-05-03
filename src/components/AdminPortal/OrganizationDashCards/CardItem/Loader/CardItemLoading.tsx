@@ -37,7 +37,7 @@ const CardItemLoading = (): JSX.Element => {
         className={`${styles.cardItem} border-bottom`}
         data-testid="cardItemLoading"
       >
-        <div className={`${styles.iconWrapper} me-3`}>
+        <div className={`${styles.iconWrapper}`}>
           <div className={styles.themeOverlay} />
         </div>
         <span

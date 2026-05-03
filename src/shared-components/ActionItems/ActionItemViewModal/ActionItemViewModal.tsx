@@ -130,8 +130,8 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
       size="lg"
       data-testid="actionItemViewModal"
     >
-      <div className="p-3">
-        <div className="d-flex mb-3 w-100">
+      <div style={{ padding: 12 }}>
+        <div style={{ width: "100%" }}>
           <FormFieldGroup
             name="category"
             label={t('category')}
@@ -148,7 +148,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
             />
           </FormFieldGroup>
         </div>
-        <div className="d-flex gap-3 mb-3">
+        <div style={{ gap: 12 }}>
           <FormFieldGroup
             name="assignedTo"
             label={t('assignedTo')}
@@ -183,9 +183,9 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
             />
           </FormFieldGroup>
         </div>
-        <div className="d-flex gap-3 mx-auto mb-3 align-items-start w-100">
-          <div className="mb-3">
-            <span className="form-label mb-2">{t('status')}</span>
+        <div style={{ marginLeft: "auto", alignItems: "flex-start" }}>
+          <div style={{ marginBottom: 12 }}>
+            <span className="form-label">{t('status')}</span>
 
             <div>
               <StatusBadge
@@ -215,12 +215,12 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
             />
           </FormFieldGroup>
         </div>
-        <div className={`d-flex gap-3 mb-3`}>
+        <div className={`gap-3`}>
           <DatePicker
             data-testid="assignmentDatePicker"
             format="DD/MM/YYYY"
             label={t('assignmentDate')}
-            className={`${styles.noOutline} w-100`}
+            className={`${styles.noOutline}`}
             value={dayjs(assignedAt)}
             disabled
             onChange={() => null}
@@ -230,14 +230,14 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
             <DatePicker
               format="DD/MM/YYYY"
               label={t('completionDate')}
-              className={`${styles.noOutline} w-100`}
+              className={`${styles.noOutline}`}
               value={dayjs(completionAt)}
               disabled
               onChange={() => null}
             />
           )}
         </div>
-        <div className={`d-flex ${isCompleted && 'mb-3'}`}>
+        <div className={`${isCompleted && 'mb-3'}`}>
           <FormFieldGroup
             name="preCompletionNotes"
             label={t('preCompletionNotes')}

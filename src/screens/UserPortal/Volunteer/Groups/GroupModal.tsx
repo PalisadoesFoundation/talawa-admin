@@ -214,7 +214,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
       showFooter={false}
     >
       <fieldset
-        className={`btn-group ${styles.toggleGroup} mt-0 px-3 mb-4 w-100`}
+        className={`btn-group ${styles.toggleGroup} mt-0`}
       >
         <legend className="visually-hidden">{t('viewToggle')}</legend>
         <input
@@ -229,7 +229,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
           className={`btn btn-outline-primary ${styles.toggleBtn}`}
           htmlFor="detailsRadio"
         >
-          <TbListDetails className="me-2" />
+          <TbListDetails style={{ marginRight: 8 }} />
           {t('details')}
         </label>
 
@@ -246,7 +246,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
           className={`btn btn-outline-primary ${styles.toggleBtn}`}
           htmlFor="groupsRadio"
         >
-          <PiUserListBold className="me-2" size={21} />
+          <PiUserListBold style={{ marginRight: 8 }} size={21} />
           {t('requests')}
         </label>
       </fieldset>
@@ -255,7 +255,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
         <form
           data-testid="groupForm"
           onSubmit={updateGroupHandler}
-          className="p-3"
+          style={{ padding: 12 }}
         >
           {/* Input field to enter the group name */}
           <FormFieldGroup
@@ -351,7 +351,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
           </Button>
         </form>
       ) : (
-        <div className="px-3">
+        <div style={{ padding: "0 12px" }}>
           {requests.length === 0 ? (
             <Stack height="100%" alignItems="center" justifyContent="center">
               {t('noRequests')}
@@ -365,10 +365,10 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
               <Table aria-label={t('groupTable')}>
                 <TableHead>
                   <TableRow>
-                    <TableCell className="fw-bold">
+                    <TableCell style={{ fontWeight: 600 }}>
                       {t('volunteerName')}
                     </TableCell>
-                    <TableCell className="fw-bold">
+                    <TableCell style={{ fontWeight: 600 }}>
                       {t('volunteerActions')}
                     </TableCell>
                   </TableRow>
@@ -386,7 +386,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                         <TableCell
                           component="th"
                           scope="row"
-                          className="d-flex gap-1 align-items-center"
+                          style={{ gap: 4 }}
                           data-testid="userName"
                         >
                           <ProfileAvatarDisplay
@@ -399,11 +399,11 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                           {name}
                         </TableCell>
                         <TableCell component="th" scope="row">
-                          <div className="d-flex gap-2">
+                          <div style={{ gap: 8 }}>
                             <Button
                               variant="success"
                               size="sm"
-                              className="me-2 rounded"
+                              className="rounded"
                               data-testid={`acceptBtn`}
                               aria-label={t('acceptRequest')}
                               onClick={() =>
@@ -422,7 +422,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                                 updateMembershipStatus(request.id, 'rejected')
                               }
                             >
-                              <FaXmark size={18} className="fw-bold" />
+                              <FaXmark size={18} style={{ fontWeight: 600 }} />
                             </Button>
                           </div>
                         </TableCell>

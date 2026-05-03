@@ -89,12 +89,12 @@ const EventDashboardScreen = (): React.JSX.Element => {
   if (adminFor === null) {
     return (
       <>
-        <div className={`d-flex flex-row ${styles.containerHeightEventDash}`}>
+        <div className={`${styles.containerHeightEventDash}`}>
           <div
             className={`${styles.colorLight} ${styles.mainContainerEventDashboard}`}
           >
             <div
-              className={`d-flex flex-row justify-content-between flex-wrap ${styles.gap}`}
+              className={`${styles.gap}`}
             >
               <div className={styles.flexOne}>
                 <h1>{t('title')}</h1>
@@ -149,7 +149,7 @@ const EventDashboardScreen = (): React.JSX.Element => {
         } `}
         data-testid="mainpageright"
       >
-        <div className="d-flex justify-content-between align-items-center">
+        <div style={{ alignItems: "center" }}>
           <div className={styles.flexOne}>
             <h1>{t('title')}</h1>
           </div>

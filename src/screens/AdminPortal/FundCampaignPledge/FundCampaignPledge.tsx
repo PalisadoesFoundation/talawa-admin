@@ -202,10 +202,10 @@ const fundCampaignPledge = (): JSX.Element => {
 
   if (pledgeError) {
     return (
-      <div className={`${styles.container} bg-white rounded-4 my-3`}>
+      <div className={`${styles.container} rounded-4 my-3`}>
         <div className={styles.message} data-testid="errorMsg">
           <WarningAmberRounded className={styles.errorIcon} />
-          <h6 className="fw-bold text-danger text-center">
+          <h6 style={{ textAlign: "center" }}>
             {tErrors('errorLoading', {
               entity: t('pledges.pledges'),
             })}

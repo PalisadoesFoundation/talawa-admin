@@ -1009,7 +1009,11 @@
     "searchByName": "Search by Name",
     "assocCampaigns": "Associated Campaigns",
     "errorLoadingFundsData": "Error loading funds data",
-    "associatedCampaigns": "Associated Campaigns"
+    "associatedCampaigns": "Associated Campaigns",
+    "allCampaigns": "All Funds",
+    "goal": "Goal",
+    "progress": "Progress",
+    "endDate": "End Date"
   },
   "fundCampaign": {
     "title": "Fundraising Campaigns",

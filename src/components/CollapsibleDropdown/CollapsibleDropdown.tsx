@@ -120,9 +120,9 @@ const CollapsibleDropdown = ({
                         <i className={`fa ${stringIcon}`} />
                       </div>
                       {tCommon(name || '')}
-                      <div className="ms-auto">
+                      <div style={{ marginLeft: "auto" }}>
                         <i
-                          className={`fa me-2 fa-chevron-right ${
+                          className={`fa fa-chevron-right ${
                             isActive === true ? 'text-white' : 'text-secondary'
                           }`}
                         />
