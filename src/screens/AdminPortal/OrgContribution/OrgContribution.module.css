@@ -37,7 +37,7 @@
 
 .sidebar:after {
   content: '';
-  background-color: var(--color-gray-100);
+  background-color: var(--gray-100, #f3f4f6);
   position: absolute;
   width: var(--space-1);
   height: var(--space-26);
@@ -66,7 +66,7 @@
 .searchInput {
   text-decoration: none;
   margin-bottom: var(--space-10);
-  border-color: var(--color-gray-100);
+  border-color: var(--gray-100, #f3f4f6);
   width: 80%;
   border-radius: var(--radius-md);
   padding-top: var(--space-2);
@@ -77,12 +77,12 @@
 }
 
 .searchtitle {
-  color: var(--color-gray-500);
+  color: var(--gray-500, #6b7280);
   font-weight: var(--font-weight-semibold);
   font-size: var(--font-size-lg);
   margin-bottom: var(--space-6);
   padding-bottom: var(--space-2);
-  border-bottom: var(--border-3) solid var(--color-blue-200);
+  border-bottom: var(--border-3) solid var(--gray-100, #f3f4f6);
   width: 60%;
 }
 
@@ -101,12 +101,12 @@
 }
 
 .logintitle {
-  color: var(--color-gray-500);
+  color: var(--gray-500, #6b7280);
   font-weight: var(--font-weight-semibold);
   font-size: var(--font-size-xl);
   margin-bottom: var(--space-8);
   padding-bottom: var(--space-2);
-  border-bottom: var(--border-3) solid var(--color-blue-200);
+  border-bottom: var(--border-3) solid var(--gray-100, #f3f4f6);
   width: 15%;
 }
 

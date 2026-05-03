@@ -34,6 +34,6 @@
 
 .radioDescription {
   font-size: var(--font-size-sm);
-  color: var(--color-gray-600);
+  color: var(--gray-600, #4b5563);
   margin-top: var(--space-1);
 }

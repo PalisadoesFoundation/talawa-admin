@@ -12,7 +12,7 @@
   padding: var(--space-3);
   width: 100%;
   border-radius: var(--radius-xl) !important;
-  background-color: var(--color-gray-100) !important;
+  background-color: var(--gray-100, #f3f4f6) !important;
   color: inherit !important;
   text-decoration: none !important;
   cursor: pointer;
@@ -21,7 +21,7 @@
 }
 
 .profileContainer:hover {
-  background-color: var(--color-gray-200) !important;
+  background-color: var(--gray-200, #e5e7eb) !important;
 }
 
 .imageContainer {
@@ -45,17 +45,17 @@
 .primaryText {
   font-weight: var(--font-weight-semibold);
   font-size: var(--font-size-sm);
-  color: var(--color-gray-900);
+  color: var(--gray-900, #111827);
 }
 
 .secondaryText {
   font-weight: var(--font-weight-regular);
   font-size: var(--font-size-xs);
-  color: var(--color-gray-600);
+  color: var(--gray-600, #4b5563);
 }
 
 .chevronIcon {
-  color: var(--color-gray-500);
+  color: var(--gray-500, #6b7280);
   font-size: var(--font-size-lg);
   margin-left: auto;
   flex-shrink: 0;

@@ -393,7 +393,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 className={styles.editActionButton}
                 data-testid="modal-submit-btn"
               >
-                <i className="fa fa-edit" />
                 {tCommon('edit')}
               </Button>
 
@@ -404,7 +403,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 onClick={handleDeleteClick}
                 disabled={!pledge?.id}
               >
-                <i className="fa fa-trash" />
                 {tCommon('delete')}
               </Button>
             </div>

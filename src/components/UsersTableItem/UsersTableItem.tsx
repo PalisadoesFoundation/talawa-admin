@@ -326,7 +326,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                         </td>
                         <td>
                           <select
-                            className="form-select form-select-sm"
+                            className="form-input" style={{ padding: "4px 8px", fontSize: 13 }}
                             onChange={changeRoleInOrg}
                             data-testid={`changeRoleInOrg${org.id}`}
                             disabled={isAdmin}

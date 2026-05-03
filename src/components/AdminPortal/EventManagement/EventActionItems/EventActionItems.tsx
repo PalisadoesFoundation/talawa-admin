@@ -348,7 +348,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
               onClick={() => handleOpenViewModal(params.row)}
               aria-label={t('details')}
             >
-              <i className="fa fa-info" />
+              ℹ
             </Button>
             <Button
               variant="success"
@@ -358,7 +358,6 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
               onClick={() => handleOpenItemModal(params.row)}
               aria-label={t('editActionItem')}
             >
-              <i className="fa fa-edit" />
             </Button>
             <Button
               size="sm"
@@ -368,7 +367,6 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
               onClick={() => handleOpenDeleteModal(params.row)}
               aria-label={t('deleteActionItem')}
             >
-              <i className="fa fa-trash" />
             </Button>
           </>
         );
@@ -485,7 +483,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
             data-testid="createActionItemBtn"
             data-cy="createActionItemBtn"
           >
-            <i className={'fa fa-plus'} />
+            +
             {tCommon('create')}
           </Button>
         </div>

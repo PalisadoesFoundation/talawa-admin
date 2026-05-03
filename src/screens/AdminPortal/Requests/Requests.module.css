@@ -26,15 +26,15 @@
 }
 
 .tableHeader {
-  background-color: var(--color-gray-100);
-  color: var(--color-black);
+  background-color: var(--gray-100, #f3f4f6);
+  color: var(--gray-900, #111827);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
 }
 
 .rowBackground {
-  background-color: var(--color-white);
-  color: var(--color-black);
+  background-color: var(--surface, #fff);
+  color: var(--gray-900, #111827);
 }
 
 .hoverShadowOnly:hover,
@@ -61,26 +61,26 @@
 }
 
 .requestsAcceptButton {
-  background-color: var(--color-blue-200);
-  color: var(--color-gray-700);
-  border-color: var(--color-blue-200);
+  background-color: var(--gray-100, #f3f4f6);
+  color: var(--gray-700, #374151);
+  border-color: var(--gray-100, #f3f4f6);
   width: var(--logo-md);
   height: var(--logo-xs);
   margin-inline-start: calc(var(--space-5) * -1);
 }
 
 .requestsRejectButton {
-  background-color: var(--color-red-100);
-  color: var(--color-red-500);
-  border-color: var(--color-red-100);
+  background-color: var(--red-50, #fef2f2);
+  color: var(--red-500, #ef4444);
+  border-color: var(--red-50, #fef2f2);
   width: var(--logo-md);
   height: var(--logo-xs);
   margin-inline-start: calc(var(--space-5) * -1);
 }
 
 .requestsAcceptButton:focus-visible {
-  background-color: var(--color-blue-200) !important;
-  color: var(--color-gray-700);
+  background-color: var(--gray-100, #f3f4f6) !important;
+  color: var(--gray-700, #374151);
   box-shadow:
     0 0 0 var(--border-shadow-xs) currentColor,
     var(--hover-shadow);
@@ -88,8 +88,8 @@
 }
 
 .requestsRejectButton:focus-visible {
-  background-color: var(--color-red-100) !important;
-  color: var(--color-red-500);
+  background-color: var(--red-50, #fef2f2) !important;
+  color: var(--red-500, #ef4444);
   box-shadow:
     0 0 0 var(--border-shadow-xs) currentColor,
     var(--hover-shadow);
@@ -98,9 +98,9 @@
 
 .requestsAcceptButton:disabled,
 .requestsAcceptButton.disabled {
-  background-color: var(--color-gray-50) !important;
-  color: var(--color-gray-300) !important;
-  border-color: var(--color-gray-300) !important;
+  background-color: var(--gray-50, #fafafa) !important;
+  color: var(--gray-300, #d1d5db) !important;
+  border-color: var(--gray-300, #d1d5db) !important;
   cursor: not-allowed;
   opacity: 0.6;
   pointer-events: none;
@@ -108,9 +108,9 @@
 
 .requestsRejectButton:disabled,
 .requestsRejectButton.disabled {
-  background-color: var(--color-gray-50) !important;
-  color: var(--color-gray-300) !important;
-  border-color: var(--color-gray-300) !important;
+  background-color: var(--gray-50, #fafafa) !important;
+  color: var(--gray-300, #d1d5db) !important;
+  border-color: var(--gray-300, #d1d5db) !important;
   cursor: not-allowed;
   opacity: 0.6;
   pointer-events: none;

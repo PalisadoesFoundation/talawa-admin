@@ -5,7 +5,7 @@
 }
 
 .colorLight {
-  background-color: var(--color-gray-50);
+  background-color: var(--gray-50, #fafafa);
 }
 
 .mainContainerEventDashboard {
@@ -27,7 +27,7 @@
 .collapseSidebarButton:hover,
 .opendrawer:hover {
   opacity: 1;
-  color: var(--color-black) !important;
+  color: var(--gray-900, #111827) !important;
 }
 
 .opendrawer {
@@ -40,21 +40,21 @@
   width: var(--space-9);
   height: var(--vh-100);
   z-index: 9999;
-  background-color: var(--color-gray-50);
+  background-color: var(--gray-50, #fafafa);
   border: none;
   border-radius: var(--radius-none);
   margin-right: var(--space-6);
-  color: var(--color-black);
+  color: var(--gray-900, #111827);
 }
 
 .opendrawer:hover {
   transition: background-color 0.5s ease;
-  background-color: var(--color-gray-100);
+  background-color: var(--gray-100, #f3f4f6);
 }
 
 .collapseSidebarButton:hover {
   transition: background-color 0.5s ease;
-  background-color: var(--color-gray-100);
+  background-color: var(--gray-100, #f3f4f6);
 }
 
 @media (max-width: 1120px) {
@@ -98,8 +98,8 @@
   bottom: 0;
   z-index: 9999;
   width: calc(var(--space-20) + var(--space-8));
-  background-color: var(--color-gray-100);
-  color: var(--color-black);
+  background-color: var(--gray-100, #f3f4f6);
+  color: var(--gray-900, #111827);
   border: none;
   border-radius: var(--radius-none);
 }
@@ -107,12 +107,12 @@
 .collapseSidebarButton:hover,
 .opendrawer:hover {
   opacity: 1;
-  color: var(--color-black) !important;
+  color: var(--gray-900, #111827) !important;
 }
 
 .collapseSidebarButton:hover {
   transition: background-color 0.5s ease;
-  background-color: var(--color-gray-100);
+  background-color: var(--gray-100, #f3f4f6);
 }
 
 @media (max-height: 900px) {

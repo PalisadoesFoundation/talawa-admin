@@ -22,7 +22,7 @@
 .pageNotFound h1.head {
   font-size: var(--font-size-8xl);
   font-weight: var(--font-weight-heavy);
-  color: var(--color-blue-200);
+  color: var(--gray-100, #f3f4f6);
   letter-spacing: 0;
   margin: var(--space-4) 0 0 0;
 }
@@ -38,7 +38,7 @@
   top: 50%;
   width: 50%;
   height: var(--letter-spacing-wider);
-  background: var(--color-white);
+  background: var(--surface, #fff);
   content: '';
 }
 

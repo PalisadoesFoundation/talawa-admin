@@ -4,22 +4,22 @@
   justify-content: center;
   gap: var(--space-7);
   padding: var(--space-5);
-  border-top: var(--border-1) solid var(--color-gray-100);
+  border-top: var(--border-1) solid var(--gray-100, #f3f4f6);
 }
 
 .paginationRange {
   font-size: var(--space-4);
-  color: var(--color-gray-600);
+  color: var(--gray-600, #4b5563);
   min-width: var(--space-14);
   text-align: center;
 }
 
 .pageBtn {
   padding: var(--space-3) var(--space-5);
-  border: var(--border-1) solid var(--color-gray-100);
+  border: var(--border-1) solid var(--gray-100, #f3f4f6);
   border-radius: var(--radius-sm);
-  background-color: var(--color-blue-200);
-  color: var(--color-gray-700);
+  background-color: var(--gray-100, #f3f4f6);
+  color: var(--gray-700, #374151);
   font-size: var(--space-4);
   cursor: pointer;
   transition:
@@ -30,18 +30,18 @@
 }
 
 .pageBtn:hover:not(:disabled) {
-  background-color: var(--color-blue-500);
-  border-color: var(--color-gray-700);
-  color: var(--color-white);
+  background-color: var(--green-500, #3ecf8e);
+  border-color: var(--gray-700, #374151);
+  color: var(--surface, #fff);
 }
 
 .pageBtn:disabled {
   opacity: 0.6;
-  background-color: var(--color-gray-50);
+  background-color: var(--gray-50, #fafafa);
   cursor: not-allowed;
 }
 
 .pageBtn:focus {
-  outline: var(--space-1) solid var(--color-blue-500);
+  outline: var(--space-1) solid var(--green-500, #3ecf8e);
   outline-offset: var(--space-1);
 }

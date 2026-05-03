@@ -114,9 +114,9 @@ const ItemDeleteModal: React.FC<IItemDeleteModalProps> = ({
         touched={false}
         error={undefined}
       >
-        <div className="form-check">
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <input
-            className="form-check-input"
+            
             type="radio"
             name="applyTo"
             id="deleteApplyToSeries"
@@ -124,13 +124,13 @@ const ItemDeleteModal: React.FC<IItemDeleteModalProps> = ({
             checked={applyTo === 'series'}
             onChange={() => setApplyTo('series')}
           />
-          <label className="form-check-label" htmlFor="deleteApplyToSeries">
+          <label style={{ marginLeft: 6, cursor: "pointer" }} htmlFor="deleteApplyToSeries">
             {t('entireSeries')}
           </label>
         </div>
-        <div className="form-check">
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <input
-            className="form-check-input"
+            
             type="radio"
             name="applyTo"
             id="deleteApplyToInstance"
@@ -138,7 +138,7 @@ const ItemDeleteModal: React.FC<IItemDeleteModalProps> = ({
             checked={applyTo === 'instance'}
             onChange={() => setApplyTo('instance')}
           />
-          <label className="form-check-label" htmlFor="deleteApplyToInstance">
+          <label style={{ marginLeft: 6, cursor: "pointer" }} htmlFor="deleteApplyToInstance">
             {t('thisEventOnly')}
           </label>
         </div>

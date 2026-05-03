@@ -119,7 +119,7 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
                 {type === 'Event' && (
                   <DateIcon
                     title={tCommon('eventDate')}
-                    fill="var(--bs-gray-600)"
+                    fill="var(--gray-600, #4b5563)"
                     width={20}
                     height={20}
                   />

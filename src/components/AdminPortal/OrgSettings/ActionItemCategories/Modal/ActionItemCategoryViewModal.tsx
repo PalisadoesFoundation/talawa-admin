@@ -96,7 +96,7 @@ const CategoryViewModal: FC<ICategoryViewModalProps> = ({
                   fontSize: 'var(--font-size-sm)',
                   color: category.isDisabled
                     ? 'var(--errorIcon-color)'
-                    : 'var(--bs-success)',
+                    : 'var(--green-500, #3ecf8e)',
                 }}
                 style={{ marginRight: 8 }}
               />

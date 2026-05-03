@@ -88,7 +88,7 @@ export default function BaseModal({
       data-testid="modalCloseBtn"
       className={styles.closeButton}
     >
-      <i className="fa fa-times"></i>
+      ×
     </Button>
   ) : null;
 

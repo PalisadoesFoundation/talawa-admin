@@ -41,9 +41,9 @@
 }
 
 .btnsBlock button.dropdown {
-  background-color: var(--color-white);
-  border: var(--border-1) solid var(--color-gray-300);
-  color: var(--color-gray-700);
+  background-color: var(--surface, #fff);
+  border: var(--border-1) solid var(--gray-300, #d1d5db);
+  color: var(--gray-700, #374151);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -52,18 +52,18 @@
 }
 
 .btnsBlock .dropdown :global(.btn) {
-  background-color: var(--color-white);
-  border: var(--border-1) solid var(--color-gray-300);
-  color: var(--color-gray-700);
+  background-color: var(--surface, #fff);
+  border: var(--border-1) solid var(--gray-300, #d1d5db);
+  color: var(--gray-700, #374151);
   width: 100%;
   border-radius: var(--radius-md);
 }
 
 .btnsBlock button.dropdown:hover,
 .btnsBlock .dropdown :global(.btn):hover {
-  background-color: var(--color-blue-500);
-  border-color: var(--color-blue-500);
-  color: var(--color-white);
+  background-color: var(--green-500, #3ecf8e);
+  border-color: var(--green-500, #3ecf8e);
+  color: var(--surface, #fff);
 }
 
 /* Ensure the dropdown menu matches the button width perfectly */

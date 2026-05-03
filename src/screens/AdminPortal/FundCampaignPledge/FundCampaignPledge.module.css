@@ -16,7 +16,7 @@
 
 .errorIcon {
   font-size: var(--font-size-4xl);
-  color: var(--color-red-500);
+  color: var(--red-500, #ef4444);
   margin-bottom: var(--space-5);
 }
 
@@ -27,9 +27,9 @@
   justify-content: space-between;
   margin: var(--space-7) 0 0 0;
   padding: var(--space-6) var(--space-8);
-  background-color: var(--color-gray-50);
+  background-color: var(--gray-50, #fafafa);
 
-  box-shadow: var(--color-black-15) 0 var(--shadow-offset-xs)
+  box-shadow: #00000026 0 var(--shadow-offset-xs)
     var(--shadow-blur-md);
   border-radius: var(--radius-md);
 }
@@ -43,7 +43,7 @@
 .titleContainer h3 {
   font-size: var(--font-size-28);
   font-weight: var(--font-weight-bold);
-  color: var(--color-gray-500);
+  color: var(--gray-500, #6b7280);
   margin-top: var(--space-2);
 }
 
@@ -51,7 +51,7 @@
   font-size: var(--font-size-15);
   margin-left: var(--space-3);
   font-weight: var(--font-weight-lighter);
-  color: var(--color-gray-500);
+  color: var(--gray-500, #6b7280);
 }
 
 .progressContainer {
@@ -73,11 +73,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border-color: var(--color-gray-100);
+  border-color: var(--gray-100, #f3f4f6);
 }
 
 .toggleGroup .toggleBtnPledge + label {
-  color: var(--color-gray-700);
+  color: var(--gray-700, #374151);
 }
 
 .toggleGroup .toggleBtnPledge:checked + label,
@@ -86,9 +86,9 @@
 .toggleGroup .toggleBtnPledge + label:active,
 .toggleGroup .toggleBtnPledge + label:hover,
 .toggleGroup .toggleBtnPledge + label:focus {
-  color: var(--color-gray-700) !important;
-  background-color: var(--color-blue-200) !important;
-  border-color: var(--color-blue-200) !important;
+  color: var(--gray-700, #374151) !important;
+  background-color: var(--gray-100, #f3f4f6) !important;
+  border-color: var(--gray-100, #f3f4f6) !important;
 }
 
 .progress {
@@ -148,23 +148,23 @@
 }
 
 .createButton {
-  background-color: var(--color-gray-50);
+  background-color: var(--gray-50, #fafafa);
   min-width: var(--space-15);
-  border: var(--border-1) solid var(--color-gray-700);
-  color: var(--color-gray-700);
+  border: var(--border-1) solid var(--gray-700, #374151);
+  color: var(--gray-700, #374151);
 }
 
 .createButton:hover {
-  background-color: var(--color-gray-400) !important;
-  border-color: var(--color-gray-300) !important;
-  color: var(--color-white) !important;
+  background-color: var(--gray-400, #9ca3af) !important;
+  border-color: var(--gray-300, #d1d5db) !important;
+  color: var(--surface, #fff) !important;
   box-shadow: none;
 }
 
 .createButton:active {
-  color: var(--color-gray-400);
-  background-color: var(--color-gray-100);
-  border: var(--border-1) solid var(--color-gray-400);
+  color: var(--gray-400, #9ca3af);
+  background-color: var(--gray-100, #f3f4f6);
+  border: var(--border-1) solid var(--gray-400, #9ca3af);
 }
 
 .buttonNoWrap {
@@ -185,7 +185,7 @@
 }
 
 .rowBackgroundPledge {
-  background-color: var(--color-white);
+  background-color: var(--surface, #fff);
   max-height: var(--space-14);
 }
 
@@ -197,11 +197,11 @@
   font-size: var(--font-size-sm);
   margin-top: var(--space-3);
   padding: var(--space-4);
-  border: var(--border-1) solid var(--color-gray-100);
-  background-color: var(--color-white);
-  color: var(--color-black);
+  border: var(--border-1) solid var(--gray-100, #f3f4f6);
+  background-color: var(--surface, #fff);
+  color: var(--gray-900, #111827);
   box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-lg)
-    var(--color-black-15);
+    #00000026;
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
@@ -220,7 +220,7 @@
   gap: var(--space-2);
   padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-sm);
-  background-color: var(--color-green-100);
+  background-color: var(--green-100, #d1fae5);
   height: var(--space-9);
   margin-top: var(--space-4);
 }

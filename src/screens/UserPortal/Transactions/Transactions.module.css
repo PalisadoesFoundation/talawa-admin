@@ -5,5 +5,5 @@
   max-height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
-  background-color: var(--color-gray-50);
+  background-color: var(--gray-50, #fafafa);
 }

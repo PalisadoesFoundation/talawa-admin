@@ -480,7 +480,7 @@ function ManageTag(): JSX.Element {
           </div>
           <div className="card-body">
             <div className="form-group">
-              <label className="form-label" htmlFor="tag-name">{t('tagName') || 'Tag Name'}</label>
+              <label className="field-label" htmlFor="tag-name">{t('tagName') || 'Tag Name'}</label>
               <input
                 type="text"
                 id="tag-name"

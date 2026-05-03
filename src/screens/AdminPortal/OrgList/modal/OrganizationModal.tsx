@@ -103,7 +103,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
         autoComplete="off"
       />
 
-      <label htmlFor="countrySelect" className="form-label">
+      <label htmlFor="countrySelect" className="field-label">
         {tCommon('address')}
       </label>
 
@@ -224,7 +224,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
         </div>
       </div>
 
-      <label htmlFor="orgphoto" className="form-label">
+      <label htmlFor="orgphoto" className="field-label">
         {tCommon('displayImage')}
       </label>
 

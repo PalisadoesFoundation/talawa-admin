@@ -3,7 +3,7 @@
 /* ── Org container ───────────────────────────────────────────────────────────── */
 .organizationContainer {
   padding-bottom: var(--space-3);
-  border-bottom: var(--border-1) solid var(--color-black-7);
+  border-bottom: var(--border-1) solid #00000012;
   margin-bottom: var(--space-2);
 }
 
@@ -15,8 +15,8 @@
   margin: var(--space-3-5) 0;
   padding: var(--space-3) var(--space-3-75);
   border-radius: var(--radius-xl);
-  background-color: var(--color-gray-50) !important;
-  border: var(--border-1) solid var(--color-black-6) !important;
+  background-color: var(--gray-50, #fafafa) !important;
+  border: var(--border-1) solid #0000000f !important;
   min-height: var(--space-13);
   cursor: pointer;
   text-align: left;
@@ -26,7 +26,7 @@
 }
 
 .profileContainer:hover {
-  background-color: var(--color-gray-100) !important;
+  background-color: var(--gray-100, #f3f4f6) !important;
   color: inherit !important;
 }
 
@@ -46,7 +46,7 @@
   overflow: hidden;
   flex-shrink: 0;
   margin-right: var(--space-3-75);
-  background-color: var(--color-gray-100);
+  background-color: var(--gray-100, #f3f4f6);
 }
 
 .imageContainer img,
@@ -79,7 +79,7 @@
 .primaryText {
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
-  color: var(--color-gray-900);
+  color: var(--gray-900, #111827);
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -92,7 +92,7 @@
 .secondaryText {
   font-size: var(--font-size-9);
   font-weight: var(--font-weight-regular);
-  color: var(--color-gray-mid);
+  color: var(--gray-600, #4b5563);
   display: block;
   text-transform: capitalize;
   white-space: nowrap;
@@ -103,30 +103,30 @@
 
 .ArrowIcon {
   flex-shrink: 0;
-  color: var(--color-gray-sub);
+  color: var(--gray-500, #6b7280);
   display: flex;
   align-items: center;
 }
 
 .ArrowIcon svg,
 .ArrowIcon path {
-  fill: var(--color-gray-sub);
-  color: var(--color-gray-sub);
+  fill: var(--gray-500, #6b7280);
+  color: var(--gray-500, #6b7280);
   width: var(--space-3-5);
   height: var(--space-3-5);
 }
 
 /* ── Error state ─────────────────────────────────────────────────────────────── */
 .bgDanger {
-  background-color: var(--color-red-50) !important;
-  border-color: var(--color-red-100) !important;
+  background-color: var(--red-50, #fef2f2) !important;
+  border-color: var(--red-50, #fef2f2) !important;
   cursor: default;
 }
 
 .errorText {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
-  color: var(--color-red-500);
+  color: var(--red-500, #ef4444);
 }
 
 /* Responsive styles */

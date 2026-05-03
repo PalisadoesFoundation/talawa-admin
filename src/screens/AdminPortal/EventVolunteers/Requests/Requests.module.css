@@ -12,7 +12,7 @@
 
 .errorIcon {
   font-size: var(--font-size-4xl);
-  color: var(--color-red-500);
+  color: var(--red-500, #ef4444);
   margin-bottom: var(--space-5);
 
   /* Add error icon for non-color indication */
@@ -27,8 +27,8 @@
 }
 
 .tableHeader {
-  background-color: var(--color-gray-100);
-  color: var(--color-black);
+  background-color: var(--gray-100, #f3f4f6);
+  color: var(--gray-900, #111827);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
 }
@@ -66,7 +66,7 @@
 }
 
 .dataGridContainer {
-  background-color: var(--color-white);
+  background-color: var(--surface, #fff);
   border-radius: var(--radius-xl);
 }
 
@@ -85,7 +85,7 @@
 }
 
 .rowBackgrounds {
-  background-color: var(--color-white);
+  background-color: var(--surface, #fff);
   max-height: var(--space-14);
   overflow-y: auto;
   /* Handle content overflow */

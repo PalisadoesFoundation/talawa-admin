@@ -1,10 +1,10 @@
 .mainContainer {
   width: auto;
   overflow: hidden;
-  background-color: var(--color-white);
+  background-color: var(--surface, #fff);
   margin-top: var(--space-5);
   padding: var(--space-3);
-  border: var(--border-1) solid var(--color-gray-200);
+  border: var(--border-1) solid var(--gray-200, #e5e7eb);
   border-radius: var(--radius-md);
 }
 
@@ -30,13 +30,13 @@
 .cardActionBtn {
   background-color: transparent;
   border: none;
-  color: var(--color-black);
+  color: var(--gray-900, #111827);
 }
 
 .cardActionBtn:hover {
-  background-color: var(--color-gray-50);
+  background-color: var(--gray-50, #fafafa);
   border: none;
-  color: var(--color-green-500) !important;
+  color: var(--green-500, #3ecf8e) !important;
 }
 
 .likeIcon {
@@ -55,7 +55,7 @@
   transform: translate(-50%, -50%);
   width: 90%;
   max-width: var(--space-25);
-  background-color: var(--color-white);
+  background-color: var(--surface, #fff);
   border-radius: var(--radius-md);
   padding: var(--space-7);
 }
@@ -86,7 +86,7 @@
   overflow: hidden;
   border-radius: var(--radius-full);
   position: relative;
-  border: var(--border-2) solid var(--userImage-border, var(--color-gray-200));
+  border: var(--border-2) solid var(--userImage-border, var(--gray-200, #e5e7eb));
 }
 
 .userImageUserComment img {

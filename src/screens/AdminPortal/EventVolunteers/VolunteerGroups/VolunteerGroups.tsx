@@ -285,7 +285,7 @@ function VolunteerGroups(): JSX.Element {
                 name: params.row.name,
               })}
             >
-              <i className="fa fa-info" aria-hidden="true" />
+              ℹ
             </Button>
             <Button
               variant="success"
@@ -297,7 +297,6 @@ function VolunteerGroups(): JSX.Element {
                 name: params.row.name,
               })}
             >
-              <i className="fa fa-edit" aria-hidden="true" />
             </Button>
             <Button
               size="sm"
@@ -309,7 +308,6 @@ function VolunteerGroups(): JSX.Element {
                 name: params.row.name,
               })}
             >
-              <i className="fa fa-trash" aria-hidden="true" />
             </Button>
           </>
         );
@@ -377,7 +375,7 @@ function VolunteerGroups(): JSX.Element {
               data-testid="createGroupBtn"
               aria-label={tCommon('createNew', { item: 'Volunteer Group' })}
             >
-              <i className="fa fa-plus" aria-hidden="true" />
+              +
               {tCommon('create')}
             </Button>
           }

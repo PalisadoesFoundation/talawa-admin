@@ -185,7 +185,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
         </div>
         <div style={{ marginLeft: "auto", alignItems: "flex-start" }}>
           <div style={{ marginBottom: 12 }}>
-            <span className="form-label">{t('status')}</span>
+            <span className="field-label">{t('status')}</span>
 
             <div>
               <StatusBadge

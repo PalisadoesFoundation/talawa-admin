@@ -10,18 +10,18 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--color-gray-50);
-  color: var(--color-gray-400);
-  border: var(--border-1) solid var(--color-gray-100);
+  background-color: var(--gray-50, #fafafa);
+  color: var(--gray-400, #9ca3af);
+  border: var(--border-1) solid var(--gray-100, #f3f4f6);
 }
 
 #individualRadio,
 #requestsRadio,
 #groupsRadio {
-  color: var(--color-blue-500);
+  color: var(--green-500, #3ecf8e);
 }
 
 .toggleBtn:hover {
-  color: var(--color-gray-700);
-  border: var(--border-1) solid var(--color-gray-100);
+  color: var(--gray-700, #374151);
+  border: var(--border-1) solid var(--gray-100, #f3f4f6);
 }

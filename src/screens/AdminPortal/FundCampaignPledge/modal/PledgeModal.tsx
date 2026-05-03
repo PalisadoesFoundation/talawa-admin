@@ -308,7 +308,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
             disabled={isSubmitting || !isAmountValid}
             data-testid="modal-submit-btn"
           >
-            <i className="fa fa-pencil" />
             {tCommon('create')}
           </Button>
         }
@@ -338,7 +337,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               data-testid="modal-submit-btn"
               disabled={isSubmitting || !isAmountValid}
             >
-              <i className="fa fa-edit" />
               {tCommon('edit')}
             </Button>
 
@@ -349,7 +347,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               disabled={isSubmitting || !pledge?.id}
               onClick={handleDeleteClick}
             >
-              <i className="fa fa-trash" />
               {tCommon('delete')}
             </Button>
           </div>

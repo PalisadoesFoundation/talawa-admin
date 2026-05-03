@@ -86,13 +86,13 @@ const CollapsibleDropdown = ({
         <div className={styles.collapsibleDropdownIconWrapper}>
           <IconComponent
             name={name}
-            fill={showDropdown ? 'var(--bs-black)' : 'var(--gray-500)'}
+            fill={showDropdown ? 'var(--gray-900, #111827)' : 'var(--gray-500)'}
           />
         </div>
         {tCommon(name)}
         <i
           className={`ms-auto fa
-          ${showDropdown ? 'var(--bs-white)' : 'var(--gray-500)'}
+          ${showDropdown ? 'var(--surface, #fff)' : 'var(--gray-500)'}
           ${showDropdown ? 'fa-chevron-up' : 'fa-chevron-down'}
           `}
         />

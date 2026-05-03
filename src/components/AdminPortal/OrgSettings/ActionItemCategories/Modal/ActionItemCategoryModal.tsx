@@ -246,7 +246,7 @@ const CategoryModal: FC<IActionItemCategoryModal> = ({
             type="checkbox"
             checked={isDisabled}
             data-testid="isDisabledSwitch"
-            className="form-check-input"
+            
             onChange={() =>
               setFormState({ ...formState, isDisabled: !isDisabled })
             }
@@ -261,7 +261,6 @@ const CategoryModal: FC<IActionItemCategoryModal> = ({
                 onClick={handleDelete}
                 data-testid="deleteCategoryButton"
               >
-                <i className="fa fa-trash" />
                 {tCommon('delete')}
               </Button>
             )}

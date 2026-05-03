@@ -367,7 +367,7 @@ function AddMember({
               data-testid="addBtn"
               className={styles.addButton}
             >
-              <i className={'fa fa-plus'} />
+              +
               {translateAddMember('addMember.add')}
             </Button>
           ),
@@ -515,11 +515,7 @@ function AddMember({
               }
               data-testid="showPassword"
             >
-              {showPassword ? (
-                <i className="fas fa-eye" aria-hidden="true"></i>
-              ) : (
-                <i className="fas fa-eye-slash" aria-hidden="true"></i>
-              )}
+              {showPassword ? '◉' : '○'}
             </span>
           </div>
           <h6>{translateOrgPeople('enterConfirmPassword')}</h6>
@@ -550,11 +546,7 @@ function AddMember({
               }
               data-testid="showConfirmPassword"
             >
-              {showConfirmPassword ? (
-                <i className="fas fa-eye" aria-hidden="true"></i>
-              ) : (
-                <i className="fas fa-eye-slash" aria-hidden="true"></i>
-              )}
+              {showConfirmPassword ? '◉' : '○'}
             </span>
           </div>
           <h6>{translateOrgPeople('organization')}</h6>

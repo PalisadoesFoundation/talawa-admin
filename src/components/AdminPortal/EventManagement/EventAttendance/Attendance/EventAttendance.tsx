@@ -207,7 +207,7 @@ function EventAttendance(): JSX.Element {
             componentsProps={{
               tooltip: {
                 sx: {
-                  backgroundColor: 'var(--bs-white)',
+                  backgroundColor: 'var(--surface, #fff)',
                   fontSize: 'var(--font-size-3xl)',
                   maxHeight: 'var(--space-16)',
                   overflowY: 'scroll',

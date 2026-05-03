@@ -14,13 +14,13 @@
 .timeColumn {
   width: var(--space-11);
   flex-shrink: 0;
-  border-right: var(--border-1) solid var(--color-gray-200);
+  border-right: var(--border-1) solid var(--gray-200, #e5e7eb);
 }
 
 .timeHeader {
   height: var(--space-11);
-  border-bottom: var(--border-1) solid var(--color-gray-200);
-  background-color: var(--color-white);
+  border-bottom: var(--border-1) solid var(--gray-200, #e5e7eb);
+  background-color: var(--surface, #fff);
   position: sticky;
   top: 0;
   z-index: 10;
@@ -28,8 +28,8 @@
 
 .allDaySpacer {
   height: var(--all-day-lane-height, var(--space-10));
-  border-bottom: var(--border-1) solid var(--color-gray-100);
-  background-color: var(--color-white);
+  border-bottom: var(--border-1) solid var(--gray-100, #f3f4f6);
+  background-color: var(--surface, #fff);
 }
 
 .timeSlot {
@@ -37,7 +37,7 @@
   position: relative;
   text-align: right;
   padding-right: var(--space-3);
-  color: var(--color-gray-500);
+  color: var(--gray-500, #6b7280);
   font-size: var(--font-size-xs);
 }
 
@@ -53,17 +53,17 @@
 
 .dayColumn {
   flex: 1;
-  border-right: var(--border-1) solid var(--color-gray-200);
+  border-right: var(--border-1) solid var(--gray-200, #e5e7eb);
   min-width: var(--space-15);
 }
 
 .dayColumn:focus-visible {
-  outline: var(--border-2) solid var(--color-blue-500);
+  outline: var(--border-2) solid var(--green-500, #3ecf8e);
   outline-offset: calc(var(--border-2) * -1);
 }
 
 .eventCard:focus-visible {
-  outline: var(--border-2) solid var(--color-blue-500);
+  outline: var(--border-2) solid var(--green-500, #3ecf8e);
   outline-offset: calc(var(--border-2) * -1);
 }
 
@@ -73,8 +73,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-bottom: var(--border-1) solid var(--color-gray-200);
-  background-color: var(--color-white);
+  border-bottom: var(--border-1) solid var(--gray-200, #e5e7eb);
+  background-color: var(--surface, #fff);
   position: sticky;
   top: 0;
   z-index: 10;
@@ -83,18 +83,18 @@
 .dayName {
   font-weight: var(--font-weight-medium);
   text-transform: uppercase;
-  color: var(--color-gray-500);
+  color: var(--gray-500, #6b7280);
   font-size: var(--font-size-xs);
 }
 
 .dayDate {
   font-size: var(--font-size-2xl);
-  color: var(--color-gray-800);
+  color: var(--gray-800, #1f2937);
 }
 
 .todayHighlight .dayDate {
-  background-color: var(--color-blue-500);
-  color: var(--color-white);
+  background-color: var(--green-500, #3ecf8e);
+  color: var(--surface, #fff);
   border-radius: var(--radius-full);
   width: var(--space-8);
   height: var(--space-8);
@@ -104,7 +104,7 @@
 }
 
 .todayHighlight .dayName {
-  color: var(--color-blue-500);
+  color: var(--green-500, #3ecf8e);
 }
 
 .dayGrid {
@@ -116,18 +116,18 @@
   flex-direction: column;
   gap: var(--space-1);
   padding: var(--space-1);
-  border-bottom: var(--border-1) solid var(--color-gray-100);
+  border-bottom: var(--border-1) solid var(--gray-100, #f3f4f6);
   min-height: var(--all-day-lane-height, var(--space-10));
   height: var(--all-day-lane-height, var(--space-10));
   overflow: visible;
-  background-color: var(--color-white);
+  background-color: var(--surface, #fff);
 }
 
 .allDayEventCard {
   position: relative;
-  background-color: var(--color-blue-100);
-  border-left: var(--border-3) solid var(--color-blue-500);
-  border-top: var(--border-3) solid var(--color-blue-500);
+  background-color: var(--blue-100, #dbeafe);
+  border-left: var(--border-3) solid var(--green-500, #3ecf8e);
+  border-top: var(--border-3) solid var(--green-500, #3ecf8e);
   border-radius: var(--radius-md);
   overflow: visible;
   pointer-events: auto;
@@ -140,15 +140,15 @@
 
 .gridCell {
   height: var(--space-12);
-  border-bottom: var(--border-1) solid var(--color-gray-50);
+  border-bottom: var(--border-1) solid var(--gray-50, #fafafa);
 }
 
 .eventContainer {
   position: absolute;
   /* width and left are set inline by getEventStyle based on collision columns */
-  background-color: var(--color-blue-100);
-  border-left: var(--border-3) solid var(--color-blue-500);
-  border-top: var(--border-3) solid var(--color-blue-500);
+  background-color: var(--blue-100, #dbeafe);
+  border-left: var(--border-3) solid var(--green-500, #3ecf8e);
+  border-top: var(--border-3) solid var(--green-500, #3ecf8e);
   border-radius: var(--radius-md);
   overflow: visible;
   pointer-events: auto;
@@ -188,7 +188,7 @@
 
 .eventContainer h2 {
   font-size: var(--font-size-xs) !important;
-  color: var(--color-blue-700) !important;
+  color: var(--green-700, #15803d) !important;
   margin: 0 0 var(--space-1) 0 !important;
   white-space: nowrap;
   overflow: hidden;
@@ -199,7 +199,7 @@
 
 .eventTime {
   font-size: var(--font-size-xs);
-  color: var(--color-blue-600);
+  color: var(--green-600, #16a34a);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

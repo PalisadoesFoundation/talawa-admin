@@ -3,25 +3,25 @@
 }
 
 .noOutline input:focus-visible {
-  outline: var(--border-2) solid var(--color-blue-500);
+  outline: var(--border-2) solid var(--green-500, #3ecf8e);
   outline-offset: var(--shadow-offset-sm);
 }
 
 .noOutline input:disabled {
-  -webkit-text-fill-color: var(--color-gray-400) !important;
+  -webkit-text-fill-color: var(--gray-400, #9ca3af) !important;
 }
 
 .noOutline input:disabled:focus-visible {
-  outline: var(--border-2) solid var(--color-gray-400);
+  outline: var(--border-2) solid var(--gray-400, #9ca3af);
   outline-offset: var(--shadow-offset-sm);
 }
 
 .noOutline textarea:disabled {
-  color: var(--color-gray-400) !important;
+  color: var(--gray-400, #9ca3af) !important;
 }
 
 .noOutline:focus-within {
-  outline: var(--border-2) solid var(--color-blue-500);
+  outline: var(--border-2) solid var(--green-500, #3ecf8e);
   outline-offset: var(--shadow-offset-sm);
 }
 

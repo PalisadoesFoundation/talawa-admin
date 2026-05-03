@@ -262,7 +262,7 @@ function Requests(): JSX.Element {
               data-testid="acceptBtn"
               onClick={() => updateMembershipStatus(params.row.id, 'accepted')}
             >
-              <i className="fa fa-check" />
+              ✓
             </Button>
             <Button
               size="sm"

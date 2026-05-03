@@ -99,7 +99,6 @@ const VenueCard = ({
               data-testid={`updateVenueBtn-${venueItem.node.id}`}
               className={styles.addButton}
             >
-              <i className="fa fa-pen" style={{ marginRight: '0.25rem' }}></i>
               <span>{tCommon('edit')}</span>
             </Button>
             {/* Delete button */}
@@ -109,7 +108,6 @@ const VenueCard = ({
               onClick={() => handleDelete(venueItem.node.id)}
               className={styles.removeButton}
             >
-              <i className="fa fa-trash" style={{ marginRight: '0.5rem' }}></i>
               <span>{tCommon('delete')}</span>
             </Button>
           </div>

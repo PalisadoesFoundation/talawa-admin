@@ -123,7 +123,7 @@ const LeftDrawerOrg = ({
               icon={
                 <IconComponent
                   name={name === 'Membership Requests' ? 'Requests' : name}
-                  fill="var(--bs-black)"
+                  fill="var(--gray-900, #111827)"
                 />
               }
               label={tCommon(name)}

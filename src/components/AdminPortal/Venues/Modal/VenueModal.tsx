@@ -418,7 +418,7 @@ const VenueModal = ({
               data-testid="closeimage"
               aria-label={t('closeImagePreview')}
             >
-              <i className="fa fa-times"></i>
+              ×
             </Button>
           </div>
         )}

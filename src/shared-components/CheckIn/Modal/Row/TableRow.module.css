@@ -1,6 +1,6 @@
 .buttonStyle {
-  background-color: var(--color-blue-200);
-  color: var(--color-gray-700);
+  background-color: var(--gray-100, #f3f4f6);
+  color: var(--gray-700, #374151);
   margin: var(--space-3);
   padding: var(--space-3);
 }

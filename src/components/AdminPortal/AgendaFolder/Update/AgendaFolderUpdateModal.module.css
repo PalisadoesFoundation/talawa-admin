@@ -24,6 +24,6 @@
 }
 
 .regBtn:focus-visible {
-  outline: var(--border-1) solid var(--color-blue-300);
+  outline: var(--border-1) solid var(--gray-200, #e5e7eb);
   outline-offset: var(--space-1);
 }

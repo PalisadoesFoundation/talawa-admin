@@ -408,7 +408,7 @@ const AgendaItemsUpdateModal: React.FC<
                 aria-label={t('removeAttachment')}
                 onClick={() => handleRemoveAttachment(attachment.objectName)}
               >
-                <i className="fa fa-times" />
+                &times;
               </Button>
             </div>
           ))}

@@ -1,15 +1,15 @@
 .peopleTabUserEventContainer {
-  background: var(--color-white);
+  background: var(--surface, #fff);
   border-radius: var(--radius-sm);
   height: var(--space-17);
   display: flex;
   flex-direction: column;
   padding: var(--space-5) var(--space-8);
   margin: var(--space-3);
-  border-left: var(--border-6) solid var(--color-blue-200);
-  border-right: var(--border-1) solid var(--color-gray-500);
-  border-top: var(--border-1) solid var(--color-gray-500);
-  border-bottom: var(--border-1) solid var(--color-gray-500);
+  border-left: var(--border-6) solid var(--gray-100, #f3f4f6);
+  border-right: var(--border-1) solid var(--gray-500, #6b7280);
+  border-top: var(--border-1) solid var(--gray-500, #6b7280);
+  border-bottom: var(--border-1) solid var(--gray-500, #6b7280);
 }
 
 .peopleTabUserEventTimeWrapper {
@@ -44,7 +44,7 @@
 .dateText {
   margin: 0;
   font-size: var(--space-4);
-  color: var(--color-gray-600);
+  color: var(--gray-600, #4b5563);
 }
 
 .peopleTabUserEventInfo {
@@ -61,7 +61,7 @@
 .peopleTabUserOrganizationEventPageEventDescription {
   margin: 0;
   font-size: var(--space-5);
-  color: var(--color-gray-600);
+  color: var(--gray-600, #4b5563);
   overflow-wrap: anywhere;
   white-space: normal;
 }
@@ -74,7 +74,7 @@
 }
 
 .peopleTabUserEventActionButton {
-  background-color: var(--color-blue-200);
+  background-color: var(--gray-100, #f3f4f6);
   border: none;
   border-radius: var(--radius-sm);
   padding: var(--space-2) var(--space-3);
@@ -89,7 +89,7 @@
 }
 
 .peopleTabUserEventActionButton:hover {
-  background-color: var(--color-blue-200);
+  background-color: var(--gray-100, #f3f4f6);
 }
 
 .actionIcon {

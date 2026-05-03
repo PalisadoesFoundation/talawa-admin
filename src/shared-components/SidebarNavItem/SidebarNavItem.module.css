@@ -9,8 +9,8 @@
 }
 
 .leftDrawerActiveButton {
-  background-color: var(--color-gray-100);
-  color: var(--color-black);
+  background-color: var(--gray-100, #f3f4f6);
+  color: var(--gray-900, #111827);
   font-weight: var(--font-weight-bold);
 }
 
@@ -21,28 +21,28 @@
 
 .leftDrawerInactiveButton {
   background-color: transparent;
-  color: var(--color-black);
+  color: var(--gray-900, #111827);
 }
 
 .leftDrawerInactiveButton:hover {
-  background-color: var(--color-gray-100);
+  background-color: var(--gray-100, #f3f4f6);
 }
 
 .sidebarBtn {
   background-color: transparent;
-  color: var(--color-black);
+  color: var(--gray-900, #111827);
   font-weight: var(--font-weight-regular);
   cursor: pointer;
 }
 
 .sidebarBtn:hover {
-  background-color: var(--color-gray-100);
-  color: var(--color-black);
+  background-color: var(--gray-100, #f3f4f6);
+  color: var(--gray-900, #111827);
 }
 
 .sidebarBtnActive {
-  background-color: var(--color-gray-200);
-  color: var(--color-black);
+  background-color: var(--gray-200, #e5e7eb);
+  color: var(--gray-900, #111827);
   font-weight: var(--font-weight-bold);
 }
 

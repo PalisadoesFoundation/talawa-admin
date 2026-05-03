@@ -12,7 +12,7 @@
 
 .errorIcon {
   font-size: var(--font-size-4xl);
-  color: var(--color-red-500);
+  color: var(--red-500, #ef4444);
   margin-bottom: var(--space-5);
 }
 
@@ -25,7 +25,7 @@
 .titleContainerVolunteer h3 {
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
-  color: var(--color-gray-700);
+  color: var(--gray-700, #374151);
   margin-top: var(--space-2);
 }
 

@@ -13,12 +13,12 @@
 }
 
 .editButton {
-  background-color: var(--color-blue-200);
-  color: var(--color-gray-700);
-  border-color: var(--color-gray-100);
+  background-color: var(--gray-100, #f3f4f6);
+  color: var(--gray-700, #374151);
+  border-color: var(--gray-100, #f3f4f6);
 }
 
 .editButton:is(:hover, :active) {
-  background-color: var(--color-blue-500);
-  border-color: var(--color-gray-700);
+  background-color: var(--green-500, #3ecf8e);
+  border-color: var(--gray-700, #374151);
 }

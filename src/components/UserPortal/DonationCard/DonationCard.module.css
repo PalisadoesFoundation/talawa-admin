@@ -1,7 +1,7 @@
 .donationAvatar {
   height: 100%;
   aspect-ratio: 1 / 1;
-  background-color: var(--color-white);
+  background-color: var(--surface, #fff);
   border-radius: var(--radius-full);
 }
 
@@ -26,5 +26,5 @@
 
 .donationMeta {
   font-size: var(--font-size-sm);
-  color: var(--color-blue-500);
+  color: var(--green-500, #3ecf8e);
 }

@@ -461,7 +461,7 @@ const AgendaItemsCreateModal: React.FC<
             data-testid="deleteAttachment"
             onClick={() => handleRemoveAttachment(att.objectName)}
           >
-            <i className="fa fa-times" />
+            &times;
           </Button>
         </div>
       ))}

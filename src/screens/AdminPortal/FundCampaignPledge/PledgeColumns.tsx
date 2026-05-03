@@ -175,7 +175,6 @@ export const getPledgeColumns = ({
         data-testid="editPledgeBtn"
         onClick={() => handleOpenModal(row.original, 'edit')}
       >
-        <i className="fa fa-edit" />
         {labels.edit}
       </Button>
     ),

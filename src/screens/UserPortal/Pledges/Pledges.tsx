@@ -229,7 +229,6 @@ const Pledges = (): JSX.Element => {
           data-testid="editPledgeBtn"
           onClick={() => handleOpenModal(row.original)}
         >
-          <i className="fa fa-edit" />
           {tCommon('edit')}
         </Button>
       ),

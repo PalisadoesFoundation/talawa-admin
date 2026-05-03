@@ -370,7 +370,7 @@ const Campaigns = (): JSX.Element => {
               !canCreatePledge && isEnded ? t('campaignEnded') : t('addPledge')
             }
           >
-            <i className="fa fa-plus" aria-hidden="true" />
+            +
             {t('addPledge')}
           </Button>
         );

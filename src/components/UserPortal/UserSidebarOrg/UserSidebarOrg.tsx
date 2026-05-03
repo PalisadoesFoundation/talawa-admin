@@ -87,7 +87,7 @@ const UserSidebarOrg = ({
               <SidebarNavItem
                 key={name}
                 to={url}
-                icon={<IconComponent name={name} fill="var(--bs-black)" />}
+                icon={<IconComponent name={name} fill="var(--gray-900, #111827)" />}
                 label={tCommon(name)}
                 testId={name}
                 hideDrawer={hideDrawer}

@@ -356,7 +356,7 @@ function Volunteers(): JSX.Element {
                 name: params.row.name,
               })}
             >
-              <i className="fa fa-info" aria-hidden="true" />
+              ℹ
             </Button>
             <Button
               size="sm"
@@ -368,7 +368,6 @@ function Volunteers(): JSX.Element {
                 name: params.row.name,
               })}
             >
-              <i className="fa fa-trash" aria-hidden="true" />
             </Button>
           </>
         );
@@ -437,7 +436,7 @@ function Volunteers(): JSX.Element {
               className={styles.actionsButton}
               data-testid="addVolunteerBtn"
             >
-              <i className="fa fa-plus" />
+              +
               {t('eventVolunteers.add')}
             </Button>
           }

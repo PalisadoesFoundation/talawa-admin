@@ -265,7 +265,7 @@ function Groups(): JSX.Element {
               onClick={() => handleViewClick(params.row)}
               aria-label={t('viewGroup')}
             >
-              <i className="fa fa-info" />
+              ℹ
             </Button>
             {params.row.leader.id === userId && (
               <Button
@@ -276,7 +276,6 @@ function Groups(): JSX.Element {
                 onClick={() => handleEditClick(params.row)}
                 aria-label={t('editGroup')}
               >
-                <i className="fa fa-edit" />
               </Button>
             )}
           </>

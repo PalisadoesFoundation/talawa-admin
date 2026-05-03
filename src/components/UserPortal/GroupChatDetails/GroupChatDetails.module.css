@@ -20,8 +20,8 @@
   white-space: nowrap;
   vertical-align: baseline;
   border-radius: calc(var(--radius-xs) + var(--radius-sm));
-  background-color: var(--color-green-500);
-  color: var(--color-gray-900);
+  background-color: var(--green-500, #3ecf8e);
+  color: var(--gray-900, #111827);
   margin-left: var(--space-3);
 }
 
@@ -30,7 +30,7 @@
 }
 
 .dropdownToggle {
-  color: var(--color-black);
+  color: var(--gray-900, #111827);
   border: none;
   padding: var(--space-1);
   background: none;
@@ -70,7 +70,7 @@
 }
 
 .editImgBtn:focus-visible {
-  outline: var(--border-2) solid var(--color-blue-500);
+  outline: var(--border-2) solid var(--green-500, #3ecf8e);
   outline-offset: var(--space-1);
 }
 
@@ -90,7 +90,7 @@
 }
 
 .editChatNameContainer input:focus-visible {
-  outline: var(--border-2) solid var(--color-blue-500);
+  outline: var(--border-2) solid var(--green-500, #3ecf8e);
   outline-offset: var(--space-1);
 }
 

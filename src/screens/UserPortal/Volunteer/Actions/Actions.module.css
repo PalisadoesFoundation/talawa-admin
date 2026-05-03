@@ -12,7 +12,7 @@
 
 .loadingHeading {
   font-weight: var(--font-weight-bold);
-  color: var(--color-red-500);
+  color: var(--red-500, #ef4444);
   text-align: center;
 }
 

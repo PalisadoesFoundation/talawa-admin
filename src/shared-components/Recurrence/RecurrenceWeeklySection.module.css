@@ -1,7 +1,7 @@
 .recurrenceDayButton {
   width: var(--space-7);
   height: var(--space-7);
-  border: var(--border-1) solid var(--color-gray-400);
+  border: var(--border-1) solid var(--gray-400, #9ca3af);
   cursor: pointer;
   transition: background-color 0.3s;
   display: inline-flex;
@@ -14,30 +14,30 @@
 }
 
 .recurrenceDayButton:focus-visible {
-  outline: var(--border-2) solid var(--color-blue-700);
+  outline: var(--border-2) solid var(--green-700, #15803d);
   outline-offset: var(--space-2);
 }
 
 .recurrenceDayButton:hover {
-  background-color: var(--color-gray-400);
+  background-color: var(--gray-400, #9ca3af);
 }
 
 .recurrenceDayButton span {
-  color: var(--color-gray-400);
+  color: var(--gray-400, #9ca3af);
   padding: var(--space-2);
   text-align: center;
 }
 
 .recurrenceDayButton:hover span {
-  color: var(--color-white);
+  color: var(--surface, #fff);
 }
 
 .recurrenceDayButton.selected {
-  background-color: var(--color-blue-700);
-  border-color: var(--color-blue-700);
-  color: var(--color-white);
+  background-color: var(--green-700, #15803d);
+  border-color: var(--green-700, #15803d);
+  color: var(--surface, #fff);
 }
 
 .recurrenceDayButton.selected span {
-  color: var(--color-white);
+  color: var(--surface, #fff);
 }

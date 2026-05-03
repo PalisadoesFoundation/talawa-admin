@@ -460,7 +460,6 @@ export default function Organizations(): React.JSX.Element {
                           </span>
                         </div>
                         <a href={`/user/organization/${organization.id}`} className="btn btn-primary btn-sm">
-                          View
                         </a>
                         <span
                           data-testid={`org-name-${organization.name}`}

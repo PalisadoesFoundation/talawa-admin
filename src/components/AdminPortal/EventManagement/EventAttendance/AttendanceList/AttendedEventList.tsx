@@ -65,7 +65,7 @@ const AttendedEventList: React.FC<Partial<InterfaceEvent>> = ({ id }) => {
           >
             <DateIcon
               title={tCommon('eventDate')}
-              fill="var(--bs-gray-600)"
+              fill="var(--gray-600, #4b5563)"
               width={25}
               height={25}
               className="rounded-full"

@@ -11,8 +11,8 @@
 }
 
 .tableHeader {
-  background-color: var(--color-gray-100);
-  color: var(--color-black);
+  background-color: var(--gray-100, #f3f4f6);
+  color: var(--gray-900, #111827);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
 }

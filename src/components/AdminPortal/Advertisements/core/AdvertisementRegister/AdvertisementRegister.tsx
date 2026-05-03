@@ -484,7 +484,7 @@ function AdvertisementRegister({
           onClick={handleShow}
           data-testid="createAdvertisement"
         >
-          <i className="fa fa-plus" />
+          +
           &nbsp;
           {t('createAdvertisement')}
         </Button>

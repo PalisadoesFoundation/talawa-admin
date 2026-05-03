@@ -13,7 +13,7 @@
 }
 
 .titlemodal {
-  color: var(--color-gray-500);
+  color: var(--gray-500, #6b7280);
   font-weight: var(--font-weight-semibold);
   font-size: var(--font-size-3xl);
   width: 65%;
@@ -25,11 +25,11 @@
 }
 
 .noOutline input:disabled {
-  -webkit-text-fill-color: var(--color-gray-400);
+  -webkit-text-fill-color: var(--gray-400, #9ca3af);
 }
 
 .noOutline textarea:disabled {
-  color: var(--color-gray-400);
+  color: var(--gray-400, #9ca3af);
   opacity: 1;
 }
 
@@ -39,15 +39,15 @@
 
 .regBtn {
   margin-top: var(--space-5);
-  border: var(--border-1) solid var(--color-gray-200);
+  border: var(--border-1) solid var(--gray-200, #e5e7eb);
   box-shadow: 0 var(--shadow-offset-sm) var(--shadow-blur-xs)
-    var(--color-gray-200);
+    var(--gray-200, #e5e7eb);
   padding: var(--space-4) var(--space-4);
   border-radius: var(--radius-sm);
-  background-color: var(--color-blue-700);
+  background-color: var(--green-700, #15803d);
   width: 100%;
   font-size: var(--font-size-md);
-  color: var(--color-white);
+  color: var(--surface, #fff);
   outline: none;
   font-weight: var(--font-weight-semibold);
   cursor: pointer;

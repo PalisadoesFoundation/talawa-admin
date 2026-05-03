@@ -148,7 +148,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
               id={`checkbox-${tag._id}`}
               aria-label={t('selectTag')}
             />
-            <i className="fa fa-folder" />{' '}
+            Folder{' '}
           </>
         ) : (
           <>
@@ -161,7 +161,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
               data-testid={`checkTag${tag._id}`}
               aria-label={tag.name}
             />
-            <i className="fa fa-tag" />{' '}
+            Tag{' '}
           </>
         )}
 

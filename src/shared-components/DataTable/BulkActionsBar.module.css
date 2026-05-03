@@ -5,13 +5,13 @@
   gap: var(--space-4);
   padding: var(--space-3) var(--space-4);
   margin: 0 0 var(--space-3);
-  background: var(--color-blue-100);
-  border: var(--border-1) solid var(--color-blue-200);
+  background: var(--blue-100, #dbeafe);
+  border: var(--border-1) solid var(--gray-100, #f3f4f6);
   border-radius: var(--radius-md);
 }
 
 .bulkLeft {
-  color: var(--color-gray-900);
+  color: var(--gray-900, #111827);
   font-size: var(--font-size-15);
 }
 
@@ -26,15 +26,15 @@
 }
 
 .bulkClear {
-  border: var(--border-1) solid var(--color-gray-200);
-  background: var(--color-white);
+  border: var(--border-1) solid var(--gray-200, #e5e7eb);
+  background: var(--surface, #fff);
   padding: var(--space-2) var(--space-4);
   border-radius: var(--radius-md);
   cursor: pointer;
   font-size: var(--font-size-sm);
-  color: var(--color-gray-600);
+  color: var(--gray-600, #4b5563);
 }
 
 .bulkClear:hover {
-  background: var(--color-gray-100);
+  background: var(--gray-100, #f3f4f6);
 }

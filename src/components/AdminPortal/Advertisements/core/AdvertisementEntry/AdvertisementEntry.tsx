@@ -350,9 +350,7 @@ function AdvertisementEntry({
                       <LoadingState isLoading={buttonLoading} variant="spinner">
                         <div />
                       </LoadingState>
-                    ) : (
-                      <i className={'fa fa-eye'}></i>
-                    )}
+                    ) : null}
                     {t('view')}
                   </Button>
                 </div>

@@ -32,12 +32,12 @@
 }
 
 .titlemodalAgendaItems {
-  color: var(--color-gray-900);
+  color: var(--gray-900, #111827);
   font-weight: var(--font-weight-semibold);
   font-size: var(--font-size-xl);
   margin-bottom: var(--space-8);
   padding-bottom: var(--space-4);
-  border-bottom: var(--border-3) solid var(--color-gray-200);
+  border-bottom: var(--border-3) solid var(--gray-200, #e5e7eb);
   width: 65%;
 }
 
@@ -55,7 +55,7 @@
 }
 
 .view {
-  color: var(--color-gray-600);
+  color: var(--gray-600, #4b5563);
   min-width: 0;
   padding-left: var(--space-3);
 }
@@ -99,7 +99,7 @@
 
 .urlIcon {
   margin-right: var(--space-4);
-  color: var(--color-blue-500);
+  color: var(--green-500, #3ecf8e);
 }
 
 .iconContainer {
@@ -108,7 +108,7 @@
   gap: var(--space-5);
   margin-top: var(--space-8);
   padding-top: var(--space-7);
-  border-top: var(--border-1) solid var(--color-gray-200);
+  border-top: var(--border-1) solid var(--gray-200, #e5e7eb);
 }
 
 .icon {

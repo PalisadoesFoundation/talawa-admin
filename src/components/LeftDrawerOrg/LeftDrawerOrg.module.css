@@ -37,6 +37,6 @@
 
 .leftDrawerActiveButton {
   background-color: var(--leftDrawer-active-button-bg);
-  color: var(--color-black);
+  color: var(--gray-900, #111827);
   font-weight: bold;
 }

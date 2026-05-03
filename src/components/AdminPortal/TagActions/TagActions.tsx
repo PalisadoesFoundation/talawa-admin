@@ -274,7 +274,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                       aria-label={t('remove')}
                       variant="outline"
                     >
-                      <i className="fa fa-times" />
+                      &times;
                     </Button>
                   </div>
                 ))
@@ -335,7 +335,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                               data-testid="ancestorTagsBreadCrumbs"
                             >
                               {ancestorTag.name}
-                              <i className="fa fa-caret-right" />
+                              ▸
                             </span>
                           ))}
                           <>{')'}</>

@@ -410,7 +410,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                                 updateMembershipStatus(request.id, 'accepted')
                               }
                             >
-                              <i className="fa fa-check" />
+                              ✓
                             </Button>
                             <Button
                               size="sm"

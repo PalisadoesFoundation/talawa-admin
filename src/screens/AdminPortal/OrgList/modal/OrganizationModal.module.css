@@ -1,25 +1,25 @@
 .inputField:global(.form-control) {
   margin-top: var(--space-4);
   margin-bottom: var(--space-4);
-  background-color: var(--color-white);
-  border: var(--border-1) solid var(--color-gray-100);
+  background-color: var(--surface, #fff);
+  border: var(--border-1) solid var(--gray-100, #f3f4f6);
   box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-lg)
-    var(--shadow-spread-none) var(--color-black-10);
+    var(--shadow-spread-none) #0000001a;
 }
 
 .inputField:global(.form-control)::placeholder {
-  color: var(--color-gray-500);
+  color: var(--gray-500, #6b7280);
   opacity: 1;
 }
 
 .inputField:global(.form-control):focus {
-  border: var(--border-0) solid var(--color-gray-300);
-  background-color: var(--color-gray-100);
+  border: var(--border-0) solid var(--gray-300, #d1d5db);
+  background-color: var(--gray-100, #f3f4f6);
 }
 
 .inputField:global(.form-control):focus-visible {
   box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-md)
-    var(--shadow-spread-none) var(--color-black-25);
-  outline: var(--border-2) solid var(--color-blue-500);
+    var(--shadow-spread-none) #00000040;
+  outline: var(--border-2) solid var(--green-500, #3ecf8e);
   outline-offset: 2px;
 }

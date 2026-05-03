@@ -208,17 +208,17 @@ const AcceptInvitation = (): JSX.Element => {
                   )}
 
                   {requiresConfirmation && (
-                    <div className="form-check">
+                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                       <input
                         id="confirmIsInvitee"
                         type="checkbox"
-                        className="form-check-input"
+                        
                         checked={confirmIsInvitee}
                         onChange={(e) => setConfirmIsInvitee(e.target.checked)}
                       />
                       <label
                         htmlFor="confirmIsInvitee"
-                        className="form-check-label"
+                        style={{ marginLeft: 6, cursor: "pointer" }}
                       >
                         {t('confirmMatch', {
                           defaultValue:

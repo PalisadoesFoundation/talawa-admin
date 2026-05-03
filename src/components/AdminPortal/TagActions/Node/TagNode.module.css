@@ -1,7 +1,7 @@
 .errorContainer {
   min-height: 100%;
   border-radius: var(--radius-md);
-  background-color: var(--color-white);
+  background-color: var(--surface, #fff);
   margin: var(--space-5) var(--space-0);
   display: flex;
   justify-content: center;
@@ -16,14 +16,14 @@
 }
 
 .errorIcon {
-  color: var(--color-red-500);
+  color: var(--red-500, #ef4444);
   margin-bottom: var(--space-5);
   font-size: var(--font-size-md);
 }
 
 .loadingError {
   font-weight: var(--font-weight-bold);
-  color: var(--color-red-500);
+  color: var(--red-500, #ef4444);
   text-align: center;
 }
 
@@ -64,7 +64,7 @@
   height: var(--space-8);
   margin: var(--space-5) var(--space-0);
   border: var(--border-4) solid transparent;
-  border-top-color: var(--color-gray-300);
+  border-top-color: var(--gray-300, #d1d5db);
   border-radius: var(--radius-full);
   animation: spin 0.6s linear infinite;
 }

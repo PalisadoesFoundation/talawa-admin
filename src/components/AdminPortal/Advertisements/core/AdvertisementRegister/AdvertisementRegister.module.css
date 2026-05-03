@@ -31,9 +31,9 @@
 }
 
 .dropdown {
-  background-color: var(--color-gray-50);
-  border: var(--border-1) solid var(--color-gray-600);
-  color: var(--color-gray-600);
+  background-color: var(--gray-50, #fafafa);
+  border: var(--border-1) solid var(--gray-600, #4b5563);
+  color: var(--gray-600, #4b5563);
   position: relative;
   display: flex;
   align-items: center;
@@ -48,14 +48,14 @@
 
 .dropdown:is(:hover, :active),
 :global(.show).dropdown {
-  background-color: var(--color-gray-400);
-  border-color: var(--color-gray-300);
-  color: var(--color-white);
+  background-color: var(--gray-400, #9ca3af);
+  border-color: var(--gray-300, #d1d5db);
+  color: var(--surface, #fff);
   box-shadow: none;
 }
 
 .dropdown:is(:focus, :focus-visible) {
-  outline: var(--space-1) solid var(--color-blue-200);
+  outline: var(--space-1) solid var(--gray-100, #f3f4f6);
   outline-offset: var(--space-1);
 }
 

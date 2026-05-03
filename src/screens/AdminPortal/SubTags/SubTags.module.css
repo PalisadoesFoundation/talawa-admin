@@ -19,26 +19,26 @@
 
 .addButton {
   margin-bottom: var(--space-4);
-  color: var(--color-gray-700);
-  background-color: var(--color-blue-200);
-  border-color: var(--color-blue-200);
+  color: var(--gray-700, #374151);
+  background-color: var(--gray-100, #f3f4f6);
+  border-color: var(--gray-100, #f3f4f6);
 }
 
 .addButton:is(:hover, :active, :focus) {
-  background-color: var(--color-blue-500);
-  border-color: var(--color-gray-700);
+  background-color: var(--green-500, #3ecf8e);
+  border-color: var(--gray-700, #374151);
 }
 
 .addButton:disabled {
   margin-bottom: var(--space-4);
-  background-color: var(--color-gray-50);
-  border-color: var(--color-blue-200);
+  background-color: var(--gray-50, #fafafa);
+  border-color: var(--gray-100, #f3f4f6);
 }
 
 /* Ban Icon*/
 
 .banIcon {
-  color: var(--color-red-500);
+  color: var(--red-500, #ef4444);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
   margin-bottom: var(--space-1);
@@ -46,38 +46,38 @@
 }
 
 .removeButton:hover .banIcon {
-  color: var(--color-white);
+  color: var(--surface, #fff);
 }
 
 /* Remove Button */
 
 .removeButton {
   margin-bottom: var(--space-4);
-  background-color: var(--color-red-100);
-  color: var(--color-red-500);
+  background-color: var(--red-50, #fef2f2);
+  color: var(--red-500, #ef4444);
   margin-right: var(--space-4);
-  border-color: var(--color-red-100);
+  border-color: var(--red-50, #fef2f2);
 }
 
 .removeButton:is(:hover, :active, :focus) {
-  background-color: var(--color-red-500);
-  border-color: var(--color-red-500);
-  color: var(--color-white);
+  background-color: var(--red-500, #ef4444);
+  border-color: var(--red-500, #ef4444);
+  color: var(--surface, #fff);
 }
 
 /* Modal Header*/
 
 .modalHeader {
   border: none;
-  background-color: var(--color-white);
+  background-color: var(--surface, #fff);
   padding: var(--space-5);
-  color: var(--color-black);
+  color: var(--gray-900, #111827);
 }
 
 /* Make sure the modal title is dark grey */
 .modalHeader div,
 .modalHeader .modal-title {
-  color: var(--color-gray-700);
+  color: var(--gray-700, #374151);
   font-weight: var(--font-weight-semibold);
   font-size: var(--font-size-xl);
 }
@@ -85,7 +85,7 @@
 /* Close button styling */
 .modalHeader button.close,
 .modalHeader .btn-close {
-  color: var(--color-red-500);
+  color: var(--red-500, #ef4444);
   opacity: 1;
 }
 
@@ -93,7 +93,7 @@
 .inputField label,
 form label,
 .form-label {
-  color: var(--color-black);
+  color: var(--gray-900, #111827);
   font-weight: var(--font-weight-regular);
   padding-bottom: 0;
   font-size: var(--font-size-md);
@@ -104,20 +104,20 @@ form label,
 .inputField {
   margin-top: var(--space-4);
   margin-bottom: var(--space-4);
-  background-color: var(--color-white);
-  border: var(--border-1) solid var(--color-gray-100);
+  background-color: var(--surface, #fff);
+  border: var(--border-1) solid var(--gray-100, #f3f4f6);
   box-shadow: 0 var(--border-shadow-1) var(--border-shadow-2) rgba(0, 0, 0, 0.1);
 }
 
 /* Placeholder styling */
 .inputField::placeholder {
-  color: var(--color-gray-500);
+  color: var(--gray-500, #6b7280);
   opacity: 1;
 }
 
 .inputField:focus {
-  border: var(--border-0) solid var(--color-gray-300);
-  background-color: var(--color-white);
+  border: var(--border-0) solid var(--gray-300, #d1d5db);
+  background-color: var(--surface, #fff);
   box-shadow: 0 var(--border-shadow-1) var(--border-shadow-1)
     rgba(0, 0, 0, 0.25);
   outline: none;
@@ -127,14 +127,14 @@ form label,
 /* Edit Button */
 
 .editButton {
-  background-color: var(--color-blue-200);
-  color: var(--color-gray-700);
-  border-color: var(--color-gray-100);
+  background-color: var(--gray-100, #f3f4f6);
+  color: var(--gray-700, #374151);
+  border-color: var(--gray-100, #f3f4f6);
 }
 
 .editButton:is(:hover, :active) {
-  background-color: var(--color-blue-500);
-  border-color: var(--color-gray-700);
+  background-color: var(--green-500, #3ecf8e);
+  border-color: var(--gray-700, #374151);
   box-shadow: none;
 }
 
@@ -154,7 +154,7 @@ form label,
 
 .errorIcon {
   font-size: var(--font-size-4xl);
-  color: var(--color-red-500);
+  color: var(--red-500, #ef4444);
   margin-bottom: var(--space-5);
 }
 
@@ -166,8 +166,8 @@ form label,
 /* Row Background */
 
 .rowBackground {
-  background-color: var(--color-white);
-  color: var(--color-black);
+  background-color: var(--surface, #fff);
+  color: var(--gray-900, #111827);
   max-height: var(--space-14);
   overflow-y: auto;
 }
@@ -180,9 +180,9 @@ form label,
 /* Create Button*/
 
 .createButton {
-  background-color: var(--color-gray-50);
-  color: var(--color-gray-700);
-  border: var(--border-1) solid var(--color-gray-700);
+  background-color: var(--gray-50, #fafafa);
+  color: var(--gray-700, #374151);
+  border: var(--border-1) solid var(--gray-700, #374151);
   margin: var(--space-2) var(--space-4);
   width: var(--space-16);
   height: var(--space-10);
@@ -191,28 +191,28 @@ form label,
 .createButton:hover {
   box-shadow: var(--border-shadow-xs) var(--border-shadow-xs)
     var(--border-shadow-xs) rgba(0, 0, 0, 0.3);
-  background-color: var(--color-gray-50);
-  color: var(--color-gray-700);
-  border: var(--border-1) solid var(--color-gray-700);
+  background-color: var(--gray-50, #fafafa);
+  color: var(--gray-700, #374151);
+  border: var(--border-1) solid var(--gray-700, #374151);
 }
 
 .createButton:active {
-  color: var(--color-gray-400);
-  background-color: var(--color-gray-100);
-  border: var(--border-1) solid var(--color-gray-400);
+  color: var(--gray-400, #9ca3af);
+  background-color: var(--gray-100, #f3f4f6);
+  border: var(--border-1) solid var(--gray-400, #9ca3af);
 }
 
 /* Table Header */
 
 .tableHeader {
-  background-color: var(--color-gray-100);
-  color: var(--color-black);
+  background-color: var(--gray-100, #f3f4f6);
+  color: var(--gray-900, #111827);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
 }
 
 .tagsBreadCrumbs {
-  color: var(--color-gray-400);
+  color: var(--gray-400, #9ca3af);
   cursor: pointer;
 }
 
@@ -227,7 +227,7 @@ form label,
 
 .tagsBreadCrumbs:hover,
 .tagsBreadCrumbs:focus {
-  color: var(--color-blue-700);
+  color: var(--green-700, #15803d);
   font-weight: var(--font-weight-semibold);
   text-decoration: underline;
 }
@@ -238,7 +238,7 @@ form label,
 
 .subTagsLink:hover,
 .subTagsLink:focus {
-  color: var(--color-blue-200);
+  color: var(--gray-100, #f3f4f6);
   font-weight: var(--font-weight-semibold);
   text-decoration: underline;
 }
@@ -249,7 +249,7 @@ form label,
 }
 
 .subTagsLink {
-  color: var(--color-blue-700);
+  color: var(--green-700, #15803d);
   font-weight: var(--font-weight-medium);
   cursor: pointer;
 }
@@ -265,7 +265,7 @@ form label,
 
 .subTagsScrollableDiv {
   scrollbar-width: auto;
-  scrollbar-color: var(--color-gray-400) var(--color-gray-100);
+  scrollbar-color: var(--gray-400, #9ca3af) var(--gray-100, #f3f4f6);
   max-height: calc(100vh - var(--space-20));
   overflow: auto;
 }

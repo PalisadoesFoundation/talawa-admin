@@ -146,7 +146,7 @@
 }
 
 .closeButton {
-  background-color: var(--color-gray-100) !important;
+  background-color: var(--gray-100, #f3f4f6) !important;
   border: none !important;
   border-radius: var(--radius-full) !important;
   width: var(--space-8) !important;
@@ -157,7 +157,7 @@
 }
 
 .closeButton:hover {
-  background-color: var(--color-gray-200) !important;
+  background-color: var(--gray-200, #e5e7eb) !important;
 }
 
 .closeButtonIcon {
@@ -169,7 +169,7 @@
 }
 
 .noCommentsText {
-  color: var(--color-gray-500);
+  color: var(--gray-500, #6b7280);
   text-align: center;
   padding: var(--space-5) var(--space-0);
   font-size: var(--font-size-sm);
@@ -197,7 +197,7 @@
 }
 
 .viewCommentsButton {
-  color: var(--color-gray-500);
+  color: var(--gray-500, #6b7280);
   font-size: var(--font-size-xs);
   margin-left: var(--space-2);
   margin-bottom: var(--space-1);

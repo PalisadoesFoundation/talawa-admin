@@ -43,7 +43,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: var(--color-white);
+  background-color: var(--surface, #fff);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -81,9 +81,9 @@
 .skeletonItem {
   background: linear-gradient(
     90deg,
-    var(--color-gray-200) 25%,
-    var(--color-gray-100) 50%,
-    var(--color-gray-200) 75%
+    var(--gray-200, #e5e7eb) 25%,
+    var(--gray-100, #f3f4f6) 50%,
+    var(--gray-200, #e5e7eb) 75%
   );
   background-size: 200% 100%;
   animation: skeletonPulse 1.5s ease-in-out infinite;

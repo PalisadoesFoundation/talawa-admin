@@ -447,7 +447,6 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
                 data-testid="editCampaignBtn"
                 disabled={isSubmitting}
               >
-                <i className="fa fa-edit" />
                 {tCommon('edit')}
               </Button>
 
@@ -458,7 +457,6 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
                 disabled={isSubmitting}
                 onClick={() => setIsDeleteModalOpen(true)}
               >
-                <i className="fa fa-trash" />
                 {tCommon('delete')}
               </Button>
             </div>

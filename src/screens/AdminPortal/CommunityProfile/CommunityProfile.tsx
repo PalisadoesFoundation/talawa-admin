@@ -254,7 +254,7 @@ const CommunityProfile = (): JSX.Element => {
             <h2>{t('communityName')}</h2>
             <p className="form-section-desc">{t('communityProfileInfo')}</p>
             <div className="form-group">
-              <label className="form-label" htmlFor="community-name">{t('communityName')}</label>
+              <label className="field-label" htmlFor="community-name">{t('communityName')}</label>
               <input
                 type="text"
                 id="community-name"
@@ -268,7 +268,7 @@ const CommunityProfile = (): JSX.Element => {
               />
             </div>
             <div className="form-group">
-              <label className="form-label" htmlFor="community-desc">{tCommon('description')}</label>
+              <label className="field-label" htmlFor="community-desc">{tCommon('description')}</label>
               <textarea
                 id="community-desc"
                 className="form-input"
@@ -278,7 +278,7 @@ const CommunityProfile = (): JSX.Element => {
               />
             </div>
             <div className="form-group">
-              <label className="form-label" htmlFor="community-url">{t('wesiteLink')}</label>
+              <label className="field-label" htmlFor="community-url">{t('wesiteLink')}</label>
               <input
                 type="url"
                 id="community-url"
@@ -298,7 +298,7 @@ const CommunityProfile = (): JSX.Element => {
             <h2>{t('logo')}</h2>
             <p className="form-section-desc">{t('communityProfileInfo')}</p>
             <div className="form-group">
-              <label className="form-label">{t('logo')}</label>
+              <label className="field-label">{t('logo')}</label>
               <div
                 className="upload-area"
                 role="button"
@@ -358,7 +358,7 @@ const CommunityProfile = (): JSX.Element => {
               />
             </div>
             <div className="form-group">
-              <label className="form-label" htmlFor="primary-color">Primary Color</label>
+              <label className="field-label" htmlFor="primary-color">Primary Color</label>
               <div className="color-picker-row">
                 <div className="color-swatch" style={{ background: '#3ecf8e' }} title="Primary color preview"></div>
                 <input type="text" id="primary-color" className="form-input color-hex-input" defaultValue="#3ecf8e" aria-label="Primary color hex value" />
@@ -372,7 +372,7 @@ const CommunityProfile = (): JSX.Element => {
             <p className="form-section-desc">{t('communityProfileInfo')}</p>
             <div className="form-grid-2">
               <div className="form-group">
-                <label className="form-label" htmlFor="social-facebook">Facebook URL</label>
+                <label className="field-label" htmlFor="social-facebook">Facebook URL</label>
                 <input
                   type="url"
                   id="social-facebook"
@@ -388,7 +388,7 @@ const CommunityProfile = (): JSX.Element => {
               </div>
 
               <div className="form-group">
-                <label className="form-label" htmlFor="social-twitter">X (Twitter) URL</label>
+                <label className="field-label" htmlFor="social-twitter">X (Twitter) URL</label>
                 <input
                   type="url"
                   id="social-twitter"
@@ -404,7 +404,7 @@ const CommunityProfile = (): JSX.Element => {
               </div>
 
               <div className="form-group">
-                <label className="form-label" htmlFor="social-github">GitHub URL</label>
+                <label className="field-label" htmlFor="social-github">GitHub URL</label>
                 <input
                   type="url"
                   id="social-github"
@@ -420,7 +420,7 @@ const CommunityProfile = (): JSX.Element => {
               </div>
 
               <div className="form-group">
-                <label className="form-label" htmlFor="social-linkedin">LinkedIn URL</label>
+                <label className="field-label" htmlFor="social-linkedin">LinkedIn URL</label>
                 <input
                   type="url"
                   id="social-linkedin"
@@ -436,7 +436,7 @@ const CommunityProfile = (): JSX.Element => {
               </div>
 
               <div className="form-group">
-                <label className="form-label" htmlFor="social-instagram">Instagram URL</label>
+                <label className="field-label" htmlFor="social-instagram">Instagram URL</label>
                 <input
                   type="url"
                   id="social-instagram"
@@ -452,7 +452,7 @@ const CommunityProfile = (): JSX.Element => {
               </div>
 
               <div className="form-group">
-                <label className="form-label" htmlFor="social-youtube">YouTube URL</label>
+                <label className="field-label" htmlFor="social-youtube">YouTube URL</label>
                 <input
                   type="url"
                   id="social-youtube"
@@ -468,7 +468,7 @@ const CommunityProfile = (): JSX.Element => {
               </div>
 
               <div className="form-group">
-                <label className="form-label" htmlFor="social-reddit">Reddit URL</label>
+                <label className="field-label" htmlFor="social-reddit">Reddit URL</label>
                 <input
                   type="url"
                   id="social-reddit"
@@ -484,7 +484,7 @@ const CommunityProfile = (): JSX.Element => {
               </div>
 
               <div className="form-group">
-                <label className="form-label" htmlFor="social-slack">Slack URL</label>
+                <label className="field-label" htmlFor="social-slack">Slack URL</label>
                 <input
                   type="url"
                   id="social-slack"

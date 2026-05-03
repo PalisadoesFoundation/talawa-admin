@@ -119,7 +119,7 @@ export const DeleteModal: React.FC<InterfaceDeleteModalProps> = ({
     >
       {showWarning && (
         <div>
-          <i className="fa fa-exclamation-triangle" aria-hidden="true"></i>
+          ⚠
         </div>
       )}
 

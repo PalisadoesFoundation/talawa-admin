@@ -9,25 +9,25 @@
 }
 
 .noOutline input:focus-visible {
-  outline: var(--border-2) solid var(--color-blue-500);
+  outline: var(--border-2) solid var(--green-500, #3ecf8e);
   outline-offset: var(--shadow-offset-sm);
 }
 
 .noOutline input:disabled {
-  -webkit-text-fill-color: var(--color-gray-400) !important;
+  -webkit-text-fill-color: var(--gray-400, #9ca3af) !important;
 }
 
 .noOutline input:disabled:focus-visible {
-  outline: var(--border-2) solid var(--color-gray-400);
+  outline: var(--border-2) solid var(--gray-400, #9ca3af);
   outline-offset: var(--shadow-offset-sm);
 }
 
 .noOutline textarea:disabled {
-  color: var(--color-gray-400) !important;
+  color: var(--gray-400, #9ca3af) !important;
 }
 
 .noOutline:focus-within {
-  outline: var(--border-2) solid var(--color-blue-500);
+  outline: var(--border-2) solid var(--green-500, #3ecf8e);
   outline-offset: var(--shadow-offset-sm);
 }
 
@@ -37,40 +37,40 @@
 
 .addButton {
   margin-bottom: var(--space-4);
-  color: var(--color-gray-700);
-  background-color: var(--color-blue-200);
-  border-color: var(--color-blue-200);
+  color: var(--gray-700, #374151);
+  background-color: var(--gray-100, #f3f4f6);
+  border-color: var(--gray-100, #f3f4f6);
 }
 
 .addButton:focus-visible {
-  outline: var(--border-2) solid var(--color-blue-500);
+  outline: var(--border-2) solid var(--green-500, #3ecf8e);
   outline-offset: var(--shadow-offset-sm);
-  box-shadow: 0 0 0 var(--border-2) var(--color-blue-500);
+  box-shadow: 0 0 0 var(--border-2) var(--green-500, #3ecf8e);
 }
 
 .addButton:is(:hover, :active) {
-  background-color: var(--color-blue-500);
-  border-color: var(--color-gray-700);
+  background-color: var(--green-500, #3ecf8e);
+  border-color: var(--gray-700, #374151);
 }
 
 .addButton:disabled {
-  background-color: var(--color-gray-50);
-  border-color: var(--color-blue-200);
+  background-color: var(--gray-50, #fafafa);
+  border-color: var(--gray-100, #f3f4f6);
 }
 
 .addButton:disabled:focus-visible {
-  outline: var(--border-2) solid var(--color-gray-400);
+  outline: var(--border-2) solid var(--gray-400, #9ca3af);
   outline-offset: var(--shadow-offset-sm);
-  box-shadow: 0 0 0 var(--border-2) var(--color-blue-300);
+  box-shadow: 0 0 0 var(--border-2) var(--gray-200, #e5e7eb);
 }
 
 .autocompleteWrapper {
   display: flex;
   align-items: center;
-  border: var(--border-1) solid var(--color-gray-300);
+  border: var(--border-1) solid var(--gray-300, #d1d5db);
   border-radius: var(--rounded-md);
   padding: var(--space-2);
-  background-color: var(--color-white);
+  background-color: var(--surface, #fff);
 }
 
 .autocompleteWrapper input {

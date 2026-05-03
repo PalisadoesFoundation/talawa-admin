@@ -1,5 +1,5 @@
 .logoutBtn {
-  color: var(--color-red-500);
+  color: var(--red-500, #ef4444);
 }
 
 .profileContainer {
@@ -27,13 +27,13 @@
 .primaryText {
   font-weight: var(--font-weight-semibold);
   font-size: var(--font-size-sm);
-  color: var(--color-gray-900);
+  color: var(--gray-900, #111827);
 }
 
 .secondaryText {
   font-weight: var(--font-weight-regular);
   font-size: var(--font-size-xs);
-  color: var(--color-gray-500);
+  color: var(--gray-500, #6b7280);
 }
 
 .dropdownToggle {

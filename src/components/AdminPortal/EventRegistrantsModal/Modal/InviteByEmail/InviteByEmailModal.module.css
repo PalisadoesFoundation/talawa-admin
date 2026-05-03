@@ -33,5 +33,5 @@
 }
 
 .emailHelp {
-  color: var(--color-gray-600);
+  color: var(--gray-600, #4b5563);
 }

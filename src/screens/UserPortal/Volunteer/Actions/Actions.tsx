@@ -193,7 +193,7 @@ function Actions(): JSX.Element {
           onClick={() => handleViewClick(p.row)}
           aria-label={tCommon('viewDetails')}
         >
-          <i className="fa fa-info" />
+          ℹ
         </Button>
       ),
     },

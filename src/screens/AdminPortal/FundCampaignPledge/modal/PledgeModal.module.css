@@ -26,7 +26,7 @@
 .fieldRow :global(label) {
   display: inline-block;
   margin-bottom: var(--space-2);
-  color: var(--color-black);
+  color: var(--gray-900, #111827);
   font-family: 'Inter', sans-serif;
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-regular);
@@ -41,10 +41,10 @@
   width: 100%;
   height: var(--space-10);
   border-radius: var(--radius-sm);
-  border: var(--border-1) solid var(--color-gray-200);
-  background: var(--color-gray-50);
+  border: var(--border-1) solid var(--gray-200, #e5e7eb);
+  background: var(--gray-50, #fafafa);
   box-shadow: none;
-  color: var(--color-black);
+  color: var(--gray-900, #111827);
   font-family: 'Lato', sans-serif;
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-regular);
@@ -55,7 +55,7 @@
 .fieldRow :global(.form-control::placeholder),
 .fieldRow :global(.form-select::placeholder),
 .fieldRow :global(input::placeholder) {
-  color: var(--color-gray-600);
+  color: var(--gray-600, #4b5563);
   font-family: 'Lato', sans-serif;
   font-weight: var(--font-weight-light);
   font-size: var(--font-size-md);
@@ -67,19 +67,19 @@
 .fieldRow :global(.form-select:focus),
 .fieldRow :global(select:focus),
 .fieldRow :global(input:focus) {
-  border-color: var(--color-blue-300);
+  border-color: var(--gray-200, #e5e7eb);
   box-shadow: var(--shadow-spread-none) var(--shadow-spread-none)
-    var(--shadow-spread-none) var(--space-2) var(--color-blue-shadow-focus);
-  background: var(--color-gray-50);
+    var(--shadow-spread-none) var(--space-2) rgba(62, 207, 142, 0.3);
+  background: var(--gray-50, #fafafa);
 }
 
 .fieldRow :global(.form-control:disabled),
 .fieldRow :global(.form-select:disabled),
 .fieldRow :global(select:disabled),
 .fieldRow :global(input:disabled) {
-  background: var(--color-gray-100);
-  color: var(--color-gray-600);
-  border-color: var(--color-gray-200);
+  background: var(--gray-100, #f3f4f6);
+  color: var(--gray-600, #4b5563);
+  border-color: var(--gray-200, #e5e7eb);
 }
 
 .fieldRow :global(input[type='number']) {
@@ -152,10 +152,10 @@
   height: var(--pledge-compact-box-height);
   min-height: var(--pledge-compact-box-height);
   border-radius: var(--pledge-compact-box-radius);
-  border: var(--border-1) solid var(--color-gray-200);
-  background: var(--color-gray-100);
+  border: var(--border-1) solid var(--gray-200, #e5e7eb);
+  background: var(--gray-100, #f3f4f6);
   box-shadow: none;
-  color: var(--color-black);
+  color: var(--gray-900, #111827);
   font-family: 'Lato', sans-serif;
   font-style: normal;
   font-weight: var(--pledge-compact-text-weight);
@@ -168,7 +168,7 @@
 .goalSection :global(input::placeholder),
 .currencySection :global(.form-select::placeholder),
 .currencySection :global(select::placeholder) {
-  color: var(--color-black);
+  color: var(--gray-900, #111827);
   font-family: 'Lato', sans-serif;
   font-style: normal;
   font-weight: var(--pledge-compact-text-weight);
@@ -181,11 +181,11 @@
 .currencySection :global(select:focus),
 .goalSection :global(.form-control:focus),
 .goalSection :global(input:focus) {
-  border-color: var(--color-blue-300);
+  border-color: var(--gray-200, #e5e7eb);
   outline: none;
   box-shadow: var(--shadow-spread-none) var(--shadow-spread-none)
-    var(--shadow-spread-none) var(--space-2) var(--color-blue-shadow-focus);
-  background: var(--color-gray-100);
+    var(--shadow-spread-none) var(--space-2) rgba(62, 207, 142, 0.3);
+  background: var(--gray-100, #f3f4f6);
 }
 
 .pledgerInput {
@@ -217,38 +217,38 @@
 }
 
 .editActionButton {
-  color: var(--color-gray-700);
-  background-color: var(--color-blue-200);
-  border-color: var(--color-blue-200);
+  color: var(--gray-700, #374151);
+  background-color: var(--gray-100, #f3f4f6);
+  border-color: var(--gray-100, #f3f4f6);
 }
 
 .editActionButton:is(:hover, :active, :focus) {
-  background-color: var(--color-blue-300);
-  border-color: var(--color-blue-300);
-  color: var(--color-gray-700);
+  background-color: var(--gray-200, #e5e7eb);
+  border-color: var(--gray-200, #e5e7eb);
+  color: var(--gray-700, #374151);
 }
 
 .deleteActionButton {
-  color: var(--color-red-400);
-  background-color: var(--color-red-100);
-  border-color: var(--color-red-100);
+  color: var(--red-400, #f87171);
+  background-color: var(--red-50, #fef2f2);
+  border-color: var(--red-50, #fef2f2);
 }
 
 .deleteActionButton:is(:hover, :active, :focus) {
-  background-color: var(--color-red-100);
-  border-color: var(--color-red-100);
-  color: var(--color-red-400);
+  background-color: var(--red-50, #fef2f2);
+  border-color: var(--red-50, #fef2f2);
+  color: var(--red-400, #f87171);
 }
 
 .deleteActionButton i {
-  color: var(--color-red-400);
+  color: var(--red-400, #f87171);
 }
 
 .editActionButton:disabled,
 .deleteActionButton:disabled {
-  background-color: var(--color-gray-100);
-  border-color: var(--color-gray-100);
-  color: var(--color-gray-600);
+  background-color: var(--gray-100, #f3f4f6);
+  border-color: var(--gray-100, #f3f4f6);
+  color: var(--gray-600, #4b5563);
 }
 
 @media (max-width: 768px) {
@@ -269,23 +269,23 @@
   margin-right: auto;
   margin-bottom: var(--space-0);
   margin-left: auto;
-  color: var(--color-gray-700);
-  background-color: var(--color-blue-200);
-  border-color: var(--color-blue-200);
+  color: var(--gray-700, #374151);
+  background-color: var(--gray-100, #f3f4f6);
+  border-color: var(--gray-100, #f3f4f6);
   border-radius: var(--radius-sm);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-semibold);
 }
 
 .addButton:is(:hover, :active, :focus) {
-  background-color: var(--color-blue-300);
-  border-color: var(--color-blue-300);
+  background-color: var(--gray-200, #e5e7eb);
+  border-color: var(--gray-200, #e5e7eb);
 }
 
 .addButton:disabled {
-  background-color: var(--color-gray-100);
-  border-color: var(--color-gray-100);
-  color: var(--color-gray-600);
+  background-color: var(--gray-100, #f3f4f6);
+  border-color: var(--gray-100, #f3f4f6);
+  color: var(--gray-600, #4b5563);
 }
 
 .currencyContainer {

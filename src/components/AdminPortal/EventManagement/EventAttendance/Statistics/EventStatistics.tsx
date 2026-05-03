@@ -469,7 +469,7 @@ export const AttendanceStatisticsModal: React.FC<
         <div
           style={{
             width: '100%',
-            border: '1px solid var(--bs-success, #198754)',
+            border: '1px solid var(--green-500, #3ecf8e)',
             display: 'flex',
             flexDirection: 'row',
             borderRadius: '0.375rem',
@@ -479,7 +479,7 @@ export const AttendanceStatisticsModal: React.FC<
             <div
               className={`${styles.borderRightGreen} ${styles.chartContainer}`}
               style={{
-                color: 'var(--bs-success, #198754)',
+                color: 'var(--green-500, #3ecf8e)',
                 position: 'relative',
                 paddingTop: '1.5rem',
                 alignItems: 'center',
@@ -497,7 +497,7 @@ export const AttendanceStatisticsModal: React.FC<
                 className={styles.topRightCorner}
                 style={{
                   padding: '0 0.25rem',
-                  border: '1px solid var(--bs-success, #198754)',
+                  border: '1px solid var(--green-500, #3ecf8e)',
                 }}
               >
                 <p style={{ color: '#000' }}>{t('trends')}</p>
@@ -554,7 +554,7 @@ export const AttendanceStatisticsModal: React.FC<
             <div
               className={styles.borderRightGreen}
               style={{
-                color: 'var(--bs-success, #198754)',
+                color: 'var(--green-500, #3ecf8e)',
                 position: 'relative',
                 display: 'flex',
                 alignItems: 'center',
@@ -569,7 +569,7 @@ export const AttendanceStatisticsModal: React.FC<
                 className={styles.bottomRightCorner}
                 style={{
                   padding: '0 0.25rem',
-                  border: '1px solid var(--bs-success, #198754)',
+                  border: '1px solid var(--green-500, #3ecf8e)',
                 }}
               >
                 <p style={{ color: '#000' }}>{t('attendanceCount')}</p>
@@ -578,7 +578,7 @@ export const AttendanceStatisticsModal: React.FC<
           )}
           <div
             style={{
-              color: 'var(--bs-success, #198754)',
+              color: 'var(--green-500, #3ecf8e)',
               position: 'relative',
               display: 'flex',
               flexDirection: 'column',
@@ -592,7 +592,7 @@ export const AttendanceStatisticsModal: React.FC<
                 data-testid="gender-button"
                 variant={selectedCategory === 'Gender' ? 'success' : 'light'}
                 style={{
-                  border: '1px solid var(--bs-success, #198754)',
+                  border: '1px solid var(--green-500, #3ecf8e)',
                   padding: '0.5rem',
                 }}
                 onClick={() => handleCategoryChange('Gender')}
@@ -603,7 +603,7 @@ export const AttendanceStatisticsModal: React.FC<
                 data-testid="age-button"
                 variant={selectedCategory === 'Age' ? 'success' : 'light'}
                 style={{
-                  border: '1px solid var(--bs-success, #198754)',
+                  border: '1px solid var(--green-500, #3ecf8e)',
                   borderLeft: 'none',
                   padding: '0.5rem',
                 }}
@@ -649,7 +649,7 @@ export const AttendanceStatisticsModal: React.FC<
               className={styles.topLeftCorner}
               style={{
                 padding: '0 0.25rem',
-                border: '1px solid var(--bs-success, #198754)',
+                border: '1px solid var(--green-500, #3ecf8e)',
               }}
             >
               <p style={{ color: '#000' }}>{t('demography')}</p>

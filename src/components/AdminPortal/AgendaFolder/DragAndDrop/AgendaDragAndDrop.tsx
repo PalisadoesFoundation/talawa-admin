@@ -266,7 +266,7 @@ export default function AgendaDragAndDrop({
                               {...provided.dragHandleProps}
                               style={{ display: 'inline-flex', alignItems: 'center', cursor: 'grab' }}
                             >
-                              <i className="fas fa-bars fa-sm" />
+                              ☰
                             </span>
                           </div>
 
@@ -297,7 +297,6 @@ export default function AgendaDragAndDrop({
                                 onClick={() => onEditFolder(agendaFolder)}
                                 aria-label={t('editFolder')}
                               >
-                                <i className="fas fa-edit fa-sm" />
                               </Button>
                               <Button
                                 size="sm"
@@ -306,7 +305,6 @@ export default function AgendaDragAndDrop({
                                 onClick={() => onDeleteFolder(agendaFolder)}
                                 aria-label={t('deleteFolder')}
                               >
-                                <i className="fas fa-trash" />
                               </Button>
                             </div>
                           </div>
@@ -411,7 +409,7 @@ export default function AgendaDragAndDrop({
                                               {...provided.dragHandleProps}
                                               style={{ cursor: 'grab' }}
                                             >
-                                              <i className="fas fa-bars fa-sm" />
+                                              ☰
                                             </span>
                                           </div>
 
@@ -443,7 +441,7 @@ export default function AgendaDragAndDrop({
                                               }
                                               aria-label={t('previewItem')}
                                             >
-                                              <i className="fas fa-info fa-sm" />
+                                              ℹ
                                             </Button>
                                             <Button
                                               size="sm"
@@ -453,7 +451,6 @@ export default function AgendaDragAndDrop({
                                               }
                                               aria-label={t('editItem')}
                                             >
-                                              <i className="fas fa-edit fa-sm" />
                                             </Button>
                                             <Button
                                               size="sm"
@@ -463,7 +460,6 @@ export default function AgendaDragAndDrop({
                                               }
                                               aria-label={t('deleteItem')}
                                             >
-                                              <i className="fas fa-trash" />
                                             </Button>
                                           </div>
                                         </div>
