@@ -259,7 +259,9 @@ select.form-input { appearance: auto; }
 .attendee-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 500; color: var(--gray-500); }
 
 /* ── POST FEED ────────────────────────────────────────────────────────────── */
-.post-feed { display: flex; flex-direction: column; gap: 16px; max-width: 720px; }
+.post-feed { gap: 20px; }
+.post-feed-single { display: flex; flex-direction: column; max-width: 640px; margin: 0 auto; }
+.post-feed-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); }
 .post-card { background: var(--surface); border-radius: var(--radius-xl); box-shadow: var(--shadow-card); padding: 22px 24px; transition: box-shadow 0.2s; }
 .post-card:hover { box-shadow: var(--shadow-card-hover); }
 .post-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }

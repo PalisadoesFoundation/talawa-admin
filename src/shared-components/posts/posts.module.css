@@ -59,16 +59,46 @@
 
 /* ── Post Feed Layout ───────────────────────────────────────────────────── */
 .postFeed {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  max-width: 720px;
+  min-width: 0;
 }
 
 .postList {
+  min-width: 0;
+}
+
+/* Layout toggle */
+.layoutToggle {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
+  background: var(--gray-100, #f3f4f6);
+  border-radius: 8px;
+  padding: 3px;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.layoutBtn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--gray-500, #6b7280);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  padding: 0;
+}
+
+.layoutBtn:hover {
+  color: var(--gray-700, #374151);
+}
+
+.layoutBtnActive {
+  background: var(--surface, #fff);
+  color: var(--gray-900, #111827);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
 /* ── Layout ─────────────────────────────────────────────────────────────── */

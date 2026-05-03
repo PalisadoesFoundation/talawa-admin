@@ -78,6 +78,7 @@ export default function PostsPage() {
   const [filteredPosts, setFilteredPosts] = useState<InterfacePost[]>([]);
   const { orgId: currentUrl } = useParams();
   const [sortingOption, setSortingOption] = useState('None');
+  const [layout, setLayout] = useState<'feed' | 'grid'>('feed');
   const [allPosts, setAllPosts] = useState<InterfacePost[]>([]);
   const [after, setAfter] = useState<string | null>(null);
   const first = 6;
@@ -390,28 +391,48 @@ export default function PostsPage() {
         </div>
       </div>
 
-      <div className="toolbar">
-        <Toolbar
-          search={{
-            placeholder: t('searchTitle'),
-            onSearch: handleSearch,
-            inputTestId: 'searchByName',
-          }}
-          filters={[
-            {
-              type: 'sort',
-              title: t('sortPost'),
-              options: [
-                { label: t('latest'), value: 'latest' },
-                { label: t('oldest'), value: 'oldest' },
-                { label: t('none'), value: 'None' },
-              ],
-              selected: sortingOption,
-              onChange: handleSorting,
-              testIdPrefix: 'sortpost',
-            },
-          ]}
-        />
+      <div className="toolbar" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div style={{ flex: 1 }}>
+          <Toolbar
+            search={{
+              placeholder: t('searchTitle'),
+              onSearch: handleSearch,
+              inputTestId: 'searchByName',
+            }}
+            filters={[
+              {
+                type: 'sort',
+                title: t('sortPost'),
+                options: [
+                  { label: t('latest'), value: 'latest' },
+                  { label: t('oldest'), value: 'oldest' },
+                  { label: t('none'), value: 'None' },
+                ],
+                selected: sortingOption,
+                onChange: handleSorting,
+                testIdPrefix: 'sortpost',
+              },
+            ]}
+          />
+        </div>
+        <div className={styles.layoutToggle}>
+          <button
+            className={`${styles.layoutBtn} ${layout === 'feed' ? styles.layoutBtnActive : ''}`}
+            onClick={() => setLayout('feed')}
+            title="Feed view"
+            aria-label="Feed view"
+          >
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" /></svg>
+          </button>
+          <button
+            className={`${styles.layoutBtn} ${layout === 'grid' ? styles.layoutBtnActive : ''}`}
+            onClick={() => setLayout('grid')}
+            title="Grid view"
+            aria-label="Grid view"
+          >
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /></svg>
+          </button>
+        </div>
       </div>
 
       <div
@@ -436,7 +457,7 @@ export default function PostsPage() {
 
         {/* Post Feed */}
         {isFiltering ? (
-          <div className="post-feed">
+          <div className={layout === 'grid' ? 'post-feed post-feed-grid' : 'post-feed post-feed-single'}>
             {postsToDisplay.map((post) => {
               const authorName = post.creator?.name ?? 'Unknown User';
               const initials = getInitials(authorName);
@@ -487,7 +508,7 @@ export default function PostsPage() {
             }
             scrollThreshold={0.8}
           >
-            <div className="post-feed">
+            <div className={layout === 'grid' ? 'post-feed post-feed-grid' : 'post-feed post-feed-single'}>
               {postsToDisplay.map((post) => {
                 const authorName = post.creator?.name ?? 'Unknown User';
                 const initials = getInitials(authorName);
