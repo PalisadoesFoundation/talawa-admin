@@ -13,7 +13,7 @@
  * - Includes a search bar and advertisement registration functionality.
  *
  * dependencies
- * - `react`, `react-bootstrap`, `react-router-dom`, `react-i18next`
+ * - `react`, `react-router-dom`, `react-i18next`
  * - `@apollo/client` for GraphQL queries.
  * - `InfiniteScroll` for infinite scrolling functionality.
  *
@@ -31,11 +31,10 @@
  * @see AdvertisementRegister - Handles advertisement creation.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import styles from './Advertisements.module.css';
 import { useQuery } from '@apollo/client';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
-import { Col, Row, Tab, Tabs } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import AdvertisementEntry from './core/AdvertisementEntry/AdvertisementEntry';
 import AdvertisementRegister from './core/AdvertisementRegister/AdvertisementRegister';
@@ -181,6 +180,18 @@ export default function Advertisements(): JSX.Element {
   }
 
   const loading = activeLoading || completedLoading; // if any of them is in loading state
+
+  const [activeTab, setActiveTab] = useState<'activeAds' | 'archivedAds'>(
+    'archivedAds',
+  );
+
+  const handleTabClick = useCallback(
+    (tab: 'activeAds' | 'archivedAds') => {
+      setActiveTab(tab);
+    },
+    [],
+  );
+
   return (
     <ErrorBoundaryWrapper
       fallbackErrorMessage={tErrors('defaultErrorMessage')}
@@ -188,14 +199,18 @@ export default function Advertisements(): JSX.Element {
       resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
       resetButtonText={tErrors('resetButton')}
     >
-      <Row data-testid="advertisements" className={styles.rowAdvertisements}>
-        <Col md={8} className={styles.containerAdvertisements}>
+      <div
+        data-testid="advertisements"
+        className={styles.rowAdvertisements}
+        style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}
+      >
+        <div className={styles.containerAdvertisements}>
           {loading && (
             <LoadingState variant="spinner" isLoading={loading}>
               <div />
             </LoadingState>
           )}
-          <Col className={styles.colAdvertisements}>
+          <div className={styles.colAdvertisements}>
             <Toolbar
               search={{
                 placeholder: t('searchAdvertisements'),
@@ -229,87 +244,113 @@ export default function Advertisements(): JSX.Element {
                 />
               }
             />
-          </Col>
-          <Tabs
-            key="advertisements-tabs"
-            defaultActiveKey="archivedAds"
-            id="uncontrolled-tab-example"
-            className="mt-4"
-          >
-            <Tab
-              eventKey="activeAds"
-              title={t('activeAds')}
-              className="pt-4 m-2"
-            >
-              {activeAdvertisements.length === 0 ? (
-                <div className={styles.pMessageAdvertisement}>
-                  {t('pMessage')}
-                </div>
-              ) : (
-                <InfiniteScroll
-                  dataLength={activeAdvertisements.length}
-                  next={loadMoreActiveAdvertisements}
-                  loader={<AdvertisementSkeleton />}
-                  hasMore={
-                    orgActiveAdvertisementListData?.organization?.advertisements
-                      ?.pageInfo?.hasNextPage ?? false
-                  }
-                  className={styles.listBoxAdvertisements}
-                >
-                  <div className={styles.justifyspAdvertisements}>
-                    {activeAdvertisements.map((ad) => {
-                      return (
-                        <AdvertisementEntry
-                          key={ad.id}
-                          advertisement={ad}
-                          setAfterActive={setAfterActive}
-                          setAfterCompleted={setAfterCompleted}
-                        />
-                      );
-                    })}
-                  </div>
-                </InfiniteScroll>
-              )}
-            </Tab>
+          </div>
+          <div style={{ marginTop: '1.5rem' }}>
+            <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+              <button
+                type="button"
+                onClick={() => handleTabClick('activeAds')}
+                style={{
+                  padding: '8px 16px',
+                  fontWeight: activeTab === 'activeAds' ? 'bold' : 'normal',
+                  borderBottom:
+                    activeTab === 'activeAds' ? '2px solid currentColor' : 'none',
+                  background: 'none',
+                  border: 'none',
+                  borderBottomWidth: activeTab === 'activeAds' ? '2px' : '0',
+                  borderBottomStyle: 'solid',
+                  cursor: 'pointer',
+                }}
+              >
+                {t('activeAds')}
+              </button>
+              <button
+                type="button"
+                onClick={() => handleTabClick('archivedAds')}
+                style={{
+                  padding: '8px 16px',
+                  fontWeight: activeTab === 'archivedAds' ? 'bold' : 'normal',
+                  background: 'none',
+                  border: 'none',
+                  borderBottomWidth: activeTab === 'archivedAds' ? '2px' : '0',
+                  borderBottomStyle: 'solid',
+                  cursor: 'pointer',
+                }}
+              >
+                {t('archivedAds')}
+              </button>
+            </div>
 
-            <Tab
-              eventKey="archivedAds"
-              title={t('archivedAds')}
-              className="pt-4 m-2"
-            >
-              {completedAdvertisements.length === 0 ? (
-                <div className={styles.pMessageAdvertisement}>
-                  {t('pMessage')}
-                </div>
-              ) : (
-                <InfiniteScroll
-                  dataLength={completedAdvertisements.length}
-                  next={loadMoreCompletedAdvertisements}
-                  loader={<AdvertisementSkeleton />}
-                  hasMore={
-                    orgCompletedAdvertisementListData?.organization
-                      ?.advertisements?.pageInfo?.hasNextPage ?? false
-                  }
-                  className={styles.listBoxAdvertisements}
-                >
-                  <div className={styles.justifyspAdvertisements}>
-                    {completedAdvertisements.map((ad) => {
-                      return (
-                        <AdvertisementEntry
-                          key={ad.id}
-                          advertisement={ad}
-                          setAfterActive={setAfterActive}
-                          setAfterCompleted={setAfterCompleted}
-                        />
-                      );
-                    })}
+            {activeTab === 'activeAds' && (
+              <div style={{ paddingTop: '16px', margin: '8px' }}>
+                {activeAdvertisements.length === 0 ? (
+                  <div className={styles.pMessageAdvertisement}>
+                    {t('pMessage')}
                   </div>
-                </InfiniteScroll>
-              )}
-            </Tab>
-          </Tabs>
-        </Col>
-      </Row>
+                ) : (
+                  <InfiniteScroll
+                    dataLength={activeAdvertisements.length}
+                    next={loadMoreActiveAdvertisements}
+                    loader={<AdvertisementSkeleton />}
+                    hasMore={
+                      orgActiveAdvertisementListData?.organization
+                        ?.advertisements?.pageInfo?.hasNextPage ?? false
+                    }
+                    className={styles.listBoxAdvertisements}
+                  >
+                    <div className={styles.justifyspAdvertisements}>
+                      {activeAdvertisements.map((ad) => {
+                        return (
+                          <AdvertisementEntry
+                            key={ad.id}
+                            advertisement={ad}
+                            setAfterActive={setAfterActive}
+                            setAfterCompleted={setAfterCompleted}
+                          />
+                        );
+                      })}
+                    </div>
+                  </InfiniteScroll>
+                )}
+              </div>
+            )}
+
+            {activeTab === 'archivedAds' && (
+              <div style={{ paddingTop: '16px', margin: '8px' }}>
+                {completedAdvertisements.length === 0 ? (
+                  <div className={styles.pMessageAdvertisement}>
+                    {t('pMessage')}
+                  </div>
+                ) : (
+                  <InfiniteScroll
+                    dataLength={completedAdvertisements.length}
+                    next={loadMoreCompletedAdvertisements}
+                    loader={<AdvertisementSkeleton />}
+                    hasMore={
+                      orgCompletedAdvertisementListData?.organization
+                        ?.advertisements?.pageInfo?.hasNextPage ?? false
+                    }
+                    className={styles.listBoxAdvertisements}
+                  >
+                    <div className={styles.justifyspAdvertisements}>
+                      {completedAdvertisements.map((ad) => {
+                        return (
+                          <AdvertisementEntry
+                            key={ad.id}
+                            advertisement={ad}
+                            setAfterActive={setAfterActive}
+                            setAfterCompleted={setAfterCompleted}
+                          />
+                        );
+                      })}
+                    </div>
+                  </InfiniteScroll>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
     </ErrorBoundaryWrapper>
   );
 }

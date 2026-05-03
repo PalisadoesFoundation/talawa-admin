@@ -1,8 +1,8 @@
 .whiteContainer {
-  background-color: var(--color-white);
-  border-radius: var(--space-5);
-  margin-top: var(--space-5);
-  margin-bottom: var(--space-5);
+  background-color: var(--surface);
+  border-radius: var(--radius-lg);
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
 }
 
 .message {
@@ -14,23 +14,23 @@
 }
 
 .errorIcon {
-  font-size: var(--font-size-4xl);
-  color: var(--color-red-500);
-  margin-bottom: var(--space-5);
+  font-size: 2.25rem;
+  color: var(--red-500);
+  margin-bottom: 1.25rem;
 
   /* Add error icon for non-color indication */
   &::before {
     content: '⚠️';
-    margin-right: var(--space-2);
+    margin-right: 0.5rem;
   }
 }
 
 .errorIconLarge {
-  font-size: var(--font-size-3xl);
+  font-size: 1.875rem;
 }
 
 .campaignsContainer {
-  padding-right: calc(var(--space-6) + var(--space-2));
+  padding-right: 2rem;
 }
 
 .requestsTableItemIndex {
@@ -40,30 +40,30 @@
 .searchContainerRow {
   display: flex;
   align-items: center;
-  margin-bottom: var(--space-5);
-  gap: var(--space-5);
+  margin-bottom: 1.25rem;
+  gap: 1.25rem;
 }
 
 .createButton {
-  background-color: var(--color-gray-50);
-  color: var(--color-gray-700);
-  border: var(--border-1) solid var(--color-gray-700);
-  margin: var(--space-2) var(--space-4);
-  width: var(--space-16);
-  height: var(--space-10);
+  background-color: var(--gray-50);
+  color: var(--gray-700);
+  border: 1px solid var(--gray-700);
+  margin: 0.5rem 1rem;
+  width: 160px;
+  height: 2.5rem;
 }
 
 .createButton:hover {
-  background-color: var(--color-gray-400) !important;
-  border-color: var(--color-gray-300) !important;
-  color: var(--color-white) !important;
+  background-color: var(--gray-400);
+  border-color: var(--gray-300);
+  color: var(--surface);
   box-shadow: none;
 }
 
 .createButton:active {
-  color: var(--color-gray-400);
-  background-color: var(--color-gray-100);
-  border: var(--border-1) solid var(--color-gray-400);
+  color: var(--gray-400);
+  background-color: var(--gray-100);
+  border: 1px solid var(--gray-400);
 }
 
 .buttonNoWrap {
@@ -75,38 +75,36 @@
 }
 
 .addPledgeButton {
-  background-color: var(--color-blue-200);
-  color: var(--color-gray-700);
+  background-color: var(--green-50);
+  color: var(--gray-700);
   border: none;
   border-radius: var(--radius-sm);
-  font-weight: var(--font-weight-semibold);
-  padding: var(--space-3) var(--space-5);
-  --bs-btn-active-bg: var(--color-blue-300);
-  --bs-btn-active-border-color: transparent;
+  font-weight: 600;
+  padding: 0.75rem 1.25rem;
 }
 
 .addPledgeButton:is(:hover, :active) {
-  background-color: var(--color-blue-300);
-  color: var(--color-gray-700);
+  background-color: var(--green-100);
+  color: var(--gray-700);
   border-color: transparent;
   box-shadow: none;
 }
 
 .addPledgeButton:disabled {
-  background-color: var(--color-gray-200);
-  color: var(--color-gray-500);
+  background-color: var(--gray-200);
+  color: var(--gray-500);
   opacity: 1;
 }
 
 .progressPie {
-  --pie-fill-color: var(--color-blue-500);
-  width: var(--space-8);
-  height: var(--space-8);
+  --pie-fill-color: var(--blue-500);
+  width: 2rem;
+  height: 2rem;
   display: block;
 }
 
 .progressTrack {
-  fill: var(--color-gray-100);
+  fill: var(--gray-100);
 }
 
 .progressSlice {
@@ -114,26 +112,26 @@
 }
 
 .progressComplete {
-  --pie-fill-color: var(--color-green-500);
+  --pie-fill-color: var(--green-500);
 }
 
 .progressHalf {
-  --pie-fill-color: var(--color-yellow-500);
+  --pie-fill-color: var(--yellow-500);
 }
 
 .progressLow {
-  --pie-fill-color: var(--color-blue-500);
+  --pie-fill-color: var(--blue-500);
 }
 
 .progressTypography {
-  font-weight: var(--font-weight-bold);
+  font-weight: 700;
 }
 
 .progressCellContainer {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-3);
+  gap: 0.75rem;
 }
 
 .uniformTableLayout {

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Row, Col } from 'react-bootstrap';
 import { FaLink, FaTrash } from 'react-icons/fa';
 import { useParams } from 'react-router';
 import { useMutation } from '@apollo/client';
@@ -303,7 +302,7 @@ const AgendaItemsCreateModal: React.FC<
     >
       {/* Folder */}
       <FormFieldGroup name="folder" label={t('folder')}>
-        <div className="w-100">
+        <div style={{ width: '100%' }}>
           <DropDownButton
             id="create-agenda-folder-dropdown"
             options={(agendaFolderData ?? []).map((f) => ({
@@ -329,7 +328,7 @@ const AgendaItemsCreateModal: React.FC<
 
       {/* Category */}
       <FormFieldGroup name="category" label={t('category')}>
-        <div className="w-100">
+        <div style={{ width: '100%' }}>
           <DropDownButton
             id="create-agenda-category-dropdown"
             options={(agendaItemCategories ?? []).map((c) => ({
@@ -353,8 +352,8 @@ const AgendaItemsCreateModal: React.FC<
         </div>
       </FormFieldGroup>
 
-      <Row className="mb-3">
-        <Col>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', marginBottom: '1rem' }}>
+        <div style={{ flex: '1 1 0' }}>
           <FormTextField
             name="title"
             label={t('title')}
@@ -365,8 +364,8 @@ const AgendaItemsCreateModal: React.FC<
               setAgendaItemFormState((prev) => ({ ...prev, title: v }))
             }
           />
-        </Col>
-        <Col>
+        </div>
+        <div style={{ flex: '1 1 0' }}>
           <FormTextField
             name="duration"
             label={t('duration')}
@@ -377,8 +376,8 @@ const AgendaItemsCreateModal: React.FC<
               setAgendaItemFormState((prev) => ({ ...prev, duration: v }))
             }
           />
-        </Col>
-      </Row>
+        </div>
+      </div>
 
       <FormTextField
         name="description"
@@ -403,9 +402,9 @@ const AgendaItemsCreateModal: React.FC<
 
       {/* URLs */}
       <FormFieldGroup name="url" label={t('url')}>
-        <div className="d-flex gap-2">
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
           <input
-            className="form-control"
+            style={{ width: '100%', padding: '0.375rem 0.75rem', border: '1px solid #ced4da', borderRadius: '0.375rem' }}
             placeholder={t('enterUrl')}
             data-testid="urlInput"
             value={newUrl}
@@ -439,11 +438,11 @@ const AgendaItemsCreateModal: React.FC<
         <input
           type="file"
           multiple
-          className="form-control"
+          style={{ width: '100%', padding: '0.375rem 0.75rem', border: '1px solid #ced4da', borderRadius: '0.375rem' }}
           data-testid="attachment"
           onChange={handleFileChange}
         />
-        <small className="text-muted">{t('attachmentLimit')}</small>
+        <small style={{ color: '#6c757d' }}>{t('attachmentLimit')}</small>
       </FormFieldGroup>
 
       {agendaItemFormState.attachments.map((att) => (

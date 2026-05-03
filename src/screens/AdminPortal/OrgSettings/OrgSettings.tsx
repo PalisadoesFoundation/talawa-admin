@@ -24,7 +24,6 @@
  * @see {@link OrgActionItemCategories} for the Action Item Categories tab content.
  */
 import React, { useState } from 'react';
-import { Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import styles from './OrgSettings.module.css';
 import OrgActionItemCategories from 'components/AdminPortal/OrgSettings/ActionItemCategories/OrgActionItemCategories';
@@ -50,41 +49,59 @@ function OrgSettings(): JSX.Element {
   }
 
   return (
-    <div className="d-flex flex-column">
-      <Row className="mx-1 mt-3">
-        <Col>
-          <div className={styles.settingsTabs}>
-            {settingtabs.map((setting, index) => (
-              <Button
-                key={index}
-                className={`${styles.headerBtn} ${tab === setting ? styles.activeTabBtn : ''}`}
-                onClick={() => setTab(setting)}
-                data-testid={`${setting}Settings`}
-              >
-                {t(setting)}
-              </Button>
-            ))}
-          </div>
-        </Col>
-      </Row>
+    <>
+      <div className="page-header">
+        <div className="page-header-left">
+          <h1 className="page-title">{t('title')}</h1>
+          <p className="page-subtitle">
+            {t('manageOrgPreferences')}
+          </p>
+        </div>
+        <div className="page-header-actions">
+          <button className="btn btn-primary">{t('saveChanges')}</button>
+        </div>
+      </div>
 
-      {(() => {
-        switch (tab) {
-          case 'general':
-            return (
-              <div data-testid="generalTab">
-                <GeneralSettings orgId={orgId} />
-              </div>
-            );
-          case 'actionItemCategories':
-            return (
-              <div data-testid="actionItemCategoriesTab">
-                <OrgActionItemCategories orgId={orgId} />
-              </div>
-            );
-        }
-      })()}
-    </div>
+      <div className="tabs" role="tablist">
+        {settingtabs.map((setting, index) => (
+          <button
+            key={index}
+            className={`tab ${tab === setting ? 'active' : ''}`}
+            role="tab"
+            aria-selected={tab === setting}
+            onClick={() => setTab(setting)}
+            data-testid={`${setting}Settings`}
+          >
+            {t(setting)}
+          </button>
+        ))}
+      </div>
+
+      <div className="tw-card" style={{ padding: '24px', marginBottom: '24px' }}>
+        {(() => {
+          switch (tab) {
+            case 'general':
+              return (
+                <div data-testid="generalTab">
+                  <GeneralSettings orgId={orgId} />
+                </div>
+              );
+            case 'actionItemCategories':
+              return (
+                <div data-testid="actionItemCategoriesTab">
+                  <OrgActionItemCategories orgId={orgId} />
+                </div>
+              );
+          }
+        })()}
+      </div>
+
+      <div className="danger-zone">
+        <div className="danger-zone-title">{t('dangerZone')}</div>
+        <div className="danger-zone-desc">{t('dangerZoneDesc')}</div>
+        <button className="btn btn-danger">{t('deleteOrg')}</button>
+      </div>
+    </>
   );
 }
 

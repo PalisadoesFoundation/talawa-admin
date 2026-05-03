@@ -320,7 +320,8 @@
     "imageUploadError": "Image upload failed. Please try again.",
     "imageUploadSuccess": "Image uploaded successfully.",
     "congratulationOrgCreated": "Congratulations! The Organization is created.",
-    "sortOrganizations": "Sort Organizations"
+    "sortOrganizations": "Sort Organizations",
+    "managingYourOrganizations": "Manage all registered organizations"
   },
   "orgListCard": {
     "manage": "Manage",
@@ -339,6 +340,7 @@
   "requests": {
     "profile": "Profile",
     "title": "Membership Requests",
+    "reviewAndManage": "Review and manage membership requests",
     "sl_no": "Sl. No.",
     "accept": "Accept",
     "reject": "Reject",
@@ -977,6 +979,7 @@
   },
   "funds": {
     "title": "Funds",
+    "manageFundsDescription": "Manage fundraising campaigns and track donations",
     "createFund": "Create Fund",
     "searchFunds": "Search Funds",
     "fundName": "Fund Name",
@@ -1189,6 +1192,7 @@
   },
   "blockUnblockUser": {
     "title": "Block/Unblock User",
+    "manageBlockedUsers": "Users who have been blocked from the organization",
     "pageName": "Block/Unblock",
     "listOfUsers": "List of Users who spammed",
     "block_unblock": "Block/Unblock",
@@ -1339,6 +1343,7 @@
   },
   "orgSettings": {
     "title": "Settings",
+    "manageOrgPreferences": "Manage your organization preferences",
     "general": "General",
     "actionItemCategories": "Action Item Categories",
     "editOrganization": "Edit Organization",
@@ -1963,7 +1968,8 @@
     "conversationAlreadyExists": "A conversation with {{userName}} already exists!",
     "thisUser": "this user",
     "deleteChatConfirmation": "Are you sure you want to delete this chat?",
-    "memberActionsMenu": "Member Actions Menu"
+    "memberActionsMenu": "Member Actions Menu",
+    "searchContacts": "Search conversations..."
   },
   "userChatRoom": {
     "selectContact": "Click the + icon to start a new chat",
@@ -2044,7 +2050,8 @@
     "deleteVenue": "Delete venue",
     "venueImagePreview": "Preview of venue image",
     "sortVenues": "Sort Venues",
-    "closeImagePreview": "Close image preview"
+    "closeImagePreview": "Close image preview",
+    "manageVenues": "Manage event venues and spaces"
   },
   "addMember": {
     "title": "Add Member",
@@ -2451,7 +2458,9 @@
     "uninstallPluginWarning": "This action will permanently remove the plugin and all its data. This action cannot be undone.",
     "errorInstalling": "Failed to load plugin details",
     "failedToParsePluginZip": "Failed to parse plugin ZIP",
-    "pluginUploadedSuccess": "Plugin uploaded successfully! ({{components}} components) - You can now install it from the plugin list."
+    "pluginUploadedSuccess": "Plugin uploaded successfully! ({{components}} components) - You can now install it from the plugin list.",
+    "configure": "Configure",
+    "enable": "Enable"
   },
   "pluginInjector": {
     "notFoundOrDisabled": "Plugin Not Found or Disabled",

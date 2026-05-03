@@ -7,7 +7,6 @@ import ExtensionOutlined from '@mui/icons-material/ExtensionOutlined';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import PluginCard from './PluginCard';
 import type { IPluginMeta } from 'plugin';
-import styles from './PluginList.module.css';
 
 interface IPluginListProps {
   plugins: IPluginMeta[];
@@ -48,13 +47,10 @@ export default function PluginList({
   }
 
   return (
-    <div
-      className={styles.pluginListContainer}
-      data-testid="plugin-list-container"
-    >
+    <>
       {plugins.map((plugin) => (
         <PluginCard key={plugin.id} plugin={plugin} onManage={onManagePlugin} />
       ))}
-    </div>
+    </>
   );
 }

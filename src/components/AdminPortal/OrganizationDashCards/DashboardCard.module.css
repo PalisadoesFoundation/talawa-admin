@@ -1,40 +1,32 @@
 /**
  * DashboardCard — KPI stat widget
- * ---------------------------------
- * Vertical layout: label + icon in header, large number below.
- * Follows Apple/Stripe/Vercel stat card conventions.
+ * Talawa design system.
+ * White card, radius-xl, shadow-card, large number, muted label, icon.
  */
 
 .cardBodyMainDiv {
-  border-radius: var(--radius-2xl);
-  box-shadow:
-    0 var(--shadow-offset-xs) var(--shadow-blur-xs) var(--color-black-4),
-    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--color-black-5);
-  border: var(--border-1) solid var(--color-black-6);
-  background-color: var(--color-white);
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
   width: 100%;
-  transition:
-    box-shadow 0.22s ease,
-    transform 0.18s ease;
   overflow: hidden;
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
 }
 
 .cardBodyMainDiv:hover {
-  box-shadow:
-    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--color-black-7),
-    0 var(--shadow-offset-lg) var(--shadow-blur-xl) var(--color-black-7);
-  transform: translateY(-2px);
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-1px);
 }
 
 .cardBody {
-  padding: var(--space-6) var(--space-6-5) var(--space-6-5);
+  padding: 22px 24px;
   display: flex;
   flex-direction: column;
-  gap: var(--space-3-75);
+  gap: 14px;
   width: 100%;
 }
 
-/* ── Top row: label left, icon right ────────────────────────────────────────── */
+/* -- Top row: label left, icon right -- */
 .cardTop {
   display: flex;
   justify-content: space-between;
@@ -42,16 +34,16 @@
   width: 100%;
 }
 
-/* ── Icon — bare, no background pill ────────────────────────────────────────── */
+/* -- Icon with colored background pill -- */
 .cardbodyIcon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: var(--space-8);
-  height: var(--space-8);
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-md);
+  background: var(--green-50);
   flex-shrink: 0;
-  color: var(--color-blue-500);
-  opacity: 0.75;
   transition: opacity 0.15s ease;
 }
 
@@ -61,37 +53,33 @@
 
 .cardbodyIcon svg,
 .cardbodyIcon path {
-  fill: var(--color-blue-500);
-  color: var(--color-blue-500);
-  width: var(--space-8);
-  height: var(--space-8);
+  fill: var(--green-600);
+  color: var(--green-600);
+  width: 18px;
+  height: 18px;
 }
 
-/* ── Metric number ───────────────────────────────────────────────────────────── */
+/* -- Metric number -- */
 .cardBodyNumber {
-  font-size: var(--font-size-3xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-gray-900);
-  letter-spacing: -0.035em;
-  line-height: var(--line-height-none);
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--gray-900);
+  letter-spacing: -0.04em;
+  line-height: 1;
 }
 
-/* ── Label ───────────────────────────────────────────────────────────────────── */
+/* -- Label -- */
 .cardBodySecondaryText {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-gray-mid);
-  letter-spacing: var(--letter-spacing-snug-half);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--gray-500);
   text-transform: capitalize;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* ── Unused legacy classes kept as no-ops to avoid TS errors ─────────────────── */
-.cardBodymain {
-}
-.iconCol {
-}
-.contentCol {
-}
+/* -- Unused legacy classes kept as no-ops to avoid TS errors -- */
+.cardBodymain {}
+.iconCol {}
+.contentCol {}

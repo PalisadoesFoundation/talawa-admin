@@ -1,5 +1,5 @@
 /**
- * Border & shadow tokens — Apple-inspired elevation system
+ * Border & shadow tokens — elevation system
  * ----------------------------------------------------------
  */
 
@@ -18,12 +18,12 @@
   --radius-xs: 4px;
   --radius-sm: 6px;
   --radius-md: 8px;
-  --radius-lg: 10px; /* Apple standard button/input */
-  --radius-xl: 12px; /* Apple card */
+  --radius-lg: 10px; /* standard button/input */
+  --radius-xl: 12px; /* card */
   --radius-1-5xl: 14px; /* between xl=12 and 2xl=16 */
-  --radius-2xl: 16px; /* Apple larger card */
+  --radius-2xl: 16px; /* larger card */
   --radius-2-5xl: 18px; /* between 2xl=16 and 3xl=20 */
-  --radius-3xl: 20px; /* Apple modal */
+  --radius-3xl: 20px; /* modal */
   --radius-4xl: 24px; /* Legacy alias kept for compatibility */
   --radius-full: 50%;
   --radius-pill: 100rem;

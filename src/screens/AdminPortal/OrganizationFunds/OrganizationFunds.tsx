@@ -13,14 +13,10 @@ import type {
   InterfaceFundInfo,
   InterfaceFundListQueryResponse,
 } from 'utils/interfaces';
-import Toolbar from 'shared-components/Toolbar/Toolbar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import styles from './OrganizationFunds.module.css';
-import Button from 'shared-components/Button';
 import { useModalState } from 'shared-components/CRUDModalTemplate';
-import { DataTable } from 'shared-components/DataTable/DataTable';
 import { useTableData } from 'shared-components/DataTable/hooks/useTableData';
-import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 
 const PAGE_SIZE = 10;
 
@@ -159,25 +155,13 @@ const organizationFunds = (): JSX.Element => {
     navigate(`/admin/orgfundcampaign/${orgId}/${fundId}`);
   };
 
-  // Header titles for the funds table
+  // Header titles for the funds table (used by TableLoader during loading)
   const headerTitles: string[] = [
-    tCommon('hash'),
     t('funds.fundName'),
     tCommon('createdOn'),
     tCommon('status'),
-    t('funds.associatedCampaigns'),
     tCommon('action'),
   ];
-
-  const fundIndexMap = useMemo(() => {
-    const map = new Map<string, number>();
-    filteredAndSortedFunds.forEach((item, index) => {
-      if (item.id) {
-        map.set(item.id, index + 1);
-      }
-    });
-    return map;
-  }, [filteredAndSortedFunds]);
 
   if (fundError) {
     return (
@@ -196,188 +180,143 @@ const organizationFunds = (): JSX.Element => {
     );
   }
 
-  const columns: IColumnDef<InterfaceFundInfo>[] = [
-    {
-      id: 'sl_no',
-      header: tCommon('hash'),
-      accessor: 'id',
-      render: (_value, row) => (
-        <span className={styles.requestsTableItemIndex}>
-          {fundIndexMap.get(row.id) ?? 0}
-        </span>
-      ),
-      meta: {
-        sortable: false,
-      },
-    },
-    {
-      id: 'fundName',
-      header: t('funds.fundName'),
-      accessor: 'name',
-      render: (value, row) => {
-        return (
-          <Button
-            variant="link"
-            className={styles.fundNameButton}
-            data-testid="fundName"
-            onClick={() => handleClick(row.id)}
-          >
-            <i className="fa fa-link me-1" aria-hidden="true" />
-            {String(value)}
-          </Button>
-        );
-      },
-      meta: {
-        sortable: false,
-      },
-    },
-    {
-      id: 'createdAt',
-      header: tCommon('createdOn'),
-      accessor: 'createdAt',
-      render: (value) => {
-        return (
-          <div data-testid="createdOn">
-            {dayjs(String(value)).format('DD/MM/YYYY')}
-          </div>
-        );
-      },
-      meta: {
-        sortable: true,
-        sortFn: (a, b) =>
-          dayjs(a.createdAt).valueOf() - dayjs(b.createdAt).valueOf(),
-      },
-    },
-    {
-      id: 'status',
-      header: t('funds.status'),
-      accessor: 'isArchived',
-      render: (value) => {
-        return value ? t('funds.archived') : tCommon('active');
-      },
-      meta: {
-        sortable: false,
-      },
-    },
-    {
-      id: 'assocCampaigns',
-      header: t('funds.assocCampaigns'),
-      accessor: 'id',
-      render: (value) => {
-        return (
-          <Button
-            size="sm"
-            className={styles.editButton}
-            aria-label={t('funds.viewCampaigns')}
-            onClick={() => handleClick(value as string)}
-            data-testid="viewBtn"
-          >
-            <i className="fa fa-eye me-1" />
-            {t('funds.viewCampaigns')}
-          </Button>
-        );
-      },
-      meta: {
-        sortable: false,
-      },
-    },
-    {
-      id: 'action',
-      header: tCommon('action'),
-      accessor: 'id',
-      render: (_value, row) => {
-        return (
-          <Button
-            size="sm"
-            className={styles.editButton}
-            data-testid="editFundBtn"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleOpenModal(row, 'edit');
-            }}
-          >
-            <i className="fa fa-edit me-1" />
-            {t('funds.editFund')}
-          </Button>
-        );
-      },
-      meta: {
-        sortable: false,
-      },
-    },
-  ];
-
   if (!orgId) {
     return <Navigate to={'/'} replace />;
   }
 
   return (
     <div>
-      <Toolbar
-        search={{
-          placeholder: t('funds.searchFunds'),
-          value: searchText,
-          onChange: (value) => setSearchText(value.trim()),
-          onSearch: (value: string) => {
-            setSearchText(value.trim());
-          },
-          inputTestId: 'searchByName',
-          buttonTestId: 'searchButton',
-        }}
-        actions={
-          <Button
-            variant="success"
+      <div className="page-header">
+        <div className="page-header-left">
+          <h1 className="page-title">{t('funds.title')}</h1>
+          <p className="page-subtitle">
+            {t('funds.manageFundsDescription')}
+          </p>
+        </div>
+        <div className="page-header-actions">
+          <button
+            className="btn btn-primary"
             onClick={() => handleOpenModal(null, 'create')}
-            className={`${styles.createFundButton} ${styles.buttonNoWrap}`}
             data-testid="createFundBtn"
           >
-            <i className="fa fa-plus me-2" aria-hidden="true" />
-            {t('funds.createFund')}
-          </Button>
-        }
-      />
+            + {t('funds.createFund')}
+          </button>
+        </div>
+      </div>
+
+      <div className="stats-grid">
+        <div className="stat-card">
+          <div className="stat-card-top">
+            <span className="stat-card-label">{t('funds.title')}</span>
+            <div className="stat-card-icon green">
+              <AccountBalanceWallet fontSize="small" />
+            </div>
+          </div>
+          <div className="stat-card-value">{filteredAndSortedFunds.length}</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-card-top">
+            <span className="stat-card-label">{tCommon('active')}</span>
+            <div className="stat-card-icon blue">
+              <span aria-hidden="true">&#9733;</span>
+            </div>
+          </div>
+          <div className="stat-card-value">
+            {filteredAndSortedFunds.filter((f) => !f.isArchived).length}
+          </div>
+        </div>
+      </div>
+
+      <div className="toolbar" style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '20px' }}>
+        <input
+          type="text"
+          className="search-input"
+          placeholder={t('funds.searchFunds')}
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value.trim())}
+          data-testid="searchByName"
+          style={{ flex: 1, padding: '8px 12px', border: '1px solid var(--gray-200)', borderRadius: 'var(--radius-md)', fontSize: '13px' }}
+        />
+      </div>
 
       {!fundLoading &&
       fundData &&
       filteredAndSortedFunds.length === 0 &&
       searchText.length > 0 ? (
-        <EmptyState
-          icon={<Search />}
-          message="noResultsFound"
-          description={tCommon('noResultsFoundFor', {
-            query: `"${searchText}"`,
-          })}
-          dataTestId="funds-search-empty"
-        />
+        <div className="card">
+          <EmptyState
+            icon={<Search />}
+            message="noResultsFound"
+            description={tCommon('noResultsFoundFor', {
+              query: `"${searchText}"`,
+            })}
+            dataTestId="funds-search-empty"
+          />
+        </div>
       ) : !fundLoading && fundData && filteredAndSortedFunds.length === 0 ? (
-        <EmptyState
-          icon={<AccountBalanceWallet />}
-          message={t('funds.noFundsFound')}
-          dataTestId="funds-empty"
-        />
+        <div className="card">
+          <EmptyState
+            icon={<AccountBalanceWallet />}
+            message={t('funds.noFundsFound')}
+            dataTestId="funds-empty"
+          />
+        </div>
       ) : (
-        <div className={styles.listBox}>
+        <div className="card">
+          <div className="card-header">
+            <span className="card-title">{t('funds.allCampaigns')}</span>
+          </div>
           {fundLoading ? (
             <TableLoader headerTitles={headerTitles} noOfRows={PAGE_SIZE} />
           ) : (
-            <>
-              <DataTable
-                data={filteredAndSortedFunds}
-                columns={columns}
-                rowKey="id"
-                loading={fundLoading}
-                paginationMode="client"
-                pageSize={PAGE_SIZE}
-                tableClassName={styles.listTable}
-                emptyMessage={t('funds.noFundsFound')}
-                ariaLabel={t('funds.title')}
-              />
-              {filteredAndSortedFunds.length > 0 && (
-                <div className={'w-100 text-center my-4'}>
-                  <h5 className="m-0">{tCommon('endOfResults')}</h5>
-                </div>
-              )}
-            </>
+            <div className="table-wrapper">
+              <table className="data-table" aria-label={t('funds.title')}>
+                <thead>
+                  <tr>
+                    <th scope="col">{t('funds.fundName')}</th>
+                    <th scope="col">{tCommon('createdOn')}</th>
+                    <th scope="col">{tCommon('status')}</th>
+                    <th scope="col">{tCommon('action')}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredAndSortedFunds.map((fundItem) => (
+                    <tr key={fundItem.id}>
+                      <td
+                        className="cell-primary"
+                        style={{ cursor: 'pointer' }}
+                        data-testid="fundName"
+                        onClick={() => handleClick(fundItem.id)}
+                      >
+                        {fundItem.name}
+                      </td>
+                      <td data-testid="createdOn">
+                        {dayjs(fundItem.createdAt).format('MMM D, YYYY')}
+                      </td>
+                      <td>
+                        <span
+                          className={`badge ${fundItem.isArchived ? 'badge-gray' : 'badge-green'}`}
+                        >
+                          {fundItem.isArchived ? t('funds.archived') : tCommon('active')}
+                        </span>
+                      </td>
+                      <td>
+                        <button
+                          className="btn btn-secondary btn-sm"
+                          data-testid="editFundBtn"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleOpenModal(fundItem, 'edit');
+                          }}
+                        >
+                          {t('funds.editFund')}
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
         </div>
       )}

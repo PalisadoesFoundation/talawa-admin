@@ -13,14 +13,11 @@ import type {
   InterfaceQueryUserListItemForAdmin,
   InterfaceUserListQueryResponse,
 } from 'utils/interfaces';
-import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 import styles from './Users.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import { PersonOff } from '@mui/icons-material';
 import ErrorPanel from 'shared-components/ErrorPanel';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
-import { DataTable } from 'shared-components/DataTable/DataTable';
-import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { useTableData } from 'shared-components/DataTable/hooks/useTableData';
 
@@ -162,15 +159,6 @@ const Users = (): React.ReactElement => {
     return sorted;
   }, [rows, sortingOption]);
 
-  // Precompute user index map for O(1) serial number lookup
-  const userIndexMap = React.useMemo(() => {
-    const map = new Map<string, number>();
-    displayedUsers.forEach((user, index) => {
-      map.set(user.id, index + 1);
-    });
-    return map;
-  }, [displayedUsers]);
-
   const handleSearch = (value: string): void => {
     setSearchByName(value);
     refetch({
@@ -232,61 +220,15 @@ const Users = (): React.ReactElement => {
 
   const headerTitles = React.useMemo(
     () => [
-      '#',
       tCommon('name'),
       tCommon('email'),
-      t('joined_organizations'),
-      t('blocked_organizations'),
+      'Role',
+      'Organizations',
+      'Joined',
+      'Actions',
     ],
-    [t, tCommon],
+    [tCommon],
   );
-
-  const tableColumns: Array<IColumnDef<InterfaceQueryUserListItemForAdmin>> =
-    React.useMemo(
-      () => [
-        {
-          id: 'index',
-          header: headerTitles[0],
-          accessor: (row: InterfaceQueryUserListItemForAdmin) =>
-            userIndexMap.get(row.id) || 0,
-        },
-        {
-          id: 'name',
-          header: headerTitles[1],
-          accessor: 'name',
-          meta: {
-            searchable: true,
-          },
-        },
-        {
-          id: 'email',
-          header: headerTitles[2],
-          accessor: 'emailAddress',
-          meta: {
-            searchable: true,
-          },
-        },
-        {
-          id: 'joinedOrganizations',
-          header: headerTitles[3],
-          accessor: (row: InterfaceQueryUserListItemForAdmin) =>
-            row.organizationsWhereMember,
-          meta: {
-            sortable: false,
-          },
-        },
-        {
-          id: 'blockedOrganizations',
-          header: headerTitles[4],
-          accessor: (row: InterfaceQueryUserListItemForAdmin) =>
-            row.orgsWhereUserIsBlocked,
-          meta: {
-            sortable: false,
-          },
-        },
-      ],
-      [headerTitles, userIndexMap],
-    );
 
   const usersQueryErrorPanel = error ? (
     <ErrorPanel
@@ -299,50 +241,71 @@ const Users = (): React.ReactElement => {
 
   return (
     <>
+      <div className="page-header">
+        <div className="page-header-left">
+          <h1 className="page-title">{t('title')}</h1>
+          <p className="page-subtitle">{t('filterByRole')}</p>
+        </div>
+      </div>
+
       {/* Search and Filter Controls */}
-      <div className={styles.btnsContainer} data-testid="testcomp">
-        <SearchFilterBar
-          hasDropdowns={true}
-          searchPlaceholder={t('enterName')}
-          searchValue={searchByName}
-          onSearchChange={handleSearch}
-          searchInputTestId="searchByName"
-          searchButtonTestId="searchButton"
-          dropdowns={[
-            {
-              id: 'users-sort',
-              label: t('sortBy'),
-              type: 'sort',
-              options: [
-                { label: t('Newest'), value: 'newest' },
-                { label: t('Oldest'), value: 'oldest' },
-              ],
-              selectedOption: sortingOption,
-              onOptionChange: (value) => handleSorting(value.toString()),
-              dataTestIdPrefix: 'sortUsers',
-            },
-            {
-              id: 'users-filter',
-              label: t('filterByRole'),
-              type: 'filter',
-              options: [
-                { label: tCommon('admin'), value: 'admin' },
-                { label: tCommon('user'), value: 'user' },
-                { label: tCommon('cancel'), value: 'cancel' },
-              ],
-              selectedOption: filteringOption,
-              onOptionChange: (value) => handleFiltering(value.toString()),
-              dataTestIdPrefix: 'filterUsers',
-            },
-          ]}
-        />
+      <div className="toolbar" data-testid="testcomp">
+        <div className="search-bar">
+          <span className="search-icon">
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              width="16"
+              height="16"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </span>
+          <input
+            type="text"
+            placeholder={t('enterName')}
+            aria-label={t('enterName')}
+            value={searchByName}
+            onChange={(e) => handleSearch(e.target.value)}
+            data-testid="searchByName"
+          />
+        </div>
+        <div className="filter-group">
+          <button
+            className={`filter-btn${filteringOption === 'cancel' ? ' active' : ''}`}
+            onClick={() => handleFiltering('cancel')}
+            data-testid="filterUsersAll"
+          >
+            {tCommon('all')}
+          </button>
+          <button
+            className={`filter-btn${filteringOption === 'admin' ? ' active' : ''}`}
+            onClick={() => handleFiltering('admin')}
+            data-testid="filterUsersAdmin"
+          >
+            {tCommon('admin')}
+          </button>
+          <button
+            className={`filter-btn${filteringOption === 'user' ? ' active' : ''}`}
+            onClick={() => handleFiltering('user')}
+            data-testid="filterUsersUser"
+          >
+            Super Admin
+          </button>
+        </div>
       </div>
 
       {/* Error Panel */}
       {usersQueryErrorPanel}
 
-      {/* Users Table with Infinite Scroll */}
-      <div className={styles.listBox}>
+      {/* Users Table */}
+      <div className="card">
         <LoadingState
           isLoading={loading}
           variant="table"
@@ -362,42 +325,50 @@ const Users = (): React.ReactElement => {
               dataTestId="users-empty-state"
             />
           ) : (
-            <InfiniteScroll
-              dataLength={displayedUsers.length}
-              next={loadMoreUsers}
-              loader={
-                <TableLoader
-                  noOfCols={headerTitles.length}
-                  noOfRows={tableLoaderRowLength}
-                />
-              }
-              hasMore={pageInfo?.hasNextPage ?? false}
-              className={styles.listBox}
-              data-testid="users-list"
-              endMessage={
-                <div className="w-100 text-center my-4">
-                  <h5 className="m-0">{tCommon('endOfResults')}</h5>
-                </div>
-              }
-            >
-              <DataTable
-                data={displayedUsers}
-                columns={tableColumns}
-                rowKey="id"
-                tableClassName="mb-0"
-                renderRow={(
-                  user: (typeof displayedUsers)[number],
-                  index: number,
-                ) => (
-                  <UsersTableItem
-                    index={index}
-                    resetAndRefetch={resetAndRefetch}
-                    user={user}
-                    loggedInUserId={loggedInUserId}
+            <div className="table-wrapper">
+              <InfiniteScroll
+                dataLength={displayedUsers.length}
+                next={loadMoreUsers}
+                loader={
+                  <TableLoader
+                    noOfCols={headerTitles.length}
+                    noOfRows={tableLoaderRowLength}
                   />
-                )}
-              />
-            </InfiniteScroll>
+                }
+                hasMore={pageInfo?.hasNextPage ?? false}
+                className={styles.listBox}
+                data-testid="users-list"
+                endMessage={
+                  <div className="w-100 text-center my-4">
+                    <h5 className="m-0">{tCommon('endOfResults')}</h5>
+                  </div>
+                }
+              >
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">{tCommon('name')}</th>
+                      <th scope="col">{tCommon('email')}</th>
+                      <th scope="col">Role</th>
+                      <th scope="col">Organizations</th>
+                      <th scope="col">Joined</th>
+                      <th scope="col">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {displayedUsers.map((user, index) => (
+                      <UsersTableItem
+                        key={user.id}
+                        index={index}
+                        resetAndRefetch={resetAndRefetch}
+                        user={user}
+                        loggedInUserId={loggedInUserId}
+                      />
+                    ))}
+                  </tbody>
+                </table>
+              </InfiniteScroll>
+            </div>
           )}
         </LoadingState>
       </div>

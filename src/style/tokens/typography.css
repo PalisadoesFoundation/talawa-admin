@@ -1,5 +1,5 @@
 /**
- * Typography tokens — Apple-inspired type scale
+ * Typography tokens — type scale
  * -----------------------------------------------
  */
 
@@ -19,7 +19,7 @@
   --font-size-9: 0.9rem; /* ~14.4px, tables/toasts */
   --font-size-15: 0.9375rem; /* 15px */
   --font-size-md: 1rem; /* 16px */
-  --font-size-lg: 1.0625rem; /* 17px — Apple body */
+  --font-size-lg: 1.0625rem; /* 17px — body */
   --font-size-19: 1.1875rem; /* 19px */
   --font-size-xl: 1.25rem; /* 20px */
   --font-size-2xl: 1.5rem; /* 24px */

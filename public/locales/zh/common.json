@@ -324,5 +324,17 @@
   "organizationCard": {
     "card_aria": "机构卡片"
   },
-  "oauthSectionAriaLabel": "OAuth 登录选项"
+  "oauthSectionAriaLabel": "OAuth 登录选项",
+  "myOrganizations": "My Organizations",
+  "communityProfile": "Community Profile",
+  "pluginStore": "Plugin Store",
+  "dashboard": "Dashboard",
+  "posts": "Posts",
+  "chat": "Chat",
+  "venues": "Venues",
+  "blockedUsers": "Blocked Users",
+  "general": "General",
+  "home": "Home",
+  "people": "People",
+  "donate": "Donate"
 }

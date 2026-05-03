@@ -8,7 +8,7 @@
  */
 
 import React from 'react';
-import Table from 'react-bootstrap/Table';
+
 import type { InterfaceDataTableSkeletonProps } from 'types/shared-components/DataTable/interface';
 import { renderHeader } from './utils';
 import styles from './DataTableSkeleton.module.css';
@@ -39,12 +39,10 @@ export function DataTableSkeleton<T>({
 }: InterfaceDataTableSkeletonProps<T>) {
   return (
     <div className={styles.dataTableWrapper} data-testid="datatable-loading">
-      <Table
-        striped
-        hover
-        responsive
+      <table
         className={tableClassNames}
         aria-busy="true"
+        style={{ width: '100%', borderCollapse: 'collapse' }}
       >
         {ariaLabel && (
           <caption className={styles.visuallyHidden}>{ariaLabel}</caption>
@@ -104,7 +102,7 @@ export function DataTableSkeleton<T>({
             </tr>
           ))}
         </tbody>
-      </Table>
+      </table>
     </div>
   );
 }

@@ -16,8 +16,6 @@
   background-color: var(--color-blue-200);
   color: var(--color-gray-700);
   border-color: var(--color-gray-100);
-  --bs-btn-active-bg: var(--color-blue-500);
-  --bs-btn-active-border-color: var(--color-gray-100);
 }
 
 .editButton:is(:hover, :active) {

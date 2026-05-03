@@ -335,7 +335,7 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
           <textarea
             id="postCompletionNotes"
             data-cy="postCompletionNotes"
-            className="form-control"
+            className="form-input"
             value={postCompletionNotes}
             onChange={(e) => setPostCompletionNotes(e.target.value)}
             rows={4}

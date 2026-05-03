@@ -1,5 +1,22 @@
+.pageHeader {
+  margin-bottom: 1.5rem;
+}
+
+.pageHeader h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin: 0 0 0.5rem 0;
+}
+
+.pageHeader p {
+  color: var(--gray-500);
+  font-size: 1rem;
+  margin: 0;
+}
+
 .errorContainer {
-  min-height: var(--vh-100);
+  min-height: 100vh;
 }
 
 .errorMessage {
@@ -11,9 +28,9 @@
 }
 
 .errorIcon {
-  font-size: var(--font-size-4xl);
-  color: var(--color-red-500);
-  margin-bottom: var(--space-5);
+  font-size: 2.25rem;
+  color: var(--red-500);
+  margin-bottom: 1.25rem;
 
   &::before {
     content: '⚠️';
@@ -21,25 +38,25 @@
 }
 
 .tableHeader {
-  background-color: var(--color-red-500);
-  font-weight: var(--font-weight-bold);
+  background-color: var(--red-500);
+  font-weight: 700;
 }
 
 .tableItemIndex {
   display: inline-block;
   vertical-align: middle;
   text-align: center;
-  font-weight: var(--font-weight-medium);
-  color: var(--color-gray-700);
+  font-weight: 500;
+  color: var(--gray-700);
 }
 
 .tagsBreadCrumbs {
-  color: var(--color-gray-400);
+  color: var(--gray-400);
   cursor: pointer;
   &::after {
     display: block;
     content: attr(data-text);
-    font-weight: var(--font-weight-semibold);
+    font-weight: 600;
     height: 0;
     overflow: hidden;
     visibility: hidden;
@@ -48,8 +65,8 @@
 
 .tagsBreadCrumbs:hover,
 .tagsBreadCrumbs:focus {
-  color: var(--color-blue-800);
-  font-weight: var(--font-weight-semibold);
+  color: var(--green-700);
+  font-weight: 600;
   text-decoration: underline;
 }
 
@@ -59,8 +76,8 @@
 
 .subTagsLink:hover,
 .subTagsLink:focus {
-  color: var(--color-gray-500);
-  font-weight: var(--font-weight-semibold);
+  color: var(--gray-500);
+  font-weight: 600;
   text-decoration: underline;
 }
 
@@ -70,14 +87,14 @@
 }
 
 .subTagsLink {
-  color: var(--color-blue-800);
-  font-weight: var(--font-weight-medium);
+  color: var(--green-700);
+  font-weight: 500;
   cursor: pointer;
 
   &::after {
     display: block;
     content: attr(data-text);
-    font-weight: var(--font-weight-semibold);
+    font-weight: 600;
     height: 0;
     overflow: hidden;
     visibility: hidden;
@@ -86,134 +103,121 @@
 
 .orgUserTagsScrollableDiv {
   scrollbar-width: auto;
-  scrollbar-color: var(--color-gray-300) transparent;
-  max-height: calc(100vh - var(--space-20));
+  scrollbar-color: var(--gray-300) transparent;
+  max-height: calc(100vh - 5rem);
   overflow: auto;
   position: sticky;
   top: 0;
 }
 
 .editButton {
-  background-color: var(--color-blue-200);
-  color: var(--color-gray-700);
-  border-color: var(--color-gray-100);
-  --bs-btn-active-bg: var(--color-blue-500);
-  --bs-btn-active-border-color: var(--color-gray-100);
+  background-color: var(--green-50);
+  color: var(--gray-700);
+  border-color: var(--gray-100);
 }
 
 .editButton:is(:hover, :active) {
-  background-color: var(--color-blue-500);
-  border-color: var(--color-gray-700);
+  background-color: var(--green-500);
+  border-color: var(--gray-700);
   box-shadow: none;
 }
 
 .createButton {
-  background-color: var(--color-white);
-  color: var(--color-gray-900);
-  border: var(--border-1-5) solid var(--color-black-10);
+  background-color: var(--surface);
+  color: var(--gray-900);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius-md);
-  margin: var(--space-3-5) var(--space-4);
+  margin: 0.875rem 1rem;
   width: auto;
-  min-width: var(--space-11-5);
+  min-width: 2.875rem;
   white-space: nowrap;
-  height: var(--space-9);
-  font-size: var(--font-size-14);
-  font-weight: var(--font-weight-medium);
+  height: 2.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
 }
 
 .createButton:hover {
-  box-shadow: var(--border-shadow-xs) var(--border-shadow-xs)
-    var(--border-shadow-xs)
-    color-mix(in srgb, var(--color-black) 30%, transparent);
-  background-color: var(--color-gray-50);
-  color: var(--color-gray-700);
-  border: var(--border-1) solid var(--color-gray-700);
+  box-shadow: var(--shadow-card);
+  background-color: var(--gray-50);
+  color: var(--gray-700);
+  border: 1px solid var(--gray-700);
 }
 
 .createButton:active {
-  color: var(--color-gray-400);
-  background-color: var(--color-gray-100);
-  border: var(--border-1) solid var(--color-gray-400);
+  color: var(--gray-400);
+  background-color: var(--gray-100);
+  border: 1px solid var(--gray-400);
 }
 
 .inputField {
-  margin-top: var(--space-4);
-  margin-bottom: var(--space-4);
-  background-color: var(--color-white);
-  border: var(--border-1) solid var(--color-gray-200);
-  box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-lg)
-    color-mix(in srgb, var(--color-black) 10%, transparent);
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  background-color: var(--surface);
+  border: 1px solid var(--gray-200);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .inputField::placeholder {
-  color: var(--color-gray-500);
+  color: var(--gray-500);
   opacity: 1;
 }
 
 .inputField:focus {
-  border: var(--border-0) solid var(--color-gray-300);
-  background-color: var(--color-gray-50);
-  box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-md)
-    color-mix(in srgb, var(--color-black) 25%, transparent);
+  border: none;
+  background-color: var(--gray-50);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.25);
   outline: none;
   transition: box-shadow 0.2s ease;
 }
 
 .removeButton {
-  margin-bottom: var(--space-4);
-  background-color: var(--color-red-100);
-  color: var(--color-red-500);
-  margin-right: var(--space-5);
-  --bs-btn-border-color: var(--color-red-100);
+  margin-bottom: 1rem;
+  background-color: var(--red-50);
+  color: var(--red-500);
+  margin-right: 1.25rem;
+  border-color: var(--red-50);
 }
 
 .removeButton:is(:hover, :active, :focus) {
-  background-color: var(--color-red-500);
-  border-color: var(--color-red-500);
-  color: var(--color-white);
+  background-color: var(--red-500);
+  border-color: var(--red-500);
+  color: var(--surface);
 }
 
 .addButton {
-  margin-bottom: var(--space-4);
-  color: var(--color-gray-700);
-  background-color: var(--color-blue-200);
-  border-color: var(--color-blue-200);
-  --bs-btn-focus-box-shadow: none;
+  margin-bottom: 1rem;
+  color: var(--gray-700);
+  background-color: var(--green-50);
+  border-color: var(--green-100);
 }
 
 .addButton:is(:hover, :active, :focus) {
-  background-color: var(--color-blue-600);
-  border-color: var(--color-gray-700);
+  background-color: var(--green-600);
+  border-color: var(--gray-700);
 }
 
 .addButton:disabled {
-  margin-bottom: var(--space-4);
-}
-
-.btnsContainer {
-  display: flex;
-  margin: var(--space-9) 0;
-  align-items: center;
+  margin-bottom: 1rem;
 }
 
 .btnsContainer {
   display: flex;
   align-items: center;
-  gap: var(--space-5);
+  gap: 1.25rem;
   flex-shrink: 0;
   white-space: nowrap;
 }
 
 .btnsContainer > :first-child {
-  flex: 1 1 var(--space-21);
-  min-width: var(--space-18);
+  flex: 1 1 540px;
+  min-width: 400px;
   max-width: 100%;
 }
 
 .btnsContainer .btnsBlock {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
+  gap: 1rem;
   flex-wrap: wrap;
 }
 
@@ -227,7 +231,7 @@
 @media (max-width: 1020px) {
   .btnsContainer {
     flex-direction: column;
-    margin: var(--space-7) 0;
+    margin: 2rem 0;
   }
 
   .btnsContainer > div {
@@ -238,7 +242,7 @@
 
   .btnsContainer .btnsBlock {
     display: block;
-    margin: var(--space-7) 0 0 0;
+    margin: 2rem 0 0 0;
     justify-content: space-between;
   }
 
@@ -246,11 +250,11 @@
     margin: 0;
     margin-left: 0;
     width: 100%;
-    max-width: var(--space-27);
+    max-width: 720px;
   }
 
   .btnsContainer .btnsBlock div button {
-    margin-right: var(--space-7);
+    margin-right: 2rem;
   }
 }
 
@@ -261,7 +265,7 @@
 
   .btnsContainer .btnsBlock {
     display: block;
-    margin-top: var(--space-5);
+    margin-top: 1.25rem;
     margin-right: 0;
   }
 
@@ -270,7 +274,7 @@
   }
 
   .btnsContainer .btnsBlock button {
-    margin-bottom: var(--space-5);
+    margin-bottom: 1.25rem;
     margin-right: 0;
     width: 100%;
   }

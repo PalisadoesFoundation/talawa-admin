@@ -1,24 +1,33 @@
+/**
+ * OrganizationCard — Talawa design system
+ * White card with radius-xl, shadow-card, avatar with gradient, name,
+ * description, stats row.
+ */
+
 .orgCard {
-  background-color: var(--color-white);
-  margin: var(--space-3);
-  height: calc(var(--space-16) + var(--space-8));
-  padding: var(--space-5);
-  border-radius: var(--radius-4);
-  outline: var(--border-1) solid var(--color-gray-100);
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+  padding: 22px 24px;
   position: relative;
-  margin-right: var(--space-8);
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.orgCard:hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-1px);
 }
 
 .innerContainer {
   display: flex;
   height: 100%;
-  gap: var(--space-5);
+  gap: 16px;
 }
 
 .orgCard .innerContainer {
   display: flex;
   height: 100%;
-  gap: var(--space-5);
+  gap: 16px;
 }
 
 .orgImgContainer {
@@ -27,11 +36,15 @@
   align-items: center;
   position: relative;
   overflow: hidden;
-  border-radius: var(--radius-2);
-  width: var(--space-14);
-  height: var(--space-14);
+  border-radius: var(--radius-md);
+  width: 48px;
+  height: 48px;
   object-fit: contain;
-  background-color: var(--color-gray-100);
+  background: linear-gradient(135deg, var(--green-500), var(--green-700));
+  color: #000;
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
 }
 
 .orgCard .innerContainer .orgImgContainer {
@@ -40,38 +53,36 @@
   align-items: center;
   position: relative;
   overflow: hidden;
-  border-radius: var(--radius-2);
-  width: var(--space-14);
-  height: var(--space-14);
+  border-radius: var(--radius-md);
+  width: 48px;
+  height: 48px;
   object-fit: contain;
-  margin-bottom: var(--space-4);
-  background-color: var(--color-gray-100);
+  background: linear-gradient(135deg, var(--green-500), var(--green-700));
+  color: #000;
+  font-weight: 700;
+  font-size: 14px;
+  flex-shrink: 0;
 }
 
 .content {
   display: flex;
   flex-direction: column;
   flex: 1;
-  margin-left: var(--space-5);
-  width: 70%;
-  margin-top: var(--space-4);
+  min-width: 0;
 }
 
 .orgCard .innerContainer .content {
   display: flex;
   flex-direction: column;
   flex: 1;
-  margin-left: var(--space-0);
-  width: 70%;
-  margin-top: var(--space-4);
+  min-width: 0;
 }
 
 @media (max-width: 580px) {
   .orgCard {
     width: 100%;
     height: unset;
-    margin: var(--space-3) var(--space-0);
-    padding: var(--space-6) var(--space-7);
+    padding: 20px;
   }
 
   .orgCard .innerContainer {
@@ -84,8 +95,8 @@
   }
 
   .orgCard button {
-    bottom: var(--space-0);
-    right: var(--space-0);
+    bottom: 0;
+    right: 0;
     position: relative;
     margin-left: auto;
     display: block;
@@ -102,18 +113,21 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  font-size: var(--font-size-md);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--gray-900);
+  letter-spacing: -0.01em;
 }
 
 .orgdesc {
-  font-size: var(--font-size-15);
-  color: var(--color-gray-700);
+  font-size: 13px;
+  color: var(--gray-500);
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 1;
   line-clamp: 1;
   -webkit-box-orient: vertical;
-  max-width: var(--space-21);
+  margin-top: 2px;
 }
 
 .address {
@@ -126,109 +140,115 @@
 }
 
 .address h6 {
-  font-size: var(--font-size-15);
-  color: var(--color-gray-700);
+  font-size: 12px;
+  color: var(--gray-400);
+  font-weight: 500;
 }
 
 .statusChip {
-  display: inline-block;
-  margin-top: var(--space-1);
-  padding: var(--space-1) var(--space-3);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  margin-top: 6px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 10px;
   width: fit-content;
 }
 
 .member {
-  background-color: var(--color-green-100);
-  color: var(--color-green-500);
+  background-color: var(--green-50);
+  color: var(--green-700);
 }
 
 .pendingMembership {
-  background-color: var(--color-yellow-100);
-  color: var(--color-yellow-600);
+  background-color: var(--yellow-50);
+  color: var(--yellow-500);
 }
 
 .notMember {
-  background-color: var(--color-gray-50);
-  color: var(--color-gray-400);
+  background-color: var(--gray-100);
+  color: var(--gray-600);
 }
 
 .buttonContainer {
   margin-top: auto;
   display: flex;
   justify-content: flex-end;
-  padding-bottom: var(--space-5);
+  padding-bottom: 0;
 }
 
 .manageBtn,
 .withdrawBtn,
 .outlineBtn {
-  min-width: var(--space-14);
-  height: var(--space-9);
+  min-width: 80px;
+  height: 34px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   white-space: nowrap;
+  font-family: var(--font);
 }
 
 .manageBtn {
   display: flex;
-  justify-content: space-around;
-  width: var(--space-14);
-  border: var(--border-1) solid var(--color-blue-200);
-  background-color: var(--color-blue-200);
-  color: var(--color-gray-700);
+  justify-content: center;
+  gap: 6px;
+  padding: 0 16px;
+  border: none;
+  background: var(--green-500);
+  color: #000;
   position: absolute;
-  right: var(--space-5);
-  bottom: var(--space-5);
+  right: 22px;
+  bottom: 22px;
   border-radius: var(--radius-md);
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-semibold);
+  font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s;
+  transition: background 0.15s ease, box-shadow 0.15s ease;
 }
 
 .manageBtn:hover {
-  color: var(--color-gray-700);
-  box-shadow:
-    0 var(--shadow-offset-xs) var(--shadow-blur-xs) 0 rgba(168, 199, 250, 1),
-    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
-      rgba(60, 64, 67, 0.15);
+  background: var(--green-400);
+  box-shadow: 0 2px 10px rgba(62, 207, 142, 0.25);
+  color: #000;
 }
 
 .withdrawBtn {
   display: flex;
-  justify-content: space-around;
-  width: var(--space-14);
+  justify-content: center;
+  gap: 6px;
+  padding: 0 16px;
 }
 
 .outlineBtn {
-  background-color: var(--color-white);
-  color: var(--color-blue-200);
-  border-color: var(--color-blue-200);
-  padding: var(--space-5) var(--space-5);
+  background: var(--surface);
+  color: var(--gray-700);
+  border: 1px solid var(--border-input);
+  padding: 0 16px;
   position: absolute;
-  right: var(--space-5);
-  bottom: var(--space-5);
-  width: var(--space-14);
+  right: 22px;
+  bottom: 22px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
 }
 
 .outlineBtn:is(:hover, :active) {
-  background-color: var(--color-blue-500);
-  color: var(--color-white);
-  border-color: var(--color-blue-500);
+  background: var(--green-500);
+  color: #000;
+  border-color: var(--green-500);
 }
 
 .outlineBtn:disabled {
-  background-color: var(--color-white);
-  color: var(--color-gray-400);
-  border-color: var(--color-gray-400);
+  background: var(--surface);
+  color: var(--gray-400);
+  border-color: var(--gray-300);
+  cursor: not-allowed;
 }
 
 .buttonWidth8rem {
-  width: var(--space-14);
+  width: 80px;
 }

@@ -5,7 +5,7 @@ import { I18nextProvider } from 'react-i18next';
 import i18n from '../../../utils/i18nForTest';
 import { OrgSelector } from './OrgSelector';
 import type { InterfaceOrgOption } from '../../../types/Auth/OrgSelector/interface';
-import styles from '../../../style/app-fixed.module.css';
+import styles from './OrgSelector.module.css';
 
 describe('OrgSelector', () => {
   const mockOrganizations: InterfaceOrgOption[] = [

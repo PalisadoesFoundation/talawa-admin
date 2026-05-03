@@ -1,0 +1,103 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Design Tokens — Talawa
+   Single source of truth for colors, spacing, typography, radii, shadows.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* ── Typography ──────────────────────────────────────────────────────────── */
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+
+  /* ── Dark sidebar ────────────────────────────────────────────────────────── */
+  --sidebar-bg: #1c1c1e;
+  --sidebar-hover: rgba(255,255,255,0.06);
+  --sidebar-active: rgba(255,255,255,0.10);
+  --sidebar-text: rgba(255,255,255,0.72);
+  --sidebar-text-active: #ffffff;
+  --sidebar-border: rgba(255,255,255,0.08);
+
+  /* ── Light content surfaces ──────────────────────────────────────────────── */
+  --bg: #f5f5f7;
+  --surface: #ffffff;
+  --border: rgba(0,0,0,0.06);
+  --border-input: rgba(0,0,0,0.12);
+  --border-strong: rgba(0,0,0,0.15);
+
+  /* ── Neutrals ────────────────────────────────────────────────────────────── */
+  --gray-50: #fafafa;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+
+  /* ── Green accent (primary) ──────────────────────────────────────────────── */
+  --green-50: #ecfdf5;
+  --green-100: #d1fae5;
+  --green-400: #4ade80;
+  --green-500: #3ecf8e;
+  --green-600: #16a34a;
+  --green-700: #15803d;
+
+  /* ── Secondary colors ────────────────────────────────────────────────────── */
+  --blue-50: #eff6ff;
+  --blue-500: #3b82f6;
+  --blue-600: #2563eb;
+  --orange-50: #fff7ed;
+  --orange-500: #f97316;
+  --purple-50: #faf5ff;
+  --purple-500: #a855f7;
+  --red-50: #fef2f2;
+  --red-500: #ef4444;
+  --red-600: #dc2626;
+  --yellow-50: #fefce8;
+  --yellow-500: #eab308;
+
+  /* ── Layout ──────────────────────────────────────────────────────────────── */
+  --sidebar-w: 260px;
+  --sidebar-collapsed-w: 64px;
+  --topbar-h: 52px;
+
+  /* ── Radii ───────────────────────────────────────────────────────────────── */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+
+  /* ── Shadows ─────────────────────────────────────────────────────────────── */
+  --shadow-card: 0 0 0 1px var(--border), 0 2px 8px rgba(0,0,0,0.02);
+  --shadow-card-hover: 0 0 0 1px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.06);
+
+  /* ── Backward compat — map old token names used by existing components ─── */
+  --primary-theme-color: var(--green-500);
+  --color-white: var(--surface);
+  --color-black: var(--gray-900);
+  --color-gray-50: var(--gray-50);
+  --color-gray-100: var(--gray-100);
+  --color-gray-200: var(--gray-200);
+  --color-gray-300: var(--gray-300);
+  --color-gray-400: var(--gray-400);
+  --color-gray-500: var(--gray-500);
+  --color-gray-600: var(--gray-600);
+  --color-gray-700: var(--gray-700);
+  --color-gray-800: var(--gray-800);
+  --color-gray-900: var(--gray-900);
+  --color-blue-500: var(--blue-500);
+  --color-red-500: var(--red-500);
+  --color-green-500: var(--green-500);
+
+  /* ── Backward compat aliases for components that reference old names ─── */
+  --primary-theme-color: var(--green-500);
+  --app-bg: var(--bg);
+  --surface-bg: var(--surface);
+  --leftDrawer-bg: var(--sidebar-bg);
+  --sidebar-collapsed-width: 64px;
+  --sidebar-expanded-width: 260px;
+}

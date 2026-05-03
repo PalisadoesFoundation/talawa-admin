@@ -33,7 +33,7 @@
  * ```
  */
 import React from 'react';
-import Card from 'react-bootstrap/Card';
+
 import Rating from '@mui/material/Rating';
 import styles from './Review.module.css';
 import type { Feedback } from 'types/Event/type';
@@ -58,11 +58,11 @@ export const ReviewStats = ({ data }: InterfaceStatsModal): JSX.Element => {
       resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
       resetButtonText={tErrors('resetButton')}
     >
-      <Card className={styles.reviewCard}>
-        <Card.Body>
-          <Card.Title>
+      <div className={styles.reviewCard}>
+        <div>
+          <div>
             <h3>{t('title')}</h3>
-          </Card.Title>
+          </div>
           <h5>{t('filledByCount', { count: reviews.length })}</h5>
           {reviews.length ? (
             reviews.map((review) => (
@@ -76,8 +76,8 @@ export const ReviewStats = ({ data }: InterfaceStatsModal): JSX.Element => {
           ) : (
             <>{t('emptyState')}</>
           )}
-        </Card.Body>
-      </Card>
+        </div>
+      </div>
     </ErrorBoundaryWrapper>
   );
 };

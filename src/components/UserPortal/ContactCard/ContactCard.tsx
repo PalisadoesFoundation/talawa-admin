@@ -33,7 +33,7 @@
  * ```
  */
 import React from 'react';
-import { Badge } from 'react-bootstrap';
+
 import { useTranslation } from 'react-i18next';
 
 import UserPortalCard from 'components/UserPortal/UserPortalCard/UserPortalCard';
@@ -72,13 +72,13 @@ const ContactCard: React.FC<InterfaceContactCardProps> = ({
 
   const actionsSlot =
     unseenMessages > 0 ? (
-      <Badge
-        pill
+      <span
         className={styles.unseenBadge}
+        style={{ borderRadius: '50rem', display: 'inline-block' }}
         data-testid={`contact-unseen-${id}`}
       >
         {unseenMessages}
-      </Badge>
+      </span>
     ) : undefined;
 
   return (

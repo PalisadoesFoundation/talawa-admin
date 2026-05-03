@@ -1,6 +1,5 @@
 import React, { ChangeEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Card } from 'react-bootstrap';
 import Button from 'shared-components/Button';
 import PasswordUpdateModal from 'shared-components/Auth/PasswordUpdate/PasswordUpdateModal';
 import {
@@ -129,8 +128,8 @@ const Security = (): JSX.Element => {
   return (
     <>
       <div className="w-100">
-        <Card className={`mt-4 ${styles.securityCard}`}>
-          <Card.Body className="d-flex justify-content-between align-items-center">
+        <div className={`mt-4 ${styles.securityCard}`}>
+          <div className={styles.securityCardBody}>
             <div>
               <h5 className="mb-1 fw-semibold">{t('password')}</h5>
             </div>
@@ -142,8 +141,8 @@ const Security = (): JSX.Element => {
             >
               {t('changePassword')}
             </Button>
-          </Card.Body>
-        </Card>
+          </div>
+        </div>
       </div>
 
       <PasswordUpdateModal

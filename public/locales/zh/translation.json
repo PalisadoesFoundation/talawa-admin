@@ -323,7 +323,8 @@
     "orgName": "输入名称",
     "sortOrganizations": "排序组织",
     "admins": "管理员",
-    "members": "成员"
+    "members": "成员",
+    "managingYourOrganizations": "管理所有已注册的组织"
   },
   "orgListCard": {
     "manage": "管理",

@@ -42,7 +42,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { RESEND_VERIFICATION_EMAIL_MUTATION } from 'GraphQl/Mutations/mutations';
 import PaginationList from 'shared-components/PaginationList/PaginationList';
-import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
+// Old UserSidebar removed — layout shell (UserGlobalScreen) handles sidebar
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -50,7 +50,6 @@ import styles from './Organizations.module.css';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
 import type { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';
-import { Alert } from 'react-bootstrap';
 import Button from 'shared-components/Button';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
@@ -188,27 +187,6 @@ export default function Organizations(): React.JSX.Element {
     }
   };
 
-  const [hideDrawer, setHideDrawer] = useState<boolean>(() => {
-    const stored = getItem('sidebar');
-    return stored === 'true';
-  });
-
-  const handleResize = (): void => {
-    if (window.innerWidth <= 820) {
-      setHideDrawer(true);
-    }
-  };
-
-  useEffect(() => {
-    setItem('sidebar', hideDrawer.toString());
-  }, [hideDrawer, setItem]);
-
-  useEffect(() => {
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [organizations, setOrganizations] = React.useState<IOrganization[]>([]);
@@ -344,38 +322,43 @@ export default function Organizations(): React.JSX.Element {
 
   const isLoading = loadingAll || loadingJoined || loadingCreated;
 
+  // Split organizations into "my orgs" (joined) and "browse" (not joined)
+  const myOrgs = organizations.filter((org) => org.isJoined);
+  const browseOrgs = organizations.filter((org) => !org.isJoined);
+
+  // Helper to get initials from org name
+  const getInitials = (name: string): string => {
+    return name
+      .split(' ')
+      .map((w) => w[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
+
   return (
     <>
-      <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
-      <div
-        className={`${styles.organizationsContainer} ${
-          hideDrawer ? styles.marginLeft80 : styles.marginLeft260
-        } ${hideDrawer ? styles.expand : styles.contract}`}
-        data-testid="organizations-container"
-      >
-        <div
-          className={`${styles.mainContainerOrganization} ${styles.organizationsMainContainer}`}
-        >
-          <div className={styles.selectOrganizationContainer}>
-            <div className={styles.organizationsFlexContainer}>
-              <h1>{t('selectOrganization')}</h1>
-            </div>
+      <div data-testid="organizations-container">
+        <div className="page-header">
+          <div className="page-header-left">
+            <h1 className="page-title">{t('selectOrganization')}</h1>
+            <p className="page-subtitle">
+              {t('joinedOrganizations')}
+            </p>
           </div>
+        </div>
 
-          {/* Email Verification Warning Banner */}
-          {showEmailWarning && (
-            <Alert
-              variant="warning"
-              dismissible
-              onClose={handleDismissWarning}
-              className={styles.alert}
-              data-testid="email-verification-warning"
-              aria-live="polite"
-            >
-              <div className={styles.selectOrganizationContainer}>
-                <div>
-                  <strong>{tLogin('emailNotVerified')}</strong>
-                </div>
+        {/* Email Verification Warning Banner */}
+        {showEmailWarning && (
+          <div
+            className={styles.alertBanner}
+            data-testid="email-verification-warning"
+            aria-live="polite"
+            role="alert"
+          >
+            <div className={styles.alertContent}>
+              <strong>{tLogin('emailNotVerified')}</strong>
+              <div className={styles.alertActions}>
                 <Button
                   variant="outline-warning"
                   size="sm"
@@ -387,128 +370,186 @@ export default function Organizations(): React.JSX.Element {
                     ? tCommon('loading')
                     : tLogin('resendVerification')}
                 </Button>
-              </div>
-            </Alert>
-          )}
-
-          {/* Refactored Header Structure */}
-          <div className={styles.calendar__header}>
-            <SearchFilterBar
-              hasDropdowns={true}
-              dropdowns={[
-                {
-                  id: 'filter',
-                  label: t('filter'),
-                  type: 'filter',
-                  options: modes.map((value, index) => ({
-                    label: value,
-                    value: index,
-                  })),
-                  selectedOption: mode,
-                  onOptionChange: (value) => setMode(Number(value)),
-                  dataTestIdPrefix: 'modeChangeBtn',
-                },
-              ]}
-              searchValue={searchText}
-              onSearchChange={setSearchText}
-              onSearchSubmit={() => doSearch(searchText)}
-              searchPlaceholder={t('searchOrganizations')}
-              searchInputTestId="searchInput"
-              searchButtonTestId="searchBtn"
-            />
-          </div>
-
-          <div className={styles.content}>
-            <div className={styles.loadingSpinnerContainer}>
-              {isLoading ? (
-                <div
-                  className={styles.conditionalLoadingSpinner}
-                  data-testid="loading-spinner"
-                  role="status"
+                <button
+                  type="button"
+                  className={styles.alertDismiss}
+                  onClick={handleDismissWarning}
+                  aria-label="Close"
                 >
-                  <HourglassBottomIcon />{' '}
-                  <span aria-live="polite">{t('loading')}</span>
-                </div>
-              ) : (
-                <>
-                  {organizations && organizations.length > 0 ? (
-                    <div className="row" data-testid="organizations-list">
-                      {(rowsPerPage > 0
-                        ? organizations.slice(
-                            page * rowsPerPage,
-                            page * rowsPerPage + rowsPerPage,
-                          )
-                        : organizations
-                      ).map((organization: IOrganization, index) => {
-                        const cardProps: IOrganizationCardProps = {
-                          name: organization.name,
-                          id: organization.id,
-                          description: organization.description,
-                          avatarURL: organization.avatarURL || '',
-                          addressLine1: organization.addressLine1 || '',
-                          admins: organization.admins,
-                          membershipRequestStatus:
-                            organization.membershipRequestStatus,
-                          userRegistrationRequired:
-                            organization.userRegistrationRequired,
-                          membershipRequests: organization.membershipRequests,
-                          isJoined: organization.isJoined,
-                          membersCount: organization.membersCount || 0,
-                          adminsCount: organization.adminsCount || 0,
-                          role: role,
-                        };
-                        return (
-                          <div
-                            key={index}
-                            className={`${styles.organizationCol} ${styles.organizationCard}`}
-                            data-testid="organization-card"
-                            data-organization-name={organization.name}
-                            data-membership-status={
-                              organization.membershipRequestStatus
-                            }
-                            data-cy="orgCard"
-                          >
-                            <div
-                              data-testid={`membership-status-${organization.name}`}
-                              data-status={organization.membershipRequestStatus}
-                              className="visually-hidden"
-                            ></div>
-
-                            <OrganizationCard data={cardProps} />
-                            <span
-                              data-testid={`org-name-${organization.name}`}
-                              className="visually-hidden"
-                            >
-                              {organization.name}
-                            </span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  ) : (
-                    <span data-testid="no-organizations-message">
-                      {t('nothingToShow')}
-                    </span>
-                  )}
-                </>
-              )}
+                  &times;
+                </button>
+              </div>
             </div>
-            <table>
-              <tbody>
-                <tr>
-                  {/* Use the real dataset size to avoid rendering phantom pages. */}
-                  <PaginationList
-                    count={organizations.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                  />
-                </tr>
-              </tbody>
-            </table>
           </div>
+        )}
+
+        {/* Toolbar with search and filter */}
+        <div className="toolbar">
+          <SearchFilterBar
+            hasDropdowns={true}
+            dropdowns={[
+              {
+                id: 'filter',
+                label: t('filter'),
+                type: 'filter',
+                options: modes.map((value, index) => ({
+                  label: value,
+                  value: index,
+                })),
+                selectedOption: mode,
+                onOptionChange: (value) => setMode(Number(value)),
+                dataTestIdPrefix: 'modeChangeBtn',
+              },
+            ]}
+            searchValue={searchText}
+            onSearchChange={setSearchText}
+            onSearchSubmit={() => doSearch(searchText)}
+            searchPlaceholder={t('searchOrganizations')}
+            searchInputTestId="searchInput"
+            searchButtonTestId="searchBtn"
+          />
         </div>
+
+        {/* Content */}
+        {isLoading ? (
+          <div
+            className="empty-state"
+            data-testid="loading-spinner"
+            role="status"
+          >
+            <HourglassBottomIcon />{' '}
+            <span aria-live="polite">{t('loading')}</span>
+          </div>
+        ) : (
+          <>
+            {organizations && organizations.length > 0 ? (
+              <>
+                {/* My Organizations */}
+                {myOrgs.length > 0 && (
+                  <div className={styles.orgGrid} data-testid="organizations-list">
+                    {(rowsPerPage > 0
+                      ? myOrgs.slice(
+                          page * rowsPerPage,
+                          page * rowsPerPage + rowsPerPage,
+                        )
+                      : myOrgs
+                    ).map((organization: IOrganization, index) => (
+                      <div
+                        className={styles.orgCard}
+                        key={index}
+                        data-testid="organization-card"
+                        data-organization-name={organization.name}
+                        data-membership-status={organization.membershipRequestStatus}
+                        data-cy="orgCard"
+                      >
+                        <div
+                          data-testid={`membership-status-${organization.name}`}
+                          data-status={organization.membershipRequestStatus}
+                          className={styles.srOnly}
+                        ></div>
+                        <div className={styles.orgAvatar}>
+                          {getInitials(organization.name)}
+                        </div>
+                        <div className={styles.orgName}>{organization.name}</div>
+                        <div className={styles.orgMembers}>
+                          {organization.membersCount || 0} members
+                        </div>
+                        <div className={styles.orgRole}>
+                          <span className={`badge ${organization.membershipRequestStatus === 'created' || role === 'administrator' ? 'badge-green' : 'badge-blue'}`}>
+                            {role === 'administrator' ? 'Admin' : 'Member'}
+                          </span>
+                        </div>
+                        <a href={`/user/organization/${organization.id}`} className="btn btn-primary btn-sm">
+                          View
+                        </a>
+                        <span
+                          data-testid={`org-name-${organization.name}`}
+                          className={styles.srOnly}
+                        >
+                          {organization.name}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Browse Organizations */}
+                {browseOrgs.length > 0 && (
+                  <>
+                    <h2 className={styles.sectionTitle}>{t('allOrganizations')}</h2>
+                    <div className={styles.sectionSubtitle}>Discover and join new organizations</div>
+                    <div className={styles.orgGrid}>
+                      {browseOrgs.map((organization: IOrganization, index) => (
+                        <div
+                          className={styles.orgCard}
+                          key={`browse-${index}`}
+                          data-testid="organization-card"
+                          data-organization-name={organization.name}
+                          data-membership-status={organization.membershipRequestStatus}
+                          data-cy="orgCard"
+                        >
+                          <div
+                            data-testid={`membership-status-${organization.name}`}
+                            data-status={organization.membershipRequestStatus}
+                            className={styles.srOnly}
+                          ></div>
+                          <div className={styles.orgAvatar}>
+                            {getInitials(organization.name)}
+                          </div>
+                          <div className={styles.orgName}>{organization.name}</div>
+                          <div className={styles.orgMembers}>
+                            {organization.membersCount || 0} members
+                          </div>
+                          <div className={styles.orgRole}>
+                            <span className="badge badge-gray">Open</span>
+                          </div>
+                          <OrganizationCard
+                            data={{
+                              name: organization.name,
+                              id: organization.id,
+                              description: organization.description,
+                              avatarURL: organization.avatarURL || '',
+                              addressLine1: organization.addressLine1 || '',
+                              admins: organization.admins,
+                              membershipRequestStatus: organization.membershipRequestStatus,
+                              userRegistrationRequired: organization.userRegistrationRequired,
+                              membershipRequests: organization.membershipRequests,
+                              isJoined: organization.isJoined,
+                              membersCount: organization.membersCount || 0,
+                              adminsCount: organization.adminsCount || 0,
+                              role: role,
+                            }}
+                          />
+                          <span
+                            data-testid={`org-name-${organization.name}`}
+                            className={styles.srOnly}
+                          >
+                            {organization.name}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </>
+            ) : (
+              <div className="empty-state">
+                <div className="empty-state-icon">&#128269;</div>
+                <div className="empty-state-title" data-testid="no-organizations-message">
+                  {t('nothingToShow')}
+                </div>
+              </div>
+            )}
+          </>
+        )}
+
+        <PaginationList
+          count={organizations.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </div>
     </>
   );

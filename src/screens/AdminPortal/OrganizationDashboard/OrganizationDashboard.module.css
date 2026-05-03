@@ -1,67 +1,106 @@
+/**
+ * OrganizationDashboard — Talawa dashboard
+ *
+ * Clean cards with subtle shadows, generous spacing, smooth hover transitions.
+ */
+
 .requestsIcon {
-  color: var(--color-gray-700);
+  color: var(--gray-500, #6b7280);
 }
 
 .membershipEmptyContainer {
-  min-height: var(--space-15);
-}
-
-.flex {
-  display: flex;
+  min-height: 120px;
 }
 
 .iconGrey {
-  fill: var(--color-gray-700);
+  fill: var(--gray-500, #6b7280);
 }
 
-/* ── Content cards (posts, membership, etc.) ────────────────────────────────── */
-.contentCard {
-  background-color: var(--color-white);
-  border-radius: var(--radius-2xl);
-  border: var(--border-1) solid var(--color-black-6);
-  box-shadow:
-    var(--shadow-1),
-    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--color-black-5);
-  overflow: hidden;
-  width: 100%;
-}
-
-.cardHeader {
-  padding: var(--space-6) var(--space-5) var(--space-5) var(--space-5);
-  border-bottom: var(--border-1) solid var(--color-gray-100);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.cardHeader .cardTitle {
-  font-size: var(--font-size-19);
-  font-weight: var(--font-weight-semibold);
-}
-
-.containerBody {
-  padding: var(--space-5);
-}
-
-.emptyContainer {
-  padding: var(--space-5);
-  text-align: center;
-  color: var(--color-gray-700);
-}
-
-.rankings {
-  aspect-ratio: 1;
-  border-radius: var(--radius-full);
-  width: var(--space-10);
+/* ── Stats request card ──────────────────────────────────────────────────── */
+.requestStatCard {
+  display: inline-block;
+  margin-bottom: 16px;
 }
 
 .cardBtnWrapper {
   display: block;
   width: 100%;
-  padding: var(--space-0);
-  margin: var(--space-0);
+  padding: 0;
+  margin: 0;
   border: none;
   background: transparent;
   cursor: pointer;
   text-align: left;
+}
+
+/* ── 2-column grid ────────────────────────────────────────────────────────── */
+.grid2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-top: 24px;
+}
+
+@media (max-width: 992px) {
+  .grid2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Content cards (tw-card) ──────────────────────────────────────────────── */
+.twCard {
+  background-color: var(--surface, #fff);
+  border-radius: var(--radius-xl, 18px);
+  border: 1px solid var(--border, rgba(0, 0, 0, 0.06));
+  box-shadow:
+    0 0 0 1px var(--border, rgba(0, 0, 0, 0.06)),
+    0 2px 8px rgba(0, 0, 0, 0.02);
+  overflow: hidden;
+  width: 100%;
+  transition: box-shadow 0.22s ease;
+}
+
+.twCard:hover {
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.08),
+    0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.twCardHeader {
+  padding: 18px 22px 14px;
+  border-bottom: 1px solid var(--gray-100, #f3f4f6);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.twCardHeader .cardTitle {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--gray-900, #111827);
+  letter-spacing: -0.01em;
+}
+
+.twCardBody {
+  padding: 4px 14px 14px;
+}
+
+.emptyContainer {
+  padding: 40px 20px;
+  text-align: center;
+  color: var(--gray-400, #9ca3af);
+  font-size: 13px;
+}
+
+.emptyContainer h6 {
+  font-weight: 400;
+  color: var(--gray-400, #9ca3af);
+  margin: 0;
+}
+
+.rankings {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  width: 40px;
+  object-fit: cover;
 }

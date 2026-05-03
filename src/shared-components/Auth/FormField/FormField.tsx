@@ -1,5 +1,4 @@
 import React from 'react';
-import { Form } from 'react-bootstrap';
 import type { InterfaceFormFieldProps } from '../../../types/shared-components/Auth/FormField/interface';
 
 /**
@@ -45,48 +44,49 @@ export const FormField: React.FC<InterfaceFormFieldProps> = ({
   const describedBy = errorId || helperId || undefined;
 
   return (
-    <Form.Group className="mb-3" controlId={name}>
+    <div style={{ marginBottom: '1rem' }}>
       {label && (
-        <Form.Label>
+        <label htmlFor={name}>
           {label}
-          {required && <span className="text-danger"> *</span>}
-        </Form.Label>
+          {required && <span style={{ color: 'var(--red-500, #ef4444)' }}> *</span>}
+        </label>
       )}
 
-      <Form.Control
+      <input
         type={type}
+        id={name}
         name={name}
         value={value}
         onChange={onChange}
         onBlur={onBlur}
         placeholder={placeholder}
         disabled={disabled}
-        isInvalid={hasError}
         aria-invalid={hasError}
         aria-describedby={describedBy}
         data-testid={testId}
         data-cy={dataCy}
+        className="form-input"
+        style={hasError ? { borderColor: 'var(--red-500, #ef4444)' } : undefined}
       />
 
       {/* Error message with aria-live for screen reader announcements */}
       {hasError && (
-        <Form.Control.Feedback
-          type="invalid"
+        <div
           id={errorId}
-          className="d-block"
+          style={{ display: 'block', color: 'var(--red-500, #ef4444)', fontSize: '0.875em', marginTop: '0.25rem' }}
           role={ariaLive ? 'status' : undefined}
           aria-live={ariaLive ? 'polite' : undefined}
         >
           {error}
-        </Form.Control.Feedback>
+        </div>
       )}
 
       {/* Helper text displayed when no error */}
       {helperText && !hasError && (
-        <Form.Text id={helperId} className="text-muted">
+        <small id={helperId} style={{ color: 'var(--gray-500, #6b7280)' }}>
           {helperText}
-        </Form.Text>
+        </small>
       )}
-    </Form.Group>
+    </div>
   );
 };

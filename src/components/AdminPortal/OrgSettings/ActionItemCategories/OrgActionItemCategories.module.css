@@ -20,8 +20,6 @@
   background-color: var(--color-blue-200);
   color: var(--color-gray-600);
   border-color: var(--color-gray-100);
-  --bs-btn-active-bg: var(--color-blue-500);
-  --bs-btn-active-border-color: var(--color-gray-100);
 }
 
 .btnsContainerOrgActionItemCategories {
@@ -33,9 +31,9 @@
 }
 
 .dropdown {
-  background-color: var(--color-white) !important;
+  background-color: var(--color-white);
   min-width: var(--space-16);
-  color: var(--color-gray-600) !important;
+  color: var(--color-gray-600);
   position: relative;
   display: inline-block;
 }
@@ -44,8 +42,6 @@
   background-color: var(--color-gray-50);
   color: var(--color-gray-600);
   border-color: var(--color-gray-600);
-  --bs-btn-active-bg: var(--color-gray-100);
-  --bs-btn-active-border-color: var(--color-gray-400);
   padding: var(--space-4) var(--space-6);
 }
 

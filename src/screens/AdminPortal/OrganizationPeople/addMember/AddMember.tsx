@@ -32,7 +32,6 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { InputGroup, FormControl } from 'react-bootstrap';
 import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
@@ -455,51 +454,51 @@ function AddMember({
         data-testid="addNewUserModal"
       >
         <div className="my-3">
-          <div className="row">
-            <div className="col-sm-12">
+          <div>
+            <div>
               <h6>{translateAddMember('addMember.enterName')}</h6>
-              <InputGroup className="mt-2 mb-4">
-                <FormControl
+              <div className={styles.inputGroup}>
+                <input
                   placeholder={translateAddMember('addMember.name')}
-                  className={styles.borderNone}
+                  className={`${styles.formInput} ${styles.borderNone}`}
                   value={createUserVariables.name}
                   onChange={handleFirstName}
                   data-testid="firstNameInput"
                 />
-              </InputGroup>
+              </div>
             </div>
           </div>
           <h6>{translateOrgPeople('enterEmail')}</h6>
-          <InputGroup className="mt-2 mb-4">
-            <FormControl
+          <div className={styles.inputGroup}>
+            <input
               placeholder={translateOrgPeople('emailAddress')}
               type="email"
-              className={styles.borderNone}
+              className={`${styles.formInput} ${styles.borderNone}`}
               value={createUserVariables.email}
               onChange={handleEmailChange}
               data-testid="emailInput"
             />
-            <InputGroup.Text
-              className={`${styles.colorPrimary} ${styles.borderNone}`}
+            <span
+              className={`${styles.inputAddon} ${styles.colorPrimary} ${styles.borderNone}`}
             >
               <EmailOutlinedIcon
                 className={`${styles.colorWhite}`}
                 aria-hidden="true"
               />
-            </InputGroup.Text>
-          </InputGroup>
+            </span>
+          </div>
           <h6>{translateOrgPeople('enterPassword')}</h6>
-          <InputGroup className="mt-2 mb-4">
-            <FormControl
+          <div className={styles.inputGroup}>
+            <input
               placeholder={translateOrgPeople('password')}
               type={showPassword ? 'text' : 'password'}
-              className={styles.borderNone}
+              className={`${styles.formInput} ${styles.borderNone}`}
               value={createUserVariables.password}
               onChange={handlePasswordChange}
               data-testid="passwordInput"
             />
-            <InputGroup.Text
-              className={`${styles.colorPrimary} ${styles.borderNone} ${styles.colorWhite}`}
+            <span
+              className={`${styles.inputAddon} ${styles.colorPrimary} ${styles.borderNone} ${styles.colorWhite}`}
               onClick={togglePassword}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
@@ -521,20 +520,20 @@ function AddMember({
               ) : (
                 <i className="fas fa-eye-slash" aria-hidden="true"></i>
               )}
-            </InputGroup.Text>
-          </InputGroup>
+            </span>
+          </div>
           <h6>{translateOrgPeople('enterConfirmPassword')}</h6>
-          <InputGroup className="mt-2 mb-4">
-            <FormControl
+          <div className={styles.inputGroup}>
+            <input
               placeholder={translateOrgPeople('confirmPassword')}
               type={showConfirmPassword ? 'text' : 'password'}
-              className={styles.borderNone}
+              className={`${styles.formInput} ${styles.borderNone}`}
               value={createUserVariables.confirmPassword}
               onChange={handleConfirmPasswordChange}
               data-testid="confirmPasswordInput"
             />
-            <InputGroup.Text
-              className={`${styles.colorPrimary} ${styles.borderNone} ${styles.colorWhite}`}
+            <span
+              className={`${styles.inputAddon} ${styles.colorPrimary} ${styles.borderNone} ${styles.colorWhite}`}
               onClick={toggleConfirmPassword}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
@@ -556,17 +555,17 @@ function AddMember({
               ) : (
                 <i className="fas fa-eye-slash" aria-hidden="true"></i>
               )}
-            </InputGroup.Text>
-          </InputGroup>
+            </span>
+          </div>
           <h6>{translateOrgPeople('organization')}</h6>
-          <InputGroup className="mt-2 mb-4">
-            <FormControl
-              className={styles.borderNone}
+          <div className={styles.inputGroup}>
+            <input
+              className={`${styles.formInput} ${styles.borderNone}`}
               value={organizationData?.organization?.name}
               data-testid="organizationName"
               disabled
             />
-          </InputGroup>
+          </div>
         </div>
       </CreateModal>
     </>

@@ -69,7 +69,7 @@ const SidebarNavItem = ({
           {
             style: {
               fontSize: resolvedSize,
-              color: isActive ? 'var(--bs-black)' : 'var(--bs-secondary)',
+              color: isActive ? 'var(--bs-black)' : 'var(--gray-500)',
             },
           },
         );
@@ -83,7 +83,7 @@ const SidebarNavItem = ({
           fill: useSimpleButton
             ? isActive
               ? 'var(--color-black)'
-              : 'var(--bs-secondary)'
+              : 'var(--gray-500)'
             : 'none',
           width: resolvedSize,
           height: resolvedSize,

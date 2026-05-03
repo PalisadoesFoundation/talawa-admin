@@ -33,31 +33,31 @@
  *
  */
 import React from 'react';
-import { Card, Row } from 'react-bootstrap';
-import Col from 'react-bootstrap/Col';
 import styles from './DashboardCardLoading.module.css';
 
 const DashBoardCardLoading = (): JSX.Element => {
   return (
-    <Card className="rounded-4" border="0" data-testid="Card">
-      <Card.Body className={styles.cardBody}>
-        <Row className="align-items-center">
-          <Col sm={4}>
+    <div style={{ borderRadius: '1rem', border: 'none' }} data-testid="Card">
+      <div className={styles.cardBody}>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div style={{ flex: '0 0 33.33%' }}>
             <div className={styles.iconWrapper}>
               <div className={styles.themeOverlay} />
             </div>
-          </Col>
-          <Col sm={8} className={styles.textWrapper}>
+          </div>
+          <div style={{ flex: '0 0 66.67%' }} className={styles.textWrapper}>
             <span
-              className={`${styles.primaryText} ${styles.shimmer1} shimmer rounded w-75 mb-2`}
+              className={`${styles.primaryText} ${styles.shimmer1} shimmer`}
+              style={{ borderRadius: '0.25rem', width: '75%', marginBottom: '0.5rem' }}
             />
             <span
-              className={`${styles.secondaryText} ${styles.shimmer2} shimmer rounded`}
+              className={`${styles.secondaryText} ${styles.shimmer2} shimmer`}
+              style={{ borderRadius: '0.25rem' }}
             />
-          </Col>
-        </Row>
-      </Card.Body>
-    </Card>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

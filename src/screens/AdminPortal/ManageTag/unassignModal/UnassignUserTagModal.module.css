@@ -1,68 +1,64 @@
-.modalHeader:global(.modal-header) {
+.modalHeader {
   border: none;
-  background-color: var(--color-white);
+  background-color: var(--surface);
   padding: var(--space-5);
-  color: var(--color-black);
+  color: var(--gray-900);
 }
 
-/* Make sure the modal title is dark grey */
-.modalHeader:global(.modal-header) div,
-.modalHeader:global(.modal-header) :global(.modal-title) {
-  color: var(--color-gray-700);
+.modalHeader div,
+.modalHeader .modalTitle {
+  color: var(--gray-700);
   font-weight: var(--font-weight-semibold);
   font-size: var(--font-size-xl);
 }
 
-/* Close button styling */
-.modalHeader:global(.modal-header) :global(button.close),
-.modalHeader:global(.modal-header) :global(.btn-close) {
-  color: var(--color-red-500);
+.modalHeader .closeButton {
+  color: var(--red-500);
   opacity: 1;
 }
 
-.removeButton:global(.btn) {
+.removeButton {
   margin-bottom: var(--space-4);
-  background-color: var(--color-red-100);
-  color: var(--color-red-500);
+  background-color: var(--red-50);
+  color: var(--red-500);
   margin-right: var(--space-4);
-  --bs-btn-border-color: var(--color-red-100);
+  border-color: var(--red-50);
 }
 
-.removeButton:global(.btn):is(:hover, :active) {
-  background-color: var(--color-red-500);
-  border-color: var(--color-red-500);
-  color: var(--color-white);
+.removeButton:is(:hover, :active) {
+  background-color: var(--red-500);
+  border-color: var(--red-500);
+  color: var(--surface);
 }
 
-.removeButton:global(.btn):focus-visible {
-  background-color: var(--color-red-500);
-  border-color: var(--color-red-500);
-  color: var(--color-white);
-  outline: 2px solid var(--color-red-500);
+.removeButton:focus-visible {
+  background-color: var(--red-500);
+  border-color: var(--red-500);
+  color: var(--surface);
+  outline: 2px solid var(--red-500);
   outline-offset: 2px;
 }
 
-.addButton:global(.btn) {
+.addButton {
   margin-bottom: var(--space-4);
-  color: var(--color-gray-700);
-  background-color: var(--color-blue-200);
-  border-color: var(--color-blue-200);
-  --bs-btn-focus-box-shadow: none;
+  color: var(--gray-700);
+  background-color: var(--blue-50);
+  border-color: var(--blue-50);
 }
 
-.addButton:global(.btn):is(:hover, :active) {
-  background-color: var(--color-blue-500);
-  border-color: var(--color-gray-700);
+.addButton:is(:hover, :active) {
+  background-color: var(--blue-500);
+  border-color: var(--gray-700);
 }
 
-.addButton:global(.btn):focus-visible {
-  background-color: var(--color-blue-500);
-  border-color: var(--color-gray-700);
-  outline: 2px solid var(--color-blue-500);
+.addButton:focus-visible {
+  background-color: var(--blue-500);
+  border-color: var(--gray-700);
+  outline: 2px solid var(--blue-500);
   outline-offset: 2px;
 }
 
 .addButton:disabled {
-  background-color: var(--color-gray-50);
-  border-color: var(--color-blue-200);
+  background-color: var(--gray-50);
+  border-color: var(--blue-50);
 }

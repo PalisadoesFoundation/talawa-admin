@@ -1,3 +1,30 @@
+.pageHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.pageHeaderLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pageTitle {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--gray-900);
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.pageSubtitle {
+  font-size: 14px;
+  color: var(--gray-500);
+  margin: 0;
+}
+
 .btnsContainer {
   display: flex;
   margin: var(--space-9) 0;
@@ -44,16 +71,17 @@
 
 .custom_table {
   border-radius: var(--radius-xl);
-  background-color: var(--color-gray-100);
+  background-color: var(--surface);
+  box-shadow: var(--shadow-card);
 }
 
 .custom_table tbody tr {
-  background-color: var(--color-gray-200);
+  background-color: var(--surface);
 }
 
 .custom_table tbody tr:hover {
-  background-color: var(--color-gray-100);
-  box-shadow: 0 0 0 var(--shadow-spread-xs) rgba(0, 0, 0, 0.1);
+  background-color: var(--gray-50);
+  box-shadow: var(--shadow-card-hover);
 }
 
 .custom_table tbody tr:focus-within {
@@ -71,7 +99,6 @@
   color: var(--color-gray-600);
   background-color: var(--color-blue-200);
   border-color: var(--color-gray-100);
-  --bs-btn-focus-box-shadow: none;
 }
 
 .unblockButton.unblockButton:is(:hover, :active, :focus) {
@@ -108,7 +135,7 @@
   background-color: var(--color-red-100);
   color: var(--color-red-500);
   margin-right: var(--space-4);
-  --bs-btn-border-color: var(--color-red-100);
+  border-color: var(--color-red-100);
 }
 
 .removeButton.removeButton:is(:hover, :active, :focus) {

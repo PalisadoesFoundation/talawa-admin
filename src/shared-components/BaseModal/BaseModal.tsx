@@ -1,27 +1,13 @@
 /**
- * BaseModal component.
+ * BaseModal — native <dialog> implementation.
  *
- * A reusable wrapper around react-bootstrap Modal that provides a consistent
- * structure and reduces boilerplate code across the Talawa Admin application.
- * Handles common patterns like header with title/close button, body content,
- * and optional footer with action buttons.
- *
- * @remarks
- * Features:
- * - Standardized header with optional title and close button.
- * - Customizable size variants: sm, lg, xl.
- * - Built-in accessibility including aria-modal, role dialog, and Escape key support.
- * - Flexible footer for action buttons.
- * - Custom header support for complex layouts.
- * - i18n support for user-visible strings.
- *
- * Example usage:
- * - Confirmation modal with title, footer actions, and content.
- * - Form modal with custom header styling and submit button.
+ * Replaces react-bootstrap Modal. Same IBaseModalProps interface.
+ * Uses showModal() for top-layer + backdrop. Frosted-glass backdrop,
+ * slide-up animation, Escape key support.
  */
-import { useId } from 'react';
+import { useId, useRef, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { Button } from 'shared-components/Button';
-import { Modal } from 'react-bootstrap';
 import type { IBaseModalProps } from 'types/shared-components/BaseModal/interface';
 import { useTranslation } from 'react-i18next';
 import styles from './BaseModal.module.css';
@@ -50,6 +36,49 @@ export default function BaseModal({
   const { t } = useTranslation('common');
   const titleId = useId();
   const bodyId = useId();
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    if (show && !dialog.open) {
+      dialog.showModal();
+    } else if (!show && dialog.open) {
+      dialog.close();
+    }
+  }, [show]);
+
+  const handleCancel = useCallback(
+    (e: Event) => {
+      if (!keyboard) {
+        e.preventDefault();
+        return;
+      }
+      onHide();
+    },
+    [keyboard, onHide],
+  );
+
+  const handleClick = useCallback(
+    (e: React.MouseEvent<HTMLDialogElement>) => {
+      if (backdrop === 'static') return;
+      if (e.target === dialogRef.current) {
+        onHide();
+      }
+    },
+    [backdrop, onHide],
+  );
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    dialog.addEventListener('cancel', handleCancel);
+    return () => dialog.removeEventListener('cancel', handleCancel);
+  }, [handleCancel]);
+
+  const sizeClass = size
+    ? { sm: styles.sizeSm, lg: styles.sizeLg, xl: styles.sizeXl }[size] || ''
+    : '';
 
   const closeButton = showCloseButton ? (
     <Button
@@ -63,41 +92,53 @@ export default function BaseModal({
     </Button>
   ) : null;
 
-  return (
-    <Modal
-      show={show}
-      onHide={onHide}
-      size={size}
-      centered={centered}
-      backdrop={backdrop}
-      keyboard={keyboard}
-      className={className}
+  // Portal the dialog to document.body so it's never nested inside
+  // invalid parents like <tbody>, <tr>, etc.
+  return createPortal(
+    <dialog
+      ref={dialogRef}
+      className={`${styles.dialog} ${sizeClass} ${centered ? styles.centered : ''} ${className || ''}`}
       role="dialog"
       aria-modal={true}
       aria-labelledby={title ? titleId : undefined}
       aria-describedby={bodyId}
       data-testid={dataTestId}
       id={id}
+      onClick={handleClick}
     >
-      {headerContent ? (
-        <Modal.Header className={headerClassName} data-testid={headerTestId}>
-          {headerContent}
-          {closeButton}
-        </Modal.Header>
-      ) : (
-        <Modal.Header className={headerClassName} data-testid={headerTestId}>
-          <Modal.Title id={titleId}>{title}</Modal.Title>
-          {closeButton}
-        </Modal.Header>
-      )}
-      <Modal.Body id={bodyId} className={bodyClassName}>
-        {children}
-      </Modal.Body>
-      {footer && (
-        <Modal.Footer className={footerClassName} data-testid="modal-footer">
-          {footer}
-        </Modal.Footer>
-      )}
-    </Modal>
+      <div className={styles.dialogContent}>
+        {headerContent ? (
+          <div
+            className={`${styles.header} ${headerClassName || ''}`}
+            data-testid={headerTestId}
+          >
+            {headerContent}
+            {closeButton}
+          </div>
+        ) : (
+          <div
+            className={`${styles.header} ${headerClassName || ''}`}
+            data-testid={headerTestId}
+          >
+            <h2 className={styles.title} id={titleId}>
+              {title}
+            </h2>
+            {closeButton}
+          </div>
+        )}
+        <div id={bodyId} className={`${styles.body} ${bodyClassName || ''}`}>
+          {children}
+        </div>
+        {footer && (
+          <div
+            className={`${styles.footer} ${footerClassName || ''}`}
+            data-testid="modal-footer"
+          >
+            {footer}
+          </div>
+        )}
+      </div>
+    </dialog>,
+    document.body,
   );
 }

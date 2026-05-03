@@ -1,24 +1,38 @@
+/**
+ * CardItem — Talawa list item for events, posts, and requests
+ */
+
 .cardItem {
   display: flex;
   flex-direction: row;
   align-items: center;
-  /* Vertically centers the items */
   justify-content: flex-start;
-  height: 6rem;
-  padding: 0.75rem;
-  gap: 1.5rem;
-  background-color: #f7f8fa;
-  border: 1px solid var(--cardItem-border);
-  border-radius: 8px;
-  margin-top: 20px;
+  min-height: 5rem;
+  padding: 12px 16px;
+  gap: 16px;
+  background-color: var(--gray-50, #fafafa);
+  border: 1px solid var(--gray-100, #f3f4f6);
+  border-radius: var(--radius-lg, 14px);
+  margin-top: 12px;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.cardItem:first-child {
+  margin-top: 0;
+}
+
+.cardItem:hover {
+  background-color: var(--surface, #fff);
+  border-color: var(--gray-200, #e5e7eb);
 }
 
 .CardItemImage {
-  background-color: #eaebef;
-  height: 5rem;
-  width: 5rem;
-  min-width: 5rem;
-  border-radius: 8px;
+  background-color: var(--gray-100, #f3f4f6);
+  height: 3.5rem;
+  width: 3.5rem;
+  min-width: 3.5rem;
+  border-radius: var(--radius-md, 10px);
+  overflow: hidden;
 }
 
 .CardItemImage img {
@@ -29,12 +43,14 @@
 }
 
 .cardItemtitle {
-  font-size: 15px;
-  font-weight: bold;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gray-900, #111827);
+  line-height: 1.3;
 }
 
 .CardItemDate {
-  color: gray;
+  color: var(--gray-500, #6b7280);
   font-size: 12px;
 }
 
@@ -49,12 +65,14 @@
 
 .CardItemMainDiv {
   width: 100%;
+  min-width: 0;
 }
 
 .CardItemMainDivEvent {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
 }
 
 .upcomingEventsTitle {
@@ -65,22 +83,25 @@
 
 .cardItemAuthor {
   font-size: 12px;
-  font-weight: bold;
+  font-weight: 500;
+  color: var(--gray-500, #6b7280);
+  margin-top: 2px;
 }
 
 .rightCard {
   display: flex;
   width: fit-content;
-  gap: 7px;
+  gap: 8px;
   justify-content: center;
   flex-direction: column;
-  margin-left: 10px;
+  margin-left: 12px;
   overflow-x: hidden;
+  flex-shrink: 0;
 }
 
 .cardItem .location {
-  font-size: 0.9rem;
-  color: var(--cardItem-location-color);
+  font-size: 13px;
+  color: var(--gray-600, #4b5563);
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 1;
@@ -92,11 +113,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px;
+  padding: 8px 12px;
   width: fit-content;
-  border: 1px solid var(--time-border);
+  border: 1px solid var(--gray-200, #e5e7eb);
   box-sizing: border-box;
-  background: var(--time-bg);
-  box-shadow: 0 3px 8px var(--time-box-shadow);
-  border-radius: 8px;
+  background: var(--gray-50, #fafafa);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  border-radius: var(--radius-md, 10px);
+  font-size: 12px;
+  color: var(--gray-600, #4b5563);
+  white-space: nowrap;
+  gap: 8px;
 }

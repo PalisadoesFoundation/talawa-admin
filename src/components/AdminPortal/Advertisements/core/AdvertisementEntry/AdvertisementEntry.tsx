@@ -37,7 +37,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from './AdvertisementEntry.module.css';
-import { Card, Col, Row, Carousel } from 'react-bootstrap';
 import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import Button from 'shared-components/Button/Button';
 import { DELETE_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -152,7 +151,7 @@ function AdvertisementEntry({
   const deleteModalFooter = (
     <>
       <Button
-        className={`btn btn-danger ${styles.removeButton}`}
+        className={styles.removeButton}
         onClick={toggleShowDeleteModal}
         data-testid="delete_no"
       >
@@ -160,7 +159,7 @@ function AdvertisementEntry({
       </Button>
       <Button
         type="button"
-        className={`btn ${styles.addButton}`}
+        className={styles.addButton}
         onClick={onDelete}
         data-testid="delete_yes"
       >
@@ -189,10 +188,13 @@ function AdvertisementEntry({
       resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
       resetButtonText={tErrors('resetButton')}
     >
-      <Row data-testid="AdEntry" xs={1} md={2} className="g-4">
+      <div
+        data-testid="AdEntry"
+        style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}
+      >
         {Array.from({ length: 1 }).map((_, idx) => (
-          <Col key={idx}>
-            <Card className={styles.addCard}>
+          <div key={idx}>
+            <div className={styles.addCard}>
               <div className={styles.dropdownContainer} ref={dropdownRef}>
                 <Button
                   className={styles.dropdownButton}
@@ -250,12 +252,13 @@ function AdvertisementEntry({
                   {advertisement.attachments &&
                   advertisement.attachments.length > 0 ? (
                     advertisement.attachments.length > 1 ? (
-                      <Carousel className={styles.carouselContainer}>
+                      <div className={styles.carouselContainer}>
                         {advertisement.attachments.map((attachment, index) => (
-                          <Carousel.Item key={index}>
+                          <div key={index}>
                             <div className={styles.imageWrapper}>
                               <img
-                                className={`d-block w-100 ${styles.cardImage}`}
+                                className={styles.cardImage}
+                                style={{ display: 'block', width: '100%' }}
                                 src={attachment.previewUrl}
                                 alt={t('advertisementImageAlt', {
                                   index: index + 1,
@@ -265,13 +268,14 @@ function AdvertisementEntry({
                                 crossOrigin="anonymous"
                               />
                             </div>
-                          </Carousel.Item>
+                          </div>
                         ))}
-                      </Carousel>
+                      </div>
                     ) : (
                       <div className={styles.imageWrapper}>
                         <img
-                          className={`d-block w-100 ${styles.cardImage}`}
+                          className={styles.cardImage}
+                          style={{ display: 'block', width: '100%' }}
                           src={advertisement.attachments[0].previewUrl}
                           alt={t('advertisementMedia')}
                           data-testid="media"
@@ -289,10 +293,10 @@ function AdvertisementEntry({
                   )}
                 </div>
               )}
-              <Card.Body>
-                <Card.Title className="t-bold" data-testid="Ad_name">
+              <div>
+                <h3 className="t-bold" data-testid="Ad_name">
                   {advertisement.name}
-                </Card.Title>
+                </h3>
 
                 <StatusBadge
                   variant={statusVariant}
@@ -300,7 +304,7 @@ function AdvertisementEntry({
                   dataTestId="advertisement-status"
                 />
 
-                <Card.Text
+                <p
                   data-testid="Ad_desc"
                   className={
                     advertisement.description &&
@@ -313,28 +317,28 @@ function AdvertisementEntry({
                   advertisement.description.length > 0
                     ? advertisement.description
                     : t('noDescription')}
-                </Card.Text>
-                <Card.Text data-testid="Ad_end_date">
+                </p>
+                <p data-testid="Ad_end_date">
                   Starts :{' '}
                   {advertisement.startAt
                     ? new Date(advertisement.startAt).toDateString()
                     : 'N/A'}
-                </Card.Text>
-                <Card.Text data-testid="Ad_end_date">
+                </p>
+                <p data-testid="Ad_end_date">
                   Ends :{' '}
                   {advertisement.endAt
                     ? new Date(advertisement.endAt).toDateString()
                     : 'N/A'}
-                </Card.Text>
-                <Card.Subtitle
-                  className="mb-2 text-muted author"
+                </p>
+                <h6
+                  style={{ marginBottom: '0.5rem', color: '#6c757d' }}
                   data-testid="Ad_type"
                 >
                   Type:{' '}
                   {advertisement.type === 'pop_up'
                     ? 'pop up'
                     : advertisement.type}
-                </Card.Subtitle>
+                </h6>
                 <div className={styles.buttons}>
                   <Button
                     className={`${styles.entryaction} ${styles.addButton}`}
@@ -364,11 +368,11 @@ function AdvertisementEntry({
                     {t('deleteAdvertisementMsg')}
                   </div>
                 </BaseModal>
-              </Card.Body>
-            </Card>
-          </Col>
+              </div>
+            </div>
+          </div>
         ))}
-      </Row>
+      </div>
       <br />
     </ErrorBoundaryWrapper>
   );

@@ -8,7 +8,7 @@
  */
 
 import React from 'react';
-import Table from 'react-bootstrap/Table';
+
 import type {
   IColumnDef,
   InterfaceDataTableTableProps,
@@ -89,11 +89,11 @@ export function DataTableTable<T>({
   };
 
   return (
-    <Table
-      responsive
+    <table
       className={tableClassNames}
       data-testid="datatable"
       aria-busy={ariaBusy}
+      style={{ width: '100%', borderCollapse: 'collapse' }}
     >
       {ariaLabel && (
         <caption className={styles.visuallyHidden}>{ariaLabel}</caption>
@@ -255,6 +255,6 @@ export function DataTableTable<T>({
           />
         )}
       </tbody>
-    </Table>
+    </table>
   );
 }

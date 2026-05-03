@@ -46,12 +46,9 @@
  * @returns JSX.Element - The rendered OrganizationVenues component.
  */
 import React, { useEffect, useState } from 'react';
-import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
-import styles from './OrganizationVenues.module.css';
 import { errorHandler } from 'utils/errorHandler';
 import { useMutation, useQuery } from '@apollo/client';
-import Col from 'react-bootstrap/Col';
 import { VENUE_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { Navigate, useParams } from 'react-router';
@@ -60,8 +57,6 @@ import { DELETE_VENUE_MUTATION } from 'GraphQl/Mutations/VenueMutations';
 import useVenueDeletion from '../../../hooks/useVenueDeletion';
 import { DeleteModal } from 'shared-components/CRUDModalTemplate';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
-import VenueCard from 'components/AdminPortal/Venues/VenueCard';
-import Toolbar from 'shared-components/Toolbar/Toolbar';
 import SafeBreadcrumbs from 'shared-components/BreadcrumbsComponent/SafeBreadcrumbs';
 
 export const getVenueNameById = (
@@ -248,78 +243,108 @@ function organizationVenues(props?: {
         ]}
       />
 
-      <Toolbar
-        search={{
-          placeholder: `${t('searchBy')} ${tCommon(searchBy)}`,
-          value: searchTerm,
-          onChange: handleSearch,
-          onSearch: handleSearch,
-          inputTestId: 'searchInput',
-          buttonTestId: 'searchBtn',
-        }}
-        filters={[
-          {
-            id: 'org-venue-SearchBy',
-            label: '',
-            type: 'filter',
-            title: t('searchBy'),
-            options: [
-              { label: tCommon('name'), value: 'name' },
-              { label: tCommon('description'), value: 'desc' },
-            ],
-            selected: searchBy,
-            onChange: (value) => handleSearchByChange(value.toString()),
-            testIdPrefix: 'searchByButton',
-          },
-          {
-            id: 'org-venue-Venues',
-            label: '',
-            type: 'sort',
-            title: t('sortVenues'),
-            options: [
-              { label: t('highestCapacity'), value: 'highest' },
-              { label: t('lowestCapacity'), value: 'lowest' },
-            ],
-            selected: sortOrder,
-            onChange: (value) => handleSortChange(value.toString()),
-            testIdPrefix: 'sortVenues',
-          },
-        ]}
-        actions={
-          <Button
-            variant="success"
-            className={styles.dropdown}
+      <div className="page-header">
+        <div className="page-header-left">
+          <h1 className="page-title">
+            {t('title')}{' '}
+            <span
+              className="badge badge-gray"
+              style={{ fontSize: '14px', verticalAlign: 'middle', marginLeft: '8px' }}
+            >
+              {venues.length}
+            </span>
+          </h1>
+          <p className="page-subtitle">{t('manageVenues')}</p>
+        </div>
+        <div className="page-header-actions">
+          <button
+            className="btn btn-primary"
             onClick={showCreateVenueModal}
             data-testid="createVenueBtn"
           >
-            <i className="fa fa-plus me-1"></i> {t('addVenue')}
-          </Button>
-        }
-      />
-
-      <Col>
-        <div className={styles.mainpageright}>
-          <LoadingState isLoading={venueLoading} variant="spinner" size="lg">
-            <div
-              className={`${styles.list_box} row `}
-              data-testid="orgvenueslist"
-            >
-              {venues.length ? (
-                venues.map((venueItem: InterfaceQueryVenueListItem) => (
-                  <VenueCard
-                    venueItem={venueItem}
-                    showEditVenueModal={showEditVenueModal}
-                    handleDelete={openDeleteModal}
-                    key={venueItem.node.id}
-                  />
-                ))
-              ) : (
-                <h6>{t('noVenues')}</h6>
-              )}
-            </div>
-          </LoadingState>
+            + {t('addVenue')}
+          </button>
         </div>
-      </Col>
+      </div>
+
+      <div className="toolbar" style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '20px' }}>
+        <input
+          type="text"
+          className="search-input"
+          placeholder={`${t('searchBy')} ${tCommon(searchBy)}`}
+          value={searchTerm}
+          onChange={(e) => handleSearch(e.target.value)}
+          data-testid="searchInput"
+          style={{ flex: 1, padding: '8px 12px', border: '1px solid var(--gray-200)', borderRadius: 'var(--radius-md)', fontSize: '13px' }}
+        />
+        <select
+          className="filter-dropdown"
+          value={searchBy}
+          onChange={(e) => handleSearchByChange(e.target.value)}
+          data-testid="searchByButton-filter"
+          style={{ padding: '8px 12px', border: '1px solid var(--gray-200)', borderRadius: 'var(--radius-md)', fontSize: '13px', background: 'var(--surface)' }}
+        >
+          <option value="name">{tCommon('name')}</option>
+          <option value="desc">{tCommon('description')}</option>
+        </select>
+        <select
+          className="filter-dropdown"
+          value={sortOrder}
+          onChange={(e) => handleSortChange(e.target.value)}
+          data-testid="sortVenues-filter"
+          style={{ padding: '8px 12px', border: '1px solid var(--gray-200)', borderRadius: 'var(--radius-md)', fontSize: '13px', background: 'var(--surface)' }}
+        >
+          <option value="highest">{t('highestCapacity')}</option>
+          <option value="lowest">{t('lowestCapacity')}</option>
+        </select>
+      </div>
+
+      <LoadingState isLoading={venueLoading} variant="spinner" size="lg">
+        <div
+          className="grid-3"
+          data-testid="orgvenueslist"
+        >
+          {venues.length ? (
+            venues.map((venueItem: InterfaceQueryVenueListItem) => (
+              <div className="venue-card" key={venueItem.node.id}>
+                <div className="venue-img">
+                  {venueItem.node.image ? (
+                    <img
+                      src={venueItem.node.image}
+                      alt={venueItem.node.name}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                  ) : (
+                    'Image Placeholder'
+                  )}
+                </div>
+                <div className="venue-info">
+                  <div className="venue-name">{venueItem.node.name}</div>
+                  <div className="venue-address">
+                    {venueItem.node.description ?? ''}
+                  </div>
+                  <div className="venue-meta">
+                    <span className="venue-capacity">
+                      {t('capacity')}: <strong>{venueItem.node.capacity ?? 0}</strong>
+                    </span>
+                    <button
+                      className="btn btn-secondary btn-sm"
+                      data-testid={`editVenueBtn-${venueItem.node.id}`}
+                      onClick={() => showEditVenueModal(venueItem)}
+                    >
+                      {tCommon('edit')}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="empty-state">
+              <p className="empty-state-text">{t('noVenues')}</p>
+            </div>
+          )}
+        </div>
+      </LoadingState>
 
       <VenueModal
         show={venueModal}

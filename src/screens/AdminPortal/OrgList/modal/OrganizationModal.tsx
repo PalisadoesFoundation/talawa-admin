@@ -120,7 +120,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                 setFormState({ ...formState, countryCode: inputText });
               }
             }}
-            className={`form-control mb-3 ${styles.inputField}`}
+            className={`form-input mb-3 ${styles.inputField}`}
           >
             <option value="" disabled>
               {tCommon('selectACountry')}
@@ -231,7 +231,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
       <input
         accept="image/*"
         id="orgphoto"
-        className={`form-control mb-3 ${styles.inputField}`}
+        className={`form-input mb-3 ${styles.inputField}`}
         name="photo"
         type="file"
         data-testid="organisationImage"

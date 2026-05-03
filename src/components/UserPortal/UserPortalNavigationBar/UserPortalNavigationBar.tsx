@@ -9,14 +9,14 @@
  * @returns The rendered UserPortalNavigationBar component
  */
 import { useState } from 'react';
-import { Container, Navbar, Nav, Offcanvas } from 'react-bootstrap';
+
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 import cookies from 'js-cookie';
 import i18next from 'i18next';
-import type { DropDirection } from 'react-bootstrap/esm/DropdownContext';
+
 
 import {
   InterfaceUserPortalNavbarProps,
@@ -99,7 +99,7 @@ export const UserPortalNavigationBar = (
     orgData?.organization?.name ||
     (mode === 'user' ? tCommon('talawa') : '');
 
-  const dropDirection: DropDirection = 'start';
+  const dropDirection = 'start' as const;
   const homeLink = finalOrganizationId
     ? `/user/organization/${finalOrganizationId}`
     : '#';
@@ -174,27 +174,29 @@ export const UserPortalNavigationBar = (
     if (!navigationLinks || navigationLinks.length === 0) return null;
 
     return (
-      <Nav className="me-auto flex-grow-1 pe-3 pt-1" variant="dark">
+      <nav style={{ display: 'flex', flexGrow: 1, paddingRight: '1rem', paddingTop: '0.25rem', marginRight: 'auto' }}>
         {navigationLinks.map((link: NavigationLink) => {
           const linkLabel = link.translationKey
             ? t(link.translationKey.split(':').pop() || link.translationKey)
             : link.label;
 
           return (
-            <Nav.Link
+            <button
               key={link.id}
-              active={isLinkActive(link)}
+              type="button"
+              className={isLinkActive(link) ? styles.navLinkActive : styles.navLink}
               onClick={async (): Promise<void> => {
                 await handleNavigation(link);
               }}
               data-testid={link.testId || `navigationLink-${link.id}`}
+              style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: '0.5rem 1rem' }}
             >
-              {link.icon && <link.icon className="me-2" />}
+              {link.icon && <link.icon style={{ marginRight: '0.5rem' }} />}
               {linkLabel}
-            </Nav.Link>
+            </button>
           );
         })}
-      </Nav>
+      </nav>
     );
   };
 
@@ -202,7 +204,7 @@ export const UserPortalNavigationBar = (
   const renderDesktopContent = (): JSX.Element => (
     <>
       {renderNavigationLinks()}
-      <Navbar.Collapse className="justify-content-end">
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
         <LanguageSelector
           showLanguageSelector={showLanguageSelector}
           testIdPrefix={''}
@@ -222,15 +224,15 @@ export const UserPortalNavigationBar = (
           PermIdentityIcon={PermIdentityIcon}
           testIdPrefix=""
         />
-      </Navbar.Collapse>
+      </div>
     </>
   );
 
-  // Render mobile content (inside Offcanvas)
+  // Render mobile content
   const renderMobileContent = (): JSX.Element => (
     <>
       {renderNavigationLinks()}
-      <Navbar.Collapse className="justify-content-end">
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
         <LanguageSelector
           showLanguageSelector={showLanguageSelector}
           testIdPrefix={'mobile'}
@@ -250,7 +252,7 @@ export const UserPortalNavigationBar = (
           PermIdentityIcon={PermIdentityIcon}
           testIdPrefix={'mobile'}
         />
-      </Navbar.Collapse>
+      </div>
     </>
   );
 
@@ -260,19 +262,18 @@ export const UserPortalNavigationBar = (
   // Render based on mobile layout
   if (mobileLayout === 'offcanvas') {
     return (
-      <Navbar
-        expand={expandBreakpoint}
-        variant={variant}
+      <nav
         className={navbarClassName}
-        style={customStyles}
+        style={{ display: 'flex', alignItems: 'center', padding: '0.5rem 1rem', ...customStyles }}
       >
-        <Container fluid>
-          <Navbar.Brand
+        <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+          <a
             href={homeLink}
             onClick={(e) => {
               e.preventDefault();
               handleBrandClick();
             }}
+            style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit', marginRight: 'auto' }}
           >
             <img
               className={styles.talawaImage}
@@ -281,42 +282,27 @@ export const UserPortalNavigationBar = (
               data-testid="brandLogo"
             />
             <b data-testid="brandName">{brandNameText}</b>
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="offcanvasNavbar-expand-md" />
-          <Navbar.Offcanvas
-            id="offcanvasNavbar-expand-md"
-            aria-labelledby="offcanvasNavbar-expand-md"
-            placement="end"
-            className={styles.offcanvasContainer}
-          >
-            <Offcanvas.Header closeButton>
-              <Offcanvas.Title data-testid="offcanvasTitle">
-                {tCommon('talawa')}
-              </Offcanvas.Title>
-            </Offcanvas.Header>
-            <Offcanvas.Body>{renderMobileContent()}</Offcanvas.Body>
-          </Navbar.Offcanvas>
+          </a>
           {renderDesktopContent()}
-        </Container>
-      </Navbar>
+        </div>
+      </nav>
     );
   }
 
   // Collapse layout (default for user mode)
   return (
-    <Navbar
-      expand={expandBreakpoint}
-      variant={variant}
+    <nav
       className={navbarClassName}
-      style={customStyles}
+      style={{ display: 'flex', alignItems: 'center', padding: '0.5rem 1rem', ...customStyles }}
     >
-      <Container fluid>
-        <Navbar.Brand
+      <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+        <a
           href={homeLink}
           onClick={(e) => {
             e.preventDefault();
             handleBrandClick();
           }}
+          style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit', marginRight: 'auto' }}
         >
           <img
             className={styles.talawaImage}
@@ -325,10 +311,9 @@ export const UserPortalNavigationBar = (
             data-testid="brandLogo"
           />
           <b data-testid="brandName">{brandNameText}</b>
-        </Navbar.Brand>
-        <Navbar.Toggle />
+        </a>
         {renderDesktopContent()}
-      </Container>
-    </Navbar>
+      </div>
+    </nav>
   );
 };

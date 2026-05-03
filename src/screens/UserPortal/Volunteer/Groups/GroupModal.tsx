@@ -270,7 +270,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
               type="text"
               aria-label={tCommon('name')}
               required
-              className={`form-control ${styles.noOutline}`}
+              className={`form-input ${styles.noOutline}`}
               value={name}
               data-testid="nameInput"
               onChange={(e) =>
@@ -286,7 +286,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
               id="description"
               aria-label={tCommon('description')}
               rows={3}
-              className={`form-control ${styles.noOutline}`}
+              className={`form-input ${styles.noOutline}`}
               value={description ?? ''}
               onChange={(e) =>
                 setFormState({
@@ -308,7 +308,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
               type="number"
               min="1"
               aria-label={t('volunteersRequired')}
-              className={`form-control ${styles.noOutline}`}
+              className={`form-input ${styles.noOutline}`}
               value={volunteersRequired !== null ? volunteersRequired : ''}
               onChange={(e) => {
                 const val = e.target.value;

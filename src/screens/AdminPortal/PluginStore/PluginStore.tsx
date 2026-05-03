@@ -5,12 +5,8 @@
  */
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import Button from 'shared-components/Button/Button';
-import styles from './PluginStore.module.css';
-import PaginationList from 'shared-components/PaginationList/PaginationList';
 import PluginModal from './PluginModal';
 import UploadPluginModal from './UploadPluginModal';
-import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { PluginList, UninstallConfirmationModal } from './components';
 import { usePluginActions, usePluginFilters } from './hooks';
 import { useGetAllPlugins } from 'plugin/graphql-service';
@@ -123,30 +119,25 @@ export default function PluginStore() {
   ];
 
   const uploadPluginButton = (
-    <Button
-      className={`${styles.dropdown} ${styles.createorgdropdown}`}
+    <button
+      className="btn btn-primary"
       onClick={uploadModal.open}
       data-testid="uploadPluginBtn"
     >
-      <i className={'fa fa-plus me-2'} />
-      {t('uploadPlugin')}
-    </Button>
+      + {t('uploadPlugin')}
+    </button>
   );
 
   return (
-    <div className={styles.pageContent} data-testid="plugin-store-page">
-      <p className={styles.pageSubtitle}>{t('subtitle')}</p>
-      <SearchFilterBar
-        searchPlaceholder={t('searchPlaceholder')}
-        searchValue={searchTerm}
-        onSearchChange={debouncedSearch}
-        searchInputTestId="searchPlugins"
-        searchButtonTestId="searchPluginsBtn"
-        hasDropdowns={true}
-        dropdowns={pluginStoreDropdowns}
-        additionalButtons={uploadPluginButton}
-      />
-      <div className={styles.pluginListContainer}>
+    <div data-testid="plugin-store-page">
+      <div className="page-header">
+        <div className="page-header-left">
+          <h1 className="page-title">{t('title')}</h1>
+          <p className="page-subtitle">{t('subtitle')}</p>
+        </div>
+      </div>
+
+      <div className="grid-3">
         <PluginList
           plugins={paginatedPlugins}
           searchTerm={searchTerm}
@@ -154,23 +145,7 @@ export default function PluginStore() {
           onManagePlugin={openPlugin}
         />
       </div>
-      {/* Pagination Controls */}
-      <div className={styles.paginationContainer}>
-        <table>
-          <tbody>
-            <tr>
-              <PaginationList
-                count={filteredPlugins.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-                data-testid="plugin-pagination"
-              />
-            </tr>
-          </tbody>
-        </table>
-      </div>
+
       {/* Plugin Details Modal */}
       <PluginModal
         show={pluginModal.isOpen}

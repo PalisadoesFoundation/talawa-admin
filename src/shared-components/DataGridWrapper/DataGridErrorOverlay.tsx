@@ -44,7 +44,7 @@ export function DataGridErrorOverlay({
       <div data-testid="data-grid-error-icon">
         <IconComponent
           name="error"
-          fill="var(--bs-danger)"
+          fill="var(--red-500)"
           width="48px"
           height="48px"
         />

@@ -1,4 +1,4 @@
-.modalContent :global(.modal-dialog) {
+.modalContent .modalDialog {
   width: var(--space-26);
   max-width: var(--space-26);
 }
@@ -12,35 +12,31 @@
   padding-inline-end: 0;
 }
 
-.input :global(.searchBarContainer) {
+.input .searchBarContainer {
   margin: 0;
   width: 100%;
   max-width: 100%;
 }
 
-.input :global(.searchBarInputWrapper) {
+.input .searchBarInputWrapper {
   min-width: 0;
 }
 
 .input:active {
-  box-shadow: var(--border-shadow-xs) var(--border-shadow-xs)
-    var(--border-shadow-xs) var(--color-gray-400);
-
-  background-color: var(--color-blue-200);
-  border-color: var(--color-gray-200);
-  color: var(--color-gray-700);
+  box-shadow: 0 1px 2px var(--gray-400);
+  background-color: var(--blue-50);
+  border-color: var(--gray-200);
+  color: var(--gray-700);
 }
 
 .input:focus-within {
-  box-shadow: var(--border-shadow-xs) var(--border-shadow-xs)
-    var(--border-shadow-xs) var(--color-gray-400);
-
-  border-color: var(--color-gray-200);
+  box-shadow: 0 1px 2px var(--gray-400);
+  border-color: var(--gray-200);
 }
 
 .tableHeadCell {
-  background-color: var(--color-gray-100);
-  color: var(--color-gray-700);
+  background-color: var(--gray-100);
+  color: var(--gray-700);
 }
 
 .tableBodyCell {
@@ -57,45 +53,44 @@
   margin-right: var(--space-2);
   width: var(--space-10);
   height: var(--space-10);
-  border-radius: var(--radius-full);
+  border-radius: 9999px;
 }
 
 .eventsAttended,
 .membername {
-  color: var(--color-blue-200);
+  color: var(--blue-50);
 }
 
 .membername {
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
-  color: var(--color-blue-200);
+  color: var(--blue-50);
   text-decoration: none;
 }
 
 .membername:hover {
-  color: var(--color-blue-500);
+  color: var(--blue-500);
   text-decoration: underline;
 }
 
 .subtleBlueGrey {
-  color: var(--color-blue-200);
+  color: var(--blue-50);
 }
 
 .subtleBlueGrey:hover {
-  color: var(--color-blue-500);
+  color: var(--blue-500);
 }
 
 .addButton {
   margin-bottom: var(--space-5);
-  color: var(--color-gray-700);
-  background-color: var(--color-blue-200);
-  border-color: var(--color-blue-200);
-  --bs-btn-focus-box-shadow: none;
+  color: var(--gray-700);
+  background-color: var(--blue-50);
+  border-color: var(--blue-50);
 }
 
 .addButton:is(:hover, :active, :focus) {
-  background-color: var(--color-blue-500);
-  border-color: var(--color-gray-700);
+  background-color: var(--blue-500);
+  border-color: var(--gray-700);
 }
 
 .addButton:disabled {
@@ -104,21 +99,58 @@
 
 .headers {
   border: none;
-  background-color: var(--color-white);
+  background-color: var(--surface);
   padding: var(--space-5);
-  color: var(--color-black);
+  color: var(--gray-900);
 }
 
-.headers :global(.modal-title) {
-  color: var(--color-gray-700);
+.headers .modalTitle {
+  color: var(--gray-700);
   font-weight: var(--font-weight-semibold);
   font-size: var(--font-size-xl);
 }
 
-.headers :global(button.close),
-.headers :global(.btn-close) {
-  color: var(--color-red-500);
+.headers .closeButton {
+  color: var(--red-500);
   opacity: 1;
+}
+
+.inputGroup {
+  display: flex;
+  align-items: stretch;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--border-input);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.formInput {
+  flex: 1;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--gray-900);
+  background-color: var(--surface);
+  outline: none;
+}
+
+.formInput:focus {
+  box-shadow: 0 0 0 2px var(--green-100);
+}
+
+.formInput:disabled {
+  background-color: var(--gray-100);
+  cursor: not-allowed;
+}
+
+.inputAddon {
+  display: flex;
+  align-items: center;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  cursor: pointer;
 }
 
 .borderNone {
@@ -126,40 +158,35 @@
 }
 
 .colorPrimary {
-  background: var(--color-blue-200);
-  color: var(--color-gray-700);
-  --bs-btn-active-bg: var(--color-blue-200);
+  background: var(--blue-50);
+  color: var(--gray-700);
   cursor: pointer;
 }
 
 .colorPrimary:hover,
 .colorPrimary:focus,
 .colorPrimary:active {
-  background-color: var(--color-blue-200);
-  box-shadow:
-    0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
-      var(--color-blue-200),
-    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
-      var(--color-gray-300);
-  color: var(--color-gray-700);
+  background-color: var(--blue-50);
+  box-shadow: var(--shadow-card-hover);
+  color: var(--gray-700);
 }
 
 .colorWhite {
-  color: var(--color-gray-700);
+  color: var(--gray-700);
 }
 
 .removeButton {
   margin-bottom: var(--space-5);
-  background-color: var(--color-red-100);
-  color: var(--color-red-500);
+  background-color: var(--red-50);
+  color: var(--red-500);
   margin-right: var(--space-5);
-  --bs-btn-border-color: var(--color-red-100);
+  border-color: var(--red-50);
 }
 
 .removeButton:is(:hover, :active, :focus) {
-  background-color: var(--color-red-500);
-  border-color: var(--color-red-500);
-  color: var(--color-white);
+  background-color: var(--red-500);
+  border-color: var(--red-500);
+  color: var(--surface);
 }
 
 .dataTable {

@@ -1,297 +1,436 @@
+/**
+ * LoginPage — Talawa split-screen login
+ *
+ * Left panel: dark background with Palisadoes branding + social icons
+ * Right panel: white form area with Talawa logo, login/register forms
+ */
+
+/* ── Animations ────────────────────────────────────────────────────────────── */
+@keyframes zoomIn {
+  from { opacity: 0; transform: scale(0.3); }
+  50%  { opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Tab visibility ────────────────────────────────────────────────────────── */
 .active_tab {
-  -webkit-animation: fadeIn 0.3s ease-in-out;
   animation: fadeIn 0.3s ease-in-out;
+}
+
+.hidden {
+  display: none;
+}
+
+/* ── Split layout ──────────────────────────────────────────────────────────── */
+.loginSplit {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ── Left Panel ────────────────────────────────────────────────────────────── */
+.loginLeft {
+  width: 58%;
+  background: #111113;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 60px;
+  overflow: hidden;
+}
+
+.loginLeft::before {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(62, 207, 142, 0.18) 0%, transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.loginLeftBrand {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.loginLeftBrand a {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+}
+
+.loginLeftBrand p {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.45);
+  max-width: 360px;
+  line-height: 1.6;
 }
 
 .communityLogo {
   object-fit: contain;
 }
 
+.palisadoes_logo {
+  width: var(--logo-lg, 200px);
+  height: auto;
+  filter: brightness(0.9);
+}
+
+.loginLeftFooter {
+  position: absolute;
+  bottom: 32px;
+  left: 60px;
+  right: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.25);
+}
+
+/* ── Social icons ──────────────────────────────────────────────────────────── */
+.socialIcons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 36px;
+  position: relative;
+  z-index: 1;
+}
+
+.socialIcons a {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.06);
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.socialIcons a:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.socialIcons img {
+  width: 18px;
+  height: 18px;
+  opacity: 0.5;
+  transition: opacity 0.15s;
+}
+
+.socialIcons a:hover img {
+  opacity: 0.8;
+}
+
+/* ── Right Panel ───────────────────────────────────────────────────────────── */
+.loginRight {
+  width: 42%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 48px;
+  background: #fff;
+  overflow-y: auto;
+}
+
+.loginRight::-webkit-scrollbar {
+  width: 4px;
+}
+
+.loginRight::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.loginRight::-webkit-scrollbar-thumb {
+  background-color: var(--gray-300, #d1d5db);
+  border-radius: 2px;
+}
+
+.loginFormWrapper {
+  width: 100%;
+  max-width: 380px;
+  position: relative;
+}
+
+/* ── Talawa logo ───────────────────────────────────────────────────────────── */
+.talawa_logo {
+  height: clamp(40px, 8vw, 56px);
+  width: auto;
+  aspect-ratio: 1;
+  display: block;
+  margin: 24px auto 28px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .talawa_logo {
+    animation: zoomIn 0.3s ease-in-out;
+  }
+}
+
+.marginTopForReg {
+  margin-top: 44px;
+}
+
+/* ── Language selector ─────────────────────────────────────────────────────── */
+.langChangeBtn {
+  margin: 0;
+  position: absolute;
+  top: -36px;
+  right: 0;
+  left: auto;
+}
+
+.langChangeBtnStyle {
+  width: auto;
+  height: 36px;
+  padding: 6px 12px;
+  color: var(--gray-600, #4b5563);
+  border: 1px solid var(--gray-200, #e5e7eb);
+  border-radius: var(--radius-sm, 6px);
+  background-color: var(--surface, #fff);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  transition: border-color 0.12s;
+}
+
+.langChangeBtnStyle:hover {
+  border-color: var(--gray-300, #d1d5db);
+}
+
+/* ── Segmented toggle (Admin / User) ───────────────────────────────────────── */
+.segmentedToggle {
+  display: flex;
+  background: var(--gray-100, #f3f4f6);
+  border-radius: var(--radius-md, 10px);
+  padding: 3px;
+  margin-bottom: 24px;
+}
+
+.segmentedToggle button {
+  flex: 1;
+  padding: 8px 0;
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  color: var(--gray-500, #6b7280);
+  border-radius: var(--radius-sm, 6px);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.segmentedActive {
+  background: var(--surface, #fff);
+  color: var(--gray-900, #111827);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* ── Register heading ──────────────────────────────────────────────────────── */
+.registerHeading {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  margin-bottom: 12px;
+  color: var(--gray-900, #111827);
+}
+
+/* ── Forgot password link ──────────────────────────────────────────────────── */
+.forgotLink {
+  display: block;
+  text-align: right;
+  font-size: 12px;
+  color: var(--green-600, #059669);
+  margin-top: -10px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.forgotLink:hover {
+  text-decoration: underline;
+}
+
+/* ── Buttons ───────────────────────────────────────────────────────────────── */
+.login_btn {
+  font-weight: 600;
+  color: #000;
+  background-color: var(--green-500, #3ecf8e);
+  border: none;
+  border-radius: var(--radius-md, 10px);
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 100%;
+  padding: 11px 20px;
+  font-size: 14px;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+  cursor: pointer;
+}
+
+.login_btn:hover {
+  background-color: var(--green-400, #4ade80);
+  color: #000;
+  box-shadow: 0 4px 16px rgba(62, 207, 142, 0.25);
+}
+
+.reg_btn {
+  font-weight: 600;
+  background-color: transparent;
+  border: 1.5px solid var(--gray-200, #e5e7eb);
+  border-radius: var(--radius-md, 10px);
+  margin-top: 0;
+  color: var(--gray-700, #374151);
+  margin-bottom: 0;
+  width: 100%;
+  padding: 10px 20px;
+  font-size: 13px;
+  transition: background-color 0.12s ease, border-color 0.12s ease;
+  cursor: pointer;
+  text-align: center;
+}
+
+.reg_btn:hover {
+  background-color: var(--gray-50, #fafafa);
+  border-color: var(--gray-300, #d1d5db);
+  color: var(--gray-900, #111827);
+}
+
+.backToLoginLink {
+  text-decoration: none;
+  color: inherit;
+}
+
 .email_button {
-  --bs-btn-active-bg: var(--color-blue-200);
-  --bs-btn-active-border-color: var(--color-blue-200);
-  --bs-btn-hover-bg: var(--color-blue-200);
-  --bs-btn-hover-border-color: var(--color-blue-200);
   position: absolute;
   z-index: 10;
   bottom: 0;
   right: 0;
   height: 100%;
   display: flex;
-  background-color: var(--color-blue-200);
-  border-color: var(--color-blue-200);
+  background-color: var(--green-500, #3ecf8e);
+  border: none;
+  border-radius: 0 var(--radius-md, 10px) var(--radius-md, 10px) 0;
   justify-content: center;
   align-items: center;
-  color: var(--color-gray-700);
+  color: #000;
+  padding: 0 16px;
+  transition: background-color 0.15s ease;
 }
 
 .email_button:hover {
-  color: var(--color-gray-700) !important;
-  box-shadow:
-    0 var(--border-1) var(--border-3) 0 var(--color-blue-200),
-    0 var(--border-4) var(--border-8) var(--border-3) var(--color-gray-800);
+  background-color: var(--green-400, #4ade80);
+  color: #000;
 }
 
-.socialIcons {
+/* ── OR divider ────────────────────────────────────────────────────────────── */
+.orDivider {
   display: flex;
-  gap: var(--space-5);
-  justify-content: center;
-}
-
-.login_background {
-  min-height: 100vh;
-}
-
-.login_btn {
-  font-weight: bold;
-  color: var(--color-gray-700);
-  --bs-btn-bg: var(--color-blue-200);
-  --bs-btn-border-color: var(--color-blue-200);
-  --bs-btn-hover-bg: var(--color-blue-200);
-  --bs-btn-hover-border-color: var(--color-blue-200);
-  --bs-btn-active-color: var(--color-blue-200);
-  --bs-btn-active-bg: var(--color-blue-200);
-  --bs-btn-active-border-color: var(--color-blue-200);
-  --bs-btn-disabled-bg: var(--color-blue-200);
-  --bs-btn-disabled-border-color: var(--color-blue-200);
-  margin-top: var(--space-5);
-  margin-bottom: var(--space-5);
-  width: 100%;
-  transition: background-color 0.2s ease;
-  cursor: pointer;
-}
-
-.login_btn:hover {
-  color: var(--color-gray-700) !important;
-  box-shadow:
-    0 var(--border-1) var(--border-3) 0 var(--color-blue-200),
-    0 var(--border-4) var(--border-8) var(--border-3) var(--color-gray-800);
-}
-
-.langChangeBtnStyle {
-  --bs-btn-active-bg: var(--color-blue-200);
-  --bs-btn-active-border-color: var(--color-blue-200);
-  --bs-btn-active-color: var(--color-blue-500);
-  width: var(--space-14);
-  height: var(--space-9);
-  padding: var(--space-3);
-  color: var(--color-blue-500);
-  border-color: var(--color-blue-200);
-  background-color: transparent;
-  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: var(--space-2);
+  gap: 14px;
+  margin: 24px 0;
+  color: var(--gray-300, #d1d5db);
+  font-size: 12px;
+  font-weight: 500;
 }
 
-.langChangeBtnStyle:hover {
-  background-color: var(--color-blue-200) !important;
-  border-color: var(--color-blue-200) !important;
+.orDivider::before,
+.orDivider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--gray-200, #e5e7eb);
 }
 
-.talawa_logo {
-  height: clamp(var(--space-10), 8vw, var(--space-12));
-  width: auto;
-  aspect-ratio: 1;
+/* Keep legacy orText for any subcomponents that might reference it */
+.orText {
   display: block;
-  margin: var(--space-7) auto var(--space-5);
-
-  @media (prefers-reduced-motion: no-preference) {
-    -webkit-animation: zoomIn 0.3s ease-in-out;
-    animation: zoomIn 0.3s ease-in-out;
-  }
+  position: absolute;
+  top: -8px;
+  left: calc(50% - 2.6rem);
+  margin: 0 auto;
+  padding: 4px 20px;
+  z-index: 100;
+  background: var(--surface, #fff);
+  color: var(--gray-400, #9ca3af);
+  font-size: 12px;
 }
 
+/* ── Password checks ──────────────────────────────────────────────────────── */
 .password_checks {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   flex-direction: column;
-  gap: var(--space-5);
+  gap: 12px;
 }
 
 .password_check_element {
-  padding: var(--space-3) 0;
+  padding: 8px 0;
+  font-size: 13px;
+  color: var(--gray-600, #4b5563);
 }
 
 .password_check_element_top {
-  margin-top: var(--space-1);
+  margin-top: 4px;
 }
 
 .password_check_element_bottom {
-  margin-bottom: var(--space-6);
-}
-
-.reg_btn {
-  font-weight: bold;
-  background-color: var(--color-gray-100);
-  border-color: var(--color-gray-100);
-  --bs-btn-hover-bg: var(--color-gray-100);
-  --bs-btn-hover-border-color: var(--color-gray-100);
-  --bs-btn-active-color: var(--color-gray-100);
-  --bs-btn-active-bg: var(--color-gray-100);
-  --bs-btn-active-border-color: var(--color-gray-100);
-  margin-top: var(--space-5);
-  color: var(--color-gray-700);
-  margin-bottom: var(--space-5);
-  width: 100%;
-  transition: background-color 0.2s ease;
-  cursor: pointer;
-}
-
-.reg_btn:hover {
-  color: var(--color-gray-700) !important;
-  box-shadow:
-    0 var(--border-1) var(--border-3) 0 var(--color-blue-200),
-    0 var(--border-4) var(--border-8) var(--border-3) var(--color-gray-800);
-}
-
-.row .left_portion {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  height: 100vh;
-}
-
-.row .left_portion .inner .palisadoes_logo {
-  width: var(--logo-lg);
-  height: auto;
-}
-
-.row .right_portion {
-  min-height: 100vh;
-  position: relative;
-  overflow-y: scroll;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: var(--space-5) var(--space-9);
-  background: var(--color-white);
-}
-
-.row .right_portion::-webkit-scrollbar {
-  width: var(--space-3);
-}
-
-.row .right_portion::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.row .right_portion::-webkit-scrollbar-thumb {
-  background-color: var(--color-black);
-  border-radius: var(--radius-sm);
-}
-
-.row .right_portion .langChangeBtn {
-  margin: 0;
-  position: absolute;
-  top: var(--space-5);
-  right: var(--space-9);
-  left: auto;
-}
-
-.orText {
-  display: block;
-  position: absolute;
-  top: calc(var(--space-2) * -1);
-  left: calc(50% - 2.6rem);
-  margin: 0 auto;
-  padding: var(--space-3) var(--space-8);
-  z-index: 100;
-  background: var(--color-white);
-  color: var(--color-gray-600);
-}
-
-.row .orText {
-  display: block;
-  position: absolute;
-  top: calc(var(--space-3) * -1);
-  left: calc(50% - 2.6rem);
-  margin: 0 auto;
-  padding: var(--space-2) var(--space-8);
-  z-index: 100;
-  background: var(--color-white);
-  color: var(--color-gray-600);
+  margin-bottom: 16px;
 }
 
 .selectOrgText {
   width: 100%;
 }
 
-@media (max-width: 992px) {
-  .row .left_portion {
-    padding: var(--space-0) var(--space-8);
+/* ═══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 900px) {
+  .loginLeft {
+    display: none;
   }
 
-  .row .left_portion .inner .palisadoes_logo {
+  .loginRight {
     width: 100%;
-  }
-}
-
-@media (max-width: 768px) {
-  .row {
-    flex-direction: column-reverse;
-  }
-
-  .row .right_portion,
-  .row .left_portion {
-    height: unset;
-  }
-
-  .row .right_portion {
-    min-height: 100vh;
-    overflow-y: unset;
-  }
-
-  .row .left_portion .inner {
-    display: flex;
-    justify-content: center;
-  }
-
-  .row .left_portion .inner .palisadoes_logo {
-    height: var(--logo-sm);
-    width: unset;
-    position: absolute;
-    margin: var(--space-3);
-    top: 0;
-    right: 0;
-    z-index: 100;
-  }
-
-  .row .left_portion .inner p {
-    margin-bottom: 0;
-    padding: var(--space-5);
-  }
-
-  .socialIcons {
-    margin-bottom: var(--space-5);
+    padding: 40px 24px;
   }
 }
 
 @media (max-width: 576px) {
-  .row .right_portion {
-    padding: var(--space-5) var(--space-5) var(--space-0) var(--space-5);
+  .loginRight {
+    padding: 20px;
   }
 
-  .row .right_portion .langChangeBtn {
-    position: absolute;
-    top: var(--space-5);
-    right: var(--space-5);
-    left: auto;
+  .langChangeBtn {
+    top: -28px;
+    right: 0;
   }
 
   .marginTopForReg {
-    margin-top: var(--space-11) !important;
+    margin-top: 44px;
   }
 
-  .row .right_portion .talawa_logo {
-    height: var(--logo-md);
-    margin: var(--space-0) auto var(--space-8) auto;
-  }
-
-  .socialIcons {
-    margin-bottom: var(--space-5);
+  .talawa_logo {
+    height: var(--logo-md, 48px);
+    margin: 0 auto 24px auto;
   }
 }
 
@@ -302,25 +441,5 @@
 
   .active_tab {
     animation: none;
-  }
-}
-
-/* Animations */
-@keyframes zoomIn {
-  from {
-    opacity: 0;
-    transform: scale(0.3);
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
   }
 }

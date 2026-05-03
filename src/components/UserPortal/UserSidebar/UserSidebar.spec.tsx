@@ -20,20 +20,6 @@ vi.mock('shared-components/SidebarBase/SidebarBase.module.css', () => ({
   },
 }));
 
-vi.mock('style/app-fixed.module.css', () => ({
-  default: {
-    leftDrawer: 'leftDrawer',
-    hideElemByDefault: 'hideElemByDefault',
-    collapsedDrawer: 'collapsedDrawer',
-    expandedDrawer: 'expandedDrawer',
-    talawaLogo: 'talawaLogo',
-    talawaText: 'talawaText',
-    titleHeader: 'titleHeader',
-    leftbarcompheight: 'leftbarcompheight',
-    optionList: 'optionList',
-    iconWrapper: 'iconWrapper',
-  },
-}));
 
 vi.mock('./UserSidebar.module.css', () => ({
   default: {

@@ -1,0 +1,53 @@
+.peopleTabBtnBlock {
+  height: 100%;
+  padding-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #808080;
+  border: 1px solid #dddddd;
+}
+
+.peopleTabActiveButton {
+  color: #555555;
+  background: #eaebef;
+  border-radius: 9px;
+  border: 1px solid #555555;
+}
+
+.peopleTabIconWrapper {
+  display: flex;
+  align-items: center;
+  color: #808080;
+  border: 1px solid #ddd;
+  border-radius: 9px;
+  padding: 0 20px;
+}
+
+.peopleTabIcon {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  color: grey;
+  padding: 1rem 1.2rem;
+}
+
+.peopleTabImgIcon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.peopleTabEventHeader {
+  display: flex;
+  align-items: center;
+  color: grey;
+}
+
+.peopleTabEventHeader:hover {
+  color: var(--groupsLabel-color);
+}
+
+.peopleTabActiveHeader {
+  color: #555555;
+  background: #eaebef;
+}

@@ -29,7 +29,7 @@
  * @returns The rendered PeopleTabNavbarButton component
  */
 import React from 'react';
-import styles from 'style/app-fixed.module.css';
+import styles from './PeopleTabNavbarButton.module.css';
 import { InterfacePeopleTabNavbar } from 'types/PeopleTab/interface';
 
 const PeopleTabNavbarButton: React.FC<InterfacePeopleTabNavbar> = ({

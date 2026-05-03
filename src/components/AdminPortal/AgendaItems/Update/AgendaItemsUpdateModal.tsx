@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Row, Col } from 'react-bootstrap';
 import DropDownButton from 'shared-components/DropDownButton';
 import { FaLink, FaTrash } from 'react-icons/fa';
 import { useParams } from 'react-router';
@@ -238,7 +237,7 @@ const AgendaItemsUpdateModal: React.FC<
     >
       {/* Folder */}
       <FormFieldGroup name="folder" label={t('folder')}>
-        <div className="w-100">
+        <div style={{ width: '100%' }}>
           <DropDownButton
             id="agenda-folder-dropdown"
             options={(agendaFolderData ?? []).map((f) => ({
@@ -264,7 +263,7 @@ const AgendaItemsUpdateModal: React.FC<
 
       {/* Category */}
       <FormFieldGroup name="category" label={t('category')}>
-        <div className="w-100">
+        <div style={{ width: '100%' }}>
           <DropDownButton
             id="agenda-category-dropdown"
             options={(agendaItemCategories ?? []).map((c) => ({
@@ -288,8 +287,8 @@ const AgendaItemsUpdateModal: React.FC<
         </div>
       </FormFieldGroup>
 
-      <Row className="mb-3">
-        <Col>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', marginBottom: '1rem' }}>
+        <div style={{ flex: '1 1 0' }}>
           <FormTextField
             name="title"
             label={t('title')}
@@ -297,8 +296,8 @@ const AgendaItemsUpdateModal: React.FC<
             value={itemFormState.name}
             onChange={(v) => setItemFormState({ ...itemFormState, name: v })}
           />
-        </Col>
-        <Col>
+        </div>
+        <div style={{ flex: '1 1 0' }}>
           <FormTextField
             name="duration"
             label={t('duration')}
@@ -309,8 +308,8 @@ const AgendaItemsUpdateModal: React.FC<
               setItemFormState({ ...itemFormState, duration: v })
             }
           />
-        </Col>
-      </Row>
+        </div>
+      </div>
 
       <FormTextField
         name="description"
@@ -340,9 +339,9 @@ const AgendaItemsUpdateModal: React.FC<
 
       {/* URLs */}
       <FormFieldGroup name="url" label={t('url')}>
-        <div className="d-flex gap-2">
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
           <input
-            className="form-control"
+            style={{ width: '100%', padding: '0.375rem 0.75rem', border: '1px solid #ced4da', borderRadius: '0.375rem' }}
             placeholder={t('enterUrl')}
             value={newUrl}
             onChange={(e) => setNewUrl(e.target.value)}
@@ -377,7 +376,7 @@ const AgendaItemsUpdateModal: React.FC<
           type="file"
           multiple
           accept="image/*,video/*"
-          className="form-control"
+          style={{ width: '100%', padding: '0.375rem 0.75rem', border: '1px solid #ced4da', borderRadius: '0.375rem' }}
           onChange={handleFileChange}
         />
       </FormFieldGroup>

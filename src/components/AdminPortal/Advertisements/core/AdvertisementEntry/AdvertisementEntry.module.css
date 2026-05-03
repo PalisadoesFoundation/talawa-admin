@@ -1,5 +1,5 @@
 .noDescription {
-  color: var(--bs-gray-500);
+  color: var(--gray-500);
 }
 
 .cardOtherSettings {
@@ -101,7 +101,6 @@
   color: var(--addButton-font);
   background-color: var(--light-blue);
   border-color: var(--addButton-bg);
-  --bs-btn-focus-box-shadow: none;
 }
 
 .removeButton {
@@ -109,7 +108,7 @@
   background-color: var(--removeButton-bg);
   color: var(--removeButton-color);
   margin-right: 10px;
-  --bs-btn-border-color: var(--removeButton-border);
+  border-color: var(--removeButton-border);
 }
 
 .mediaContainer {

@@ -457,6 +457,7 @@ export interface InterfaceOrgInfoTypePG {
   avatarURL: string | null;
   createdAt: string;
   membersCount?: number;
+  adminsCount?: number;
   members?: {
     id?: string;
     edges: {

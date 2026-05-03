@@ -14,7 +14,7 @@
  * @remarks
  * - The sidebar includes input fields for filtering contributions and displays recent statistics.
  * - The main content area lists contribution details such as user name, date, amount, transaction ID, and email.
- * - Dependencies include `react-bootstrap`, `react-i18next`, `ContriStats`, and `OrgContriCards`.
+ * - Dependencies include `react-i18next`, `ContriStats`, and `OrgContriCards`.
  *
  * @example
  * ```tsx
@@ -28,8 +28,6 @@
  * @returns The rendered JSX for the OrgContribution page.
  */
 import React, { useState } from 'react';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import ContriStats from 'components/AdminPortal/ContriStats/ContriStats';
 import OrgContriCards from 'components/AdminPortal/OrgContriCards/OrgContriCards';
@@ -49,10 +47,13 @@ function OrgContribution(): JSX.Element {
 
   return (
     <>
-      <Row>
-        <Col sm={3}>
-          <div className={styles.sidebar}>
-            <div className={styles.sidebarsticky}>
+      <div className={styles.pageHeader}>
+        <h1>{t('contribution')}</h1>
+        <p>{t('filterByName')}</p>
+      </div>
+      <div className={styles.layoutGrid}>
+        <div className={styles.sidebar}>
+          <div className={styles.sidebarsticky}>
               {/* Input for filtering by organization name */}
               <label htmlFor="filterByName" className={styles.searchtitle}>
                 {t('filterByName')}
@@ -90,12 +91,10 @@ function OrgContribution(): JSX.Element {
               />
             </div>
           </div>
-        </Col>
-        <Col sm={8}>
-          <div className={styles.mainpageright}>
-            <Row className={styles.justifysp}>
-              <p className={styles.logintitle}>{t('contribution')}</p>
-            </Row>
+        <div className={styles.mainpageright}>
+          <div className={styles.justifysp}>
+            <p className={styles.logintitle}>{t('contribution')}</p>
+          </div>
             {/* Section displaying a list of contribution cards */}
             <OrgContriCards
               key="129"
@@ -106,9 +105,8 @@ function OrgContribution(): JSX.Element {
               contriTransactionId="21WE98YU"
               userEmail="johndoexyz@gmail.com"
             />
-          </div>
-        </Col>
-      </Row>
+        </div>
+      </div>
     </>
   );
 }

@@ -324,5 +324,17 @@
   "organizationCard": {
     "card_aria": "Carte de l'organisation"
   },
-  "oauthSectionAriaLabel": "Options de connexion OAuth"
+  "oauthSectionAriaLabel": "Options de connexion OAuth",
+  "myOrganizations": "My Organizations",
+  "communityProfile": "Community Profile",
+  "pluginStore": "Plugin Store",
+  "dashboard": "Dashboard",
+  "posts": "Posts",
+  "chat": "Chat",
+  "venues": "Venues",
+  "blockedUsers": "Blocked Users",
+  "general": "General",
+  "home": "Home",
+  "people": "People",
+  "donate": "Donate"
 }

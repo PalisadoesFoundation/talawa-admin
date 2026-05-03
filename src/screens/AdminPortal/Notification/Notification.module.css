@@ -1,24 +1,47 @@
 .container {
-  padding: var(--space-6);
+  padding: 1.5rem;
+}
+
+.pageHeader {
+  margin-bottom: 1.5rem;
+}
+
+.pageHeader h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin: 0 0 0.5rem 0;
+}
+
+.pageHeader p {
+  color: var(--gray-500);
+  font-size: 1rem;
+  margin: 0;
+}
+
+.listGroup {
+  width: 100%;
+  max-width: 720px;
 }
 
 .title {
-  margin-bottom: var(--space-6);
+  margin-bottom: 1.5rem;
 }
 
 .notificationItem {
   display: flex;
   align-items: center;
-  background: var(--color-white);
-  border-bottom: var(--border-2) solid var(--color-gray-100);
-  margin: var(--space-3) var(--space-0);
-  padding: var(--space-4) var(--space-5);
-  max-width: var(--space-28); /* Limit width */
-  max-height: var(--space-11);
+  justify-content: space-between;
+  background: var(--surface);
+  border-bottom: 2px solid var(--gray-100);
+  margin: 0.75rem 0;
+  padding: 1rem 1.25rem;
+  max-width: 720px;
+  min-height: 2.75rem;
 }
 
 .unread {
-  background-color: var(--color-gray-50);
+  background-color: var(--gray-50);
 }
 
 .notificationLink {
@@ -26,88 +49,61 @@
   color: inherit;
 }
 
-.notificationTitle {
-  font-weight: var(--font-weight-bold);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: var(--space-22);
-}
-
-.notificationBody {
-  color: var(--color-gray-700);
-}
-
-/* Update notificationItem styles */
-.notificationItem {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--color-white);
-  border-bottom: var(--border-2) solid var(--color-gray-100);
-  margin: var(--space-3) var(--space-0);
-  padding: var(--space-4) var(--space-5);
-  max-width: var(--space-27); /* Limit width */
-  min-height: var(--space-11);
-}
-
-/* Add profile placeholder and vertical divider */
 .profileSection {
-  width: var(--space-10);
-  height: var(--space-10);
-  border-radius: var(--radius-full);
-  margin-right: var(--space-5);
-  background: var(--color-gray-50);
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  margin-right: 1.25rem;
+  background: var(--gray-50);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  border: var(--border-1-5) solid var(--color-gray-100);
+  border: 1.5px solid var(--gray-100);
 }
 
 .notificationTitle {
-  font-weight: var(--font-weight-bold);
+  font-weight: 700;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: var(--space-22);
+  max-width: 480px;
 }
 
 .notificationBody {
-  color: var(--color-gray-700);
-  font-size: var(--font-size-15);
+  color: var(--gray-700);
+  font-size: 0.9375rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: var(--space-26);
+  max-width: 640px;
 }
 
 .notificationContent {
   display: flex;
   flex-direction: column;
-  justify-content: center; /* vertically center text block */
+  justify-content: center;
   flex: 1 1 auto;
   min-width: 0;
 }
 
 .markButton {
-  margin-left: var(--space-4);
-  align-self: center; /* vertical center inside the item */
-  background-color: var(--color-blue-200) !important;
-  border-color: var(--color-blue-200) !important;
-  color: var(--color-gray-800) !important;
+  margin-left: 1rem;
+  align-self: center;
+  background-color: var(--green-50);
+  border-color: var(--green-50);
+  color: var(--gray-800);
 }
 
-/* Pagination footer */
 .paginationFooter {
   display: flex;
-  justify-content: center; /* center horizontally */
+  justify-content: center;
   align-items: center;
-  gap: var(--space-3); /* low distance between buttons */
-  margin-top: var(--space-7);
-  padding-bottom: var(--space-4);
+  gap: 0.75rem;
+  margin-top: 2rem;
+  padding-bottom: 1rem;
   width: 100%;
-  max-width: var(--space-27); /* match notification item width */
+  max-width: 720px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -116,20 +112,20 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center; /* center children */
+  align-items: center;
 }
 
 .listWrapper .list-group {
   width: 100%;
-  max-width: var(--space-27); /* same as notification items */
+  max-width: 720px;
 }
 
 .paginationButton {
-  background-color: var(--color-blue-200); /* bluish base similar to site */
-  color: var(--color-black); /* text dark */
-  border: var(--border-1) solid var(--color-blue-200);
-  padding: var(--space-3) var(--space-4);
-  border-radius: 6px;
+  background-color: var(--green-50);
+  color: var(--gray-900);
+  border: 1px solid var(--green-100);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
   cursor: pointer;
   transition:
     background-color 0.15s ease,
@@ -137,7 +133,7 @@
 }
 
 .paginationButton:hover:not(:disabled) {
-  background-color: var(--color-blue-200); /* darker bluish on hover */
+  background-color: var(--green-100);
   transform: translateY(-1px);
 }
 
@@ -146,24 +142,23 @@
   cursor: not-allowed;
 }
 
-/* Skeleton loading styles */
 .skeletonTitle {
-  height: var(--space-5);
+  height: 1.25rem;
   width: 60%;
-  background: linear-gradient(90deg, var(--color-gray-50), var(--color-white));
-  border-radius: 6px;
-  margin-bottom: var(--space-3);
+  background: linear-gradient(90deg, var(--gray-50), var(--surface));
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.75rem;
 }
 
 .skeletonBody {
-  height: var(--space-4);
+  height: 1rem;
   width: 90%;
-  background: linear-gradient(90deg, var(--color-gray-50), var(--color-white));
-  border-radius: 6px;
+  background: linear-gradient(90deg, var(--gray-50), var(--surface));
+  border-radius: var(--radius-sm);
 }
 
 .buttonSpacer {
-  width: var(--space-13);
+  width: 200px;
 }
 
 .notificationLinkContent {
@@ -172,7 +167,7 @@
 }
 
 .userIconWrapper {
-  color: var(--bs-secondary, var(--color-blue-200));
+  color: var(--gray-600);
   display: flex;
   align-items: center;
   justify-content: center;

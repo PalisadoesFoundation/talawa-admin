@@ -27,11 +27,9 @@
  *
  */
 import React from 'react';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import { useTranslation } from 'react-i18next';
 
-import styles from 'style/app-fixed.module.css';
+import styles from './OrgContriCards.module.css';
 import type { InterfaceOrgContriCardsProps } from 'types/AdminPortal/Contribution/interface';
 
 function orgContriCards(props: InterfaceOrgContriCardsProps): JSX.Element {
@@ -39,8 +37,8 @@ function orgContriCards(props: InterfaceOrgContriCardsProps): JSX.Element {
 
   return (
     <>
-      <Row>
-        <Col className={styles.cards}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+        <div className={styles.cards}>
           <h2>{props.userName}</h2>
           <p>{props.userEmail}</p>
           <p>
@@ -52,8 +50,8 @@ function orgContriCards(props: InterfaceOrgContriCardsProps): JSX.Element {
           <h3>
             {t('amount')}: $ <span>{props.contriAmount}</span>
           </h3>
-        </Col>
-      </Row>
+        </div>
+      </div>
     </>
   );
 }

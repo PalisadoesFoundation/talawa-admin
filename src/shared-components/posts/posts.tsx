@@ -56,7 +56,6 @@ import {
 } from 'types/Post/interface';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useTranslation } from 'react-i18next';
-import Row from 'react-bootstrap/Row';
 import Add from '@mui/icons-material/Add';
 import Button from 'shared-components/Button';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
@@ -335,144 +334,208 @@ export default function PostsPage() {
   const pinnedPosts =
     orgPinnedPostListData?.organization?.pinnedPosts?.edges ?? [];
 
+  /**
+   * Helper: get author initials from name string.
+   */
+  const getInitials = (name: string): string => {
+    const parts = name.trim().split(/\s+/);
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+    return (name[0] ?? '').toUpperCase();
+  };
+
+  /**
+   * Helper: format a post date for display.
+   */
+  const formatTimestamp = (dateStr: string): string => {
+    try {
+      const d = new Date(dateStr);
+      return d.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+      }) +
+        ' at ' +
+        d.toLocaleTimeString('en-US', {
+          hour: 'numeric',
+          minute: '2-digit',
+          hour12: true,
+        });
+    } catch {
+      return '';
+    }
+  };
+
   return (
     <>
-      <Row>
-        <div className={styles.mainpagerightOrgPost}>
-          <Toolbar
-            search={{
-              placeholder: t('searchTitle'),
-              onSearch: handleSearch,
-              inputTestId: 'searchByName',
-            }}
-            filters={[
-              {
-                type: 'sort',
-                title: t('sortPost'),
-                options: [
-                  { label: t('latest'), value: 'latest' },
-                  { label: t('oldest'), value: 'oldest' },
-                  { label: t('none'), value: 'None' },
-                ],
-                selected: sortingOption,
-                onChange: handleSorting,
-                testIdPrefix: 'sortpost',
-              },
-            ]}
-            actions={
-              <Button
-                onClick={createPostModal.open}
-                disabled={!userId}
-                data-testid="createPostModalBtn"
-                data-cy="createPostModalBtn"
-                className={styles.dropdown}
-              >
-                <Add />
-                {t('createPost')}
-              </Button>
-            }
-          />
-
-          <div className={`row ${styles.list_box}`}>
-            <div
-              data-testid="posts-renderer"
-              data-loading={String(orgPostListLoading)}
-              data-is-filtering={String(isFiltering)}
-              data-sorting-option={sortingOption}
-              id="posts-scroll-container"
-            >
-              {orgPostListError && (
-                <div data-testid="not-found">{t('errorLoadingPosts')}</div>
-              )}
-
-              {/* Pinned Posts Carousel */}
-              {pinnedPosts.length > 0 && !isFiltering && (
-                <Box sx={{ mb: 3 }}>
-                  <Typography variant="h5" sx={{ mb: 2 }}>
-                    {t('pinnedPosts')}
-                  </Typography>
-                  <PinnedPostsLayout
-                    pinnedPosts={pinnedPosts}
-                    onStoryClick={handleStoryClick}
-                  />
-                </Box>
-              )}
-
-              {/* Search Results Message */}
-              {isFiltering && filteredPosts.length === 0 && searchTerm && (
-                <Box sx={{ py: 4 }}>
-                  <Typography color="text.secondary">
-                    {t('noPostsFoundMatching', { term: searchTerm })}
-                  </Typography>
-                </Box>
-              )}
-
-              {/* Posts List with Infinite Scroll */}
-              {isFiltering ? (
-                // Display filtered posts without infinite scroll
-                <Box
-                  sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: 'var(--space-2)',
-                  }}
-                >
-                  {postsToDisplay.map((post) => (
-                    <PostCard
-                      key={post.id}
-                      {...formatPostForCard(post, refetch)}
-                    />
-                  ))}
-                </Box>
-              ) : (
-                // Infinite scroll for regular posts
-                <InfiniteScroll
-                  dataLength={postsToDisplay.length}
-                  next={loadMorePosts}
-                  hasMore={hasMore && sortingOption === 'None'}
-                  loader={<InfiniteScrollLoader />}
-                  endMessage={
-                    postsToDisplay.length > 0 && (
-                      <Box sx={{ py: 2 }}>
-                        <Typography color="text.secondary">
-                          {t('noMorePosts')}
-                        </Typography>
-                      </Box>
-                    )
-                  }
-                  scrollThreshold={0.8}
-                >
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: 'var(--space-2)',
-                    }}
-                  >
-                    {postsToDisplay.map((post) => (
-                      <PostCard
-                        key={post.id}
-                        {...formatPostForCard(post, refetch)}
-                      />
-                    ))}
-                  </Box>
-                </InfiniteScroll>
-              )}
-
-              {/* Empty State */}
-              {postsToDisplay.length === 0 &&
-                !orgPostListLoading &&
-                !isFiltering && (
-                  <Box sx={{ py: 4 }}>
-                    <Typography color="text.secondary">
-                      {t('noPosts')}
-                    </Typography>
-                  </Box>
-                )}
-            </div>
-          </div>
+      <div className="page-header">
+        <div className="page-header-left">
+          <h1 className="page-title">
+            {t('title')}{' '}
+            <span className="count-badge">{allPosts.length}</span>
+          </h1>
+          <p className="page-subtitle">{t('searchTitle')}</p>
         </div>
-      </Row>
+        <div className="page-header-actions">
+          <Button
+            onClick={createPostModal.open}
+            disabled={!userId}
+            data-testid="createPostModalBtn"
+            data-cy="createPostModalBtn"
+            className="btn btn-primary"
+          >
+            + {t('createPost')}
+          </Button>
+        </div>
+      </div>
+
+      <div className="toolbar">
+        <Toolbar
+          search={{
+            placeholder: t('searchTitle'),
+            onSearch: handleSearch,
+            inputTestId: 'searchByName',
+          }}
+          filters={[
+            {
+              type: 'sort',
+              title: t('sortPost'),
+              options: [
+                { label: t('latest'), value: 'latest' },
+                { label: t('oldest'), value: 'oldest' },
+                { label: t('none'), value: 'None' },
+              ],
+              selected: sortingOption,
+              onChange: handleSorting,
+              testIdPrefix: 'sortpost',
+            },
+          ]}
+        />
+      </div>
+
+      <div
+        data-testid="posts-renderer"
+        data-loading={String(orgPostListLoading)}
+        data-is-filtering={String(isFiltering)}
+        data-sorting-option={sortingOption}
+        id="posts-scroll-container"
+      >
+        {orgPostListError && (
+          <div data-testid="not-found">{t('errorLoadingPosts')}</div>
+        )}
+
+        {/* Search Results Message */}
+        {isFiltering && filteredPosts.length === 0 && searchTerm && (
+          <div className="empty-state">
+            <p className="empty-state-text">
+              {t('noPostsFoundMatching', { term: searchTerm })}
+            </p>
+          </div>
+        )}
+
+        {/* Post Feed */}
+        {isFiltering ? (
+          <div className="post-feed">
+            {postsToDisplay.map((post) => {
+              const authorName = post.creator?.name ?? 'Unknown User';
+              const initials = getInitials(authorName);
+              const isPinned = !!post.pinnedAt;
+              const hasImage = !!post.attachmentURL;
+              return (
+                <div className="post-card" key={post.id} data-testid={`post-card-${post.id}`}>
+                  <div className="post-header">
+                    <div className="post-avatar">{initials}</div>
+                    <div>
+                      <div className="post-author-name">{authorName}</div>
+                      <div className="post-timestamp">{formatTimestamp(post.createdAt)}</div>
+                    </div>
+                    {isPinned && (
+                      <span className="post-pin-badge badge badge-orange">{'\uD83D\uDCCC'} {t('pinnedPosts')}</span>
+                    )}
+                  </div>
+                  <div className="post-content">{post.caption ?? ''}</div>
+                  {hasImage && (
+                    <div className="post-image-placeholder">{'\uD83D\uDCF7'} Photo</div>
+                  )}
+                  <div className="post-footer">
+                    <div className="post-action">
+                      <span className="post-action-icon">{'\u2764'}</span> {post.upVotesCount ?? 0} likes
+                    </div>
+                    <div className="post-action">
+                      <span className="post-action-icon">{'\uD83D\uDCAC'}</span> {post.commentsCount ?? 0} comments
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <InfiniteScroll
+            dataLength={postsToDisplay.length}
+            next={loadMorePosts}
+            hasMore={hasMore && sortingOption === 'None'}
+            loader={<InfiniteScrollLoader />}
+            endMessage={
+              postsToDisplay.length > 0 && (
+                <Box sx={{ py: 2 }}>
+                  <Typography color="text.secondary">
+                    {t('noMorePosts')}
+                  </Typography>
+                </Box>
+              )
+            }
+            scrollThreshold={0.8}
+          >
+            <div className="post-feed">
+              {postsToDisplay.map((post) => {
+                const authorName = post.creator?.name ?? 'Unknown User';
+                const initials = getInitials(authorName);
+                const isPinned = !!post.pinnedAt;
+                const hasImage = !!post.attachmentURL;
+                return (
+                  <div className="post-card" key={post.id} data-testid={`post-card-${post.id}`}>
+                    <div className="post-header">
+                      <div className="post-avatar">{initials}</div>
+                      <div>
+                        <div className="post-author-name">{authorName}</div>
+                        <div className="post-timestamp">{formatTimestamp(post.createdAt)}</div>
+                      </div>
+                      {isPinned && (
+                        <span className="post-pin-badge badge badge-orange">{'\uD83D\uDCCC'} {t('pinnedPosts')}</span>
+                      )}
+                    </div>
+                    <div className="post-content">{post.caption ?? ''}</div>
+                    {hasImage && (
+                      <div className="post-image-placeholder">{'\uD83D\uDCF7'} Photo</div>
+                    )}
+                    <div className="post-footer">
+                      <div className="post-action">
+                        <span className="post-action-icon">{'\u2764'}</span> {post.upVotesCount ?? 0} likes
+                      </div>
+                      <div className="post-action">
+                        <span className="post-action-icon">{'\uD83D\uDCAC'}</span> {post.commentsCount ?? 0} comments
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </InfiniteScroll>
+        )}
+
+        {/* Empty State */}
+        {postsToDisplay.length === 0 &&
+          !orgPostListLoading &&
+          !isFiltering && (
+            <div className="empty-state">
+              <p className="empty-state-text">
+                {t('noPosts')}
+              </p>
+            </div>
+          )}
+      </div>
+
       {userId && (
         <div>
           <CreatePostModal

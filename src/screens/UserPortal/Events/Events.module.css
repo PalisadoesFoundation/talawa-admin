@@ -18,7 +18,149 @@
   }
 }
 
+/* ── Page header ──────────────────────────────────────────────────────────── */
+.pageHeader {
+  margin-bottom: 0.5rem;
+}
+
+.pageTitle {
+  font-family: var(--font);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin: 0 0 0.25rem;
+}
+
+.pageSubtitle {
+  font-family: var(--font);
+  font-size: 0.938rem;
+  color: var(--gray-500);
+  margin: 0;
+}
+
 .justifyspOrganizationEvents {
   justify-content: space-between;
   margin-top: var(--space-6);
+}
+
+/* ── Event grid (prototype: user-events.html) ──────────────────────────────── */
+.eventGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 900px) {
+  .eventGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.eventCard {
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  transition: box-shadow 0.2s, transform 0.15s;
+}
+
+.eventCard:hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-2px);
+}
+
+.eventCardBody {
+  padding: 24px;
+}
+
+.eventDateRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.eventDateBadge {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  border: 1.5px solid var(--green-400);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.eventDateMonth {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--green-500);
+}
+
+.eventDateDay {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--gray-900);
+}
+
+.eventDateInfo {
+  flex: 1;
+}
+
+.eventCardTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--gray-900);
+  margin-bottom: 2px;
+}
+
+.eventCardTime {
+  font-size: 12px;
+  color: var(--gray-400);
+}
+
+.eventCardDesc {
+  font-size: 13px;
+  color: var(--gray-500);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.eventCardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.eventLocation {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--gray-400);
+}
+
+.eventLocation svg {
+  width: 14px;
+  height: 14px;
+  stroke: var(--gray-400);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.btnAttending {
+  background: var(--green-50);
+  color: var(--green-700);
+  border: 1px solid var(--green-400);
+}
+
+.btnAttending:hover {
+  background: var(--green-100);
 }

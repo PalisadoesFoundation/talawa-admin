@@ -1,3 +1,32 @@
+.pageHeader {
+  margin-bottom: 1.5rem;
+}
+
+.pageHeader h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin: 0 0 0.5rem 0;
+}
+
+.pageHeader p {
+  color: var(--gray-500);
+  font-size: 1rem;
+  margin: 0;
+}
+
+.layoutGrid {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .layoutGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .sidebar {
   z-index: 0;
   padding-top: var(--space-2);

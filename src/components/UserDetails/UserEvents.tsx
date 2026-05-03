@@ -29,7 +29,7 @@
  * ```
  */
 import React, { useState, useMemo, useCallback } from 'react';
-import { Card } from 'react-bootstrap';
+
 import { useTranslation } from 'react-i18next';
 import styles from './UserEvents.module.css';
 import PeopleTabUserEvents from 'shared-components/PeopleTabUserEvents/PeopleTabUserEvents';
@@ -173,10 +173,10 @@ const UserEvents: React.FC<PeopleTabUserEventsProps> = ({ orgId, userId }) => {
           alignmentClassName={styles.peopleTabNavbarAlignment}
         />
 
-        <Card.Body className={`${styles.peoplePageUserEventCardBody}`}>
+        <div className={`${styles.peoplePageUserEventCardBody}`}>
           {filteredEvents.length === 0 ? (
             <div
-              className={`w-100 h-100 d-flex justify-content-center align-items-center fw-semibold text-secondary`}
+              style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', fontWeight: 600, color: 'var(--gray-500)' }}
             >
               {t('noeventsAttended')}
             </div>
@@ -199,7 +199,7 @@ const UserEvents: React.FC<PeopleTabUserEventsProps> = ({ orgId, userId }) => {
               />
             ))
           )}
-        </Card.Body>
+        </div>
       </div>
     </div>
   );

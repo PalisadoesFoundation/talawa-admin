@@ -1,44 +1,36 @@
-.dropdown {
-  background-color: var(--color-white);
-  width: auto;
-  white-space: nowrap;
-  border: var(--border-1-5) solid var(--color-black-10);
-  color: var(--color-gray-mid);
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  border-radius: var(--radius-lg);
-  font-size: var(--font-size-14);
-  font-weight: var(--font-weight-medium);
-  transition:
-    background-color 0.15s ease,
-    border-color 0.15s ease,
-    color 0.15s ease;
+/* ═══════════════════════════════════════════════════════════════════════════
+   OrganizationEvents — Talawa Design System
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Page Header ────────────────────────────────────────────────────────── */
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 28px;
 }
 
-.dropdown:is(:hover, :active),
-:global(.show).dropdown {
-  background-color: var(--color-gray-400) !important;
-  border-color: var(--color-gray-300) !important;
-  color: var(--color-white) !important;
-  box-shadow: none !important;
+.pageTitle {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
 }
 
-.dropdown:is(:focus, :focus-visible) {
-  outline: var(--space-1) solid var(--color-blue-200);
-  outline-offset: var(--space-1);
+.pageSubtitle {
+  font-size: 14px;
+  color: var(--gray-500);
+  margin-top: 4px;
+}
+
+/* ── Layout ─────────────────────────────────────────────────────────────── */
+.mainpageright {
+  width: 100%;
 }
 
 .mainpageright > hr {
   width: 100%;
   margin-block: var(--space-6);
   margin-inline: calc(var(--space-5) * -1);
-}
-
-@media screen and (max-width: 1200px) {
-  .mainpageright {
-    width: 100%;
-  }
 }
 
 @media screen and (max-width: 575.5px) {
@@ -49,38 +41,117 @@
 
 .justifyspOrganizationEvents {
   justify-content: space-between;
-  margin-top: var(--space-6);
+  margin-top: 0;
 }
 
+/* ── Dropdown ───────────────────────────────────────────────────────────── */
+.dropdown {
+  background-color: var(--surface);
+  width: auto;
+  white-space: nowrap;
+  border: 1.5px solid var(--gray-200);
+  color: var(--gray-700);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 600;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.dropdown:is(:hover, :active),
+:global(.show).dropdown {
+  background-color: var(--gray-500) !important;
+  border-color: var(--gray-500) !important;
+  color: var(--surface) !important;
+  box-shadow: none !important;
+}
+
+.dropdown:is(:focus, :focus-visible) {
+  outline: 2px solid var(--green-500);
+  outline-offset: 2px;
+}
+
+/* ── Add Icon ───────────────────────────────────────────────────────────── */
 .addIconStyle {
   font-size: var(--font-size-2xl);
   margin-bottom: var(--space-1);
   margin-right: var(--space-1);
 }
 
+/* ── Modal ──────────────────────────────────────────────────────────────── */
 .titlemodalOrganizationEvents {
-  color: var(--color-gray-700);
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-xl);
-  margin-bottom: var(--space-6);
-  padding-bottom: var(--space-2);
-  border-bottom: var(--border-3) solid var(--color-gray-100);
+  color: var(--gray-700);
+  font-weight: 600;
+  font-size: 18px;
+  margin-bottom: 24px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--gray-100);
   width: 65%;
 }
 
 .closeButtonOrganizationEvents {
-  color: var(--color-red-500);
-  margin-right: var(--space-2);
-  background-color: var(--color-red-100);
-  border: var(--border-1) solid var(--color-white);
+  background: var(--red-50);
+  color: var(--red-500);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
 }
 
 .closeButtonOrganizationEvents:is(:hover, :focus-visible) {
-  color: var(--color-red-100);
-  background-color: var(--color-red-500);
-  border: var(--border-1) solid var(--color-white);
+  color: var(--surface);
+  background-color: var(--red-500);
 }
 
 .closeButtonOrganizationEvents:focus-visible {
-  outline: var(--space-1) solid var(--color-blue-200);
+  outline: 2px solid var(--green-500);
+}
+
+/* ── View Toggle ───────────────────────────────────────────────────────── */
+.viewToggle {
+  display: flex;
+  justify-content: center;
+  margin: 16px 0;
+  background-color: var(--gray-100, #f3f4f6);
+  border-radius: 999px;
+  padding: 4px;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.viewToggleBtn {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  background: transparent;
+  color: var(--gray-600, #4b5563);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.viewToggleBtn:hover {
+  color: var(--gray-900, #111827);
+}
+
+.viewToggleBtnActive {
+  background-color: var(--green-500, #3ecf8e);
+  color: #000;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.viewToggleBtnActive:hover {
+  background-color: var(--green-400, #4ade80);
+  color: #000;
 }

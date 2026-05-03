@@ -7,7 +7,7 @@
   /* padding-top: 20px; */
   width: 250px;
   flex-grow: 1;
-  background-color: var(--bs-white);
+  background-color: var(--surface);
 }
 
 @media screen and (max-width: 900px) {
@@ -50,12 +50,12 @@
 }
 
 .link {
-  text-decoration: none !important;
+  text-decoration: none;
   color: black;
 }
 
 .rounded {
-  border-radius: 10px !important;
+  border-radius: var(--radius-md);
 }
 
 .colorLight {

@@ -35,12 +35,11 @@ import styles from './OrgList.module.css';
 import OrganizationModal from './modal/OrganizationModal';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { Link } from 'react-router';
-import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
+// OrganizationCard replaced by inline org-card markup matching design prototype
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import Group from '@mui/icons-material/Group';
 import Search from '@mui/icons-material/Search';
-import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
-import { Alert } from 'react-bootstrap';
+/* Alert replaced with plain div for Talawa design */
 import RBButton from 'shared-components/Button';
 import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
@@ -55,6 +54,34 @@ interface InterfaceOrgFormState {
   name: string;
   postalCode: string;
   state: string;
+}
+
+/**
+ * Generates a deterministic gradient color pair for an org avatar based on the org name.
+ */
+const AVATAR_GRADIENT_PALETTE = [
+  ['#3ecf8e', '#15803d'],
+  ['#3b82f6', '#2563eb'],
+  ['#f97316', '#ea580c'],
+  ['#a855f7', '#7c3aed'],
+  ['#ef4444', '#dc2626'],
+  ['#eab308', '#ca8a04'],
+  ['#06b6d4', '#0891b2'],
+  ['#ec4899', '#db2777'],
+  ['#14b8a6', '#0d9488'],
+  ['#8b5cf6', '#6d28d9'],
+];
+
+function getAvatarGradient(name: string): string {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const idx =
+    ((hash % AVATAR_GRADIENT_PALETTE.length) + AVATAR_GRADIENT_PALETTE.length) %
+    AVATAR_GRADIENT_PALETTE.length;
+  const [c1, c2] = AVATAR_GRADIENT_PALETTE[idx];
+  return `linear-gradient(135deg, ${c1}, ${c2})`;
 }
 
 /**
@@ -359,8 +386,6 @@ function OrgList(): JSX.Element {
     setPage(0);
   };
 
-  const shimmerClass = `${styles.orgImgContainer} ${styles.shimmerText}`;
-  const shimmerBtnClass = `${styles.shimmerText} ${styles.button}`;
   const pluginBtnClass = 'btn  btn-primary ' + styles.pluginStoreBtn;
   const storeUrl = `orgstore/id=${dialogRedirectOrgId}`;
 
@@ -368,11 +393,9 @@ function OrgList(): JSX.Element {
     <div className={styles.orgListContainer}>
       {/* Email Verification Warning Banner */}
       {showEmailWarning && (
-        <Alert
-          variant="warning"
-          dismissible
-          onClose={handleDismissWarning}
+        <div
           className={styles.warningAlert}
+          role="alert"
           data-testid="email-verification-warning"
           aria-live="polite"
         >
@@ -380,64 +403,80 @@ function OrgList(): JSX.Element {
             <div>
               <strong>{tLogin('emailNotVerified')}</strong>
             </div>
-            <RBButton
-              variant="outline-primary"
-              size="sm"
-              onClick={handleResendVerification}
-              disabled={resendLoading}
-              data-testid="resend-verification-btn"
-            >
-              {resendLoading
-                ? tCommon('loading')
-                : tLogin('resendVerification')}
-            </RBButton>
+            <div className={styles.warningActions}>
+              <RBButton
+                variant="outline-primary"
+                size="sm"
+                onClick={handleResendVerification}
+                disabled={resendLoading}
+                data-testid="resend-verification-btn"
+              >
+                {resendLoading
+                  ? tCommon('loading')
+                  : tLogin('resendVerification')}
+              </RBButton>
+              <button
+                type="button"
+                className={styles.warningDismiss}
+                onClick={handleDismissWarning}
+                aria-label="Dismiss"
+              >
+                &times;
+              </button>
+            </div>
           </div>
-        </Alert>
+        </div>
       )}
 
-      {/* Buttons Container */}
-      <div className={styles.calendar__header}>
-        <SearchFilterBar
-          hasDropdowns={true}
-          searchPlaceholder={t('searchOrganizations')}
-          searchValue={typedValue}
-          onSearchChange={handleChangeFilter}
-          searchInputTestId="searchInput"
-          searchButtonTestId="searchBtn"
-          dropdowns={[
-            {
-              id: 'org-list-dropdown',
-              label: tCommon('sort'),
-              type: 'sort',
-              options: [
-                { label: t('Latest'), value: 'Latest' },
-                { label: t('Earliest'), value: 'Earliest' },
-              ],
-              selectedOption: sortingState.selectedOption,
-              onOptionChange: (value) => handleSortChange(value.toString()),
-              dataTestIdPrefix: 'sortOrgs',
-              dropdownTestId: 'sort',
-            },
-          ]}
-          additionalButtons={
-            <>
-              {role === 'administrator' && (
-                <RBButton
-                  className={`${styles.dropdown} ${styles.createorgdropdown}`}
-                  onClick={open}
-                  data-testid="createOrganizationBtn"
-                >
-                  <i className={`fa fa-plus ${styles.plusIcon}`} />
-                  {t('createOrganization')}
-                </RBButton>
-              )}
-            </>
-          }
-        />
+      {/* Page Header */}
+      <div className="page-header">
+        <div className="page-header-left">
+          <h1 className="page-title">{t('title')}</h1>
+          <p className="page-subtitle">{t('managingYourOrganizations')}</p>
+        </div>
       </div>
 
-      {/* Text Infos for list */}
+      {/* Toolbar */}
+      <div className="toolbar">
+        <div className="search-bar">
+          <span className="search-icon">
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              width="16"
+              height="16"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </span>
+          <input
+            type="text"
+            placeholder={t('searchOrganizations')}
+            aria-label={t('searchOrganizations')}
+            value={typedValue}
+            onChange={(e) => handleChangeFilter(e.target.value)}
+            data-testid="searchInput"
+          />
+        </div>
+        {role === 'administrator' && (
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={open}
+            data-testid="createOrganizationBtn"
+          >
+            + {t('createOrganization')}
+          </button>
+        )}
+      </div>
 
+      {/* Organization Content */}
       {!isLoading &&
       (!sortedOrganizations || sortedOrganizations.length === 0) &&
       searchByName.length === 0 &&
@@ -461,40 +500,40 @@ function OrgList(): JSX.Element {
         />
       ) : (
         <>
+          {/* Loading Skeletons */}
           {isLoading && (
-            <>
+            <div className={styles.orgGrid}>
               {[...Array(perPageResult)].map((_, index) => (
-                <div key={index} className={styles.itemCardOrgList}>
-                  <div className={styles.loadingWrapper}>
-                    <div className={styles.innerContainer}>
-                      <div className={shimmerClass} />
-
-                      <div className={styles.content}>
-                        <h5
-                          className={styles.shimmerText}
-                          title={t('orgName')}
-                        ></h5>
-                        <h6
-                          className={styles.shimmerText}
-                          title={t('location')}
-                        ></h6>
-                        <h6
-                          className={styles.shimmerText}
-                          title={t('admins')}
-                        ></h6>
-                        <h6
-                          className={styles.shimmerText}
-                          title={t('members')}
-                        ></h6>
-                      </div>
-                    </div>
-                    <div className={shimmerBtnClass} />
+                <div key={index} className={styles.orgCardSkeleton}>
+                  <div className={styles.skeletonHeader}>
+                    <div
+                      className={`${styles.skeletonAvatar} ${styles.shimmerText}`}
+                    />
+                    <div
+                      className={`${styles.skeletonName} ${styles.shimmerText}`}
+                    />
+                  </div>
+                  <div
+                    className={`${styles.skeletonDesc} ${styles.shimmerText}`}
+                  />
+                  <div className={styles.skeletonStats}>
+                    <div
+                      className={`${styles.skeletonStat} ${styles.shimmerText}`}
+                    />
+                    <div
+                      className={`${styles.skeletonStat} ${styles.shimmerText}`}
+                    />
+                    <div
+                      className={`${styles.skeletonStat} ${styles.shimmerText}`}
+                    />
                   </div>
                 </div>
               ))}
-            </>
+            </div>
           )}
-          <div className={`${styles.listBoxOrgList}`}>
+
+          {/* Organization Grid */}
+          <div className={styles.orgGrid}>
             {(rowsPerPage > 0
               ? sortedOrganizations.slice(
                   page * rowsPerPage,
@@ -502,43 +541,65 @@ function OrgList(): JSX.Element {
                 )
               : sortedOrganizations
             )?.map((item: InterfaceOrgInfoTypePG) => {
+              const initials = item.name
+                .split(/\s+/)
+                .map((w) => w[0])
+                .join('')
+                .slice(0, 2)
+                .toUpperCase();
+              const avatarGradient = getAvatarGradient(item.name);
+              const createdDate = new Date(item.createdAt).toLocaleDateString(
+                'en-US',
+                { month: 'short', year: 'numeric' },
+              );
               return (
-                <div key={item.id} className={styles.itemCardOrgList}>
-                  <OrganizationCard data={{ ...item, role: 'admin' }} />
-                </div>
+                <Link
+                  key={item.id}
+                  to={`/admin/orgdash/${item.id}`}
+                  className={styles.orgCard}
+                >
+                  <div className={styles.orgCardHeader}>
+                    <div
+                      className={styles.orgCardAvatar}
+                      style={{ background: avatarGradient }}
+                    >
+                      {initials}
+                    </div>
+                    <div className={styles.orgCardName}>{item.name}</div>
+                  </div>
+                  <div className={styles.orgCardDesc}>
+                    {item.description || ''}
+                  </div>
+                  <div className={styles.orgCardStats}>
+                    <div className={styles.orgCardStat}>
+                      <strong>{item.membersCount ?? 0}</strong> Members
+                    </div>
+                    <div className={styles.orgCardStat}>
+                      <strong>{item.adminsCount ?? 0}</strong> Admins
+                    </div>
+                    <div className={styles.orgCardStat}>
+                      Created {createdDate}
+                    </div>
+                  </div>
+                </Link>
               );
             })}
           </div>
-          {/* pagination */}
-          <table className={styles.table_fullWidth}>
-            <tbody>
-              <tr>
-                <PaginationList
-                  count={sortedOrganizations.length || 0}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                />
-              </tr>
-            </tbody>
-          </table>
+
+          {/* Pagination */}
+          <div className={styles.paginationWrapper}>
+            <PaginationList
+              count={sortedOrganizations.length || 0}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </div>
         </>
       )}
+
       {/* Create Organization Modal */}
-      {/**
-       * Renders the `OrganizationModal` component.
-       *
-       * @param useModalState - Manages organization creation modal state (provides: isOpen, open, close, toggle)
-       * @param isOpen - A boolean indicating whether the modal should be displayed.
-       * @param toggle - A function to toggle the visibility of the modal.
-       * @param formState - The state of the form in the organization modal.
-       * @param setFormState - A function to update the state of the form in the organization modal.
-       * @param createOrg - A function to handle the submission of the organization creation form.
-       * @param t - A translation function for localization.
-       * @param userData - Information about the current user.
-       * @returns JSX element representing the `OrganizationModal`.
-       */}
       <OrganizationModal
         showModal={isOpen}
         toggleModal={close}
@@ -546,6 +607,7 @@ function OrgList(): JSX.Element {
         setFormState={setFormState}
         createOrg={createOrg}
       />
+
       {/* Plugin Notification Modal after Org is Created */}
       <CRUDModalTemplate
         open={dialogModalisOpen}

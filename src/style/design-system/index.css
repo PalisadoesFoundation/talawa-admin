@@ -1,0 +1,11 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Talawa Admin — Talawa Design System
+   Import this single file to get the complete design system.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@import './tokens.css';
+@import './reset.css';
+@import './components.css';
+@import './utilities.css';
+@import './accessibility.css';
+@import './mobile.css';

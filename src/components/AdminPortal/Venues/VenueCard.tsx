@@ -29,7 +29,6 @@
  *
  */
 import React from 'react';
-import { Card } from 'react-bootstrap';
 import Button from 'shared-components/Button';
 import defaultImg from 'assets/images/defaultImg.png';
 import PeopleIcon from 'assets/svgs/people.svg?react';
@@ -52,22 +51,21 @@ const VenueCard = ({
   const { t: tCommon } = useTranslation('common');
   return (
     <div
-      className="col-xl-4 col-lg-4 col-md-6"
+      style={{ flex: '0 0 33.33%', maxWidth: '33.33%' }}
       data-testid={`venue-item-${venueItem.node.id}`}
       key={venueItem.node.id}
     >
       <div className={styles.cards} data-testid="cardStructure">
-        <Card className={styles.card}>
+        <div className={styles.card}>
           {/* Venue image or default image if none provided */}
-          <Card.Img
-            variant="top"
+          <img
             src={venueItem.node.attachments?.[0]?.url || defaultImg}
             alt={tCommon('imageNotFound')}
             className={styles.venueimage}
             crossOrigin="anonymous"
           />
-          <Card.Body className="pb-0">
-            <Card.Title className="d-flex justify-content-between">
+          <div style={{ paddingBottom: 0 }}>
+            <h3 style={{ display: 'flex', justifyContent: 'space-between' }}>
               {/* Venue name with truncation if too long */}
               <div className={styles.title}>
                 {venueItem.node.name.length > 25
@@ -79,19 +77,19 @@ const VenueCard = ({
               {venueItem.node.capacity != null && (
                 <div className={styles.capacityLabel}>
                   {tCommon('capacity')}: {venueItem.node.capacity}
-                  <PeopleIcon className="ms-1" width={16} height={16} />
+                  <PeopleIcon style={{ marginLeft: '0.25rem' }} width={16} height={16} />
                 </div>
               )}
-            </Card.Title>
-            <Card.Text className={styles.text}>
+            </h3>
+            <p className={styles.text}>
               {/* Venue description with truncation if too long */}
               {venueItem.node.description &&
               venueItem.node.description.length > 40
                 ? venueItem.node.description.slice(0, 40) + '...'
                 : venueItem.node.description}
-            </Card.Text>
-          </Card.Body>
-          <div className="d-flex justify-content-end gap-2 mb-2 me-3">
+            </p>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginBottom: '0.5rem', marginRight: '1rem' }}>
             {/* Edit button */}
             <Button
               size="sm"
@@ -99,9 +97,9 @@ const VenueCard = ({
                 showEditVenueModal(venueItem);
               }}
               data-testid={`updateVenueBtn-${venueItem.node.id}`}
-              className={`btn ${styles.addButton}`}
+              className={styles.addButton}
             >
-              <i className="fa fa-pen me-1"></i>
+              <i className="fa fa-pen" style={{ marginRight: '0.25rem' }}></i>
               <span>{tCommon('edit')}</span>
             </Button>
             {/* Delete button */}
@@ -109,13 +107,13 @@ const VenueCard = ({
               size="sm"
               data-testid={`deleteVenueBtn-${venueItem.node.id}`}
               onClick={() => handleDelete(venueItem.node.id)}
-              className={`btn btn-danger ${styles.removeButton}`}
+              className={styles.removeButton}
             >
-              <i className="fa fa-trash me-2"></i>
+              <i className="fa fa-trash" style={{ marginRight: '0.5rem' }}></i>
               <span>{tCommon('delete')}</span>
             </Button>
           </div>
-        </Card>
+        </div>
       </div>
     </div>
   );

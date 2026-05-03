@@ -12,7 +12,7 @@
   background-color: var(--color-gray-50) !important;
   border-right: var(--border-1) solid var(--color-gray-200);
   transition: 0.5s ease;
-  font-family: var(--bs-leftDrawer-font-family);
+  font-family: var(--font, 'Inter', sans-serif);
   overflow-x: hidden !important;
 }
 

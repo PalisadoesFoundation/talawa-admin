@@ -119,7 +119,7 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
           <input
             id="tagName"
             type="text"
-            className={`form-control mb-3 ${styles.inputField}`}
+            className={`form-input mb-3 ${styles.inputField}`}
             placeholder={t('tagNamePlaceholder')}
             data-testid="tagNameInput"
             autoComplete="off"

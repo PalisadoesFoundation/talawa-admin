@@ -12,7 +12,7 @@
  * @remarks
  * - Uses Apollo Client's `useQuery` to fetch data for members, posts, and events.
  * - Displays loading states and handles errors using `NotificationToast`.
- * - Utilizes `react-bootstrap` for layout and styling.
+ * - Utilizes design system classes for layout and styling.
  * - Integrates with `react-router-dom` for navigation.
  * - Supports internationalization using `react-i18next`.
  *
@@ -26,9 +26,6 @@
  */
 import { useQuery } from '@apollo/client';
 import React, { useEffect, useState, JSX } from 'react';
-import Card from 'react-bootstrap/Card';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
 import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
 import {
@@ -250,26 +247,23 @@ function OrganizationDashboard(): JSX.Element {
    * UseEffect to handle errors and navigate if necessary.
    */
   useEffect(() => {
-    if (
-      errorPost ||
-      orgPostsError ||
-      orgMemberError ||
-      orgEventsError ||
-      orgBlockedUsersError ||
-      orgVenuesError
-    ) {
+    // Only navigate away if ALL critical queries fail (not just one)
+    // Individual query failures are shown inline as empty states
+    const criticalErrors = [
+      orgMemberError,
+      orgEventsError,
+    ].filter(Boolean);
+
+    // If both member and event data fail, the page is unusable
+    if (criticalErrors.length >= 2) {
       NotificationToast.error(
         tErrors('errorLoading', { entity: '' }) as string,
       );
       navigate('/');
     }
   }, [
-    orgPostsError,
-    errorPost,
     orgMemberError,
     orgEventsError,
-    orgBlockedUsersError,
-    orgVenuesError,
   ]);
 
   const membershipRequests =
@@ -280,209 +274,207 @@ function OrganizationDashboard(): JSX.Element {
 
   return (
     <>
-      {/* ── Stat cards — full page width so they're proportional ───────────── */}
-      <Row className="mt-4">
-        <Col xs={12}>
-          <DashboardStats
-            memberCount={memberCount}
-            adminCount={adminCount}
-            eventCount={eventCount}
-            venueCount={venueCount}
-            blockedCount={blockedCount}
-            postsCount={orgPostsData?.organization.postsCount}
-            isLoading={
-              orgMemberLoading ||
-              orgPostsLoading ||
-              orgEventsLoading ||
-              orgBlockedUsersLoading ||
-              orgVenuesLoading
-            }
-            onMembersClick={async (): Promise<void> => {
-              // navigate(peopleLink);
-            }}
-            onAdminsClick={async (): Promise<void> => {
-              // navigate(adminLink);
-            }}
-            onPostsClick={async (): Promise<void> => {
-              await navigate(postsLink);
-            }}
-            onEventsClick={async (): Promise<void> => {
-              await navigate(eventsLink);
-            }}
-            onVenuesClick={async (): Promise<void> => {
-              await navigate(venuesLink);
-            }}
-            onBlockedUsersClick={async (): Promise<void> => {
-              await navigate(blockUserLink);
-            }}
-          />
-        </Col>
-      </Row>
+      {/* ── Page header ───────────────────────────────────────────────────── */}
+      <div className="page-header">
+        <div>
+          <h1 className="page-title">{t('title')}</h1>
+        </div>
+      </div>
+
+      {/* ── Stat cards ────────────────────────────────────────────────────── */}
+      <div>
+        <DashboardStats
+          memberCount={memberCount}
+          adminCount={adminCount}
+          eventCount={eventCount}
+          venueCount={venueCount}
+          blockedCount={blockedCount}
+          postsCount={orgPostsData?.organization.postsCount}
+          isLoading={
+            orgMemberLoading ||
+            orgPostsLoading ||
+            orgEventsLoading ||
+            orgBlockedUsersLoading ||
+            orgVenuesLoading
+          }
+          onMembersClick={async (): Promise<void> => {
+            // navigate(peopleLink);
+          }}
+          onAdminsClick={async (): Promise<void> => {
+            // navigate(adminLink);
+          }}
+          onPostsClick={async (): Promise<void> => {
+            await navigate(postsLink);
+          }}
+          onEventsClick={async (): Promise<void> => {
+            await navigate(eventsLink);
+          }}
+          onVenuesClick={async (): Promise<void> => {
+            await navigate(venuesLink);
+          }}
+          onBlockedUsersClick={async (): Promise<void> => {
+            await navigate(blockUserLink);
+          }}
+        />
+      </div>
 
       {/* ── Optional pending requests stat card ────────────────────────────── */}
       {membershipRequestData?.organization &&
         pendingMembershipRequests.length > 0 && (
-          <Row className="mb-2">
-            <Col xs={6} md={4} className="mb-4">
-              <Button
-                type="button"
-                className={styles.cardBtnWrapper}
-                onClick={(): void => {
-                  navigate(requestLink);
-                }}
-                aria-label={tCommon('requests')}
-              >
-                <DashBoardCard
-                  count={pendingMembershipRequests.length}
-                  title={tCommon('requests')}
-                  icon={<UsersIcon className={styles.requestsIcon} />}
-                />
-              </Button>
-            </Col>
-          </Row>
+          <div className={styles.requestStatCard}>
+            <Button
+              type="button"
+              className={styles.cardBtnWrapper}
+              onClick={(): void => {
+                navigate(requestLink);
+              }}
+              aria-label={tCommon('requests')}
+            >
+              <DashBoardCard
+                count={pendingMembershipRequests.length}
+                title={tCommon('requests')}
+                icon={<UsersIcon className={styles.requestsIcon} />}
+              />
+            </Button>
+          </div>
         )}
 
-      {/* ── Content row — events/posts left, requests/rankings right ───────── */}
-      <Row>
-        <Col xl={8}>
-          <Row>
-            <UpcomingEventsCard
-              upcomingEvents={upcomingEvents}
-              eventLoading={orgEventsLoading}
-              onViewAllEventsClick={async (): Promise<void> => {
-                await navigate(eventsLink);
+      {/* ── Content grid — events, posts, requests, rankings ───────────────── */}
+      <div className="grid-2">
+        {/* Upcoming Events */}
+        <UpcomingEventsCard
+          upcomingEvents={upcomingEvents}
+          eventLoading={orgEventsLoading}
+          onViewAllEventsClick={async (): Promise<void> => {
+            await navigate(eventsLink);
+          }}
+        />
+
+        {/* Latest Posts */}
+        <div className="tw-card">
+          <div className="tw-card-header">
+            <div className="tw-card-title">{t('latestPosts')}</div>
+            <Button
+              size="sm"
+              variant="light"
+              data-testid="viewAllPosts"
+              onClick={async (): Promise<void> => {
+                await navigate(postsLink);
               }}
-            />
-            <Col lg={6} className="mb-4">
-              <Card className={styles.contentCard}>
-                <div className={styles.cardHeader}>
-                  <div className={styles.cardTitle}>{t('latestPosts')}</div>
-                  <Button
-                    size="sm"
-                    variant="light"
-                    data-testid="viewAllPosts"
-                    onClick={async (): Promise<void> => {
-                      await navigate(postsLink);
-                    }}
-                  >
-                    {t('viewAll')}
-                  </Button>
+            >
+              {t('viewAll')}
+            </Button>
+          </div>
+          <div className="tw-card-body">
+            <LoadingState
+              isLoading={loadingPost}
+              variant="custom"
+              customLoader={[...Array(4)].map((_, index) => (
+                <CardItemLoading key={'postLoading_' + index} />
+              ))}
+            >
+              {orgPostsData?.organization.postsCount == 0 ? (
+                <div className="tw-card-empty">
+                  <h6>{t('noPostsPresent')}</h6>
                 </div>
-                <Card.Body className={styles.containerBody}>
-                  <LoadingState
-                    isLoading={loadingPost}
-                    variant="custom"
-                    customLoader={[...Array(4)].map((_, index) => (
-                      <CardItemLoading key={'postLoading_' + index} />
-                    ))}
-                  >
-                    {orgPostsData?.organization.postsCount == 0 ? (
-                      <div className={styles.emptyContainer}>
-                        <h6>{t('noPostsPresent')}</h6>
-                      </div>
-                    ) : (
-                      postData?.organization.posts.edges
-                        .slice(0, 5)
-                        .map(
-                          (
-                            edge: InterfaceOrganizationPostsConnectionEdgePg,
-                          ) => {
-                            const post = edge.node;
-                            return (
-                              <CardItem
-                                type="Post"
-                                key={post.id}
-                                title={post.caption}
-                                time={post.createdAt}
-                                creator={{
-                                  id: post.creator.id,
-                                  name: post.creator.name,
-                                }}
-                              />
-                            );
-                          },
-                        )
-                    )}
-                  </LoadingState>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-        </Col>
-
-        <Col xl={4}>
-          <div className={`${styles.contentCard} mb-4`}>
-            <div className={styles.cardHeader}>
-              <div className={styles.cardTitle}>{t('membershipRequests')}</div>
-              <Button
-                size="sm"
-                variant="light"
-                data-testid="viewAllMembershipRequests"
-                onClick={async (): Promise<void> => {
-                  await navigate(requestLink);
-                }}
-              >
-                {t('viewAll')}
-              </Button>
-            </div>
-            <div className={styles.containerBody}>
-              <LoadingState
-                isLoading={loadingMembershipRequests}
-                variant="custom"
-                customLoader={[...Array(4)].map((_, index) => (
-                  <CardItemLoading key={'requestsLoading_' + index} />
-                ))}
-              >
-                {pendingMembershipRequests.length === 0 ? (
-                  <div
-                    className={`${styles.emptyContainer} ${styles.membershipEmptyContainer}`}
-                  >
-                    <h6>{t('noMembershipRequests')}</h6>
-                  </div>
-                ) : (
-                  pendingMembershipRequests
-                    .slice(0, 8)
-                    .map(
-                      (request: {
-                        status: string;
-                        membershipRequestId: string;
-                        user: { name: string; avatarURL?: string };
-                      }) => (
+              ) : (
+                postData?.organization.posts.edges
+                  .slice(0, 5)
+                  .map(
+                    (edge: InterfaceOrganizationPostsConnectionEdgePg) => {
+                      const post = edge.node;
+                      return (
                         <CardItem
-                          type="MembershipRequest"
-                          key={request.membershipRequestId}
-                          title={request.user.name}
-                          image={request.user.avatarURL}
+                          type="Post"
+                          key={post.id}
+                          title={post.caption}
+                          time={post.createdAt}
+                          creator={{
+                            id: post.creator.id,
+                            name: post.creator.name,
+                          }}
                         />
-                      ),
-                    )
-                )}
-              </LoadingState>
-            </div>
+                      );
+                    },
+                  )
+              )}
+            </LoadingState>
           </div>
+        </div>
 
-          <div className={styles.contentCard}>
-            <div className={styles.cardHeader}>
-              <div className={styles.cardTitle}>{t('volunteerRankings')}</div>
-              <Button
-                size="sm"
-                variant="light"
-                data-testid="viewAllLeadeboard"
-                onClick={async (): Promise<void> => {
-                  await Promise.resolve(
-                    NotificationToast.success(t('comingSoon')),
-                  );
-                }}
-              >
-                {t('viewAll')}
-              </Button>
-            </div>
-            <div className={`${styles.containerBody} ${styles.emptyContainer}`}>
-              <h6>{t('comingSoon')}</h6>
-            </div>
+        {/* Membership Requests */}
+        <div className="tw-card">
+          <div className="tw-card-header">
+            <div className="tw-card-title">{t('membershipRequests')}</div>
+            <Button
+              size="sm"
+              variant="light"
+              data-testid="viewAllMembershipRequests"
+              onClick={async (): Promise<void> => {
+                await navigate(requestLink);
+              }}
+            >
+              {t('viewAll')}
+            </Button>
           </div>
-        </Col>
-      </Row>
+          <div className="tw-card-body">
+            <LoadingState
+              isLoading={loadingMembershipRequests}
+              variant="custom"
+              customLoader={[...Array(4)].map((_, index) => (
+                <CardItemLoading key={'requestsLoading_' + index} />
+              ))}
+            >
+              {pendingMembershipRequests.length === 0 ? (
+                <div
+                  className="tw-card-empty"
+                >
+                  <h6>{t('noMembershipRequests')}</h6>
+                </div>
+              ) : (
+                pendingMembershipRequests
+                  .slice(0, 8)
+                  .map(
+                    (request: {
+                      status: string;
+                      membershipRequestId: string;
+                      user: { name: string; avatarURL?: string };
+                    }) => (
+                      <CardItem
+                        type="MembershipRequest"
+                        key={request.membershipRequestId}
+                        title={request.user.name}
+                        image={request.user.avatarURL}
+                      />
+                    ),
+                  )
+              )}
+            </LoadingState>
+          </div>
+        </div>
+
+        {/* Volunteer Rankings */}
+        <div className="tw-card">
+          <div className="tw-card-header">
+            <div className="tw-card-title">{t('volunteerRankings')}</div>
+            <Button
+              size="sm"
+              variant="light"
+              data-testid="viewAllLeadeboard"
+              onClick={async (): Promise<void> => {
+                await Promise.resolve(
+                  NotificationToast.success(t('comingSoon')),
+                );
+              }}
+            >
+              {t('viewAll')}
+            </Button>
+          </div>
+          <div className={`${styles.twCardBody} ${styles.emptyContainer}`}>
+            <h6>{t('comingSoon')}</h6>
+          </div>
+        </div>
+      </div>
     </>
   );
 }

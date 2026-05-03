@@ -5,7 +5,6 @@ import {
   Draggable,
   type DropResult,
 } from '@hello-pangea/dnd';
-import { Col, Row } from 'react-bootstrap';
 import Button from 'shared-components/Button';
 import styles from './AgendaDragAndDrop.module.css';
 import type { InterfaceAgendaDragAndDropProps } from 'types/AdminPortal/Agenda/interface';
@@ -229,7 +228,12 @@ export default function AgendaDragAndDrop({
             <div
               ref={provided.innerRef}
               {...provided.droppableProps}
-              className="mx-4 bg-light p-3 rounded-4"
+              style={{
+                margin: '0 1.5rem',
+                backgroundColor: '#f8f9fa',
+                padding: '1rem',
+                borderRadius: '1rem',
+              }}
             >
               {folders.map((agendaFolder, index) => {
                 const isDefault = agendaFolder.isDefaultFolder;
@@ -246,57 +250,46 @@ export default function AgendaDragAndDrop({
                         {...provided.draggableProps}
                         className={`${styles.agendaItemRow} ${getDraggingClass(
                           snapshot.isDragging,
-                        )} py-3 mb-4 px-4 rounded-4`}
+                        )}`}
+                        style={{
+                          padding: '1rem 1.5rem',
+                          marginBottom: '1.5rem',
+                          borderRadius: '1rem',
+                        }}
                       >
                         {/* Folder header */}
-                        <Row>
-                          <Col
-                            xs={2}
-                            sm={1}
-                            md={1}
-                            lg={1}
-                            className="text-center align-self-center"
+                        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
+                          <div
+                            style={{ textAlign: 'center', alignSelf: 'center', flex: '0 0 auto', width: '8%' }}
                           >
                             <span
                               {...provided.dragHandleProps}
-                              className="d-inline-flex align-items-center cursor-grab"
+                              style={{ display: 'inline-flex', alignItems: 'center', cursor: 'grab' }}
                             >
                               <i className="fas fa-bars fa-sm" />
                             </span>
-                          </Col>
+                          </div>
 
-                          <Col
-                            xs={10}
-                            sm={5}
-                            md={3}
-                            lg={3}
-                            className="text-start align-self-center"
+                          <div
+                            style={{ textAlign: 'start', alignSelf: 'center', flex: '1 1 auto' }}
                           >
                             <span className={styles.categoryChip}>
                               {agendaFolder.name}
                             </span>
-                          </Col>
+                          </div>
 
-                          <Col
-                            xs={12}
-                            sm={4}
-                            md={6}
-                            lg={4}
-                            className="text-start align-self-center"
+                          <div
+                            style={{ textAlign: 'start', alignSelf: 'center', flex: '2 1 auto' }}
                           >
                             <span className={styles.categoryChip}>
                               {agendaFolder.description}
                             </span>
-                          </Col>
+                          </div>
 
-                          <Col
-                            xs={12}
-                            sm={2}
-                            md={2}
-                            lg={4}
-                            className="d-flex justify-content-end align-self-center"
+                          <div
+                            style={{ display: 'flex', justifyContent: 'flex-end', alignSelf: 'center', flex: '1 1 auto' }}
                           >
-                            <div className="d-flex gap-2">
+                            <div style={{ display: 'flex', gap: '0.5rem' }}>
                               <Button
                                 size="sm"
                                 disabled={isDefault}
@@ -316,52 +309,50 @@ export default function AgendaDragAndDrop({
                                 <i className="fas fa-trash" />
                               </Button>
                             </div>
-                          </Col>
-                        </Row>
+                          </div>
+                        </div>
 
                         <div
-                          className={`mx-1 ${
-                            agendaFolderConnection === 'Event' ? 'my-4' : 'my-0'
-                          }`}
+                          style={{
+                            margin: `${agendaFolderConnection === 'Event' ? '1.5rem' : '0'} 0.25rem`,
+                          }}
                         />
 
                         {/* Table head */}
                         <div
-                          className={`shadow-sm ${
-                            agendaFolderConnection === 'Event' ? 'mx-4' : 'mx-0'
-                          }`}
+                          style={{
+                            boxShadow: '0 .125rem .25rem rgba(0,0,0,.075)',
+                            margin: agendaFolderConnection === 'Event' ? '0 1.5rem' : '0',
+                          }}
                         >
-                          <Row
-                            className={`${styles.tableHeadAgendaItems} mx-0 border py-3`}
+                          <div
+                            className={styles.tableHeadAgendaItems}
+                            style={{
+                              display: 'flex',
+                              margin: '0',
+                              border: '1px solid #dee2e6',
+                              padding: '1rem 0',
+                            }}
                           >
-                            <Col lg={1} className="fw-bold text-center">
+                            <div style={{ flex: '0 0 8.33%', fontWeight: 'bold', textAlign: 'center' }}>
                               {t('sequence')}
-                            </Col>
-                            <Col lg={2} className="fw-bold text-center">
+                            </div>
+                            <div style={{ flex: '0 0 16.67%', fontWeight: 'bold', textAlign: 'center' }}>
                               {t('title')}
-                            </Col>
-                            <Col
-                              lg={2}
-                              className="fw-bold text-center d-none d-md-block"
-                            >
+                            </div>
+                            <div style={{ flex: '0 0 16.67%', fontWeight: 'bold', textAlign: 'center' }}>
                               {t('category')}
-                            </Col>
-                            <Col
-                              lg={3}
-                              className="fw-bold text-center d-none d-md-block"
-                            >
+                            </div>
+                            <div style={{ flex: '0 0 25%', fontWeight: 'bold', textAlign: 'center' }}>
                               {t('description')}
-                            </Col>
-                            <Col
-                              lg={2}
-                              className="fw-bold text-center d-none d-md-block"
-                            >
+                            </div>
+                            <div style={{ flex: '0 0 16.67%', fontWeight: 'bold', textAlign: 'center' }}>
                               {t('duration')}
-                            </Col>
-                            <Col lg={2} className="fw-bold text-center">
+                            </div>
+                            <div style={{ flex: '0 0 16.67%', fontWeight: 'bold', textAlign: 'center' }}>
                               {t('options')}
-                            </Col>
-                          </Row>
+                            </div>
+                          </div>
                         </div>
 
                         {/* ITEMS */}
@@ -374,11 +365,24 @@ export default function AgendaDragAndDrop({
                             <div
                               ref={provided.innerRef}
                               {...provided.droppableProps}
-                              className={`bg-light-subtle border border-top-0 shadow-sm mx-4`}
+                              style={{
+                                backgroundColor: '#fcfcfd',
+                                border: '1px solid #dee2e6',
+                                borderTop: 'none',
+                                boxShadow: '0 .125rem .25rem rgba(0,0,0,.075)',
+                                margin: '0 1.5rem',
+                              }}
                             >
                               {/* EMPTY STATE */}
                               {agendaFolder.items.edges.length === 0 && (
-                                <div className="py-3 text-center fw-semibold text-body-tertiary">
+                                <div
+                                  style={{
+                                    padding: '1rem 0',
+                                    textAlign: 'center',
+                                    fontWeight: 600,
+                                    color: '#adb5bd',
+                                  }}
+                                >
                                   {t('noAgendaItems')}
                                 </div>
                               )}
@@ -398,47 +402,38 @@ export default function AgendaDragAndDrop({
                                         {...provided.draggableProps}
                                         className={`${styles.agendaItemRow} ${getDraggingClass(
                                           snapshot.isDragging,
-                                        )} py-2`}
+                                        )}`}
+                                        style={{ padding: '0.5rem 0' }}
                                       >
-                                        <Row className="mx-3 my-3">
-                                          <Col lg={1} className="text-center">
+                                        <div style={{ display: 'flex', margin: '1rem', alignItems: 'center' }}>
+                                          <div style={{ flex: '0 0 8.33%', textAlign: 'center' }}>
                                             <span
                                               {...provided.dragHandleProps}
-                                              className="cursor-grab"
+                                              style={{ cursor: 'grab' }}
                                             >
                                               <i className="fas fa-bars fa-sm" />
                                             </span>
-                                          </Col>
+                                          </div>
 
-                                          <Col lg={2} className="text-center">
+                                          <div style={{ flex: '0 0 16.67%', textAlign: 'center' }}>
                                             {agendaItem.name}
-                                          </Col>
+                                          </div>
 
-                                          <Col
-                                            lg={2}
-                                            className="text-center d-none d-md-block"
-                                          >
+                                          <div style={{ flex: '0 0 16.67%', textAlign: 'center' }}>
                                             {agendaItem.category?.name ??
                                               t('noCategory')}
-                                          </Col>
+                                          </div>
 
-                                          <Col
-                                            lg={3}
-                                            className="text-center d-none d-md-block"
-                                          >
+                                          <div style={{ flex: '0 0 25%', textAlign: 'center' }}>
                                             {agendaItem.description}
-                                          </Col>
+                                          </div>
 
-                                          <Col
-                                            lg={2}
-                                            className="text-center d-none d-md-block"
-                                          >
+                                          <div style={{ flex: '0 0 16.67%', textAlign: 'center' }}>
                                             {agendaItem.duration ?? '-'}
-                                          </Col>
+                                          </div>
 
-                                          <Col
-                                            lg={2}
-                                            className="d-flex justify-content-center gap-2"
+                                          <div
+                                            style={{ flex: '0 0 16.67%', display: 'flex', justifyContent: 'center', gap: '0.5rem' }}
                                           >
                                             <Button
                                               size="sm"
@@ -470,8 +465,8 @@ export default function AgendaDragAndDrop({
                                             >
                                               <i className="fas fa-trash" />
                                             </Button>
-                                          </Col>
-                                        </Row>
+                                          </div>
+                                        </div>
                                       </div>
                                     )}
                                   </Draggable>

@@ -37,7 +37,7 @@ import {
   pieArcClasses,
   pieArcLabelClasses,
 } from '@mui/x-charts/PieChart';
-import Card from 'react-bootstrap/Card';
+
 import type { Feedback } from 'types/Event/type';
 import type { InterfaceStatsModal } from 'types/Event/interface';
 import { useTranslation } from 'react-i18next';
@@ -97,11 +97,11 @@ export const FeedbackStats = ({
 
   return (
     <>
-      <Card>
-        <Card.Body>
-          <Card.Title>
+      <div>
+        <div>
+          <div>
             <h3>{t('title')}</h3>
-          </Card.Title>
+          </div>
           <h5>{t('filledByCount', { count: data.event.feedback.length })}</h5>
           {data.event.feedback.length ? (
             <PieChart
@@ -137,8 +137,8 @@ export const FeedbackStats = ({
           ) : (
             <>{t('emptyState')}</>
           )}
-        </Card.Body>
-      </Card>
+        </div>
+      </div>
     </>
   );
 };

@@ -1,25 +1,11 @@
 /**
- * OrganizationScreen Component
+ * OrganizationScreen — org-level admin layout shell.
  *
- * This component serves as the main screen for managing an organization.
- * It includes a side drawer for navigation, a header with a title and profile dropdown,
- * and dynamically renders child routes using React Router's `Outlet`.
- *
- * @remarks
- * - The component uses Redux for state management and Apollo Client for GraphQL queries.
- * - It dynamically updates the page title and event name based on the current route.
- * - The side drawer visibility is responsive to screen resizing.
- *
- * @returns  The rendered OrganizationScreen component.
- *
- * @example
- * ```tsx
- * <OrganizationScreen />
- * ```
- *
+ * Uses AdminSidebar (org variant) and Topbar. Manages org context,
+ * event name resolution, and Redux route targets.
  */
-import LeftDrawerOrg from 'components/LeftDrawerOrg/LeftDrawerOrg';
-import React, { useEffect, useState } from 'react';
+
+import React, { useEffect, useState, useCallback } from 'react';
 import type { JSX } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -34,27 +20,21 @@ import { updateTargets } from 'state/action-creators';
 import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
-import styles from './OrganizationScreen.module.css';
 import type { InterfaceMapType } from 'utils/interfaces';
 import { useQuery } from '@apollo/client';
 import { GET_ORGANIZATION_EVENTS_PG } from 'GraphQl/Queries/Queries';
 import useLocalStorage from 'utils/useLocalstorage';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import AdminSidebar from 'components/Layout/AdminSidebar/AdminSidebar';
+import Topbar from 'components/Layout/Topbar/Topbar';
 
 const OrganizationScreen = (): JSX.Element => {
   const { getItem, setItem } = useLocalStorage();
-  // State to manage visibility of the side drawer
-  const [hideDrawer, setHideDrawer] = useState<boolean>(() => {
-    const stored = getItem('sidebar');
-    return stored === 'true';
-  });
-  // Get the current location to determine the translation key
   const location = useLocation();
   const titleKey: string | undefined =
     translationKeyMap[location.pathname.split('/')[2]];
   const { t } = useTranslation('translation', { keyPrefix: titleKey });
 
-  // Get the organization ID from the URL parameters
   const { orgId } = useParams();
   const [eventName, setEventName] = useState<string | null>(null);
 
@@ -63,14 +43,39 @@ const OrganizationScreen = (): JSX.Element => {
   const shouldFetchEventName = Boolean(orgId && eventId);
   const EVENTS_PAGE_SIZE = 100;
 
-  // Get the application routes from the Redux store
+  // Redux route targets
   const appRoutes: { targets: TargetsType[] } = useSelector(
     (state: RootState) => state.appRoutes,
   );
   const { targets } = appRoutes;
-
   const dispatch = useAppDispatch();
 
+  // Sidebar collapse state
+  const [collapsed, setCollapsed] = useState<boolean>(() => {
+    return getItem('sidebarCollapsed') === 'true';
+  });
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const handleToggleCollapse = useCallback(() => {
+    setCollapsed((prev) => {
+      const next = !prev;
+      setItem('sidebarCollapsed', next.toString());
+      document.body.classList.toggle('sidebar-collapsed', next);
+      return next;
+    });
+  }, [setItem]);
+
+  const handleCloseMobile = useCallback(() => {
+    setMobileOpen(false);
+    document.body.style.overflow = '';
+  }, []);
+
+  const handleOpenMobile = useCallback(() => {
+    setMobileOpen(true);
+    document.body.style.overflow = 'hidden';
+  }, []);
+
+  // Event name query
   const { data: eventsData } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
     variables: {
       id: orgId ?? '',
@@ -80,28 +85,29 @@ const OrganizationScreen = (): JSX.Element => {
     skip: !shouldFetchEventName,
   });
 
-  // Update targets whenever the organization ID changes
+  // Update Redux targets when org changes
   useEffect(() => {
     if (orgId) {
       dispatch(updateTargets(orgId));
     }
   }, [orgId, dispatch]);
 
+  // Sync body class on mount
   useEffect(() => {
-    setItem('sidebar', hideDrawer.toString());
-  }, [hideDrawer, setItem]);
+    document.body.classList.toggle('sidebar-collapsed', collapsed);
+  }, [collapsed]);
 
-  // If no organization ID is found, navigate back to the home page
+  // Redirect if no org
   if (!orgId) {
     return <Navigate to={'/'} replace />;
   }
 
+  // Resolve event name
   useEffect(() => {
     if (!eventId) {
       setEventName(null);
       return;
     }
-    // Wait until event data has been fetched before attempting lookup
     if (!eventsData?.organization?.events) {
       return;
     }
@@ -121,44 +127,27 @@ const OrganizationScreen = (): JSX.Element => {
     setEventName(matched.node.name ?? null);
   }, [eventId, eventsData]);
 
-  // Handle screen resizing to show/hide the side drawer
-  const handleResize = (): void => {
-    if (window.innerWidth <= 820) {
-      setHideDrawer(!hideDrawer);
-    }
-  };
-
-  // Set up event listener for window resize
-  useEffect(() => {
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
+  const pageTitle = eventName ? `${t('title')} — ${eventName}` : t('title');
 
   return (
     <>
-      <div className={styles.opendrawer}>
-        <LeftDrawerOrg
-          orgId={orgId}
-          targets={targets}
-          hideDrawer={hideDrawer}
-          setHideDrawer={setHideDrawer}
-        />
-      </div>
-      <div
-        className={`${hideDrawer ? styles.expand : styles.contract}`}
-        data-testid="mainpageright"
-      >
-        <div className="d-flex justify-content-between align-items-center">
-          <div className={styles.flexContainerColumn}>
-            <h1 className={styles.titleMargin}>{t('title')}</h1>
-            {eventName && <h4>{eventName}</h4>}
-          </div>
-        </div>
+      <a href="#main-content" className="skip-link">
+        Skip to main content
+      </a>
+
+      <AdminSidebar
+        variant="org"
+        collapsed={collapsed}
+        onToggleCollapse={handleToggleCollapse}
+        mobileOpen={mobileOpen}
+        onCloseMobile={handleCloseMobile}
+      />
+
+      <Topbar title={pageTitle} onHamburgerClick={handleOpenMobile} />
+
+      <main id="main-content" className="main" data-testid="mainpageright">
         <Outlet />
-      </div>
+      </main>
     </>
   );
 };

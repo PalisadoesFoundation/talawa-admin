@@ -1,5 +1,4 @@
 import React from 'react';
-import { Form, InputGroup } from 'react-bootstrap';
 import { FormFieldGroup } from './FormFieldGroup';
 import type { IFormTextFieldProps } from '../../types/FormFieldGroup/interface';
 
@@ -30,20 +29,41 @@ export const FormTextField: React.FC<IFormTextFieldProps> = ({
 }) => {
   const isInvalid = touched && !!error;
 
-  const renderControl = () => (
-    <Form.Control
-      {...(props.as !== 'textarea' && { type })}
-      placeholder={placeholder}
-      value={value}
-      onChange={(e) => {
-        onChange?.(e.target.value);
-      }}
-      isInvalid={isInvalid}
-      disabled={disabled}
-      data-testid={dataTestId}
-      {...props}
-    />
-  );
+  const renderControl = () => {
+    if (props.as === 'textarea') {
+      return (
+        <textarea
+          id={name}
+          placeholder={placeholder}
+          value={value}
+          onChange={(e) => {
+            onChange?.(e.target.value);
+          }}
+          disabled={disabled}
+          data-testid={dataTestId}
+          className="form-input"
+          style={isInvalid ? { borderColor: 'var(--red-500, #ef4444)' } : undefined}
+        />
+      );
+    }
+    return (
+      <input
+        type={type}
+        id={name}
+        placeholder={placeholder}
+        value={value}
+        onChange={(e) => {
+          onChange?.(e.target.value);
+        }}
+        disabled={disabled}
+        data-testid={dataTestId}
+        className="form-input"
+        style={isInvalid ? { borderColor: 'var(--red-500, #ef4444)' } : undefined}
+        {...(props as React.InputHTMLAttributes<HTMLInputElement>)}
+      />
+    );
+  };
+
   return (
     <FormFieldGroup
       name={name}
@@ -56,18 +76,11 @@ export const FormTextField: React.FC<IFormTextFieldProps> = ({
       className={className}
     >
       {startAdornment || endAdornment ? (
-        <React.Fragment>
-          <InputGroup>
-            {startAdornment}
-            {renderControl()}
-            {endAdornment}
-          </InputGroup>
-          {/*
-              Bootstraps Form.Control inside InputGroup doesn't show standard validation feedback automatically
-              in the same way or position, but FormFieldGroup handles error text display below the child.
-              However, Form.Control.isInvalid handles the red border.
-           */}
-        </React.Fragment>
+        <div style={{ display: 'flex', alignItems: 'stretch' }}>
+          {startAdornment}
+          {renderControl()}
+          {endAdornment}
+        </div>
       ) : (
         renderControl()
       )}

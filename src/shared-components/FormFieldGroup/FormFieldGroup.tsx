@@ -1,5 +1,4 @@
 import React from 'react';
-import { Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import type { InterfaceFormFieldGroupProps } from '../../types/FormFieldGroup/interface';
 
@@ -34,48 +33,52 @@ export const FormFieldGroup: React.FC<
     return (
       <>
         {label && !hideLabel && (
-          <Form.Label htmlFor={effectiveInputId} className="visually-hidden">
+          <label
+            htmlFor={effectiveInputId}
+            style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', borderWidth: 0 }}
+          >
             {label}
             {required && <span aria-label={tCommon('required')}>*</span>}
-          </Form.Label>
+          </label>
         )}
         {children}
         {showError && (
-          <Form.Control.Feedback type="invalid" className="d-block">
+          <div style={{ display: 'block', color: 'var(--red-500, #ef4444)', fontSize: '0.875em', marginTop: '0.25rem' }}>
             {error}
-          </Form.Control.Feedback>
+          </div>
         )}
       </>
     );
   }
 
   return (
-    <Form.Group controlId={effectiveInputId} className={className}>
-      <Form.Label
-        className={`${hideLabel ? 'visually-hidden' : ''} ${disabled ? 'text-muted' : ''} ${labelClassName || ''}`.trim()}
+    <div className={className}>
+      <label
+        htmlFor={effectiveInputId}
+        className={labelClassName || undefined}
+        style={hideLabel ? { position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', borderWidth: 0 } : disabled ? { opacity: 0.5 } : undefined}
       >
         {label}
         {required && <span aria-label={tCommon('required')}> *</span>}
-      </Form.Label>
+      </label>
 
       {children}
 
       {helpText && !showError && (
-        <Form.Text id={`${effectiveInputId}-help`} className="text-muted">
+        <small id={`${effectiveInputId}-help`} style={{ color: 'var(--gray-500, #6b7280)' }}>
           {helpText}
-        </Form.Text>
+        </small>
       )}
 
       {showError && (
-        <Form.Control.Feedback
+        <div
           id={`${effectiveInputId}-error`}
-          type="invalid"
-          className="d-block"
+          style={{ display: 'block', color: 'var(--red-500, #ef4444)', fontSize: '0.875em', marginTop: '0.25rem' }}
         >
           {error}
-        </Form.Control.Feedback>
+        </div>
       )}
-    </Form.Group>
+    </div>
   );
 };
 

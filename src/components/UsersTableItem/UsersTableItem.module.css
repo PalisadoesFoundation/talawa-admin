@@ -1,21 +1,61 @@
 .editButton {
-  composes: editButton from '../../style/app-fixed.module.css';
+  background-color: var(--editButton-bg);
+  color: var(--editButton-font);
+  border-color: var(--editButton-border);
+}
+
+.editButton:is(:hover, :active) {
+  background-color: var(--editButton-bg-hover);
+  border-color: var(--editButton-border-hover);
+  box-shadow: none;
 }
 
 .removeButton {
-  composes: removeButton from '../../style/app-fixed.module.css';
+  margin-bottom: 10px;
+  background-color: var(--removeButton-bg);
+  color: var(--removeButton-color);
+  margin-right: 10px;
+}
+
+.removeButton:is(:hover, :active, :focus) {
+  background-color: var(--removeButton-bg-hover) !important;
+  border-color: var(--removeButton-border-hover);
+  color: var(--removeButton-color-hover);
 }
 
 .modalHeader {
-  composes: modalHeader from '../../style/app-fixed.module.css';
+  border: none;
+  background-color: var(--modalHeader-bg) !important;
+  padding: 1rem;
+  color: var(--modalHeader-color);
 }
 
 .notJoined {
-  composes: notJoined from '../../style/app-fixed.module.css';
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .modalTable {
-  composes: modalTable from '../../style/app-fixed.module.css';
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.modalTable img[alt='creator'] {
+  height: 24px;
+  width: 24px;
+  object-fit: contain;
+  border-radius: 12px;
+  margin-right: 0.4rem;
+}
+
+.modalTable img[alt='orgImage'] {
+  height: 28px;
+  width: 28px;
+  object-fit: contain;
+  border-radius: 4px;
+  margin-right: 0.4rem;
 }
 
 .divider {

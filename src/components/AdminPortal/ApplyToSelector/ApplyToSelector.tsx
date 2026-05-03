@@ -1,5 +1,4 @@
 import React, { useId } from 'react';
-import { Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import type {
   InterfaceApplyToSelectorProps,
@@ -28,25 +27,33 @@ const ApplyToSelector: React.FC<InterfaceApplyToSelectorProps> = ({
   });
 
   return (
-    <Form.Group className="mb-3" as="fieldset">
-      <Form.Label as="legend">{t('applyTo')}</Form.Label>
-      <Form.Check
-        type="radio"
-        label={t('entireSeries')}
-        name={name}
-        id={seriesId}
-        checked={applyTo === 'series'}
-        onChange={() => onChange('series')}
-      />
-      <Form.Check
-        type="radio"
-        label={t('thisEventOnly')}
-        name={name}
-        id={instanceId}
-        checked={applyTo === 'instance'}
-        onChange={() => onChange('instance')}
-      />
-    </Form.Group>
+    <fieldset style={{ marginBottom: '1rem' }}>
+      <legend>{t('applyTo')}</legend>
+      <div>
+        <input
+          type="radio"
+          name={name}
+          id={seriesId}
+          checked={applyTo === 'series'}
+          onChange={() => onChange('series')}
+        />
+        <label htmlFor={seriesId} style={{ marginLeft: '0.5rem' }}>
+          {t('entireSeries')}
+        </label>
+      </div>
+      <div>
+        <input
+          type="radio"
+          name={name}
+          id={instanceId}
+          checked={applyTo === 'instance'}
+          onChange={() => onChange('instance')}
+        />
+        <label htmlFor={instanceId} style={{ marginLeft: '0.5rem' }}>
+          {t('thisEventOnly')}
+        </label>
+      </div>
+    </fieldset>
   );
 };
 

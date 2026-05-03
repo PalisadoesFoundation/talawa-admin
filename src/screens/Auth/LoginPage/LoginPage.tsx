@@ -14,8 +14,6 @@ import { ApolloError, useQuery } from '@apollo/client';
 import React, { useEffect, useRef, useState } from 'react';
 
 import Button from 'shared-components/Button';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
 import { loadRecaptchaScript } from 'utils/recaptcha';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation, useNavigate } from 'react-router';
@@ -134,7 +132,7 @@ const LoginPage = (): JSX.Element => {
   }, []);
 
   const handleLoginSuccess = (signInResult: InterfaceSignInResult): void => {
-    const { user } = signInResult;
+    const { user, authenticationToken } = signInResult;
     if (user.countryCode !== null) {
       i18n.changeLanguage(user.countryCode);
     }
@@ -143,6 +141,10 @@ const LoginPage = (): JSX.Element => {
     if (role === 'admin' && !isAdminUser) {
       NotificationToast.warning(tErrors('notAuthorised') as string);
       return;
+    }
+    // Store the auth token so Apollo's authLink can send it with requests
+    if (authenticationToken) {
+      setItem('token', authenticationToken);
     }
     setItem('IsLoggedIn', 'TRUE');
     setItem('name', user.name);
@@ -256,134 +258,157 @@ const LoginPage = (): JSX.Element => {
 
   return (
     <>
-      <section className={styles.login_background}>
-        <Row className={styles.row}>
-          <Col sm={0} md={6} lg={7} className={styles.left_portion}>
-            <div className={styles.inner}>
-              {data?.community ? (
-                <a
-                  href={data.community.websiteURL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`${styles.communityLogo}`}
-                >
-                  <img
-                    src={data.community.logoURL}
-                    alt={t('communityLogo')}
-                    data-testid="preLoginLogo"
-                  />
-                  <p className="text-center">{data.community.name}</p>
-                </a>
-              ) : (
-                <a
-                  href="https://www.palisadoes.org/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <PalisadoesLogo
-                    className={styles.palisadoes_logo}
-                    data-testid="PalisadoesLogo"
-                  />
-                  <p className="text-center" data-testid="app-footer">
-                    {t('fromPalisadoes')}
-                  </p>
-                </a>
+      <section className={styles.loginSplit}>
+        {/* ── Left Panel: dark branding ── */}
+        <div className={styles.loginLeft}>
+          <div className={styles.loginLeftBrand}>
+            {data?.community ? (
+              <a
+                href={data.community.websiteURL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.communityLogo}
+              >
+                <img
+                  src={data.community.logoURL}
+                  alt={t('communityLogo')}
+                  data-testid="preLoginLogo"
+                />
+                <p>{data.community.name}</p>
+              </a>
+            ) : (
+              <a
+                href="https://www.palisadoes.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <PalisadoesLogo
+                  className={styles.palisadoes_logo}
+                  data-testid="PalisadoesLogo"
+                />
+                <p data-testid="app-footer">{t('fromPalisadoes')}</p>
+              </a>
+            )}
+            <div className={styles.socialIcons}>{socialIconsList}</div>
+          </div>
+          <div className={styles.loginLeftFooter}>
+            <span>The Palisadoes Foundation</span>
+            <span>Open Source Community Management</span>
+          </div>
+        </div>
+
+        {/* ── Right Panel: form area ── */}
+        <div className={styles.loginRight}>
+          <div className={styles.loginFormWrapper}>
+            <ChangeLanguageDropDown
+              parentContainerStyle={styles.langChangeBtn}
+              btnStyle={styles.langChangeBtnStyle}
+            />
+            <TalawaLogo
+              className={`${styles.talawa_logo} ${
+                showTab === 'REGISTER' ? styles.marginTopForReg : ''
+              }`}
+            />
+
+            {/* LOGIN TAB */}
+            <div
+              className={
+                showTab === 'LOGIN' ? styles.active_tab : styles.hidden
+              }
+              role="tabpanel"
+              aria-hidden={showTab !== 'LOGIN'}
+            >
+              {/* Admin / User segmented toggle */}
+              {location.pathname !== '/admin' && (
+                <div className={styles.segmentedToggle}>
+                  <button
+                    type="button"
+                    className={
+                      role === 'admin' ? styles.segmentedActive : undefined
+                    }
+                    onClick={(): void => setRole('admin')}
+                  >
+                    {tCommon('admin')}
+                  </button>
+                  <button
+                    type="button"
+                    className={
+                      role === 'user' ? styles.segmentedActive : undefined
+                    }
+                    onClick={(): void => setRole('user')}
+                  >
+                    {tCommon('user')}
+                  </button>
+                </div>
+              )}
+
+              <LoginForm
+                isAdmin={role === 'admin'}
+                onSuccess={handleLoginSuccess}
+                onError={handleLoginError}
+                testId="login-form"
+                enableRecaptcha={REACT_APP_USE_RECAPTCHA === 'YES'}
+              />
+
+              <Link
+                to="/forgotPassword"
+                className={styles.forgotLink}
+                tabIndex={-1}
+              >
+                {tCommon('forgotPassword')}
+              </Link>
+
+              <OAuthSection mode="login" />
+
+              {location.pathname !== '/admin' && (
+                <>
+                  <div className={styles.orDivider}>{tCommon('OR')}</div>
+                  <Button
+                    variant="outline-secondary"
+                    className={styles.reg_btn}
+                    data-testid="goToRegisterPortion"
+                    onClick={(): void => {
+                      setShowTab('REGISTER');
+                      navigate('/register');
+                    }}
+                  >
+                    {tCommon('register')}
+                  </Button>
+                </>
               )}
             </div>
-            <div className={styles.socialIcons}>{socialIconsList}</div>
-          </Col>
-          <Col sm={12} md={6} lg={5}>
-            <div className={styles.right_portion}>
-              <ChangeLanguageDropDown
-                parentContainerStyle={styles.langChangeBtn}
-                btnStyle={styles.langChangeBtnStyle}
+
+            {/* REGISTER TAB */}
+            <div
+              className={
+                showTab === 'REGISTER' ? styles.active_tab : styles.hidden
+              }
+              role="tabpanel"
+              aria-hidden={showTab !== 'REGISTER'}
+            >
+              <h1 className={styles.registerHeading} data-testid="register-text">
+                {tCommon('register')}
+              </h1>
+              <RegistrationForm
+                organizations={organizations}
+                onSuccess={handleRegisterSuccess}
+                onError={handleRegisterError}
+                enableRecaptcha={REACT_APP_USE_RECAPTCHA === 'YES'}
               />
-              <TalawaLogo
-                className={`${styles.talawa_logo}  ${
-                  showTab === 'REGISTER' && styles.marginTopForReg
-                }`}
-              />
-              {/* LOGIN TAB */}
-              <div
-                className={`${
-                  showTab === 'LOGIN' ? styles.active_tab : 'd-none'
-                }`}
-                role="tabpanel"
-                aria-hidden={showTab !== 'LOGIN'}
+              <div className={styles.orDivider}>{tCommon('OR')}</div>
+              <Button
+                variant="outline-secondary"
+                className={styles.reg_btn}
+                data-testid="goToLoginPortion"
+                onClick={(): void => setShowTab('LOGIN')}
               >
-                <LoginForm
-                  isAdmin={role === 'admin'}
-                  onSuccess={handleLoginSuccess}
-                  onError={handleLoginError}
-                  testId="login-form"
-                  enableRecaptcha={REACT_APP_USE_RECAPTCHA === 'YES'}
-                />
-                <div className="text-end mt-3">
-                  <Link
-                    to="/forgotPassword"
-                    className="text-secondary"
-                    tabIndex={-1}
-                  >
-                    {tCommon('forgotPassword')}
-                  </Link>
-                </div>
-                <OAuthSection mode="login" />
-                {location.pathname !== '/admin' && (
-                  <div className="position-relative my-2">
-                    <hr />
-                    <span className={styles.orText}>{tCommon('OR')}</span>
-                    <Button
-                      variant="outline-secondary"
-                      className={styles.reg_btn}
-                      data-testid="goToRegisterPortion"
-                      onClick={(): void => {
-                        setShowTab('REGISTER');
-                        navigate('/register');
-                      }}
-                    >
-                      {tCommon('register')}
-                    </Button>
-                  </div>
-                )}
-              </div>
-              {/* REGISTER TAB */}
-              <div
-                className={`${
-                  showTab === 'REGISTER' ? styles.active_tab : 'd-none'
-                }`}
-                role="tabpanel"
-                aria-hidden={showTab !== 'REGISTER'}
-              >
-                <h1
-                  className="fs-2 fw-bold text-dark mb-3"
-                  data-testid="register-text"
-                >
-                  {tCommon('register')}
-                </h1>
-                <RegistrationForm
-                  organizations={organizations}
-                  onSuccess={handleRegisterSuccess}
-                  onError={handleRegisterError}
-                  enableRecaptcha={REACT_APP_USE_RECAPTCHA === 'YES'}
-                />
-                <div className="position-relative my-2">
-                  <hr />
-                  <span className={styles.orText}>{tCommon('OR')}</span>
-                </div>
-                <Button
-                  variant="outline-secondary"
-                  className={styles.reg_btn}
-                  data-testid="goToLoginPortion"
-                  onClick={(): void => setShowTab('LOGIN')}
-                >
-                  <Link to="/" className="text-decoration-none">
-                    {t('backToLogin')}
-                  </Link>
-                </Button>
-              </div>
+                <Link to="/" className={styles.backToLoginLink}>
+                  {t('backToLogin')}
+                </Link>
+              </Button>
             </div>
-          </Col>
-        </Row>
+          </div>
+        </div>
       </section>
     </>
   );

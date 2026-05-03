@@ -352,9 +352,9 @@ function App(): React.ReactElement {
           <Route path="/auth/callback" element={<OAuthCallbackPage />} />
           {/* User Portal Routes */}
           <Route element={<SecuredRouteForUser />}>
-            <Route path="/user/organizations" element={<Organizations />} />
-            {/* User global plugin routes (no orgId required) */}
+            {/* User global routes (no orgId) — wrapped in UserGlobalScreen layout */}
             <Route element={<UserGlobalScreen />}>
+              <Route path="/user/organizations" element={<Organizations />} />
               {userGlobalPluginRoutes.map((route) => (
                 <Route
                   key={`${route.pluginId}-${route.path}`}
@@ -370,7 +370,6 @@ function App(): React.ReactElement {
             </Route>
             <Route element={<UserScreen />}>
               <Route path="/user/chat/:orgId" element={<Chat />} />
-              <Route path="/user/organizations" element={<Organizations />} />
               <Route path="/user/settings" element={<MemberDetail />} />
               <Route path="/user/organization/:orgId" element={<PostsPage />} />
               <Route path="/user/people/:orgId" element={<People />} />

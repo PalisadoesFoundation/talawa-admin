@@ -50,29 +50,19 @@ import {
 import TableLoader from 'shared-components/TableLoader/TableLoader';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
-import styles from './BlockUser.module.css';
 import { useParams } from 'react-router';
 
 import type {
   InterfaceUserPg,
   InterfaceOrganizationPg,
 } from 'utils/interfaces';
-import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBan, faUserPlus } from '@fortawesome/free-solid-svg-icons';
-import Toolbar from 'shared-components/Toolbar/Toolbar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
-import { DataTable } from 'shared-components/DataTable/DataTable';
-import Button from 'shared-components/Button';
 import { useTableData } from 'shared-components/DataTable/hooks/useTableData';
 import ErrorPanel from 'shared-components/ErrorPanel';
 import { OrganizationMembershipRole } from 'types/AdminPortal/OrganizationMembershipRole/interface';
 
-type BlockUserRow = {
-  user: InterfaceUserPg;
-  index: number;
-};
+// BlockUserRow type removed - no longer needed with inline table rendering
 
 const BlockUser = (): JSX.Element => {
   // Translation hooks for internationalization
@@ -239,78 +229,9 @@ const BlockUser = (): JSX.Element => {
     setSearchTerm(value);
   }, []);
 
-  // Header titles for the table
-  const headerTitles: string[] = [
-    '#',
-    tCommon('name'),
-    tCommon('email'),
-    t('block_unblock'),
-  ];
-
   const displayedUsers = showBlockedMembers
     ? filteredBlockedUsers
     : filteredAllMembers;
-
-  const tableRows: BlockUserRow[] = displayedUsers.map((user, index) => ({
-    user,
-    index,
-  }));
-
-  const tableColumns: IColumnDef<BlockUserRow>[] = [
-    {
-      id: 'index',
-      header: headerTitles[0],
-      accessor: 'index',
-      render: (_value: unknown, row: BlockUserRow) => row.index + 1,
-    },
-    {
-      id: 'name',
-      header: headerTitles[1],
-      accessor: (row: BlockUserRow) => row.user.name,
-    },
-    {
-      id: 'email',
-      header: headerTitles[2],
-      accessor: (row: BlockUserRow) => row.user.emailAddress,
-    },
-    {
-      id: 'action',
-      header: headerTitles[3],
-      accessor: (row: BlockUserRow) => row.user.id,
-      render: (_: unknown, row: BlockUserRow) => {
-        const user = row.user;
-        return showBlockedMembers ? (
-          <Button
-            variant="success"
-            size="sm"
-            className={styles.unblockButton}
-            onClick={async (): Promise<void> => {
-              await handleUnBlockUser(user);
-            }}
-            data-testid={`unblockUserBtn-${user.id}`}
-            aria-label={t('unblock') + ': ' + user.name}
-          >
-            <FontAwesomeIcon icon={faUserPlus} className={styles.unbanIcon} />
-            {t('unblock')}
-          </Button>
-        ) : (
-          <Button
-            variant="success"
-            size="sm"
-            className={styles.removeButton}
-            onClick={async (): Promise<void> => {
-              await handleBlockUser(user);
-            }}
-            data-testid={`blockUserBtn-${user.id}`}
-            aria-label={t('block') + ': ' + user.name}
-          >
-            <FontAwesomeIcon icon={faBan} className={styles.banIcon} />
-            {t('block')}
-          </Button>
-        );
-      },
-    },
-  ];
 
   if (errorBlockedUsers) {
     return (
@@ -334,38 +255,58 @@ const BlockUser = (): JSX.Element => {
     );
   }
 
+  /**
+   * Helper: get initials from a name string.
+   */
+  const getInitials = (name: string): string => {
+    const parts = (name ?? '').trim().split(/\s+/);
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+    return (name?.[0] ?? '').toUpperCase();
+  };
+
   return (
     <>
-      <div className={styles.btnsContainer} data-testid="testcomp">
-        <Toolbar
-          search={{
-            placeholder: t('searchByName'),
-            value: searchTerm,
-            onChange: handleSearch,
-            onSearch: handleSearch,
-            inputTestId: 'searchByName',
-            buttonTestId: 'searchBtn',
-          }}
-          filters={[
-            {
-              id: 'block-user-view',
-              label: t('view'),
-              type: 'filter',
-              title: t('view'),
-              options: [
-                { label: t('allMembers'), value: 'allMembers' },
-                { label: t('blockedUsers'), value: 'blockedUsers' },
-              ],
-              selected: showBlockedMembers
-                ? t('blockedUsers')
-                : t('allMembers'),
-              onChange: (value) =>
-                setShowBlockedMembers(value === 'blockedUsers'),
-              testIdPrefix: 'blockUserView',
-            },
-          ]}
-        />
+      <div className="page-header">
+        <div className="page-header-left">
+          <h1 className="page-title">
+            {t('title')}{' '}
+            <span
+              className="badge badge-red"
+              style={{ fontSize: '13px', verticalAlign: 'middle', marginLeft: '8px' }}
+            >
+              {blockedUsers.length}
+            </span>
+          </h1>
+          <p className="page-subtitle">
+            {t('manageBlockedUsers')}
+          </p>
+        </div>
       </div>
+
+      <div className="toolbar" data-testid="testcomp" style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '20px' }}>
+        <input
+          type="text"
+          className="search-input"
+          placeholder={t('searchByName')}
+          value={searchTerm}
+          onChange={(e) => handleSearch(e.target.value)}
+          data-testid="searchByName"
+          style={{ flex: 1, padding: '8px 12px', border: '1px solid var(--gray-200)', borderRadius: 'var(--radius-md)', fontSize: '13px' }}
+        />
+        <select
+          className="filter-dropdown"
+          value={showBlockedMembers ? 'blockedUsers' : 'allMembers'}
+          onChange={(e) => setShowBlockedMembers(e.target.value === 'blockedUsers')}
+          data-testid="blockUserView-filter"
+          style={{ padding: '8px 12px', border: '1px solid var(--gray-200)', borderRadius: 'var(--radius-md)', fontSize: '13px', background: 'var(--surface)' }}
+        >
+          <option value="allMembers">{t('allMembers')}</option>
+          <option value="blockedUsers">{t('blockedUsers')}</option>
+        </select>
+      </div>
+
       {loadingMembers || loadingBlockedUsers ? (
         <TableLoader
           data-testid="TableLoader"
@@ -378,30 +319,81 @@ const BlockUser = (): JSX.Element => {
           noOfRows={10}
         />
       ) : (
-        <div className={styles.listBox}>
-          {(!showBlockedMembers && filteredAllMembers.length > 0) ||
-          (showBlockedMembers && filteredBlockedUsers.length > 0) ? (
-            <div data-testid="userList">
-              <DataTable<BlockUserRow>
-                data={tableRows}
-                columns={tableColumns}
-                rowKey={(row: BlockUserRow) => row.user.id}
-                tableClassName={styles.custom_table}
+        <div className="card">
+          <div className="table-wrapper">
+            {(!showBlockedMembers && filteredAllMembers.length > 0) ||
+            (showBlockedMembers && filteredBlockedUsers.length > 0) ? (
+              <div data-testid="userList">
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">{tCommon('name')}</th>
+                      <th scope="col">{t('blockedDate')}</th>
+                      <th scope="col">{t('reason')}</th>
+                      <th scope="col">{t('actions')}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {displayedUsers.map((user) => {
+                      const initials = getInitials(user.name ?? '');
+                      return (
+                        <tr key={user.id}>
+                          <td>
+                            <div className="user-cell">
+                              <div className="user-cell-avatar">{initials}</div>
+                              <div>
+                                <div className="user-cell-name">{user.name}</div>
+                                <div className="user-cell-email">{user.emailAddress}</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td>{''}</td>
+                          <td>{''}</td>
+                          <td>
+                            {showBlockedMembers ? (
+                              <button
+                                className="btn btn-secondary btn-sm"
+                                data-testid={`unblockUserBtn-${user.id}`}
+                                aria-label={t('unblock') + ': ' + user.name}
+                                onClick={async () => {
+                                  await handleUnBlockUser(user);
+                                }}
+                              >
+                                {t('unblock')}
+                              </button>
+                            ) : (
+                              <button
+                                className="btn btn-secondary btn-sm"
+                                data-testid={`blockUserBtn-${user.id}`}
+                                aria-label={t('block') + ': ' + user.name}
+                                onClick={async () => {
+                                  await handleBlockUser(user);
+                                }}
+                              >
+                                {t('block')}
+                              </button>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <EmptyState
+                icon="person_off"
+                message={
+                  searchTerm.length === 0
+                    ? !showBlockedMembers
+                      ? t('noUsersFound')
+                      : t('noSpammerFound')
+                    : tCommon('noResultsFoundFor', { query: searchTerm })
+                }
+                dataTestId="block-user-empty-state"
               />
-            </div>
-          ) : (
-            <EmptyState
-              icon="person_off"
-              message={
-                searchTerm.length === 0
-                  ? !showBlockedMembers
-                    ? t('noUsersFound')
-                    : t('noSpammerFound')
-                  : tCommon('noResultsFoundFor', { query: searchTerm })
-              }
-              dataTestId="block-user-empty-state"
-            />
-          )}
+            )}
+          </div>
         </div>
       )}
     </>

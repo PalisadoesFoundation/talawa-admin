@@ -17,7 +17,7 @@
  * @remarks
  * - Uses Apollo Client hooks for fetching and updating user data.
  * - Handles avatar uploads with file type and size validation.
- * - Uses react-bootstrap components and MUI-based date pickers for UI.
+ * - Uses plain HTML elements and MUI-based date pickers for UI.
  * - Supports localization via react-i18next.
  *
  * @example
@@ -35,7 +35,6 @@ import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { GET_USER_BY_ID } from 'GraphQl/Queries/Queries';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
-import { Card, Row, Col } from 'react-bootstrap';
 import useLocalStorage from 'utils/useLocalstorage';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import DatePicker from 'shared-components/DatePicker';
@@ -243,10 +242,10 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
   }
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Row className="g-4 mt-1">
-        <Col md={6}>
-          <Card className={`${styles.allRound}`}>
-            <Card.Header className={styles.userContactDetailPersonalCardHeader}>
+      <div className={styles.twoColGrid}>
+        <div className={styles.cardWrapper}>
+          <div className={`${styles.allRound}`}>
+            <div className={styles.userContactDetailPersonalCardHeader}>
               <h3 className="m-0 font-black">{t('personalDetailsHeading')}</h3>
               <Button
                 variant="light"
@@ -258,9 +257,9 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
                   ? tCommon('admin')
                   : tCommon('user')}
               </Button>
-            </Card.Header>
-            <Card.Body className="py-3 px-3">
-              <Col lg={12} className="mb-2">
+            </div>
+            <div className={styles.cardBodyPadding}>
+              <div className="mb-2">
                 <div className="text-center mb-3">
                   <div className="position-relative d-inline-block">
                     <ProfileAvatarDisplay
@@ -298,16 +297,16 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
                     onChange={onAvatarChange}
                   />
                 </FormFieldGroup>
-              </Col>
-              <Row className="g-3">
-                <Col md={6}>
+              </div>
+              <div className={styles.formGrid}>
+                <div className={styles.formCol6}>
                   <label htmlFor="name" className="form-label">
                     {tCommon('name')}
                   </label>
                   <input
                     id="name"
                     value={formState.name}
-                    className={`form-control ${styles.inputColor}`}
+                    className={`form-input ${styles.inputColor}`}
                     type="text"
                     name="name"
                     data-testid="inputName"
@@ -315,8 +314,8 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
                     required
                     placeholder={tCommon('name')}
                   />
-                </Col>
-                <Col md={6} data-testid="gender">
+                </div>
+                <div className={styles.formCol6} data-testid="gender">
                   <label htmlFor="gender" className="form-label">
                     {t('gender')}
                   </label>
@@ -339,8 +338,8 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
                       variant="outline-secondary"
                     />
                   </div>
-                </Col>
-                <Col md={6}>
+                </div>
+                <div className={styles.formCol6}>
                   <label htmlFor="birthDate" className="form-label">
                     {t('birthDate')}
                   </label>
@@ -365,8 +364,8 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
                       },
                     }}
                   />
-                </Col>
-                <Col md={6}>
+                </div>
+                <div className={styles.formCol6}>
                   <label htmlFor="grade" className="form-label">
                     {t('educationGrade')}
                   </label>
@@ -389,8 +388,8 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
                       variant="outline-secondary"
                     />
                   </div>
-                </Col>
-                <Col md={6}>
+                </div>
+                <div className={styles.formCol6}>
                   <label htmlFor="empStatus" className="form-label">
                     {t('employmentStatus')}
                   </label>
@@ -413,8 +412,8 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
                       variant="outline-secondary"
                     />
                   </div>
-                </Col>
-                <Col md={6}>
+                </div>
+                <div className={styles.formCol6}>
                   <label htmlFor="maritalStatus" className="form-label">
                     {t('maritalStatus')}
                   </label>
@@ -437,15 +436,15 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
                       variant="outline-secondary"
                     />
                   </div>
-                </Col>
-                <Col md={12}>
+                </div>
+                <div className={styles.formCol12}>
                   <label htmlFor="description" className="form-label">
                     {tCommon('description')}
                   </label>
                   <input
                     id="description"
                     value={formState.description}
-                    className={`form-control ${styles.inputColor}`}
+                    className={`form-input ${styles.inputColor}`}
                     type="text"
                     name="description"
                     data-testid="inputDescription"
@@ -455,35 +454,35 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
                     required
                     placeholder={tCommon('enterDescription')}
                   />
-                </Col>
-              </Row>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col md={6}>
-          <Card className={`${styles.allRound}`}>
-            <Card.Header className={`py-3 px-4 ${styles.topRadius}`}>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className={styles.cardWrapper}>
+          <div className={`${styles.allRound}`}>
+            <div className={`${styles.topRadius}`} style={{ padding: '0.75rem 1rem' }}>
               <h3 className="m-0 font-black">{t('contactInfoHeading')}</h3>
-            </Card.Header>
-            <Card.Body className="py-3 px-3">
-              <Row className="g-3">
-                <Col md={12}>
+            </div>
+            <div className={styles.cardBodyPadding}>
+              <div className={styles.formGrid}>
+                <div className={styles.formCol12}>
                   <label htmlFor="email" className="form-label">
                     {tCommon('email')}
                   </label>
                   <input
                     id="email"
                     value={data?.user?.emailAddress}
-                    className={`form-control ${styles.inputColor}`}
+                    className={`form-input ${styles.inputColor}`}
                     type="email"
                     name="email"
                     data-testid="inputEmail"
                     disabled
                     placeholder={tCommon('email')}
                   />
-                </Col>
+                </div>
                 {phoneFieldConfigs.map((field) => (
-                  <Col md={12} key={field.id}>
+                  <div className={styles.formCol12} key={field.id}>
                     <label htmlFor={field.id} className="form-label">
                       {t(field.key)}
                     </label>
@@ -494,7 +493,7 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
                           field.key as keyof typeof formState
                         ] as string) || ''
                       }
-                      className={`form-control ${styles.inputColor}`}
+                      className={`form-input ${styles.inputColor}`}
                       type="tel"
                       data-testid={field.testId}
                       name={field.id}
@@ -503,10 +502,10 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
                       }
                       placeholder={tCommon('memberDetailNumberExample')}
                     />
-                  </Col>
+                  </div>
                 ))}
                 {addressFieldConfigs.map((field) => (
-                  <Col md={field.colSize} key={field.id}>
+                  <div className={field.colSize === 12 ? styles.formCol12 : styles.formCol6} key={field.id}>
                     <label htmlFor={field.id} className="form-label">
                       {t(field.key)}
                     </label>
@@ -517,7 +516,7 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
                           field.key as keyof typeof formState
                         ] as string) || ''
                       }
-                      className={`form-control ${styles.inputColor}`}
+                      className={`form-input ${styles.inputColor}`}
                       type="text"
                       name={field.id}
                       data-testid={field.testId}
@@ -532,13 +531,13 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
                             : tCommon('memberDetailExampleLane')
                       }
                     />
-                  </Col>
+                  </div>
                 ))}
-                <Col md={12}>
+                <div className={styles.formCol12}>
                   <FormFieldGroup name="country" label={tCommon('country')}>
                     <select
                       id="country"
-                      className={`form-control ${styles.inputColor}`}
+                      className={`form-input ${styles.inputColor}`}
                       value={formState.countryCode}
                       data-testid="inputCountry"
                       onChange={(e) =>
@@ -561,14 +560,14 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
                         ))}
                     </select>
                   </FormFieldGroup>
-                </Col>
-              </Row>
-            </Card.Body>
-          </Card>
-        </Col>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         {isUpdated && (
-          <Col md={12}>
-            <Card.Footer className=" border-top-0 d-flex justify-content-end gap-2 py-3 px-2">
+          <div className={styles.footerActions}>
+            <div className={styles.footerActionsInner}>
               <Button
                 variant="outline-secondary"
                 onClick={resetChanges}
@@ -584,10 +583,10 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
               >
                 {tCommon('saveChanges')}
               </Button>
-            </Card.Footer>
-          </Col>
+            </div>
+          </div>
         )}
-      </Row>
+      </div>
     </LocalizationProvider>
   );
 };

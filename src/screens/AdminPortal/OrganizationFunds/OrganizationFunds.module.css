@@ -1,12 +1,39 @@
+.pageHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.pageHeaderLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pageTitle {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--gray-900);
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.pageSubtitle {
+  font-size: 14px;
+  color: var(--gray-500);
+  margin: 0;
+}
+
 .overflowVisible {
   overflow: visible;
 }
 
 .whiteContainer {
-  background-color: var(--color-white);
+  background-color: var(--surface);
   border-radius: var(--radius-xl);
-  margin-top: var(--space-5);
-  margin-bottom: var(--space-5);
+  margin-top: 1.25rem;
+  margin-bottom: 1.25rem;
 }
 
 .message {
@@ -18,26 +45,25 @@
 }
 
 .errorIcon {
-  font-size: var(--font-size-4xl);
-  color: var(--color-red-500);
-  margin-bottom: var(--space-5);
+  font-size: 2.25rem;
+  color: var(--red-500);
+  margin-bottom: 1.25rem;
 
-  /* Add error icon for non-color indication */
   &::before {
     content: '⚠️';
-    margin-right: var(--space-3);
+    margin-right: 0.75rem;
   }
 }
 
 .errorIconLarge {
-  font-size: var(--font-size-3xl);
+  font-size: 1.875rem;
 }
 
 .tableHeader {
-  background-color: var(--color-gray-100);
-  color: var(--color-black);
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-bold);
+  background-color: var(--gray-100);
+  color: var(--gray-900);
+  font-size: 1rem;
+  font-weight: 700;
 }
 
 .requestsTableItemIndex {
@@ -45,32 +71,30 @@
 }
 
 .fundNameButton {
-  color: var(--color-blue-500);
+  color: var(--green-500);
   cursor: pointer;
   padding: 0;
   text-decoration: none;
-  font-weight: var(--font-weight-regular);
+  font-weight: 400;
 }
 
 .fundNameButton:hover {
-  color: var(--color-blue-500);
+  color: var(--green-600);
   text-decoration: underline;
 }
 
 .editButton {
-  background-color: var(--color-blue-200);
-  color: var(--color-gray-700);
+  background-color: var(--green-50);
+  color: var(--gray-700);
   border: none;
   border-radius: var(--radius-sm);
-  font-weight: var(--font-weight-semibold);
-  padding: var(--space-3) var(--space-5);
-  --bs-btn-active-bg: var(--color-blue-300);
-  --bs-btn-active-border-color: transparent;
+  font-weight: 600;
+  padding: 0.75rem 1.25rem;
 }
 
 .editButton:is(:hover, :active) {
-  background-color: var(--color-blue-300);
-  color: var(--color-gray-700);
+  background-color: var(--green-100);
+  color: var(--gray-700);
   border-color: transparent;
   box-shadow: none;
 }
@@ -78,30 +102,30 @@
 .searchContainerRowNoTopMargin {
   display: flex;
   align-items: center;
-  gap: var(--space-5);
-  margin-bottom: var(--space-5);
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
 }
 
 .createFundButton {
-  background-color: var(--color-gray-50);
-  color: var(--color-gray-700);
-  border: var(--border-1) solid var(--color-gray-700);
-  margin: var(--space-2) var(--space-2);
-  width: var(--space-16);
-  height: var(--space-10);
+  background-color: var(--gray-50);
+  color: var(--gray-700);
+  border: 1px solid var(--gray-700);
+  margin: 0.5rem 0.5rem;
+  width: 160px;
+  height: 2.5rem;
 }
 
 .createFundButton:hover {
-  background-color: var(--color-gray-400) !important;
-  border-color: var(--color-gray-300) !important;
-  color: var(--color-white) !important;
+  background-color: var(--gray-400);
+  border-color: var(--gray-300);
+  color: var(--surface);
   box-shadow: none;
 }
 
 .createFundButton:active {
-  color: var(--color-gray-400);
-  background-color: var(--color-gray-100);
-  border: var(--border-1) solid var(--color-gray-400);
+  color: var(--gray-400);
+  background-color: var(--gray-100);
+  border: 1px solid var(--gray-400);
 }
 
 .buttonNoWrap {
@@ -114,12 +138,12 @@
 }
 
 .listTable {
-  margin-top: var(--space-5);
+  margin-top: 1.25rem;
 }
 
 .rowBackground {
-  background-color: var(--color-white);
-  color: var(--color-black);
-  max-height: var(--space-14);
+  background-color: var(--surface);
+  color: var(--gray-900);
+  max-height: 3.5rem;
   overflow-y: auto;
 }

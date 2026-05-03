@@ -26,7 +26,6 @@
 // translation-check-keyPrefix: eventListCard
 import React from 'react';
 import type { JSX } from 'react';
-import { Col, Row } from 'react-bootstrap';
 import styles from './EventDashboard.module.css';
 import { useTranslation } from 'react-i18next';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
@@ -146,13 +145,13 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
 
   return (
     <div data-testid="event-dashboard">
-      <Row className="">
+      <div>
         <EventListCardModals
           eventListCardProps={eventListCardProps}
           eventModalIsOpen={eventModalIsOpen}
           hideViewModal={hideViewModal}
         />
-        <div className="d-flex px-6" data-testid="event-stats">
+        <div style={{ display: 'flex', padding: '0 1.5rem' }} data-testid="event-stats">
           {/* Attendees data not available in new query; adjust or remove */}
           <div
             className={`${styles.ctacards}`}
@@ -185,11 +184,18 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
             </div>
           </div>
         </div>
-        <Col>
+        <div>
           <div className={styles.eventContainer} data-testid="event-details">
             <div className={styles.eventDetailsBox}>
               <Button
-                className="btn btn-light rounded-circle position-absolute end-0 me-3 p-1 mt-2"
+                style={{
+                  position: 'absolute',
+                  right: 0,
+                  marginRight: '1rem',
+                  padding: '0.25rem',
+                  marginTop: '0.5rem',
+                  borderRadius: '50%',
+                }}
                 onClick={showViewModal}
                 data-testid="edit-event-button"
                 aria-label={tEventList('editEvent')}
@@ -235,8 +241,8 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
               </p>
             </div>
           </div>
-        </Col>
-      </Row>
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,0 +1,30 @@
+.cards > h2 {
+  font-size: 19px;
+}
+
+.cards > h3 {
+  font-size: 17px;
+}
+
+.cards > p {
+  font-size: 14px;
+  margin-top: -5px;
+  margin-bottom: 7px;
+}
+
+.cards:hover {
+  filter: brightness(0.8);
+}
+
+.cards:hover::before {
+  opacity: 0.5;
+}
+
+.cards:hover::after {
+  opacity: 1;
+  mix-blend-mode: normal;
+}
+
+.cards:last-child:nth-last-child(odd) {
+  grid-column: auto / span 2;
+}

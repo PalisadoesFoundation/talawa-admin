@@ -23,7 +23,7 @@
  * - Provides fallback UI when no members or events are available.
  */
 import React, { useEffect } from 'react';
-import { ListGroup } from 'react-bootstrap';
+
 import AboutImg from 'assets/images/defaultImg.png';
 import styles from './OrganizationSidebar.module.css';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -144,21 +144,21 @@ export default function OrganizationSidebar(): JSX.Element {
         <b>{tCommon('members')}</b>
       </div>
       {memberLoading ? (
-        <div className={`d-flex flex-row justify-content-center`}>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
           <HourglassBottomIcon /> <span>{t('loading')}</span>
         </div>
       ) : (
-        <ListGroup variant="flush">
+        <div>
           {members && members.length ? (
             members.map((member: InterfaceMemberInfo) => {
               const memberName = `${member.firstName} ${member.lastName}`;
               return (
-                <ListGroup.Item
+                <div
                   key={member._id}
-                  action
-                  className={`${styles.rounded} ${styles.colorLight} my-1`}
+                  className={`${styles.rounded} ${styles.colorLight}`}
+                  style={{ marginTop: '0.25rem', marginBottom: '0.25rem', padding: '0.5rem', cursor: 'pointer' }}
                 >
-                  <div className="d-flex flex-row">
+                  <div style={{ display: 'flex', flexDirection: 'row' }}>
                     <img
                       src={member.image ? member.image : AboutImg}
                       className={styles.memberImage}
@@ -167,13 +167,13 @@ export default function OrganizationSidebar(): JSX.Element {
                     />
                     <div className={styles.orgName}>{memberName}</div>
                   </div>
-                </ListGroup.Item>
+                </div>
               );
             })
           ) : (
-            <div className="w-100 text-center">{t('noMembers')}</div>
+            <div style={{ width: '100%', textAlign: 'center' }}>{t('noMembers')}</div>
           )}
-        </ListGroup>
+        </div>
       )}
 
       {/* Link to view all members */}
@@ -189,42 +189,42 @@ export default function OrganizationSidebar(): JSX.Element {
         <b>{t('events')}</b>
       </div>
       {eventsLoading ? (
-        <div className={`d-flex flex-row justify-content-center`}>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
           <HourglassBottomIcon /> <span>{t('loading')}</span>
         </div>
       ) : (
-        <ListGroup variant="flush">
+        <div>
           {events && events.length ? (
             events.map((event: InterfaceQueryOrganizationEventListItem) => {
               return (
-                <ListGroup.Item
+                <div
                   key={event._id}
-                  action
-                  className={`${styles.rounded} ${styles.colorLight} my-1`}
+                  className={`${styles.rounded} ${styles.colorLight}`}
+                  style={{ marginTop: '0.25rem', marginBottom: '0.25rem', padding: '0.5rem', cursor: 'pointer' }}
                 >
-                  <div className="d-flex flex-column">
-                    <div className="d-flex flex-row justify-content-between align-items-center">
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                       <div className={styles.orgName}>{event.title}</div>
                       <div>
                         <CalendarMonthIcon />
                       </div>
                     </div>
-                    <div className={`d-flex flex-row ${styles.eventDetails}`}>
+                    <div className={styles.eventDetails} style={{ display: 'flex', flexDirection: 'row' }}>
                       Starts{' '}
                       <b> {dayjs(event.startDate).format("D MMMM 'YY")}</b>
                     </div>
-                    <div className={`d-flex flex-row ${styles.eventDetails}`}>
+                    <div className={styles.eventDetails} style={{ display: 'flex', flexDirection: 'row' }}>
                       {t('ends')}{' '}
                       <b> {dayjs(event.endDate).format("D MMMM 'YY")}</b>
                     </div>
                   </div>
-                </ListGroup.Item>
+                </div>
               );
             })
           ) : (
-            <div className="w-100 text-center">{t('noEvents')}</div>
+            <div style={{ width: '100%', textAlign: 'center' }}>{t('noEvents')}</div>
           )}
-        </ListGroup>
+        </div>
       )}
 
       {/* Link to view all events */}

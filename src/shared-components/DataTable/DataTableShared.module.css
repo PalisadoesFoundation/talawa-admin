@@ -1,5 +1,5 @@
 /**
- * Shared styles for DataTable components to avoid code duplication.
+ * Shared styles for DataTable components — Talawa design system.
  * These classes should be composed locally where needed.
  */
 
@@ -10,13 +10,13 @@
 }
 
 .dataSkeletonCell {
-  height: var(--space-5);
+  height: 16px;
   width: 100%;
   background: linear-gradient(
     90deg,
-    var(--color-gray-200) 25%,
-    var(--color-gray-100) 50%,
-    var(--color-gray-200) 75%
+    var(--gray-200) 25%,
+    var(--gray-100) 50%,
+    var(--gray-200) 75%
   );
   background-size: 200px 100%;
   border-radius: var(--radius-sm);
@@ -35,10 +35,10 @@
 
 .visuallyHidden {
   position: absolute;
-  width: var(--space-0-5);
-  height: var(--space-0-5);
+  width: 1px;
+  height: 1px;
   padding: 0;
-  margin: calc(var(--space-0-5) * -1);
+  margin: -1px;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   clip-path: inset(50%);
@@ -47,15 +47,16 @@
 }
 
 .selectCol {
-  width: var(--space-10);
+  width: 40px;
   text-align: center;
   vertical-align: middle;
 }
 
 .selectCol input[type='checkbox'] {
   cursor: pointer;
-  width: var(--space-5);
-  height: var(--space-5);
+  width: 16px;
+  height: 16px;
+  accent-color: var(--green-500);
 }
 
 .actionsCol {
@@ -64,21 +65,25 @@
 }
 
 .bulkBtn {
-  border: var(--border-1) solid var(--color-gray-200);
-  background-color: var(--color-white);
-  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--gray-200);
+  background: var(--surface);
+  padding: 6px 14px;
   border-radius: var(--radius-md);
   cursor: pointer;
-  font-size: var(--font-size-sm);
-  transition: background-color 0.15s ease;
+  font-size: 13px;
+  font-family: var(--font);
+  font-weight: 500;
+  color: var(--gray-700);
+  transition: background 0.12s ease, border-color 0.12s ease;
 }
 
 .bulkBtn:hover:not(:disabled) {
-  background-color: var(--color-gray-100);
+  background: var(--gray-50);
+  border-color: var(--gray-300);
 }
 
 .bulkBtn:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
@@ -87,6 +92,6 @@
   inset: 0;
   display: grid;
   place-items: center;
-  background-color: var(--color-white-60);
+  background: rgba(255, 255, 255, 0.6);
   z-index: 1;
 }

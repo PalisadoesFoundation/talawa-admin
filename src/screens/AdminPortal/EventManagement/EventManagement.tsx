@@ -36,19 +36,10 @@
  * @returns The rendered EventManagement component.
  */
 import React, { useState } from 'react';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import { Navigate, useNavigate, useParams } from 'react-router';
-import { FaChevronLeft, FaTasks } from 'react-icons/fa';
-import { MdOutlineDashboard } from 'react-icons/md';
-import EventRegistrantsIcon from 'assets/svgs/people.svg?react';
-import { BsPersonCheck } from 'react-icons/bs';
-import { IoMdStats, IoIosHand } from 'react-icons/io';
-import EventAgendaItemsIcon from 'assets/svgs/agenda-items.svg?react';
+import { FaChevronLeft } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
-import Button from 'shared-components/Button';
 import DropDownButton from 'shared-components/DropDownButton';
-import styles from './EventManagement.module.css';
 import EventDashboard from 'components/AdminPortal/EventManagement/Dashboard/EventDashboard';
 import EventActionItems from 'components/AdminPortal/EventManagement/EventActionItems/EventActionItems';
 import VolunteerContainer from 'screens/AdminPortal/EventVolunteers/VolunteerContainer';
@@ -71,7 +62,6 @@ type TabOptions =
 
 interface InterfaceTabConfig {
   value: TabOptions;
-  icon: JSX.Element;
   component: JSX.Element;
 }
 
@@ -111,97 +101,59 @@ const EventManagement = (): JSX.Element => {
   const eventDashboardTabs: InterfaceTabConfig[] = [
     {
       value: 'dashboard',
-      icon: <MdOutlineDashboard size={18} className="me-1" />,
       component: (
-        <div data-testid="eventDashboardTab" className="mx-4 p-4 pt-2 mt-5">
+        <div data-testid="eventDashboardTab">
           <EventDashboard eventId={eventId} />
         </div>
       ),
     },
     {
       value: 'registrants',
-      icon: <EventRegistrantsIcon width={23} height={23} className="me-1" />,
       component: (
-        <div data-testid="eventRegistrantsTab" className="mx-4 p-4 pt-2 mt-5">
+        <div data-testid="eventRegistrantsTab">
           <EventRegistrants />
         </div>
       ),
     },
     {
       value: 'attendance',
-      icon: <BsPersonCheck size={20} className="me-1" />,
       component: (
-        <div data-testid="eventAttendanceTab" className="mx-4 p-4 pt-2 mt-5">
+        <div data-testid="eventAttendanceTab">
           <EventAttendance />
         </div>
       ),
     },
     {
       value: 'agendas',
-      icon: <EventAgendaItemsIcon width={23} height={23} className="me-1" />,
       component: (
-        <div data-testid="eventAgendasTab" className="mx-4 p-4 pt-2 mt-5">
+        <div data-testid="eventAgendasTab">
           <EventAgenda eventId={eventId} />
         </div>
       ),
     },
     {
       value: 'actions',
-      icon: <FaTasks size={16} className="me-1" />,
       component: (
-        <div data-testid="eventActionsTab" className="mx-4 p-4 pt-2">
+        <div data-testid="eventActionsTab">
           <EventActionItems eventId={eventId} />
         </div>
       ),
     },
     {
       value: 'volunteers',
-      icon: <IoIosHand size={20} className="me-1" />,
       component: (
-        <div data-testid="eventVolunteersTab" className="mx-4 p-4 pt-2">
+        <div data-testid="eventVolunteersTab">
           <VolunteerContainer />
         </div>
       ),
     },
     {
       value: 'statistics',
-      icon: <IoMdStats size={20} className="me-2" />,
       component: (
-        <div data-testid="eventStatsTab" className="mx-4 p-4 pt-2 mt-5"></div>
+        <div data-testid="eventStatsTab"></div>
       ),
     },
   ];
-
-  /**
-   * Renders a button for each tab with the appropriate icon and label.
-   *
-   * @param value - The tab value
-   * @param icon - The icon to display for the tab
-   * @returns JSX.Element - The rendered button component
-   */
-  const renderButton = ({ value, icon }: InterfaceTabConfig): JSX.Element => {
-    const selected = tab === value;
-    const variant = selected ? 'success' : 'light';
-    const translatedText = t(value);
-
-    const className = selected
-      ? `px-4 d-flex align-items-center rounded-3 shadow-sm ${styles.eventManagementSelectedBtn}`
-      : `text-secondary bg-white px-4 d-flex align-items-center rounded-3 shadow-sm ${styles.eventManagementBtn}`;
-    const props = {
-      role: 'tab',
-      variant,
-      className,
-      onClick: () => setTab(value),
-      'data-testid': `${value}Btn`,
-    };
-
-    return (
-      <Button key={value} {...props}>
-        {icon}
-        {translatedText}
-      </Button>
-    );
-  };
 
   const handleBack = (): void => {
     if (userRole === 'USER') {
@@ -214,45 +166,107 @@ const EventManagement = (): JSX.Element => {
   const currentTab = eventDashboardTabs.find((t) => t.value === tab);
 
   return (
-    <div className="d-flex flex-column bg-white rounded-4 min-vh-75">
-      <Row className="mx-3 mt-4">
-        <Col>
-          <div className="d-none d-md-flex gap-3">
-            <Button
-              size="sm"
-              variant="light"
-              className="d-flex text-secondary bg-white align-items-center"
-              aria-label={t('backToEvents')}
-              onClick={handleBack}
+    <div>
+      <nav className="breadcrumb" aria-label="Breadcrumb">
+        <a
+          href="#"
+          onClick={(e) => { e.preventDefault(); handleBack(); }}
+          data-testid="backBtn"
+        >
+          {t('events') || 'Events'}
+        </a>
+        {' \u203A '}{t('dashboard')}
+      </nav>
+
+      {/* Event Header Card */}
+      <div
+        className="event-header-card"
+        style={{
+          background: 'var(--surface)',
+          borderRadius: 'var(--radius-xl)',
+          padding: '24px 28px',
+          boxShadow: 'var(--shadow-card)',
+          marginBottom: '24px',
+        }}
+      >
+        <div
+          className="event-header-top"
+          style={{
+            display: 'flex',
+            alignItems: 'flex-start',
+            justifyContent: 'space-between',
+            gap: '16px',
+            flexWrap: 'wrap',
+          }}
+        >
+          <div>
+            <h1
+              className="event-name"
+              style={{ fontSize: '22px', fontWeight: 700, letterSpacing: '-0.03em', marginBottom: '6px' }}
             >
-              <FaChevronLeft
-                cursor={'pointer'}
-                data-testid="backBtn"
-                aria-hidden="true"
-              />
-            </Button>
-            {eventDashboardTabs.map(renderButton)}
+              {t('dashboard')}
+            </h1>
+            <div
+              className="event-meta-row"
+              style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap', fontSize: '13px', color: 'var(--gray-500)', marginTop: '4px' }}
+            >
+              <span>
+                <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                {' '}{t('dashboard')}
+              </span>
+            </div>
           </div>
+          <div className="event-actions" style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
+            <button
+              className="btn btn-secondary"
+              onClick={handleBack}
+              data-testid="backToEventsBtn"
+            >
+              <FaChevronLeft aria-hidden="true" style={{ marginRight: '4px' }} />
+              {t('backToEvents') || 'Back to Events'}
+            </button>
+          </div>
+        </div>
+      </div>
 
-          <DropDownButton
-            id="tabs-dropdown"
-            options={eventDashboardTabs.map(({ value }) => ({
-              value,
-              label: t(value),
-            }))}
-            selectedValue={tab}
-            onSelect={(value) => setTab(value as TabOptions)}
-            variant="success"
-            dataTestIdPrefix="tabs"
-            drop="down"
-            parentContainerStyle="d-md-none"
-            ariaLabel={t('selectTab')}
-          />
-        </Col>
-      </Row>
+      {/* Tabs */}
+      <div className="tabs" role="tablist">
+        {eventDashboardTabs.map(({ value }) => (
+          <button
+            key={value}
+            className={`tab${tab === value ? ' active' : ''}`}
+            role="tab"
+            aria-selected={tab === value}
+            onClick={() => setTab(value)}
+            data-testid={`${value}Btn`}
+          >
+            {t(value)}
+          </button>
+        ))}
+      </div>
 
-      {/* Render content based on the selected tab */}
-      {currentTab?.component}
+      {/* Mobile dropdown fallback */}
+      <DropDownButton
+        id="tabs-dropdown"
+        options={eventDashboardTabs.map(({ value }) => ({
+          value,
+          label: t(value),
+        }))}
+        selectedValue={tab}
+        onSelect={(value) => setTab(value as TabOptions)}
+        variant="success"
+        dataTestIdPrefix="tabs"
+        drop="down"
+        parentContainerStyle="d-md-none"
+        ariaLabel={t('selectTab')}
+      />
+
+      {/* Tab content in a card */}
+      <div className="card" style={{ marginTop: '4px' }}>
+        <div className="card-body">
+          {currentTab?.component}
+        </div>
+      </div>
     </div>
   );
 };

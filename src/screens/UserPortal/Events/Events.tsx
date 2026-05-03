@@ -353,14 +353,97 @@ export default function Events(): JSX.Element {
 
   return (
     <>
-      <div className={styles.mainpageright} data-testid="events-screen">
-        <div className={`${styles.justifyspOrganizationEvents}`}>
+      <div data-testid="events-screen">
+        <div className="page-header">
+          <div className="page-header-left">
+            <h1 className="page-title">{t('title')}</h1>
+            <p className="page-subtitle">{t('createEventTitle')}</p>
+          </div>
+        </div>
+        <div className="toolbar">
           <EventHeader
             viewType={viewType}
             showInviteModal={showInviteModal}
             handleChangeView={handleChangeView}
           />
         </div>
+      </div>
+
+      {/* Event Cards Grid */}
+      <div className={styles.eventGrid}>
+        {events.map(
+          (event: {
+            id: string;
+            name: string;
+            description: string;
+            startDate: string;
+            startAt: string;
+            endAt: string;
+            allDay: boolean;
+            location: string;
+            attendees: { id: string }[];
+          }) => {
+            const eventDate = event.startAt
+              ? dayjs(event.startAt)
+              : event.startDate
+                ? dayjs(event.startDate)
+                : dayjs();
+            const monthStr = eventDate.format('MMM');
+            const dayStr = eventDate.format('DD');
+            const timeStr = event.allDay
+              ? 'All Day'
+              : `${eventDate.format('dddd, MMMM D')} at ${eventDate.format('h:mm A')}`;
+            const isAttending =
+              event.attendees?.some(
+                (a: { id: string }) => a.id === userId,
+              ) ?? false;
+
+            return (
+              <div className={styles.eventCard} key={event.id}>
+                <div className={styles.eventCardBody}>
+                  <div className={styles.eventDateRow}>
+                    <div className={styles.eventDateBadge}>
+                      <span className={styles.eventDateMonth}>{monthStr}</span>
+                      <span className={styles.eventDateDay}>{dayStr}</span>
+                    </div>
+                    <div className={styles.eventDateInfo}>
+                      <div className={styles.eventCardTitle}>{event.name}</div>
+                      <div className={styles.eventCardTime}>{timeStr}</div>
+                    </div>
+                  </div>
+                  {event.description && (
+                    <div className={styles.eventCardDesc}>
+                      {event.description}
+                    </div>
+                  )}
+                  <div className={styles.eventCardFooter}>
+                    <div className={styles.eventLocation}>
+                      <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                      >
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                        <circle cx="12" cy="10" r="3" />
+                      </svg>
+                      {event.location || 'No location'}
+                    </div>
+                    {isAttending ? (
+                      <button
+                        className={`btn btn-sm ${styles.btnAttending}`}
+                      >
+                        Attending &#10003;
+                      </button>
+                    ) : (
+                      <button className="btn btn-sm btn-primary">
+                        Register
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          },
+        )}
       </div>
 
       <EventCalendar

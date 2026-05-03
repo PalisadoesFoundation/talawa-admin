@@ -32,13 +32,13 @@
  * ```
  *
  * Uses -
- * - `react-bootstrap/Collapse` for dropdown animation.
+ * - Conditional rendering for dropdown animation.
  * - `react-router-dom` for navigation and route handling.
  * - `react-i18next` for internationalization support.
  * - `IconComponent` for rendering icons dynamically.
  */
 import React, { useEffect } from 'react';
-import { Collapse } from 'react-bootstrap';
+
 import styles from './CollapsibleDropdown.module.css';
 import IconComponent from 'shared-components/IconComponent/IconComponent';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
@@ -86,19 +86,19 @@ const CollapsibleDropdown = ({
         <div className={styles.collapsibleDropdownIconWrapper}>
           <IconComponent
             name={name}
-            fill={showDropdown ? 'var(--bs-black)' : 'var(--bs-secondary)'}
+            fill={showDropdown ? 'var(--bs-black)' : 'var(--gray-500)'}
           />
         </div>
         {tCommon(name)}
         <i
           className={`ms-auto fa
-          ${showDropdown ? 'var(--bs-white)' : 'var(--bs-secondary)'}
+          ${showDropdown ? 'var(--bs-white)' : 'var(--gray-500)'}
           ${showDropdown ? 'fa-chevron-up' : 'fa-chevron-down'}
           `}
         />
       </Button>
-      <Collapse in={showDropdown}>
-        <div className="ps-4">
+      {showDropdown && (
+        <div style={{ paddingLeft: '1.5rem' }}>
           {subTargets &&
             subTargets.map(({ name, icon: stringIcon, url }, index) => {
               return (
@@ -133,7 +133,7 @@ const CollapsibleDropdown = ({
               );
             })}
         </div>
-      </Collapse>
+      )}
     </ErrorBoundaryWrapper>
   );
 };

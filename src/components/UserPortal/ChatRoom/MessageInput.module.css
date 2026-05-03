@@ -46,7 +46,6 @@
   padding: 0;
   background: none;
   border: none;
-  --bs-btn-active-bg: none;
 }
 
 .customToggle::after,

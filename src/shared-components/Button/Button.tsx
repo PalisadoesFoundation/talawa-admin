@@ -1,70 +1,48 @@
 /**
- * Shared Button wrapper around react-bootstrap's Button.
- * Adds loading, icon placement, full-width option, and an `xl` size while
- * forwarding all standard Button props.
+ * Shared Button — native implementation using design system classes.
  *
- * @param props - Props passed to the Button component, forwarding react-bootstrap ButtonProps plus custom props like loading, icon placement, fullWidth, and xl sizing.
- * @returns JSX.Element - A wrapped react-bootstrap Button with loading state, icon placement, full-width, and xl size support.
+ * Replaces react-bootstrap Button. Same props interface, no Bootstrap dependency.
+ * Uses the `.btn` / `.btn-primary` / etc. classes from the design system.
  */
 import { forwardRef } from 'react';
 import type { ForwardedRef } from 'react';
-import RBButton from 'react-bootstrap/Button';
 import styles from './Button.module.css';
 import type { ButtonProps, ButtonSize, ButtonVariant } from './Button.types';
 
-const mapSizeToBootstrap = (
-  size: ButtonSize | undefined,
-): 'sm' | 'lg' | undefined => {
-  if (size === 'sm' || size === 'lg') {
-    return size;
-  }
-  if (size === 'xl') {
-    return 'lg';
-  }
-  return undefined; // md/default
+const VARIANT_CLASS: Record<string, string> = {
+  primary: 'btn-primary',
+  secondary: 'btn-secondary',
+  success: 'btn-primary', // map to green primary
+  danger: 'btn-danger',
+  warning: 'btn-secondary',
+  info: 'btn-secondary',
+  light: 'btn-ghost',
+  dark: 'btn-secondary',
+  link: 'btn-ghost',
+  contained: 'btn-primary',
+  outlined: 'btn-secondary',
+  outline: 'btn-secondary',
+  'outline-primary': 'btn-secondary',
+  'outline-secondary': 'btn-secondary',
+  'outline-success': 'btn-secondary',
+  'outline-danger': 'btn-danger',
+  'outline-warning': 'btn-secondary',
+  'outline-info': 'btn-secondary',
+  'outline-light': 'btn-ghost',
+  'outline-dark': 'btn-secondary',
+  text: 'btn-ghost',
+  toolbar: 'btn-secondary',
+  'toolbar-action': 'btn-secondary',
 };
 
-const BOOTSTRAP_VARIANTS = new Set([
-  'primary',
-  'secondary',
-  'success',
-  'danger',
-  'warning',
-  'info',
-  'light',
-  'dark',
-  'link',
-  'outline-primary',
-  'outline-secondary',
-  'outline-success',
-  'outline-danger',
-  'outline-warning',
-  'outline-info',
-  'outline-light',
-  'outline-dark',
-]);
+const SIZE_CLASS: Record<string, string> = {
+  sm: 'btn-sm',
+  xl: styles.sizeXl,
+};
 
-const mapVariantToBootstrap = (variant: ButtonVariant | undefined): string => {
-  if (!variant) return 'primary';
-
-  if (BOOTSTRAP_VARIANTS.has(variant)) {
-    return variant;
-  }
-
-  // Map MUI variants to bootstrap
-  switch (variant) {
-    case 'contained':
-      return 'primary';
-    case 'outlined':
-    case 'outline':
-      return 'outline-primary';
-    case 'text':
-      return 'link';
-    case 'toolbar':
-      return 'toolbar-action';
-    default:
-      return 'primary';
-  }
+const resolveVariantClass = (variant: ButtonVariant | undefined): string => {
+  if (!variant) return 'btn-primary';
+  return VARIANT_CLASS[variant] || 'btn-primary';
 };
 
 const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
@@ -79,62 +57,82 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
       iconPosition = 'start',
       size = 'md',
       disabled,
+      type = 'button',
       ...rest
     },
     ref: ForwardedRef<HTMLButtonElement | HTMLAnchorElement>,
   ) => {
-    const bootstrapSize = mapSizeToBootstrap(size);
     const isDisabled = disabled || isLoading;
     const showStartIcon = icon && iconPosition === 'start' && !isLoading;
     const showEndIcon = icon && iconPosition === 'end' && !isLoading;
     const content = isLoading && loadingText ? loadingText : children;
     const { variant, role, ...restProps } = rest;
-    const resolvedVariant = mapVariantToBootstrap(variant);
     const hasHref = 'href' in restProps && restProps.href !== undefined;
 
     const classes = [
-      styles.button,
+      'btn',
+      resolveVariantClass(variant),
+      SIZE_CLASS[size] || '',
       fullWidth ? styles.fullWidth : '',
-      size === 'xl' ? styles.sizeXl : '',
       isLoading ? styles.isLoading : '',
       className || '',
     ]
       .filter(Boolean)
       .join(' ');
 
+    const inner = (
+      <span className={styles.content}>
+        {showStartIcon && (
+          <span className={`${styles.icon} ${styles.iconStart}`}>{icon}</span>
+        )}
+        <span className={styles.label}>
+          {isLoading && (
+            <span
+              className={styles.spinner}
+              aria-hidden="true"
+              data-testid="button-spinner"
+            />
+          )}
+          {content}
+        </span>
+        {showEndIcon && (
+          <span className={`${styles.icon} ${styles.iconEnd}`}>{icon}</span>
+        )}
+      </span>
+    );
+
+    if (hasHref) {
+      return (
+        <a
+          ref={ref as ForwardedRef<HTMLAnchorElement>}
+          className={classes}
+          aria-busy={isLoading || undefined}
+          aria-live={isLoading ? 'polite' : undefined}
+          data-size={size}
+          data-fullwidth={fullWidth ? 'true' : undefined}
+          role={role ?? 'link'}
+          {...(restProps as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
+        >
+          {inner}
+        </a>
+      );
+    }
+
     return (
-      <RBButton
-        ref={ref}
+      <button
+        ref={ref as ForwardedRef<HTMLButtonElement>}
         className={classes}
-        size={bootstrapSize}
-        variant={resolvedVariant}
+        type={type}
         disabled={isDisabled}
         aria-busy={isLoading || undefined}
         aria-live={isLoading ? 'polite' : undefined}
         data-size={size}
         data-fullwidth={fullWidth ? 'true' : undefined}
-        role={role ?? (hasHref ? 'link' : undefined)}
-        {...restProps}
+        role={role}
+        {...(restProps as React.ButtonHTMLAttributes<HTMLButtonElement>)}
       >
-        <span className={styles.content}>
-          {showStartIcon && (
-            <span className={`${styles.icon} ${styles.iconStart}`}>{icon}</span>
-          )}
-          <span className={styles.label}>
-            {isLoading && (
-              <span
-                className={styles.spinner}
-                aria-hidden="true"
-                data-testid="button-spinner"
-              />
-            )}
-            {content}
-          </span>
-          {showEndIcon && (
-            <span className={`${styles.icon} ${styles.iconEnd}`}>{icon}</span>
-          )}
-        </span>
-      </RBButton>
+        {inner}
+      </button>
     );
   },
 );

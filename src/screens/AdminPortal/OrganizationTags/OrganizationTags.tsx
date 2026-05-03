@@ -22,23 +22,15 @@
  */
 import { useMutation, useQuery } from '@apollo/client';
 import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
-import { useNavigate, useParams, Link } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import React, { useEffect, useState } from 'react';
-import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import IconComponent from 'shared-components/IconComponent/IconComponent';
-import Button from 'shared-components/Button';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { CreateModal } from 'shared-components/CRUDModalTemplate/CreateModal';
 import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import type { InterfaceTagDataPG } from 'utils/interfaces';
 import styles from './OrganizationTags.module.css';
-import {
-  DataGridWrapper,
-  type GridCellParams,
-} from 'shared-components/DataGridWrapper';
-import type { TokenAwareGridColDef } from 'types/DataGridWrapper/interface';
 import type {
   InterfaceOrganizationTagsQueryPG,
   SortedByType,
@@ -46,7 +38,6 @@ import type {
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { ORGANIZATION_USER_TAGS_LIST_PG } from 'GraphQl/Queries/OrganizationQueries';
 import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
-import Toolbar from 'shared-components/Toolbar/Toolbar';
 import { PAGE_SIZE } from 'types/ReportingTable/utils';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 
@@ -178,249 +169,148 @@ function OrganizationTags(): JSX.Element {
     navigate(`/admin/orgtags/${orgId}/subTags/${tagId}`);
   };
 
-  const renderCountLink = (
-    params: GridCellParams,
-    buildPath: (id: string) => string,
-    count: number | undefined,
-  ) => (
-    <Link className="text-secondary" to={buildPath(params.row.id)}>
-      {count ?? 0}
-    </Link>
-  );
-
-  const columns: TokenAwareGridColDef[] = [
-    {
-      field: 'id',
-      headerName: tCommon('sl_no'),
-      flex: 0.5,
-      minWidth: 'space-11',
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => (
-        <span className={styles.tableItemIndex}>
-          {params.api.getRowIndexRelativeToVisibleRows(params.row.id) + 1}.
-        </span>
-      ),
-    },
-    {
-      field: 'name',
-      headerName: t('tagName'),
-      flex: 2,
-      minWidth: 'space-15',
-      align: 'left',
-      headerAlign: 'left',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div className="d-flex">
-            {params.row.parentTag &&
-              params.row.ancestorTags?.map((tag: InterfaceTagDataPG) => (
-                <div
-                  key={tag.id}
-                  className={styles.tagsBreadCrumbs}
-                  data-testid="ancestorTagsBreadCrumbs"
-                  data-text={tag.name}
-                >
-                  {tag.name}
-                  <i className={'mx-2 fa fa-caret-right'} aria-hidden="true" />
-                </div>
-              ))}
-
-            <div
-              className={styles.subTagsLink}
-              data-testid="tagName"
-              onClick={() => redirectToSubTags(params.row.id)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  redirectToSubTags(params.row.id);
-                }
-              }}
-              role="button"
-              tabIndex={0}
-              aria-label={tCommon('viewSubTagsOf', {
-                tagName: params.row.name,
-              })}
-            >
-              {params.row.name}
-              <i className={'ms-2 fa fa-caret-right'} aria-hidden="true" />
-            </div>
-          </div>
-        );
-      },
-    },
-    {
-      field: 'totalSubTags',
-      headerName: t('totalSubTags'),
-      flex: 1,
-      minWidth: 'space-14',
-      align: 'center',
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return renderCountLink(
-          params,
-          (id) => `/admin/orgtags/${orgId}/subTags/${id}`,
-          params.row.childTags?.totalCount,
-        );
-      },
-    },
-    {
-      field: 'totalAssignedUsers',
-      headerName: t('totalAssignedUsers'),
-      flex: 1,
-      minWidth: 'space-14',
-      align: 'center',
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return renderCountLink(
-          params,
-          (id) => `/admin/orgtags/${orgId}/manageTag/${id}`,
-          params.row.usersAssignedTo?.totalCount,
-        );
-      },
-    },
-    {
-      field: 'actions',
-      headerName: tCommon('actions'),
-      flex: 1,
-      minWidth: 'space-14',
-      align: 'center',
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <Button
-            size="sm"
-            variant="outline-primary"
-            onClick={() => redirectToManageTag(params.row.id)}
-            data-testid="manageTagBtn"
-            className={styles.editButton}
-            aria-label={`${t('manageTag')} ${params.row.name ?? ''}`.trim()}
-          >
-            {t('manageTag')}
-          </Button>
-        );
-      },
-    },
-  ];
-
-  const handleSortChange = (value: string): void => {
-    setTagSortOrder(value === 'latest' ? 'DESCENDING' : 'ASCENDING');
-  };
-
   return (
     <>
-      <Row>
-        <div>
-          <div
-            className={styles.btnsContainer}
-            data-testid="organizationTags-header"
-          >
-            <Toolbar
-              search={{
-                placeholder: tCommon('searchByName'),
-                value: tagSearchName,
-                onChange: (value) => setTagSearchName(value.trim()),
-                onSearch: (value) => setTagSearchName(value.trim()),
-                inputTestId: 'searchByName',
-                buttonTestId: 'searchBtn',
-              }}
-              filters={[
-                {
-                  id: 'tags-sort',
-                  label: t('sortTags'),
-                  type: 'sort',
-                  title: t('sortTags'),
-                  options: [
-                    { label: tCommon('Latest'), value: 'latest' },
-                    { label: tCommon('Oldest'), value: 'oldest' },
-                  ],
-                  selected: tagSortOrder === 'DESCENDING' ? 'latest' : 'oldest',
-                  onChange: (value) => handleSortChange(value.toString()),
-                  testIdPrefix: 'sortTags',
-                },
-              ]}
-              actions={
-                <Button
-                  onClick={() => {
-                    setTagName('');
-                    showCreateTagModal();
-                  }}
-                  data-testid="createTagBtn"
-                  className={styles.createButton}
-                  aria-label={t('createTag')}
-                >
-                  <i className="fa fa-plus me-2" />
-                  {t('createTag')}
-                </Button>
-              }
-            />
-          </div>
-
-          {orgUserTagsError ? (
-            showErrorMessage(orgUserTagsError.message)
-          ) : (
-            <div className="mb-4">
-              <div className="bg-white border light rounded-top mb-0 py-2 d-flex align-items-center">
-                <div className="ms-3 my-1">
-                  <IconComponent name="Tag" />
-                </div>
-
-                <div
-                  className={'fs-4 ms-3 my-1 ' + styles.tagsBreadCrumbs}
-                  data-text={t('tags')}
-                >
-                  {t('tags')}
-                </div>
-              </div>
-
-              <div
-                id="orgUserTagsScrollableDiv"
-                data-testid="orgUserTagsScrollableDiv"
-                className={styles.orgUserTagsScrollableDiv}
-              >
-                <InfiniteScroll
-                  dataLength={userTagsList?.length ?? 0}
-                  next={loadMoreTags}
-                  hasMore={
-                    orgUserTagsData?.organization?.tags?.pageInfo
-                      ?.hasNextPage ?? false
-                  }
-                  loader={
-                    <LoadingState
-                      isLoading={true}
-                      variant="inline"
-                      size="sm"
-                      data-testid="infiniteScrollLoader"
-                    >
-                      {null}
-                    </LoadingState>
-                  }
-                  scrollableTarget="orgUserTagsScrollableDiv"
-                >
-                  <DataGridWrapper<InterfaceTagDataPG>
-                    rows={userTagsList}
-                    columns={columns}
-                    loading={orgUserTagsLoading}
-                    error={undefined}
-                    emptyStateProps={{
-                      message: t('noTagsFound'),
-                    }}
-                  />
-                </InfiniteScroll>
-              </div>
-            </div>
-          )}
+      <div className="page-header">
+        <div className="page-header-left">
+          <h1 className="page-title">
+            {t('tags')}{' '}
+            <span style={{ fontSize: '16px', fontWeight: 500, color: 'var(--gray-400)', marginLeft: '8px' }}>
+              {userTagsList?.length ?? 0}
+            </span>
+          </h1>
+          <p className="page-subtitle">{t('tagName')}</p>
         </div>
-      </Row>
+        <div className="page-header-actions">
+          <button
+            onClick={() => {
+              setTagName('');
+              showCreateTagModal();
+            }}
+            data-testid="createTagBtn"
+            className="btn btn-primary"
+            aria-label={t('createTag')}
+          >
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            {t('createTag')}
+          </button>
+        </div>
+      </div>
+
+      {/* Toolbar */}
+      <div className="toolbar" data-testid="organizationTags-header">
+        <div className="search-bar">
+          <svg aria-hidden="true" className="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input
+            type="text"
+            placeholder={tCommon('searchByName')}
+            aria-label={tCommon('searchByName')}
+            value={tagSearchName}
+            onChange={(e) => setTagSearchName(e.target.value.trim())}
+            data-testid="searchByName"
+          />
+        </div>
+      </div>
+
+      {orgUserTagsError ? (
+        showErrorMessage(orgUserTagsError.message)
+      ) : orgUserTagsLoading ? (
+        <LoadingState isLoading={true} variant="spinner" size="lg" data-testid="loadingState">
+          {null}
+        </LoadingState>
+      ) : (
+        <>
+          <div className="card">
+            <div
+              id="orgUserTagsScrollableDiv"
+              data-testid="orgUserTagsScrollableDiv"
+              className={styles.orgUserTagsScrollableDiv}
+            >
+              <InfiniteScroll
+                dataLength={userTagsList?.length ?? 0}
+                next={loadMoreTags}
+                hasMore={
+                  orgUserTagsData?.organization?.tags?.pageInfo
+                    ?.hasNextPage ?? false
+                }
+                loader={
+                  <LoadingState
+                    isLoading={true}
+                    variant="inline"
+                    size="sm"
+                    data-testid="infiniteScrollLoader"
+                  >
+                    {null}
+                  </LoadingState>
+                }
+                scrollableTarget="orgUserTagsScrollableDiv"
+              >
+                <div className="table-wrapper">
+                  <table className="data-table">
+                    <thead>
+                      <tr>
+                        <th scope="col">{t('tagName')}</th>
+                        <th scope="col">{t('totalAssignedUsers')}</th>
+                        <th scope="col">{t('totalSubTags')}</th>
+                        <th scope="col">{tCommon('created')}</th>
+                        <th scope="col">{tCommon('actions')}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {userTagsList.length === 0 ? (
+                        <tr>
+                          <td colSpan={5} style={{ textAlign: 'center', padding: '40px', color: 'var(--gray-400)' }}>
+                            {t('noTagsFound')}
+                          </td>
+                        </tr>
+                      ) : (
+                        userTagsList.map((tag: InterfaceTagDataPG) => (
+                          <tr key={tag.id}>
+                            <td className="cell-primary">
+                              <a
+                                href="#"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  redirectToManageTag(tag.id);
+                                }}
+                                style={{ color: 'var(--green-600)' }}
+                                data-testid="tagName"
+                              >
+                                {tag.name}
+                              </a>
+                            </td>
+                            <td>{tag.usersAssignedTo?.totalCount ?? 0}</td>
+                            <td>{tag.childTags?.totalCount ?? 0}</td>
+                            <td>{tag.createdAt ? new Date(tag.createdAt).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) : ''}</td>
+                            <td>
+                              <div style={{ display: 'flex', gap: '6px' }}>
+                                <button
+                                  className="btn btn-sm btn-secondary"
+                                  onClick={() => redirectToManageTag(tag.id)}
+                                  data-testid="manageTagBtn"
+                                >
+                                  {tCommon('edit')}
+                                </button>
+                                <button
+                                  className="btn btn-sm btn-danger"
+                                  onClick={() => redirectToSubTags(tag.id)}
+                                  data-testid="subTagsBtn"
+                                >
+                                  {tCommon('delete')}
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </InfiniteScroll>
+            </div>
+          </div>
+        </>
+      )}
 
       <CreateModal
         open={createTagModalIsOpen}

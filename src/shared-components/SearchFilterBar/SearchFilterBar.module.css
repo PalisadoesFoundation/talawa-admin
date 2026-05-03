@@ -1,39 +1,67 @@
+/**
+ * SearchFilterBar — Talawa design system
+ * Flex row toolbar: search bar with green focus ring, filter dropdowns.
+ */
+
 .btnsContainerSearchBar {
   display: flex;
   width: 100%;
   justify-content: space-between;
   align-items: center;
-  margin: var(--space-7) 0 var(--space-7) 0;
-  padding: 0 var(--space-8) 0 var(--space-3);
-  align-items: stretch;
-  gap: var(--space-1);
+  margin: 20px 0;
+  padding: 0;
+  gap: 10px;
   flex-wrap: wrap;
-  min-height: var(--space-10);
+  min-height: 40px;
 }
 
 .btnsBlockSearchBar {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: var(--space-3);
+  gap: 8px;
 }
 
-/* Force all sort/filter/action buttons to the same 40 px as the search bar */
+/* Force all sort/filter/action buttons to the same height as the search bar */
 .btnsBlockSearchBar button {
-  height: var(--space-9);
+  height: 38px;
+  padding: 0 14px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--gray-200);
+  background: var(--surface);
+  color: var(--gray-700);
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease;
 }
 
-/* ── SearchBar height constraint (same technique as Navbar/PageHeader) ───────── */
-/* .searchBar is passed as className to <SearchBar>; it lands on the outer div  */
-/* alongside the CSS-Module-hashed searchBarContainer class.                    */
+.btnsBlockSearchBar button:hover {
+  background: var(--gray-50);
+  border-color: var(--gray-300);
+}
+
+/* Search bar wrapper */
 .searchBar {
-  height: var(--space-9) !important;
+  height: 38px !important;
   margin: 0 !important;
-  flex: 1 1 var(--space-11-75);
+  flex: 1 1 280px;
   min-width: 0;
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  display: flex;
+  align-items: center;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-/* Remove the 40rem min-width on the inner input wrapper */
+.searchBar:focus-within {
+  border-color: var(--green-500);
+  box-shadow: 0 0 0 3px rgba(62, 207, 142, 0.12);
+}
+
+/* Remove the min-width on the inner input wrapper */
 .searchBar > div {
   min-width: 0 !important;
   min-height: 0 !important;
@@ -44,16 +72,26 @@
 /* Constrain the search icon button to match container height */
 .searchBar > button {
   height: 100% !important;
-  width: var(--space-9) !important;
+  width: 38px !important;
 }
 
-/* Accessibility — visually hidden, readable by screen readers */
+.searchBar input {
+  font-size: 13px;
+  font-family: var(--font);
+  color: var(--gray-900);
+}
+
+.searchBar input::placeholder {
+  color: var(--gray-400);
+}
+
+/* Accessibility -- visually hidden, readable by screen readers */
 .screenReaderOnly {
   position: absolute;
-  width: 0;
-  height: 0;
+  width: 1px;
+  height: 1px;
   padding: 0;
-  margin: calc(-1 * var(--space-5));
+  margin: -1px;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;

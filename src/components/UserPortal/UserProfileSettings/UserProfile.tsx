@@ -21,7 +21,7 @@
  * ```
  *
  * Dependencies
- * - `react-bootstrap` for Card component.
+ * - Plain HTML elements for layout.
  * - `shared-components/Button/Button` for the Button component.
  * - `@mui/icons-material` for CalendarMonthOutlinedIcon.
  * - `react-i18next` for translations.
@@ -37,7 +37,7 @@
  */
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import React from 'react';
-import { Card } from 'react-bootstrap';
+
 import Button from 'shared-components/Button/Button';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import { useTranslation } from 'react-i18next';
@@ -74,12 +74,12 @@ const UserProfile = ({
 
   return (
     <>
-      <Card border="0" className="rounded-4 mb-4 ">
+      <div style={{ border: 'none', borderRadius: '1rem', marginBottom: '1.5rem' }}>
         <div className={styles.cardHeader}>
           <div className={styles.cardTitle}>{t('profileDetails')}</div>
         </div>
-        <Card.Body className={styles.cardBody}>
-          <div className={`d-flex mb-2 ${styles.profileContainer}`}>
+        <div className={styles.cardBody}>
+          <div className={styles.profileContainer} style={{ display: 'flex', marginBottom: '0.5rem' }}>
             <div className={styles.imgContainer}>
               <ProfileAvatarDisplay
                 imageUrl={image && image !== 'null' ? image : undefined}
@@ -115,21 +115,21 @@ const UserProfile = ({
                   : email}
               </span>
               <ReactTooltip id="email" />
-              <span className="d-flex">
+              <span style={{ display: 'flex' }}>
                 <CalendarMonthOutlinedIcon />
-                <span className="d-flex align-end">
+                <span style={{ display: 'flex', alignItems: 'flex-end' }}>
                   {tCommon('joined')}{' '}
                   {joinedDate(createdAt, tCommon('unavailable'))}
                 </span>
               </span>
             </div>
           </div>
-          <div className="mt-4 mb-1 d-flex justify-content-center">
+          <div style={{ marginTop: '1.5rem', marginBottom: '0.25rem', display: 'flex', justifyContent: 'center' }}>
             {/* TODO(#6707): Implement copy-to-clipboard functionality for profile link */}
             <Button data-testid="copyProfileLink">{t('copyLink')}</Button>
           </div>
-        </Card.Body>
-      </Card>
+        </div>
+      </div>
     </>
   );
 };

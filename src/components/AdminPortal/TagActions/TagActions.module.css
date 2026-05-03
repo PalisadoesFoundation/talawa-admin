@@ -1,33 +1,86 @@
 .modalHeader {
-  composes: modalHeader from '../../../style/app-fixed.module.css';
+  border: none;
+  background-color: var(--modalHeader-bg) !important;
+  padding: 1rem;
+  color: var(--modalHeader-color);
 }
 
 .removeButton {
-  composes: removeButton from '../../../style/app-fixed.module.css';
+  margin-bottom: 10px;
+  background-color: var(--removeButton-bg);
+  color: var(--removeButton-color);
+  margin-right: 10px;
+}
+
+.removeButton:is(:hover, :active, :focus) {
+  background-color: var(--removeButton-bg-hover) !important;
+  border-color: var(--removeButton-border-hover);
+  color: var(--removeButton-color-hover);
 }
 
 .addButton {
-  composes: addButton from '../../../style/app-fixed.module.css';
+  margin-bottom: 10px;
+  color: var(--addButton-font);
+  background-color: var(--light-blue);
+  border-color: var(--addButton-bg);
+}
+
+.addButton:is(:hover, :active, :focus) {
+  background-color: var(--addButton-bg-hover) !important;
+  border-color: var(--addButton-border-hover);
+}
+
+.addButton:disabled {
+  margin-bottom: 10px;
+  background-color: var(--disabled-btn);
+  border-color: var(--addButton-bg);
 }
 
 .scrollContainer {
-  composes: scrollContainer from '../../../style/app-fixed.module.css';
+  height: 100px;
+  overflow-y: auto;
+  margin-bottom: 1rem;
 }
 
 .tagBadge {
-  composes: tagBadge from '../../../style/app-fixed.module.css';
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px var(--tagBadge-box-shadow);
+  max-width: calc(100% - 2rem);
 }
 
 .removeFilterIcon {
-  composes: removeFilterIcon from '../../../style/app-fixed.module.css';
+  cursor: pointer;
 }
 
 .inputField {
-  composes: inputField from '../../../style/app-fixed.module.css';
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: var(--eventManagement-button-bg);
+  border: 1px solid var(--input-shadow);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.inputField::placeholder {
+  color: var(--inputField-placeholder-color) !important;
+  opacity: 1;
+}
+
+.inputField:focus {
+  border: 0.1px solid var(--inputField-border-focus) !important;
+  background-color: var(--inputField-bg-focus) !important;
+  box-shadow: var(--drop-shadow);
+  outline: none;
+  transition: box-shadow 0.2s ease;
 }
 
 .loadingDiv {
-  composes: loadingDiv from '../../../style/app-fixed.module.css';
+  min-height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .tagActionsScrollableDiv {

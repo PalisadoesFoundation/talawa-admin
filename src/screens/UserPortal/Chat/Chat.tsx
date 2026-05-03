@@ -177,118 +177,164 @@ export default function Chat(): JSX.Element {
     }
   }, [selectedContact, setItem]);
 
+  // Get initials from a name
+  const getInitials = (name: string): string => {
+    return name
+      .split(' ')
+      .map((n) => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
+
+  // Avatar color palette
+  const AVATAR_COLORS = [
+    { bg: 'var(--blue-50)', color: 'var(--blue-600)' },
+    { bg: 'var(--purple-50)', color: 'var(--purple-500)' },
+    { bg: 'var(--green-50)', color: 'var(--green-700)' },
+    { bg: 'var(--orange-50)', color: 'var(--orange-500)' },
+    { bg: 'var(--red-50)', color: 'var(--red-500)' },
+  ];
+
+  const getAvatarColor = (id: string) => {
+    let hash = 0;
+    for (let i = 0; i < id.length; i++) hash = id.charCodeAt(i) + ((hash << 5) - hash);
+    return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
+  };
+
   return (
     <>
-      <div className={`d-flex flex-row ${styles.containerHeight}`}>
-        <div data-testid="chat" className={`${styles.mainContainer}`}>
-          <div className={styles.contactContainer}>
-            <div
-              className={`d-flex justify-content-between ${styles.addChatContainer}`}
-            >
-              <h4>{t('title')}</h4>
+      {/* Three-panel chat layout matching prototype */}
+      <div data-testid="chat" className={styles.chatMain}>
+        {/* ── Left Panel: Conversation List ─────────────────────── */}
+        <aside className={styles.chatSidebar}>
+          <div className={styles.chatSidebarHeader}>
+            <div className={styles.chatSidebarTitle}>
+              <span>{t('title')}</span>
               <DropDownButton
                 id="newChatDropdown"
                 options={newChatOptions}
                 onSelect={handleNewChatSelect}
                 ariaLabel={t('newChat')}
                 dataTestIdPrefix="dropdown"
-                icon={<AddIcon data-testid="new-chat-icon" />}
-                buttonLabel=" "
-                parentContainerStyle={styles.dropdownToggle}
-                btnStyle={styles.customToggle}
+                icon={<AddIcon data-testid="new-chat-icon" style={{ fontSize: 18 }} />}
+                buttonLabel=""
+                btnStyle={styles.newChatBtn}
               />
             </div>
-            <div
-              className={`${styles.contactListContainer} d-flex flex-column`}
-            >
-              {chatsListLoading ? (
-                <div className={`d-flex flex-row justify-content-center`}>
-                  <HourglassBottomIcon /> <span>{tCommon('loading')}</span>
-                </div>
-              ) : (
-                <>
-                  <div className={styles.filters}>
-                    <Button
-                      onClick={() => {
-                        setFilterType('all');
-                      }}
-                      data-testid="allChat"
-                      className={[
-                        styles.filterButton,
-                        filterType === 'all' && styles.selectedBtn,
-                      ]
-                        .filter(Boolean)
-                        .join(' ')}
-                    >
-                      {t('all')}
-                    </Button>
-                    <Button
-                      data-testid="unreadChat"
-                      onClick={() => {
-                        setFilterType('unread');
-                      }}
-                      className={[
-                        styles.filterButton,
-                        filterType === 'unread' && styles.selectedBtn,
-                      ]
-                        .filter(Boolean)
-                        .join(' ')}
-                    >
-                      {t('unread')}
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        setFilterType('group');
-                      }}
-                      data-testid="groupChat"
-                      className={[
-                        styles.filterButton,
-                        filterType === 'group' && styles.selectedBtn,
-                      ]
-                        .filter(Boolean)
-                        .join(' ')}
-                    >
-                      {t('groups')}
-                    </Button>
-                  </div>
-
-                  <div
-                    data-testid="contactCardContainer"
-                    className={`${styles.contactCardContainer} ${styles.contactCardList}`}
-                  >
-                    {!!chats.length &&
-                      chats.map((chat: ChatType) => {
-                        const cardProps: InterfaceContactCardProps = {
-                          id: chat.id,
-                          title: chat.name || 'Chat',
-                          image: chat.avatarURL || '',
-                          setSelectedContact,
-                          selectedContact,
-                          isGroup: (chat.members?.edges?.length || 0) > 2,
-                          unseenMessages: chat.unreadMessagesCount ?? 0,
-                          lastMessage: chat.lastMessage?.body ?? '',
-                        };
-                        return <ContactCard {...cardProps} key={chat.id} />;
-                      })}
-                  </div>
-                </>
-              )}
+            <div className={styles.chatSearch}>
+              <span style={{ color: 'var(--gray-400)', fontSize: 14 }}>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+              </span>
+              <input
+                type="text"
+                className={styles.chatSearchInput}
+                placeholder={t('searchContacts') || 'Search conversations...'}
+                aria-label="Search conversations"
+              />
+            </div>
+            <div className={styles.chatTabs} role="tablist">
+              <button
+                className={`${styles.chatTab} ${filterType === 'all' ? styles.chatTabActive : ''}`}
+                role="tab"
+                aria-selected={filterType === 'all'}
+                onClick={() => setFilterType('all')}
+                data-testid="allChat"
+              >
+                Direct
+              </button>
+              <button
+                className={`${styles.chatTab} ${filterType === 'group' ? styles.chatTabActive : ''}`}
+                role="tab"
+                aria-selected={filterType === 'group'}
+                onClick={() => setFilterType('group')}
+                data-testid="groupChat"
+              >
+                Groups
+              </button>
             </div>
           </div>
-          <div className={styles.chatContainer} id="chat-container">
-            <ChatRoom
-              chatListRefetch={chatsListRefetch}
-              selectedContact={selectedContact}
-            />
+
+          <div className={styles.chatList} data-testid="contactCardContainer">
+            {chatsListLoading ? (
+              <div className={styles.loadingContainer}>
+                <HourglassBottomIcon style={{ fontSize: 18 }} />
+                <span>{tCommon('loading')}</span>
+              </div>
+            ) : chats.length === 0 ? (
+              <div className={styles.loadingContainer}>
+                <span>{t('noChats') || 'No conversations yet'}</span>
+              </div>
+            ) : (
+              chats.map((chat: ChatType) => {
+                const isActive = selectedContact === chat.id;
+                const isUnread = (chat.unreadMessagesCount ?? 0) > 0;
+                const chatName = chat.name || 'Chat';
+                const initials = getInitials(chatName);
+                const avatarColor = getAvatarColor(chat.id);
+
+                return (
+                  <button
+                    key={chat.id}
+                    className={`${styles.chatItem} ${isActive ? styles.chatItemActive : ''} ${isUnread ? styles.chatItemUnread : ''}`}
+                    onClick={() => setSelectedContact(chat.id)}
+                    data-testid={`chat-item-${chat.id}`}
+                  >
+                    <div
+                      className={styles.chatItemAvatar}
+                      style={{ background: avatarColor.bg, color: avatarColor.color }}
+                    >
+                      {chat.avatarURL ? (
+                        <img
+                          src={chat.avatarURL}
+                          alt=""
+                          style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
+                        />
+                      ) : (
+                        initials
+                      )}
+                    </div>
+                    <div className={styles.chatItemContent}>
+                      <div className={styles.chatItemTop}>
+                        <span className={styles.chatItemName}>{chatName}</span>
+                        <span className={styles.chatItemTime}>
+                          {chat.lastMessage?.createdAt
+                            ? new Date(chat.lastMessage.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                            : ''}
+                        </span>
+                      </div>
+                      <div className={styles.chatItemPreview}>
+                        {chat.lastMessage?.body || ''}
+                      </div>
+                    </div>
+                    {isUnread && (
+                      <div className={styles.unreadBadge}>
+                        {chat.unreadMessagesCount}
+                      </div>
+                    )}
+                  </button>
+                );
+              })
+            )}
           </div>
-        </div>
+        </aside>
+
+        {/* ── Right Panel: Chat Area ────────────────────────────── */}
+        <section className={styles.chatArea} id="chat-container">
+          <ChatRoom
+            chatListRefetch={chatsListRefetch}
+            selectedContact={selectedContact}
+          />
+        </section>
       </div>
+
+      {/* Modals */}
       {createGroupChatModalisOpen && (
         <CreateGroupChat
           toggleCreateGroupChatModal={toggleCreateGroupChatModal}
           createGroupChatModalisOpen={createGroupChatModalisOpen}
           chatsListRefetch={chatsListRefetch}
-        ></CreateGroupChat>
+        />
       )}
       {createDirectChatModalisOpen && (
         <CreateDirectChat
@@ -296,7 +342,7 @@ export default function Chat(): JSX.Element {
           createDirectChatModalisOpen={createDirectChatModalisOpen}
           chatsListRefetch={chatsListRefetch}
           chats={chats}
-        ></CreateDirectChat>
+        />
       )}
     </>
   );

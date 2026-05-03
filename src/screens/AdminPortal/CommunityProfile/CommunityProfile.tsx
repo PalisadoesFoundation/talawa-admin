@@ -37,32 +37,17 @@
  */
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Card } from 'react-bootstrap';
 import Button from 'shared-components/Button/Button';
 import { useMutation, useQuery } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
-
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { GET_COMMUNITY_DATA_PG } from 'GraphQl/Queries/Queries';
 import {
   UPDATE_COMMUNITY_PG,
   RESET_COMMUNITY,
 } from 'GraphQl/Mutations/mutations';
-import {
-  FacebookLogo,
-  InstagramLogo,
-  XLogo,
-  LinkedInLogo,
-  GithubLogo,
-  YoutubeLogo,
-  RedditLogo,
-  SlackLogo,
-} from 'assets/svgs/social-icons';
-import styles from './CommunityProfile.module.css';
 import { errorHandler } from 'utils/errorHandler';
 import UpdateSession from 'components/AdminPortal/UpdateSession/UpdateSession';
-import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { useMinioUpload } from 'utils/MinioUpload';
 
 const CommunityProfile = (): JSX.Element => {
@@ -255,51 +240,91 @@ const CommunityProfile = (): JSX.Element => {
 
   return (
     <LoadingState isLoading={loading} variant="spinner">
-      <Card border="0" className={`${styles.card} "rounded-4 my-4 shadow-sm"`}>
-        <div className={styles.cardHeader}>
-          <div className={styles.cardTitle}>{t('editProfile')}</div>
+      <div className="page-header">
+        <div className="page-header-left">
+          <h1 className="page-title">{t('title')}</h1>
+          <p className="page-subtitle">{t('communityProfileInfo')}</p>
         </div>
-        <Card.Body>
-          <div className="mb-3">{t('communityProfileInfo')}</div>
-          <form onSubmit={handleOnSubmit}>
-            <FormTextField
-              name="name"
-              label={t('communityName')}
-              value={profileVariable.name}
-              onChange={(value: string) =>
-                setProfileVariable({ ...profileVariable, name: value })
-              }
-              placeholder={t('communityName')}
-              autoComplete="off"
-              required
-              className={`mb-3 ${styles.inputField}`}
-              labelClassName={styles.formLabel}
-            />
-            <FormTextField
-              id="websiteURL"
-              name="websiteURL"
-              type="url"
-              label={t('wesiteLink')}
-              value={profileVariable.websiteURL}
-              onChange={(value: string) =>
-                setProfileVariable({ ...profileVariable, websiteURL: value })
-              }
-              placeholder={t('wesiteLink')}
-              autoComplete="off"
-              required
-              className={`mb-3 ${styles.inputField}`}
-              labelClassName={styles.formLabel}
-            />
+      </div>
 
-            <FormFieldGroup label={t('logo')} name="logo" required>
+      <div className="form-card">
+        <form onSubmit={handleOnSubmit}>
+          {/* Community Info */}
+          <div className="form-section">
+            <h2>{t('communityName')}</h2>
+            <p className="form-section-desc">{t('communityProfileInfo')}</p>
+            <div className="form-group">
+              <label className="form-label" htmlFor="community-name">{t('communityName')}</label>
+              <input
+                type="text"
+                id="community-name"
+                name="name"
+                className="form-input"
+                placeholder={t('communityName')}
+                value={profileVariable.name}
+                onChange={handleOnChange}
+                aria-label="Community name"
+                autoComplete="off"
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label" htmlFor="community-desc">{tCommon('description')}</label>
+              <textarea
+                id="community-desc"
+                className="form-input"
+                placeholder={tCommon('description')}
+                aria-label="Community description"
+                data-testid="community-desc"
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label" htmlFor="community-url">{t('wesiteLink')}</label>
+              <input
+                type="url"
+                id="community-url"
+                name="websiteURL"
+                className="form-input"
+                placeholder="https://example.com"
+                value={profileVariable.websiteURL}
+                onChange={handleOnChange}
+                aria-label="Website URL"
+                autoComplete="off"
+              />
+            </div>
+          </div>
+
+          {/* Branding */}
+          <div className="form-section">
+            <h2>{t('logo')}</h2>
+            <p className="form-section-desc">{t('communityProfileInfo')}</p>
+            <div className="form-group">
+              <label className="form-label">{t('logo')}</label>
+              <div
+                className="upload-area"
+                role="button"
+                tabIndex={0}
+                aria-label="Upload logo image"
+                onClick={() => logoInputRef.current?.click()}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    logoInputRef.current?.click();
+                  }
+                }}
+              >
+                <div className="upload-area-icon">
+                  <svg aria-hidden="true" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                </div>
+                <div className="upload-area-text">Click to upload or drag and drop</div>
+                <div className="upload-area-hint">SVG, PNG or JPG, max 2MB</div>
+              </div>
               <input
                 type="file"
                 id="logo"
                 name="logo"
                 accept="image/*"
-                className={`form-control mb-3 ${styles.inputField}`}
                 data-testid="fileInput"
                 ref={logoInputRef}
+                style={{ display: 'none' }}
                 onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
                   const file = e.target.files?.[0];
                   if (file) {
@@ -331,161 +356,172 @@ const CommunityProfile = (): JSX.Element => {
                 }}
                 autoComplete="off"
               />
-            </FormFieldGroup>
-            <FormFieldGroup label={t('social')} name="social">
-              <div id="social">
-                <div className="mb-3 d-flex align-items-center gap-3">
-                  <img src={FacebookLogo} alt={`Facebook ${t('logo')}`} />
-                  <input
-                    aria-label={`${t('social')} ${t('url')}`}
-                    type="url"
-                    id="facebook"
-                    name="facebookURL"
-                    data-testid="facebook"
-                    className={`form-control mb-0 mt-0 ${styles.inputField}`}
-                    value={profileVariable.facebookURL}
-                    onChange={handleOnChange}
-                    placeholder={t('url')}
-                    autoComplete="off"
-                  />
-                </div>
-
-                <div className="mb-3 d-flex align-items-center gap-3">
-                  <img src={InstagramLogo} alt={`Instagram ${t('logo')}`} />
-                  <input
-                    aria-label={`${t('social')} ${t('url')}`}
-                    type="url"
-                    id="instagram"
-                    name="instagramURL"
-                    data-testid="instagram"
-                    className={`form-control mb-0 mt-0 ${styles.inputField}`}
-                    value={profileVariable.instagramURL}
-                    onChange={handleOnChange}
-                    placeholder={t('url')}
-                    autoComplete="off"
-                  />
-                </div>
-
-                <div className="mb-3 d-flex align-items-center gap-3">
-                  <img src={XLogo} alt={`X ${t('logo')}`} />
-                  <input
-                    aria-label={`${t('social')} ${t('url')}`}
-                    type="url"
-                    id="x"
-                    name="xURL"
-                    data-testid="x"
-                    className={`form-control mb-0 mt-0 ${styles.inputField}`}
-                    value={profileVariable.xURL}
-                    onChange={handleOnChange}
-                    placeholder={t('url')}
-                    autoComplete="off"
-                  />
-                </div>
-
-                <div className="mb-3 d-flex align-items-center gap-3">
-                  <img src={LinkedInLogo} alt={`LinkedIn ${t('logo')}`} />
-                  <input
-                    aria-label={`${t('social')} ${t('url')}`}
-                    type="url"
-                    id="linkedIn"
-                    name="linkedInURL"
-                    data-testid="linkedIn"
-                    className={`form-control mb-0 mt-0 ${styles.inputField}`}
-                    value={profileVariable.linkedInURL}
-                    onChange={handleOnChange}
-                    placeholder={t('url')}
-                    autoComplete="off"
-                  />
-                </div>
-
-                <div className="mb-3 d-flex align-items-center gap-3">
-                  <img src={GithubLogo} alt={`Github ${t('logo')}`} />
-                  <input
-                    aria-label={`${t('social')} ${t('url')}`}
-                    type="url"
-                    id="github"
-                    name="githubURL"
-                    data-testid="github"
-                    className={`form-control mb-0 mt-0 ${styles.inputField}`}
-                    value={profileVariable.githubURL}
-                    onChange={handleOnChange}
-                    placeholder={t('url')}
-                    autoComplete="off"
-                  />
-                </div>
-
-                <div className="mb-3 d-flex align-items-center gap-3">
-                  <img src={YoutubeLogo} alt={`Youtube ${t('logo')}`} />
-                  <input
-                    aria-label={`${t('social')} ${t('url')}`}
-                    type="url"
-                    id="youtube"
-                    name="youtubeURL"
-                    data-testid="youtube"
-                    className={`form-control mb-0 mt-0 ${styles.inputField}`}
-                    value={profileVariable.youtubeURL}
-                    onChange={handleOnChange}
-                    placeholder={t('url')}
-                    autoComplete="off"
-                  />
-                </div>
-
-                <div className="mb-3 d-flex align-items-center gap-3">
-                  <img src={RedditLogo} alt={`Reddit ${t('logo')}`} />
-                  <input
-                    aria-label={`${t('social')} ${t('url')}`}
-                    type="url"
-                    id="reddit"
-                    name="redditURL"
-                    data-testid="reddit"
-                    className={`form-control mb-0 mt-0 ${styles.inputField}`}
-                    value={profileVariable.redditURL}
-                    onChange={handleOnChange}
-                    placeholder={t('url')}
-                    autoComplete="off"
-                  />
-                </div>
-
-                <div className="mb-3 d-flex align-items-center gap-3">
-                  <img src={SlackLogo} alt={`Slack ${t('logo')}`} />
-                  <input
-                    aria-label={`${t('social')} ${t('url')}`}
-                    type="url"
-                    id="slack"
-                    name="slackURL"
-                    data-testid="slack"
-                    className={`form-control mb-0 mt-0 ${styles.inputField}`}
-                    value={profileVariable.slackURL}
-                    onChange={handleOnChange}
-                    placeholder={t('url')}
-                    autoComplete="off"
-                  />
-                </div>
-              </div>
-            </FormFieldGroup>
-            <div
-              className={`${styles.btn} d-flex justify-content-end gap-3 my-3`}
-            >
-              <Button
-                className={styles.outlineBtn}
-                onClick={resetData}
-                data-testid="resetChangesBtn"
-                disabled={isDisabled()}
-              >
-                {tCommon('resetChanges')}
-              </Button>
-              <Button
-                type="submit"
-                data-testid="saveChangesBtn"
-                disabled={isDisabled()}
-                className={styles.addButton}
-              >
-                {tCommon('saveChanges')}
-              </Button>
             </div>
-          </form>
-        </Card.Body>
-      </Card>
+            <div className="form-group">
+              <label className="form-label" htmlFor="primary-color">Primary Color</label>
+              <div className="color-picker-row">
+                <div className="color-swatch" style={{ background: '#3ecf8e' }} title="Primary color preview"></div>
+                <input type="text" id="primary-color" className="form-input color-hex-input" defaultValue="#3ecf8e" aria-label="Primary color hex value" />
+              </div>
+            </div>
+          </div>
+
+          {/* Social Media */}
+          <div className="form-section">
+            <h2>{t('social')}</h2>
+            <p className="form-section-desc">{t('communityProfileInfo')}</p>
+            <div className="form-grid-2">
+              <div className="form-group">
+                <label className="form-label" htmlFor="social-facebook">Facebook URL</label>
+                <input
+                  type="url"
+                  id="social-facebook"
+                  name="facebookURL"
+                  data-testid="facebook"
+                  className="form-input"
+                  placeholder="https://facebook.com/..."
+                  value={profileVariable.facebookURL}
+                  onChange={handleOnChange}
+                  aria-label="Facebook URL"
+                  autoComplete="off"
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label" htmlFor="social-twitter">X (Twitter) URL</label>
+                <input
+                  type="url"
+                  id="social-twitter"
+                  name="xURL"
+                  data-testid="x"
+                  className="form-input"
+                  placeholder="https://x.com/..."
+                  value={profileVariable.xURL}
+                  onChange={handleOnChange}
+                  aria-label="X Twitter URL"
+                  autoComplete="off"
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label" htmlFor="social-github">GitHub URL</label>
+                <input
+                  type="url"
+                  id="social-github"
+                  name="githubURL"
+                  data-testid="github"
+                  className="form-input"
+                  placeholder="https://github.com/..."
+                  value={profileVariable.githubURL}
+                  onChange={handleOnChange}
+                  aria-label="GitHub URL"
+                  autoComplete="off"
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label" htmlFor="social-linkedin">LinkedIn URL</label>
+                <input
+                  type="url"
+                  id="social-linkedin"
+                  name="linkedInURL"
+                  data-testid="linkedIn"
+                  className="form-input"
+                  placeholder="https://linkedin.com/company/..."
+                  value={profileVariable.linkedInURL}
+                  onChange={handleOnChange}
+                  aria-label="LinkedIn URL"
+                  autoComplete="off"
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label" htmlFor="social-instagram">Instagram URL</label>
+                <input
+                  type="url"
+                  id="social-instagram"
+                  name="instagramURL"
+                  data-testid="instagram"
+                  className="form-input"
+                  placeholder="https://instagram.com/..."
+                  value={profileVariable.instagramURL}
+                  onChange={handleOnChange}
+                  aria-label="Instagram URL"
+                  autoComplete="off"
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label" htmlFor="social-youtube">YouTube URL</label>
+                <input
+                  type="url"
+                  id="social-youtube"
+                  name="youtubeURL"
+                  data-testid="youtube"
+                  className="form-input"
+                  placeholder="https://youtube.com/@..."
+                  value={profileVariable.youtubeURL}
+                  onChange={handleOnChange}
+                  aria-label="YouTube URL"
+                  autoComplete="off"
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label" htmlFor="social-reddit">Reddit URL</label>
+                <input
+                  type="url"
+                  id="social-reddit"
+                  name="redditURL"
+                  data-testid="reddit"
+                  className="form-input"
+                  placeholder="https://reddit.com/r/..."
+                  value={profileVariable.redditURL}
+                  onChange={handleOnChange}
+                  aria-label="Reddit URL"
+                  autoComplete="off"
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label" htmlFor="social-slack">Slack URL</label>
+                <input
+                  type="url"
+                  id="social-slack"
+                  name="slackURL"
+                  data-testid="slack"
+                  className="form-input"
+                  placeholder="https://your-workspace.slack.com"
+                  value={profileVariable.slackURL}
+                  onChange={handleOnChange}
+                  aria-label="Slack URL"
+                  autoComplete="off"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="form-footer">
+            <Button
+              className="btn btn-secondary"
+              onClick={resetData}
+              data-testid="resetChangesBtn"
+              disabled={isDisabled()}
+            >
+              {tCommon('resetChanges')}
+            </Button>
+            <Button
+              type="submit"
+              data-testid="saveChangesBtn"
+              disabled={isDisabled()}
+              className="btn btn-primary"
+            >
+              {tCommon('saveChanges')}
+            </Button>
+          </div>
+        </form>
+      </div>
 
       <UpdateSession />
     </LoadingState>

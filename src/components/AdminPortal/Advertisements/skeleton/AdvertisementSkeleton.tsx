@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import styles from 'style/app-fixed.module.css';
+import styles from './AdvertisementSkeleton.module.css';
 
 /**
  * AdvertisementSkeleton Component

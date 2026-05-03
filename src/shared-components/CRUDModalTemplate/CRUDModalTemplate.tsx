@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
-import { Alert } from 'react-bootstrap';
+
 import Button from 'shared-components/Button';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
@@ -140,9 +140,9 @@ export const CRUDModalTemplate: React.FC<InterfaceCRUDModalTemplateProps> = ({
       bodyClassName={styles.modalBody}
     >
       {error && (
-        <Alert variant="danger" className={styles.errorAlert}>
+        <div role="alert" className={styles.errorAlert} style={{ color: 'var(--red-500-text-emphasis)', backgroundColor: 'var(--red-500-bg-subtle)', borderColor: 'var(--red-500-border-subtle)', padding: '0.75rem 1.25rem', borderRadius: '0.375rem', marginBottom: '1rem' }}>
           {error}
-        </Alert>
+        </div>
       )}
 
       <LoadingState isLoading={loading} variant="inline">

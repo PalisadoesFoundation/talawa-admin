@@ -328,7 +328,8 @@
     "orgName": "Entrez le nom",
     "sortOrganizations": "Trier les organisations",
     "admins": "Administrateurs",
-    "members": "Membres"
+    "members": "Membres",
+    "managingYourOrganizations": "Gérer toutes les organisations enregistrées"
   },
   "orgListCard": {
     "manage": "Gérer",

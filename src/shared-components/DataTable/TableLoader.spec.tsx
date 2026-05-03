@@ -20,12 +20,6 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-vi.mock('style/app-fixed.module.css', () => ({
-  default: {
-    dataSkeletonCell: 'dataSkeletonCell',
-    dataLoadingOverlay: 'dataLoadingOverlay',
-  },
-}));
 
 describe('TableLoader', () => {
   afterEach(() => {

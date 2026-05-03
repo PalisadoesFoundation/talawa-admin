@@ -21,33 +21,6 @@ vi.mock('shared-components/SidebarBase/SidebarBase.module.css', () => ({
   },
 }));
 
-vi.mock('style/app-fixed.module.css', () => ({
-  default: {
-    leftDrawer: 'leftDrawer',
-    hideElemByDefault: 'hideElemByDefault',
-    collapsedDrawer: 'collapsedDrawer',
-    expandedDrawer: 'expandedDrawer',
-    brandingContainer: 'brandingContainer',
-    talawaLogo: 'talawaLogo',
-    talawaText: 'talawaText',
-    organizationContainer: 'organizationContainer',
-    profileContainer: 'profileContainer',
-    bgDanger: 'bgDanger',
-    imageContainer: 'imageContainer',
-    ProfileRightContainer: 'ProfileRightContainer',
-    profileText: 'profileText',
-    primaryText: 'primaryText',
-    secondaryText: 'secondaryText',
-    ArrowIcon: 'ArrowIcon',
-    titleHeader: 'titleHeader',
-    optionList: 'optionList',
-    leftDrawerActiveButton: 'leftDrawerActiveButton',
-    leftDrawerInactiveButton: 'leftDrawerInactiveButton',
-    iconWrapper: 'iconWrapper',
-    avatarContainer: 'avatarContainer',
-    userSidebarOrgFooter: 'userSidebarOrgFooter',
-  },
-}));
 
 vi.mock(
   'shared-components/SidebarOrgSection/SidebarOrgSection.module.css',

@@ -1,8 +1,8 @@
 import React, { useState, useMemo, useRef, useEffect, useId } from 'react';
-import { Form } from 'react-bootstrap';
+
 import { useTranslation } from 'react-i18next';
 import type { InterfaceOrgSelectorProps } from '../../../types/Auth/OrgSelector/interface';
-import styles from '../../../style/app-fixed.module.css';
+import styles from './OrgSelector.module.css';
 
 /**
  * Reusable organization selector component with search/autocomplete and accessibility support.
@@ -135,14 +135,14 @@ export const OrgSelector: React.FC<InterfaceOrgSelectorProps> = ({
       : undefined;
 
   return (
-    <Form.Group className="mb-3" ref={dropdownRef}>
-      <Form.Label htmlFor={inputId}>
+    <div style={{ marginBottom: '1rem' }} ref={dropdownRef}>
+      <label htmlFor={inputId}>
         {displayLabel}
-        {required && <span className="text-danger"> *</span>}
-      </Form.Label>
+        {required && <span style={{ color: 'var(--red-500)' }}> *</span>}
+      </label>
 
-      <div className="position-relative">
-        <Form.Control
+      <div style={{ position: 'relative' }}>
+        <input
           id={inputId}
           type="text"
           value={isOpen ? searchTerm : displayValue}
@@ -150,7 +150,6 @@ export const OrgSelector: React.FC<InterfaceOrgSelectorProps> = ({
           onFocus={handleInputFocus}
           onKeyDown={handleKeyDown}
           disabled={disabled}
-          isInvalid={hasError}
           placeholder={t('selectOrganization')}
           aria-invalid={hasError}
           aria-describedby={hasError ? errorId : undefined}
@@ -162,6 +161,8 @@ export const OrgSelector: React.FC<InterfaceOrgSelectorProps> = ({
           data-testid={testId}
           ref={inputRef}
           autoComplete="off"
+          className="form-input"
+          style={hasError ? { borderColor: 'var(--red-500)' } : undefined}
         />
 
         {isOpen && !disabled && (
@@ -213,17 +214,16 @@ export const OrgSelector: React.FC<InterfaceOrgSelectorProps> = ({
 
       {/* Error message with proper ARIA attributes */}
       {hasError && (
-        <Form.Control.Feedback
-          type="invalid"
+        <div
           id={errorId}
-          className="d-block"
+          style={{ display: 'block', color: 'var(--red-500)', fontSize: '0.875em', marginTop: '0.25rem' }}
           role="status"
           aria-live="polite"
         >
           {error}
-        </Form.Control.Feedback>
+        </div>
       )}
-    </Form.Group>
+    </div>
   );
 };
 

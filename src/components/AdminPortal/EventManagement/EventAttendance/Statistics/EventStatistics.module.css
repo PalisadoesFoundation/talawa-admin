@@ -46,6 +46,14 @@
   border-bottom-right-radius: 8px;
 }
 
+.modalBody {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
 .modalHeader {
   background-color: var(--modalHeader-bg) !important;
   color: var(--modalHeader-color);

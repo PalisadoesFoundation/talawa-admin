@@ -324,5 +324,23 @@
   "organizationCard": {
     "card_aria": "Organization card"
   },
-  "oauthSectionAriaLabel": "OAuth login options"
+  "oauthSectionAriaLabel": "OAuth login options",
+  "myOrganizations": "My Organizations",
+  "communityProfile": "Community Profile",
+  "pluginStore": "Plugin Store",
+  "dashboard": "Dashboard",
+  "posts": "Posts",
+  "chat": "Chat",
+  "venues": "Venues",
+  "blockedUsers": "Blocked Users",
+  "general": "General",
+  "plugins": "Plugins",
+  "home": "Home",
+  "people": "People",
+  "donate": "Donate",
+  "volunteer": "Volunteer",
+  "organizations": "Organizations",
+  "organization": "Organization",
+  "funds": "Funds",
+  "events": "Events"
 }

@@ -98,15 +98,28 @@
   gap: var(--space-2);
 }
 
-.progressBar {
-  margin: var(--space-0) var(--space-4);
+.progressBarTrack {
+  margin: 0 var(--space-4);
   width: 100%;
-  font-size: var(--font-size-15);
   height: var(--space-6);
+  background-color: var(--gray-200);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
 }
 
-.progressBarHeight {
-  height: var(--space-6);
+.progressBarFill {
+  height: 100%;
+  background-color: var(--green-500);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-15);
+  color: var(--surface);
+  font-weight: 600;
+  transition: width 0.3s ease;
+  min-width: fit-content;
+  padding: 0 0.5rem;
 }
 
 .endpoints {

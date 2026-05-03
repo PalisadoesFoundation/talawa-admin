@@ -3,7 +3,7 @@
   max-width: none;
   --campaign-modal-width: var(--space-25);
   --campaign-modal-content-min-height: calc(
-    var(--space-24) + var(--space-5) + var(--space-4) + var(--border-1)
+    var(--space-24) + var(--space-5) + var(--space-4) + 1px
   );
   --campaign-modal-content-radius: var(--radius-xl);
   --campaign-modal-header-padding-top: var(--space-6);
@@ -24,26 +24,25 @@
   );
 }
 
-.campaignModal :global(.modal-dialog) {
-  width: min(var(--campaign-modal-width), calc(var(--vw-100) - var(--space-8)));
+.campaignModalDialog {
+  width: min(var(--campaign-modal-width), calc(100vw - var(--space-8)));
   max-width: var(--campaign-modal-width);
   margin-left: auto;
   margin-right: auto;
 }
 
-.campaignModal :global(.modal-content) {
+.campaignModalContent {
   display: flex;
   flex-direction: column;
   width: 100%;
   min-height: var(--campaign-modal-content-min-height);
-  background: var(--color-white);
-  border: var(--border-1) solid var(--color-black-8);
-  box-shadow: calc(-1 * var(--shadow-offset-xs)) var(--shadow-offset-lg)
-    var(--shadow-blur-xl) var(--color-black-8);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
   border-radius: var(--campaign-modal-content-radius);
 }
 
-.campaignModal :global(.modal-header) {
+.campaignModalHeader {
   align-items: center;
   min-height: auto;
   padding: var(--campaign-modal-header-padding-top)
@@ -53,9 +52,9 @@
   border-bottom: none;
 }
 
-.campaignModal :global(.modal-title) {
+.campaignModalTitle {
   margin: 0;
-  color: var(--color-black);
+  color: var(--gray-900);
   font-family: 'Lato', sans-serif;
   font-size: var(--font-size-2xl);
   font-style: normal;
@@ -65,17 +64,17 @@
   align-items: center;
 }
 
-.campaignModal :global(.modal-header .btn-danger) {
+.campaignModalDangerBtn {
   right: var(--space-5);
   top: var(--space-4);
-  color: var(--color-red-400) !important;
+  color: var(--red-500);
 }
 
-.campaignModal :global(.modal-header .btn-danger:hover) {
-  color: var(--color-red-400) !important;
+.campaignModalDangerBtn:hover {
+  color: var(--red-500);
 }
 
-.campaignModal :global(.modal-body) {
+.campaignModalBody {
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -85,14 +84,14 @@
     var(--campaign-modal-body-padding-left);
 }
 
-.campaignModal :global(form) {
+.campaignModalForm {
   display: flex;
   flex-direction: column;
   flex: 1;
   gap: calc(var(--space-4) + var(--space-1));
 }
 
-.campaignModal :global(.modal-footer) {
+.campaignModalFooter {
   display: none;
 }
 
@@ -104,10 +103,10 @@
   gap: var(--space-2);
 }
 
-.fieldRow :global(label) {
+.fieldRow label {
   display: inline-block;
   margin-bottom: var(--space-2);
-  color: var(--color-black);
+  color: var(--gray-900);
   font-family: 'Inter', sans-serif;
   font-size: var(--font-size-md);
   font-style: normal;
@@ -116,29 +115,27 @@
   align-items: center;
 }
 
-.fieldRow :global(.form-control),
-.fieldRow :global(input[type='text']),
-.fieldRow :global(input[type='number']),
-.fieldRow :global(input[type='date']) {
+.fieldRow input[type='text'],
+.fieldRow input[type='number'],
+.fieldRow input[type='date'] {
   width: 100%;
   max-width: 100%;
   height: var(--campaign-modal-input-height);
   border-radius: var(--radius-sm);
-  border: var(--border-1) solid var(--color-gray-200);
-  background: var(--color-gray-50);
+  border: 1px solid var(--gray-200);
+  background: var(--gray-50);
   box-shadow: none;
-  color: var(--color-black);
+  color: var(--gray-900);
   font-family: 'Lato', sans-serif;
   font-size: var(--font-size-md);
   font-style: normal;
   font-weight: var(--font-weight-regular);
   line-height: var(--campaign-modal-label-line-height);
-  padding: var(--space-0) calc(var(--space-5) + var(--space-1));
+  padding: 0 calc(var(--space-5) + var(--space-1));
 }
 
-.fieldRow :global(.form-control::placeholder),
-.fieldRow :global(input::placeholder) {
-  color: var(--color-gray-600);
+.fieldRow input::placeholder {
+  color: var(--gray-600);
   font-family: 'Lato', sans-serif;
   font-weight: var(--font-weight-light);
   font-size: var(--font-size-md);
@@ -146,12 +143,10 @@
   opacity: 0.85;
 }
 
-.fieldRow :global(.form-control:focus),
-.fieldRow :global(input:focus) {
-  border-color: var(--color-blue-300);
-  box-shadow: var(--shadow-spread-none) var(--shadow-spread-none)
-    var(--shadow-spread-none) var(--space-2) var(--color-blue-shadow-focus);
-  background: var(--color-gray-50);
+.fieldRow input:focus {
+  border-color: var(--blue-500);
+  box-shadow: 0 0 0 var(--space-2) rgba(59, 130, 246, 0.15);
+  background: var(--gray-50);
 }
 
 .twoColumnRow {
@@ -173,12 +168,12 @@
   align-items: flex-start;
   margin-top: var(--space-2);
   margin-bottom: var(--space-2);
-  --campaign-compact-box-width: calc(var(--border-1) * 75);
-  --campaign-compact-box-height: calc(var(--border-1) * 25);
-  --campaign-compact-box-radius: calc(var(--border-1) * 6);
+  --campaign-compact-box-width: 75px;
+  --campaign-compact-box-height: 25px;
+  --campaign-compact-box-radius: 6px;
   --campaign-compact-text-size: var(--font-size-xs);
   --campaign-compact-text-weight: var(--font-weight-lighter);
-  --campaign-compact-line-height: calc(var(--border-1) * 14);
+  --campaign-compact-line-height: 14px;
 }
 
 .currencySection,
@@ -193,20 +188,18 @@
   align-items: center;
   gap: var(--space-3);
   width: 100%;
-  margin-bottom: var(--space-0) !important;
+  margin-bottom: 0;
 }
 
-.compactInlineGroup :global(.form-label) {
-  margin-top: var(--space-0) !important;
-  margin-bottom: var(--space-0) !important;
+.compactInlineGroup label {
+  margin-top: 0;
+  margin-bottom: 0;
   align-self: center;
   flex: 1 1 auto;
 }
 
-.compactInlineGroup :global(.form-select),
-.compactInlineGroup :global(.form-control),
-.compactInlineGroup :global(select),
-.compactInlineGroup :global(input[type='number']) {
+.compactInlineGroup select,
+.compactInlineGroup input[type='number'] {
   margin-left: auto;
   align-self: center;
   flex: 0 0 auto;
@@ -215,33 +208,29 @@
   max-width: var(--campaign-compact-box-width);
 }
 
-.currencySection :global(.form-select),
-.currencySection :global(select),
-.goalSection :global(.form-control),
-.goalSection :global(input[type='number']) {
+.currencySection select,
+.goalSection input[type='number'] {
   width: var(--campaign-compact-box-width);
   min-width: var(--campaign-compact-box-width);
   max-width: var(--campaign-compact-box-width);
   height: var(--campaign-compact-box-height);
   min-height: var(--campaign-compact-box-height);
   border-radius: var(--campaign-compact-box-radius);
-  border: var(--border-1) solid var(--color-gray-200);
-  background: var(--color-gray-100);
+  border: 1px solid var(--gray-200);
+  background: var(--gray-100);
   box-shadow: none;
-  color: var(--color-black);
+  color: var(--gray-900);
   font-family: 'Lato', sans-serif;
   font-style: normal;
   font-weight: var(--campaign-compact-text-weight);
   font-size: var(--campaign-compact-text-size);
   line-height: var(--campaign-compact-line-height);
-  padding: var(--space-0) var(--space-3);
+  padding: 0 var(--space-3);
 }
 
-.goalSection :global(.form-control::placeholder),
-.goalSection :global(input::placeholder),
-.currencySection :global(.form-select::placeholder),
-.currencySection :global(select::placeholder) {
-  color: var(--color-black);
+.goalSection input::placeholder,
+.currencySection select::placeholder {
+  color: var(--gray-900);
   font-family: 'Lato', sans-serif;
   font-style: normal;
   font-weight: var(--campaign-compact-text-weight);
@@ -250,23 +239,20 @@
   opacity: 1;
 }
 
-.currencySection :global(.form-select:focus),
-.currencySection :global(select:focus),
-.goalSection :global(.form-control:focus),
-.goalSection :global(input:focus) {
-  border-color: var(--color-blue-300);
+.currencySection select:focus,
+.goalSection input:focus {
+  border-color: var(--blue-500);
   outline: none;
-  box-shadow: var(--shadow-spread-none) var(--shadow-spread-none)
-    var(--shadow-spread-none) var(--space-2) var(--color-blue-shadow-focus);
-  background: var(--color-gray-100);
+  box-shadow: 0 0 0 var(--space-2) rgba(59, 130, 246, 0.15);
+  background: var(--gray-100);
 }
 
-.goalSection :global(input[type='number']) {
+.goalSection input[type='number'] {
   appearance: textfield;
 }
 
-.goalSection :global(input[type='number'])::-webkit-outer-spin-button,
-.goalSection :global(input[type='number'])::-webkit-inner-spin-button {
+.goalSection input[type='number']::-webkit-outer-spin-button,
+.goalSection input[type='number']::-webkit-inner-spin-button {
   appearance: none;
   margin: 0;
 }
@@ -276,26 +262,25 @@
   height: var(--campaign-modal-action-height);
   margin-top: auto;
   margin-right: auto;
-  margin-bottom: var(--space-0);
+  margin-bottom: 0;
   margin-left: auto;
-  color: var(--color-gray-700);
-  background-color: var(--color-blue-200);
-  border-color: var(--color-blue-200);
+  color: var(--gray-700);
+  background-color: var(--blue-50);
+  border-color: var(--blue-50);
   border-radius: var(--radius-sm);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-semibold);
-  --bs-btn-focus-box-shadow: none;
 }
 
 .addButton:is(:hover, :active, :focus) {
-  background-color: var(--color-blue-300);
-  border-color: var(--color-blue-300);
+  background-color: var(--blue-500);
+  border-color: var(--blue-500);
 }
 
 .addButton:disabled {
-  background-color: var(--color-gray-100);
-  border-color: var(--color-gray-100);
-  color: var(--color-gray-600);
+  background-color: var(--gray-100);
+  border-color: var(--gray-100);
+  color: var(--gray-600);
 }
 
 .editActionRow {
@@ -317,41 +302,40 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-3);
-  --bs-btn-focus-box-shadow: none;
 }
 
 .editActionButton {
-  color: var(--color-gray-700);
-  background-color: var(--color-blue-200);
-  border-color: var(--color-blue-200);
+  color: var(--gray-700);
+  background-color: var(--blue-50);
+  border-color: var(--blue-50);
 }
 
 .editActionButton:is(:hover, :active, :focus) {
-  background-color: var(--color-blue-300);
-  border-color: var(--color-blue-300);
+  background-color: var(--blue-500);
+  border-color: var(--blue-500);
 }
 
 .deleteActionButton {
-  color: var(--color-red-400);
-  background-color: var(--color-red-100);
-  border-color: var(--color-red-100);
+  color: var(--red-500);
+  background-color: var(--red-50);
+  border-color: var(--red-50);
 }
 
 .deleteActionButton:is(:hover, :active, :focus) {
-  background-color: var(--color-red-100);
-  border-color: var(--color-red-100);
-  color: var(--color-red-400);
+  background-color: var(--red-50);
+  border-color: var(--red-50);
+  color: var(--red-500);
 }
 
 .deleteActionButton i {
-  color: var(--color-red-400);
+  color: var(--red-500);
 }
 
 .editActionButton:disabled,
 .deleteActionButton:disabled {
-  background-color: var(--color-gray-100);
-  border-color: var(--color-gray-100);
-  color: var(--color-gray-600);
+  background-color: var(--gray-100);
+  border-color: var(--gray-100);
+  color: var(--gray-600);
 }
 
 .noOutline input {
@@ -359,11 +343,11 @@
 }
 
 .noOutline input:disabled {
-  -webkit-text-fill-color: var(--color-gray-600);
+  -webkit-text-fill-color: var(--gray-600);
 }
 
 .noOutline textarea:disabled {
-  color: var(--color-gray-600);
+  color: var(--gray-600);
   opacity: 1;
 }
 
@@ -372,15 +356,15 @@
 }
 
 @media (max-width: 991px) {
-  .campaignModal :global(.modal-dialog) {
+  .campaignModalDialog {
     max-width: min(
-      calc(var(--vw-100) - var(--space-8)),
+      calc(100vw - var(--space-8)),
       var(--campaign-modal-width)
     );
   }
 
-  .campaignModal :global(.modal-header),
-  .campaignModal :global(.modal-body) {
+  .campaignModalHeader,
+  .campaignModalBody {
     padding-left: var(--space-5);
     padding-right: var(--space-5);
   }
@@ -397,19 +381,19 @@
 
 @media (max-width: 575px) {
   .campaignModal {
-    max-width: calc(var(--vw-100) - var(--space-5));
+    max-width: calc(100vw - var(--space-5));
   }
 
-  .campaignModal :global(.modal-header) {
+  .campaignModalHeader {
     padding-top: var(--space-5);
     padding-bottom: calc(var(--space-2) + var(--space-1));
   }
 
-  .campaignModal :global(.modal-title) {
+  .campaignModalTitle {
     font-size: calc(var(--font-size-xl) + var(--space-2));
   }
 
-  .campaignModal :global(form) {
+  .campaignModalForm {
     gap: var(--space-4);
   }
 

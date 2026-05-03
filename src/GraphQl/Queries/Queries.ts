@@ -538,7 +538,6 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
     $startDate: DateTime
     $endDate: DateTime
     $includeRecurring: Boolean
-    $onlyStartOnDay: Boolean
   ) {
     organization(input: { id: $id }) {
       eventsCount
@@ -548,7 +547,6 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
         startDate: $startDate
         endDate: $endDate
         includeRecurring: $includeRecurring
-        onlyStartOnDay: $onlyStartOnDay
       ) {
         edges {
           node {
@@ -557,14 +555,11 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
             description
             startAt
             endAt
-            startDate
-            endDate
             allDay
             location
             isPublic
             isRegisterable
             isInviteOnly
-            # Recurring event fields
             isRecurringEventTemplate
             attendees {
               id
@@ -578,7 +573,6 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
             totalCount
             hasExceptions
             progressLabel
-            # New recurrence description fields
             recurrenceDescription
             recurrenceRule {
               id
@@ -591,7 +585,6 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
               byMonth
               byMonthDay
             }
-            # Attachments
             attachments {
               url
               mimeType

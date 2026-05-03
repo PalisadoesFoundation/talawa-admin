@@ -1,5 +1,15 @@
 /* -- EventManagement.tsx -- */
 
+.pageContainer {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+}
+
+.tabRow {
+  margin: 1rem 0.75rem 0;
+  padding: 0;
+}
+
 .eventManagementSelectedBtn {
   color: var(--color-gray-700);
   background-color: var(--color-gray-100) !important;

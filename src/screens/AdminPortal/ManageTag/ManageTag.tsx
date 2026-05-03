@@ -16,7 +16,7 @@
  * dependencies
  * - `@apollo/client` for GraphQL queries and mutations.
  * - `react-router-dom` for navigation.
- * - `react-bootstrap` for UI components.
+ * - Plain HTML elements for UI components.
  * - `@mui/x-data-grid` for displaying assigned members in a table.
  * - `react-toastify` for notifications.
  * - Custom components like `AddPeopleToTag`, `TagActions`, `EditUserTagModal`, etc.
@@ -55,10 +55,8 @@ import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import IconComponent from 'shared-components/IconComponent/IconComponent';
+
 import { useNavigate, useParams, Link } from 'react-router';
-import { Col } from 'react-bootstrap';
-import Row from 'react-bootstrap/Row';
 import Button from 'shared-components/Button/Button';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -395,183 +393,269 @@ function ManageTag(): JSX.Element {
       ?.hasNextPage,
   );
 
+  const avatarColors = [
+    { bg: '#dbeafe', color: '#2563eb' },
+    { bg: '#fce7f3', color: '#db2777' },
+    { bg: '#d1fae5', color: '#15803d' },
+    { bg: '#ede9fe', color: '#7c3aed' },
+    { bg: '#fef3c7', color: '#b45309' },
+  ];
+
+  const getInitials = (firstName?: string | null, lastName?: string | null): string => {
+    const f = firstName?.charAt(0)?.toUpperCase() ?? '';
+    const l = lastName?.charAt(0)?.toUpperCase() ?? '';
+    return f + l || '?';
+  };
+
   return (
     <>
-      <Row className={styles.head}>
-        <div className={styles.mainpageright}>
-          <div className={styles.btnsContainer}>
-            <SearchFilterBar
-              hasDropdowns={true}
-              searchPlaceholder={tCommon('searchByName')}
-              searchValue={assignedMemberSearchInput}
-              onSearchChange={(term) =>
-                setAssignedMemberSearchInput(term.trim())
-              }
-              searchInputTestId="searchInput"
-              searchButtonTestId="searchBtn"
-              dropdowns={[
-                {
-                  id: 'manage-tag-sort',
-                  label: tCommon('sort'),
-                  type: 'sort',
-                  options: [
-                    { label: tCommon('Latest'), value: 'DESCENDING' },
-                    { label: tCommon('Oldest'), value: 'ASCENDING' },
-                  ],
-                  selectedOption: assignedMemberSortOrder,
-                  onOptionChange: (value) =>
-                    setAssignedMemberSortOrder(value as SortedByType),
-                  dataTestIdPrefix: 'sortPeople',
-                },
-              ]}
-              additionalButtons={
-                <>
-                  <Button
-                    variant="success"
-                    onClick={() => redirectToSubTags(currentTagId as string)}
-                    className={`${styles.createButton} mb-2`}
-                    data-testid="subTagsBtn"
-                  >
-                    {t('subTags')}
-                  </Button>
-                  <Button
-                    variant="success"
-                    onClick={addPeopleToTagModal.open}
-                    data-testid="addPeopleToTagBtn"
-                    className={`${styles.createButton} mb-2 ms-3`}
-                  >
-                    <i className={'fa fa-plus me-2'} />
-                    {t('addPeopleToTag')}
-                  </Button>
-                </>
-              }
-            />
-          </div>
+      <nav
+        className="breadcrumb"
+        aria-label="Breadcrumb"
+        style={{ fontSize: '13px', color: 'var(--gray-400)', marginBottom: '8px' }}
+      >
+        <a
+          href="#"
+          onClick={(e) => { e.preventDefault(); navigate(`/admin/orgtags/${orgId}`); }}
+          data-testid="allTagsBtn"
+          style={{ color: 'var(--gray-400)' }}
+        >
+          {t('tags')}
+        </a>
+        {orgUserTagAncestors?.map((tag, index) => (
+          <span key={index}>
+            {' \u203A '}
+            {tag._id === currentTagId ? (
+              <span style={{ color: 'var(--gray-700)' }} data-testid="redirectToManageTag" data-text={tag.name}>
+                {tag.name}
+              </span>
+            ) : (
+              <a
+                href="#"
+                onClick={(e) => { e.preventDefault(); redirectToManageTag(tag._id as string); }}
+                data-testid="redirectToManageTag"
+                data-text={tag.name}
+                style={{ color: 'var(--gray-400)' }}
+              >
+                {tag.name}
+              </a>
+            )}
+          </span>
+        ))}
+      </nav>
 
-          <LoadingState
-            isLoading={userTagAssignedMembersLoading}
-            variant="spinner"
-          >
-            <Row className="mb-4">
-              <Col xs={9}>
-                <div className="bg-white light border rounded-top mb-0 py-2 d-flex align-items-center">
-                  <div className="ms-3 my-1">
-                    <IconComponent name="Tag" />
-                  </div>
-                  <div
-                    onClick={() => navigate(`/admin/orgtags/${orgId}`)}
-                    className={`fs-6 ms-3 my-1 ${styles.tagsBreadCrumbs}`}
-                    data-testid="allTagsBtn"
-                    data-text={t('tags')}
-                  >
-                    {t('tags')}
-                    <i className={'mx-2 fa fa-caret-right'} />
-                  </div>
-                  {orgUserTagAncestors?.map((tag, index) => (
-                    <div
-                      key={index}
-                      className={`ms-2 my-1 ${tag._id === currentTagId ? `fs-4 fw-semibold text-secondary` : `${styles.tagsBreadCrumbs} fs-6`}`}
-                      onClick={() => redirectToManageTag(tag._id as string)}
-                      data-testid="redirectToManageTag"
-                      data-text={tag.name}
-                    >
-                      {tag.name}
-                      {orgUserTagAncestors.length - 1 !== index && (
-                        <i className={'mx-2 fa fa-caret-right'} />
-                      )}
-                    </div>
-                  ))}
-                </div>
-                <div
-                  id="manageTagScrollableDiv"
-                  data-testid="manageTagScrollableDiv"
-                  className={styles.manageTagScrollableDiv}
-                >
-                  <InfiniteScroll
-                    dataLength={userTagAssignedMembers.length}
-                    next={loadMoreAssignedMembers}
-                    hasMore={hasMoreAssignedMembers}
-                    loader={<InfiniteScrollLoader />}
-                    scrollableTarget="manageTagScrollableDiv"
-                  >
-                    <DataGrid
-                      disableColumnMenu
-                      columnBufferPx={7}
-                      hideFooter={true}
-                      getRowId={(row) => row.id}
-                      slots={{
-                        noRowsOverlay: () => (
-                          <Stack
-                            height="100%"
-                            alignItems="center"
-                            justifyContent="center"
-                          >
-                            {t('noAssignedMembersFound')}
-                          </Stack>
-                        ),
-                      }}
-                      sx={dataGridStyle}
-                      getRowClassName={() => `${styles.rowBackgrounds}`}
-                      autoHeight
-                      rowHeight={65}
-                      rows={userTagAssignedMembers.map(
-                        (assignedMembers, index) => ({
-                          id: index + 1,
-                          ...assignedMembers,
-                        }),
-                      )}
-                      columns={convertTokenColumns(columns)}
-                      isRowSelectable={() => false}
-                    />
-                  </InfiniteScroll>
-                </div>
-              </Col>
-              <Col className="ms-auto" xs={3}>
-                <div className="bg-secondary text-white rounded-top mb-0 py-2 fw-semibold ms-2">
-                  <div className="ms-3 fs-5">{tCommon('actions')}</div>
-                </div>
-                <div className="d-flex flex-column align-items-center bg-white rounded-bottom mb-0 py-2 fw-semibold ms-2">
-                  <div
-                    onClick={() => {
-                      setTagActionType('assignToTags');
-                      tagActionsModal.open();
-                    }}
-                    className={`my-2 btn btn-primary btn-sm w-75 ${styles.editButton}`}
-                    data-testid="assignToTags"
-                  >
-                    {t('assignToTags')}
-                  </div>
-                  <div
-                    onClick={() => {
-                      setTagActionType('removeFromTags');
-                      tagActionsModal.open();
-                    }}
-                    className="mb-1 btn btn-danger btn-sm w-75"
-                    data-testid="removeFromTags"
-                  >
-                    {t('removeFromTags')}
-                  </div>
-                  <hr className={styles.tagActionsDivider} />
-                  <div
-                    onClick={editUserTagModal.open}
-                    className={`mt-1 mb-2 btn btn-primary btn-sm w-75 ${styles.editButton}`}
-                    data-testid="editUserTag"
-                  >
-                    {tCommon('edit')}
-                  </div>
-                  <div
-                    onClick={removeUserTagModal.open}
-                    className="mb-2 btn btn-danger btn-sm w-75"
-                    data-testid="removeTag"
-                  >
-                    {tCommon('remove')}
-                  </div>
-                </div>
-              </Col>
-            </Row>
-          </LoadingState>
+      <div className="page-header">
+        <div className="page-header-left">
+          <h1 className="page-title">
+            {currentTagName || t('manageTag')}
+            <button
+              className="btn-icon"
+              style={{ display: 'inline-flex', verticalAlign: 'middle', marginLeft: '8px' }}
+              title={tCommon('edit')}
+              onClick={editUserTagModal.open}
+              data-testid="editUserTag"
+            >
+              <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            </button>
+          </h1>
+          <p className="page-subtitle">{t('assignedMembersOf')}</p>
         </div>
-      </Row>
+        <div className="page-header-actions">
+          <a
+            href="#"
+            onClick={(e) => { e.preventDefault(); redirectToSubTags(currentTagId as string); }}
+            className="btn btn-secondary"
+            data-testid="subTagsBtn"
+          >
+            {t('subTags')} ({userTagAssignedMembersData?.getAssignedUsers?.childTags?.totalCount ?? 0})
+          </a>
+        </div>
+      </div>
+
+      <div className="grid-2">
+        {/* Left: Tag Details */}
+        <div className="card">
+          <div className="card-header">
+            <span className="card-title">{t('manageTag')}</span>
+          </div>
+          <div className="card-body">
+            <div className="form-group">
+              <label className="form-label" htmlFor="tag-name">{t('tagName') || 'Tag Name'}</label>
+              <input
+                type="text"
+                id="tag-name"
+                className="form-input"
+                value={newTagName}
+                onChange={(e) => setNewTagName(e.target.value)}
+                aria-label={t('tagName') || 'Tag name'}
+              />
+            </div>
+            <div style={{ marginTop: '8px', display: 'flex', gap: '8px' }}>
+              <button
+                className="btn btn-primary"
+                onClick={(e) => {
+                  const form = document.createElement('form');
+                  const event = new Event('submit', { bubbles: true, cancelable: true }) as unknown as React.FormEvent<HTMLFormElement>;
+                  Object.defineProperty(event, 'preventDefault', { value: () => {} });
+                  handleEditUserTag(event);
+                }}
+                data-testid="saveTagBtn"
+              >
+                {tCommon('save') || 'Save'}
+              </button>
+            </div>
+            <div style={{ marginTop: '8px', display: 'flex', gap: '8px' }}>
+              <button
+                className="btn btn-primary btn-sm"
+                onClick={() => {
+                  setTagActionType('assignToTags');
+                  tagActionsModal.open();
+                }}
+                data-testid="assignToTags"
+              >
+                {t('assignToTags')}
+              </button>
+              <button
+                className="btn btn-danger btn-sm"
+                onClick={() => {
+                  setTagActionType('removeFromTags');
+                  tagActionsModal.open();
+                }}
+                data-testid="removeFromTags"
+              >
+                {t('removeFromTags')}
+              </button>
+            </div>
+
+            <div className="danger-zone" style={{ marginTop: '24px', paddingTop: '20px', borderTop: '1px solid var(--red-50)' }}>
+              <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--red-600)', marginBottom: '8px' }}>
+                Danger Zone
+              </p>
+              <p style={{ fontSize: '12px', color: 'var(--gray-500)', marginBottom: '12px' }}>
+                Deleting this tag will remove it from all assigned members. This action cannot be undone.
+              </p>
+              <button
+                className="btn btn-danger"
+                onClick={removeUserTagModal.open}
+                data-testid="removeTag"
+              >
+                Delete Tag
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Right: Assigned Members */}
+        <div className="card">
+          <div className="card-header">
+            <span className="card-title">
+              {t('assignedMembersOf')} ({userTagAssignedMembers.length})
+            </span>
+            <button
+              className="btn btn-sm btn-primary"
+              onClick={addPeopleToTagModal.open}
+              data-testid="addPeopleToTagBtn"
+            >
+              {t('addPeopleToTag')}
+            </button>
+          </div>
+          <div className="card-body">
+            <div style={{ marginBottom: '14px' }}>
+              <div className="search-bar" style={{ width: '100%' }}>
+                <svg aria-hidden="true" className="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input
+                  type="text"
+                  placeholder={tCommon('searchByName')}
+                  aria-label={tCommon('searchByName')}
+                  value={assignedMemberSearchInput}
+                  onChange={(e) => setAssignedMemberSearchInput(e.target.value.trim())}
+                  data-testid="searchInput"
+                />
+              </div>
+            </div>
+
+            <LoadingState
+              isLoading={userTagAssignedMembersLoading}
+              variant="spinner"
+            >
+              <div
+                id="manageTagScrollableDiv"
+                data-testid="manageTagScrollableDiv"
+                className={styles.manageTagScrollableDiv}
+              >
+                <InfiniteScroll
+                  dataLength={userTagAssignedMembers.length}
+                  next={loadMoreAssignedMembers}
+                  hasMore={hasMoreAssignedMembers}
+                  loader={<InfiniteScrollLoader />}
+                  scrollableTarget="manageTagScrollableDiv"
+                >
+                  {userTagAssignedMembers.length === 0 ? (
+                    <div style={{ padding: '20px', textAlign: 'center', color: 'var(--gray-400)', fontSize: '13px' }}>
+                      {t('noAssignedMembersFound')}
+                    </div>
+                  ) : (
+                    userTagAssignedMembers.map((member, index) => {
+                      const colorSet = avatarColors[index % avatarColors.length];
+                      const initials = getInitials(member.firstName, member.lastName);
+                      const fullName = getFullName(member.firstName, member.lastName);
+                      return (
+                        <div
+                          key={member._id || index}
+                          className="member-row"
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '12px',
+                            padding: '10px 0',
+                            borderBottom: index < userTagAssignedMembers.length - 1 ? '1px solid var(--gray-100)' : 'none',
+                          }}
+                        >
+                          <div
+                            className="member-avatar"
+                            style={{
+                              width: '36px',
+                              height: '36px',
+                              borderRadius: '50%',
+                              background: colorSet.bg,
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              fontSize: '12px',
+                              fontWeight: 600,
+                              color: colorSet.color,
+                              flexShrink: 0,
+                            }}
+                          >
+                            {initials}
+                          </div>
+                          <span
+                            className="member-name"
+                            style={{ flex: 1, fontSize: '13px', fontWeight: 500, color: 'var(--gray-900)' }}
+                            data-testid="memberName"
+                          >
+                            {fullName}
+                          </span>
+                          <button
+                            className="btn btn-sm btn-danger"
+                            onClick={() => {
+                              setUnassignUserId(member._id);
+                              toggleUnassignUserTagModal();
+                            }}
+                            data-testid="unassignTagBtn"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      );
+                    })
+                  )}
+                </InfiniteScroll>
+              </div>
+            </LoadingState>
+          </div>
+        </div>
+      </div>
 
       {/* Add People To Tag Modal */}
       <AddPeopleToTag

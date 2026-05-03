@@ -1,3 +1,20 @@
+.pageHeader {
+  margin-bottom: 1.5rem;
+}
+
+.pageHeader h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin: 0 0 0.5rem 0;
+}
+
+.pageHeader p {
+  color: var(--gray-500);
+  font-size: 1rem;
+  margin: 0;
+}
+
 /* Add Button */
 
 .addButton {
@@ -5,11 +22,10 @@
   color: var(--color-gray-700);
   background-color: var(--color-blue-200);
   border-color: var(--color-blue-200);
-  --bs-btn-focus-box-shadow: none;
 }
 
 .addButton:is(:hover, :active, :focus) {
-  background-color: var(--color-blue-500) !important;
+  background-color: var(--color-blue-500);
   border-color: var(--color-gray-700);
 }
 
@@ -30,7 +46,7 @@
 }
 
 .removeButton:hover .banIcon {
-  color: var(--color-white) !important;
+  color: var(--color-white);
 }
 
 /* Remove Button */
@@ -40,11 +56,11 @@
   background-color: var(--color-red-100);
   color: var(--color-red-500);
   margin-right: var(--space-4);
-  --bs-btn-border-color: var(--color-red-100);
+  border-color: var(--color-red-100);
 }
 
 .removeButton:is(:hover, :active, :focus) {
-  background-color: var(--color-red-500) !important;
+  background-color: var(--color-red-500);
   border-color: var(--color-red-500);
   color: var(--color-white);
 }
@@ -53,7 +69,7 @@
 
 .modalHeader {
   border: none;
-  background-color: var(--color-white) !important;
+  background-color: var(--color-white);
   padding: var(--space-5);
   color: var(--color-black);
 }
@@ -61,7 +77,7 @@
 /* Make sure the modal title is dark grey */
 .modalHeader div,
 .modalHeader .modal-title {
-  color: var(--color-gray-700) !important;
+  color: var(--color-gray-700);
   font-weight: var(--font-weight-semibold);
   font-size: var(--font-size-xl);
 }
@@ -69,7 +85,7 @@
 /* Close button styling */
 .modalHeader button.close,
 .modalHeader .btn-close {
-  color: var(--color-red-500) !important;
+  color: var(--color-red-500);
   opacity: 1;
 }
 
@@ -77,7 +93,7 @@
 .inputField label,
 form label,
 .form-label {
-  color: var(--color-black) !important;
+  color: var(--color-black);
   font-weight: var(--font-weight-regular);
   padding-bottom: 0;
   font-size: var(--font-size-md);
@@ -95,13 +111,13 @@ form label,
 
 /* Placeholder styling */
 .inputField::placeholder {
-  color: var(--color-gray-500) !important;
+  color: var(--color-gray-500);
   opacity: 1;
 }
 
 .inputField:focus {
-  border: var(--border-0) solid var(--color-gray-300) !important;
-  background-color: var(--color-white) !important;
+  border: var(--border-0) solid var(--color-gray-300);
+  background-color: var(--color-white);
   box-shadow: 0 var(--border-shadow-1) var(--border-shadow-1)
     rgba(0, 0, 0, 0.25);
   outline: none;
@@ -114,8 +130,6 @@ form label,
   background-color: var(--color-blue-200);
   color: var(--color-gray-700);
   border-color: var(--color-gray-100);
-  --bs-btn-active-bg: var(--color-blue-500);
-  --bs-btn-active-border-color: var(--color-gray-100);
 }
 
 .editButton:is(:hover, :active) {
@@ -166,9 +180,9 @@ form label,
 /* Create Button*/
 
 .createButton {
-  background-color: var(--color-gray-50) !important;
-  color: var(--color-gray-700) !important;
-  border: var(--border-1) solid var(--color-gray-700) !important;
+  background-color: var(--color-gray-50);
+  color: var(--color-gray-700);
+  border: var(--border-1) solid var(--color-gray-700);
   margin: var(--space-2) var(--space-4);
   width: var(--space-16);
   height: var(--space-10);
@@ -177,15 +191,15 @@ form label,
 .createButton:hover {
   box-shadow: var(--border-shadow-xs) var(--border-shadow-xs)
     var(--border-shadow-xs) rgba(0, 0, 0, 0.3);
-  background-color: var(--color-gray-50) !important;
-  color: var(--color-gray-700) !important;
-  border: var(--border-1) solid var(--color-gray-700) !important;
+  background-color: var(--color-gray-50);
+  color: var(--color-gray-700);
+  border: var(--border-1) solid var(--color-gray-700);
 }
 
 .createButton:active {
-  color: var(--color-gray-400) !important;
-  background-color: var(--color-gray-100) !important;
-  border: var(--border-1) solid var(--color-gray-400) !important;
+  color: var(--color-gray-400);
+  background-color: var(--color-gray-100);
+  border: var(--border-1) solid var(--color-gray-400);
 }
 
 /* Table Header */

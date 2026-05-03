@@ -57,5 +57,5 @@
 .stateMessage {
   text-align: center;
   padding: 2rem;
-  color: var(--bs-secondary, #6c757d);
+  color: var(--gray-600, #6c757d);
 }

@@ -1,53 +1,51 @@
-import type { ReactNode } from 'react';
-import type { ButtonProps as BootstrapButtonProps } from 'react-bootstrap/Button';
-import type { ButtonVariant as BootstrapButtonVariant } from 'react-bootstrap/esm/types';
+import type { ReactNode, HTMLAttributes } from 'react';
 
-/**
- * Supported sizes for the shared Button component.
- * - `md` maps to the default react-bootstrap size.
- * - `xl` applies custom padding/typography via CSS modules.
- */
 export type ButtonSize = 'sm' | 'md' | 'lg' | 'xl';
-
-/** Position of an optional icon relative to the label. */
 export type ButtonIconPosition = 'start' | 'end';
 
-/**
- * Variant palette supported by react-bootstrap (including outline variants) plus
- * a couple of legacy aliases used in the app codebase.
- */
 export type ButtonVariant =
-  | BootstrapButtonVariant
+  | 'primary'
+  | 'secondary'
+  | 'success'
+  | 'danger'
+  | 'warning'
+  | 'info'
+  | 'light'
+  | 'dark'
+  | 'link'
+  | 'outline-primary'
+  | 'outline-secondary'
+  | 'outline-success'
+  | 'outline-danger'
+  | 'outline-warning'
+  | 'outline-info'
+  | 'outline-light'
+  | 'outline-dark'
   | 'outlined'
   | 'outline'
   | 'contained'
   | 'text'
   | 'toolbar'
+  | 'toolbar-action'
   | (string & {});
 
-/**
- * Props for the shared Button wrapper.
- * Extends react-bootstrap Button props and adds loading, icon, and layout helpers.
- */
-export interface InterfaceButtonProps extends Omit<
-  BootstrapButtonProps,
-  'size' | 'variant'
-> {
-  /** Visual variant (e.g., primary, outline-primary, danger). */
+export interface InterfaceButtonProps
+  extends Omit<HTMLAttributes<HTMLElement>, 'size'> {
   variant?: ButtonVariant;
-  /** Size token. `md` is the default; `xl` uses custom styling. */
   size?: ButtonSize;
-  /** Stretch to the parent width. */
   fullWidth?: boolean;
-  /** Show the loading spinner and disable interactions. */
   isLoading?: boolean;
-  /** Optional text to display while loading; falls back to children. */
   loadingText?: ReactNode;
-  /** Optional leading/trailing icon. */
   icon?: ReactNode;
-  /** Placement of the icon relative to the text. */
   iconPosition?: ButtonIconPosition;
+  href?: string;
+  target?: string;
+  rel?: string;
+  type?: 'button' | 'submit' | 'reset';
+  disabled?: boolean;
+  name?: string;
+  value?: string | number | readonly string[];
+  form?: string;
 }
 
-/** Consumer-friendly alias that matches existing imports. */
 export type ButtonProps = InterfaceButtonProps;

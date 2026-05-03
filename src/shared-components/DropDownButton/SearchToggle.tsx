@@ -40,7 +40,7 @@ const SearchToggle = React.forwardRef<
       )}
       <input
         type="text"
-        className={`form-control border-0 shadow-none ${styles.searchToggleInput}`}
+        className={`form-input border-0 shadow-none ${styles.searchToggleInput}`}
         placeholder={placeholder}
         value={value}
         onChange={onChange}

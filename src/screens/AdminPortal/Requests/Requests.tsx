@@ -22,7 +22,6 @@
 import { useQuery, useMutation } from '@apollo/client';
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { useSimpleTableData } from 'shared-components/DataTable/hooks/useSimpleTableData';
-import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
@@ -35,20 +34,13 @@ import {
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import TableLoader from 'shared-components/TableLoader/TableLoader';
-import Avatar from 'shared-components/Avatar/Avatar';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import DeleteIcon from '@mui/icons-material/Delete';
-import styles from './Requests.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams } from 'react-router';
-import Toolbar from 'shared-components/Toolbar/Toolbar';
 import { PAGE_SIZE } from 'types/ReportingTable/utils';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import Group from '@mui/icons-material/Group';
 import Search from '@mui/icons-material/Search';
-import { DataTable } from 'shared-components/DataTable/DataTable';
 import ErrorPanel from 'shared-components/ErrorPanel';
-import { IColumnDef } from 'types/shared-components/DataTable/column';
 
 interface InterfaceRequestsListItem {
   membershipRequestId: string;
@@ -142,17 +134,6 @@ const Requests = (): JSX.Element => {
     );
   }, [allRequests]);
 
-  // Precompute request index map for O(1) serial number lookup
-  const requestIndexMap = useMemo(() => {
-    const map = new Map<string, number>();
-    displayedRequests.forEach(
-      (req: InterfaceRequestsListItem, index: number) => {
-        map.set(req.membershipRequestId, index + 1);
-      },
-    );
-    return map;
-  }, [displayedRequests]);
-
   // Clear search on unmount
   useEffect(() => {
     return () => {
@@ -245,113 +226,47 @@ const Requests = (): JSX.Element => {
     }
   };
 
-  // Columns for DataTable
-  const columns: Array<IColumnDef<InterfaceRequestsListItem>> = [
-    {
-      id: 'sl_no',
-      header: t('requests.sl_no'),
-      accessor: (): number => 0,
-      render: (_: unknown, req: InterfaceRequestsListItem): JSX.Element => (
-        <span data-testid={`serial-${req.membershipRequestId}`}>
-          {requestIndexMap.get(req.membershipRequestId) || 0}
-        </span>
-      ),
-    },
-    {
-      id: 'profile',
-      header: t('requests.profile'),
-      accessor: (req: InterfaceRequestsListItem) => req.user?.id || '',
-      render: (_: unknown, req: InterfaceRequestsListItem) => {
-        const user = req.user || {};
-        if (user.avatarURL && user.avatarURL !== 'null') {
-          return (
-            <img
-              src={user.avatarURL}
-              className={styles.userAvatar}
-              alt={t('requests.profilePictureAlt')}
-              data-testid="display-img"
-              crossOrigin="anonymous"
-              onError={(e) => {
-                e.currentTarget.onerror = null;
-                e.currentTarget.style.display = 'none';
-              }}
-            />
-          );
-        }
-        return (
-          <Avatar
-            data-testid="display-img"
-            size={45}
-            avatarStyle={styles.avatarStyle}
-            name={user.name || ''}
-            alt={t('requests.placeholderAvatarAlt')}
-          />
-        );
-      },
-    },
-    {
-      id: 'name',
-      header: tCommon('name'),
-      accessor: (req: InterfaceRequestsListItem) => req.user?.name || '',
-    },
-    {
-      id: 'email',
-      header: tCommon('email'),
-      accessor: (req: InterfaceRequestsListItem) =>
-        req.user?.emailAddress || '',
-    },
-    {
-      id: 'accept',
-      header: t('requests.accept'),
-      accessor: (req: InterfaceRequestsListItem) => req.membershipRequestId,
-      render: (_: unknown, req: InterfaceRequestsListItem) => (
-        <Button
-          className={
-            'btn ' + styles.requestsAcceptButton + ' ' + styles.hoverShadowOnly
-          }
-          data-testid={'acceptMembershipRequestBtn' + req.membershipRequestId}
-          aria-label={t('requests.accept')}
-          onClick={async () => {
-            await handleAcceptUser(req.membershipRequestId);
-          }}
-        >
-          <CheckCircleIcon />
-        </Button>
-      ),
-    },
-    {
-      id: 'reject',
-      header: t('requests.reject'),
-      accessor: (req: InterfaceRequestsListItem) => req.membershipRequestId,
-      render: (_: unknown, req: InterfaceRequestsListItem) => (
-        <Button
-          className={
-            'btn ' + styles.requestsRejectButton + ' ' + styles.hoverShadowOnly
-          }
-          data-testid={'rejectMembershipRequestBtn' + req.membershipRequestId}
-          aria-label={t('requests.reject')}
-          onClick={async () => {
-            await handleRejectUser(req.membershipRequestId);
-          }}
-        >
-          <DeleteIcon />
-        </Button>
-      ),
-    },
-  ];
+  /**
+   * Helper: get initials from a name string.
+   */
+  const getInitials = (name: string): string => {
+    const parts = name.trim().split(/\s+/);
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+    return (name[0] ?? '').toUpperCase();
+  };
 
   return (
     <div data-testid="testComp">
-      <Toolbar
-        search={{
-          placeholder: t('requests.searchRequests'),
-          value: searchByName,
-          onChange: handleSearch,
-          onSearch: handleSearch,
-          inputTestId: 'searchByName',
-          buttonTestId: 'searchButton',
-        }}
-      />
+      <div className="page-header">
+        <div className="page-header-left">
+          <h1 className="page-title">
+            {t('requests.title')}{' '}
+            <span
+              className="badge badge-orange"
+              style={{ fontSize: '13px', verticalAlign: 'middle', marginLeft: '8px' }}
+            >
+              {displayedRequests.length} {t('requests.pending')}
+            </span>
+          </h1>
+          <p className="page-subtitle">
+            {t('requests.reviewAndManage')}
+          </p>
+        </div>
+      </div>
+
+      <div className="toolbar" style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '20px' }}>
+        <input
+          type="text"
+          className="search-input"
+          placeholder={t('requests.searchRequests')}
+          value={searchByName}
+          onChange={(e) => handleSearch(e.target.value)}
+          data-testid="searchByName"
+          style={{ flex: 1, padding: '8px 12px', border: '1px solid var(--gray-200)', borderRadius: 'var(--radius-md)', fontSize: '13px' }}
+        />
+      </div>
 
       {error ? (
         <ErrorPanel
@@ -386,16 +301,79 @@ const Requests = (): JSX.Element => {
           dataTestId="requests-no-requests-empty"
         />
       ) : (
-        <div className={styles.listBox}>
-          {loading ? (
-            <TableLoader headerTitles={headerTitles} noOfRows={PAGE_SIZE} />
-          ) : (
-            <DataTable<InterfaceRequestsListItem>
-              data={displayedRequests}
-              columns={columns}
-              rowKey="membershipRequestId"
-            />
-          )}
+        <div className="card">
+          <div className="table-wrapper">
+            {loading ? (
+              <TableLoader headerTitles={headerTitles} noOfRows={PAGE_SIZE} />
+            ) : (
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th scope="col">{tCommon('name')}</th>
+                    <th scope="col">{t('requests.requested')}</th>
+                    <th scope="col">{t('requests.message')}</th>
+                    <th scope="col">{t('requests.actions')}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {displayedRequests.map((req) => {
+                    const user = req.user || ({} as InterfaceRequestsListItem['user']);
+                    const initials = getInitials(user.name || '');
+                    const requestedDate = (() => {
+                      try {
+                        return new Date(req.createdAt).toLocaleDateString('en-US', {
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric',
+                        });
+                      } catch {
+                        return '';
+                      }
+                    })();
+                    return (
+                      <tr key={req.membershipRequestId}>
+                        <td>
+                          <div className="user-cell">
+                            <div className="user-cell-avatar">{initials}</div>
+                            <div>
+                              <div className="user-cell-name">{user.name}</div>
+                              <div className="user-cell-email">{user.emailAddress}</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td>{requestedDate}</td>
+                        <td>
+                          <div className="message-snippet">{''}</div>
+                        </td>
+                        <td>
+                          <div className="request-actions">
+                            <button
+                              className="btn btn-primary btn-sm"
+                              data-testid={`acceptMembershipRequestBtn${req.membershipRequestId}`}
+                              onClick={async () => {
+                                await handleAcceptUser(req.membershipRequestId);
+                              }}
+                            >
+                              {t('requests.accept')}
+                            </button>
+                            <button
+                              className="btn btn-secondary btn-sm"
+                              data-testid={`rejectMembershipRequestBtn${req.membershipRequestId}`}
+                              onClick={async () => {
+                                await handleRejectUser(req.membershipRequestId);
+                              }}
+                            >
+                              {t('requests.decline')}
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            )}
+          </div>
         </div>
       )}
     </div>

@@ -8,12 +8,12 @@
  * @returns The rendered UserNavbar component.
  *
  * @remarks
- * - Utilizes `react-bootstrap` for layout and styling.
+ * - Uses plain HTML elements for layout and styling.
  * - Supports internationalization using `i18next` and `react-i18next`.
  * - Handles user logout by revoking the refresh token and clearing local storage.
  *
  * dependencies
- * - `react-bootstrap` for Navbar, Dropdown, and Container components.
+ * - Plain HTML elements for Navbar and Container.
  * - `i18next` and `react-i18next` for language translation.
  * - `@apollo/client` for GraphQL logout mutation.
  * - `@mui/icons-material` for icons.
@@ -45,7 +45,7 @@
 import React from 'react';
 import styles from './UserNavbar.module.css';
 import TalawaImage from 'assets/images/talawa-logo-600x600.png';
-import { Container, Navbar } from 'react-bootstrap';
+
 import { languages } from 'utils/languages';
 import i18next from 'i18next';
 import cookies from 'js-cookie';
@@ -124,10 +124,10 @@ function userNavbar(): JSX.Element {
   };
 
   return (
-    <Navbar variant="dark" className={`${styles.colorPrimary}`}>
-      <Container fluid>
+    <nav className={`${styles.colorPrimary}`} style={{ display: 'flex', alignItems: 'center', padding: '0.5rem 1rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
         {/* Navbar brand with logo and name */}
-        <Navbar.Brand href="#">
+        <a href="#" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit', marginRight: 'auto' }}>
           <img
             className={styles.talawaImage}
             src={TalawaImage}
@@ -135,13 +135,10 @@ function userNavbar(): JSX.Element {
             data-testid="brandLogo"
           />
           <b data-testid="brandName">{t('talawa')}</b>
-        </Navbar.Brand>
+        </a>
 
-        {/* Navbar toggle button for responsive design */}
-        <Navbar.Toggle />
-
-        {/* Navbar collapsible content */}
-        <Navbar.Collapse className="justify-content-end">
+        {/* Navbar actions */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
           {/* Dropdown for language selection */}
           <DropDownButton
             id="language-dropdown"
@@ -197,9 +194,9 @@ function userNavbar(): JSX.Element {
               ariaLabel={tCommon('userMenu')}
             />
           </div>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+        </div>
+      </div>
+    </nav>
   );
 }
 

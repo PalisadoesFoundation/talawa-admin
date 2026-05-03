@@ -1,148 +1,189 @@
-/* Wrapper for Name, Description, Location – no horizontal margin so content stays inside modal */
+/* EventForm — Talawa design system */
+
 .textFieldsSection {
-  margin-left: var(--space-5);
-  margin-right: var(--space-6);
-  padding-right: var(--space-1);
+  margin-left: 20px;
+  margin-right: 24px;
+  padding-right: 4px;
 }
 
 .datedivEvents {
   display: flex;
   flex-direction: row;
-  margin-bottom: var(--space-6);
+  margin-top: 8px;
+  margin-bottom: 24px;
+  gap: 8px;
+  padding: 0 20px;
 }
 
 .dateboxEvents {
-  width: 90%;
-  border-radius: var(--radius-md);
-  border-color: var(--dateboxEvents-border, #e8e5e5);
-  outline: none;
-  box-shadow: none;
-  padding: var(--space-2) var(--space-3);
-  margin-right: var(--space-3);
-  margin-left: var(--space-3);
+  flex: 1;
 }
+
 
 .datediv {
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
-  margin-bottom: var(--space-6);
+  gap: 24px;
+  margin-bottom: 24px;
+  padding: 0 20px;
 }
 
-.datediv > div {
-  flex: 1;
+.dateRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-@media only screen and (max-width: 600px) {
-  .datediv {
-    flex-direction: column;
-  }
-
-  .datediv > div {
-    width: 100%;
-    margin-left: 0;
-    margin-bottom: var(--space-4);
-  }
-
-  .datediv > div p {
-    margin-bottom: var(--space-3);
-  }
+.checkboxdiv {
+  margin-top: 12px;
+  margin-bottom: 12px;
 }
 
 .checkboxdivEvents {
-  display: flex;
-  flex-wrap: wrap;
-
-  --events-gap: var(--space-5);
-  /* stylelint-disable-next-line declaration-empty-line-before */
-  column-gap: var(--events-gap, 1rem);
+  margin-top: 20px;
+  margin-bottom: 8px;
+  padding: 0 20px;
 }
 
-.checkboxdivEvents > div {
-  flex: 0 0 calc(50% - (var(--events-gap, 1rem) / 2));
-  min-width: var(--space-17);
-  margin-bottom: var(--space-8);
+.dispflex {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  justify-content: space-between;
 }
 
 .dispflexEvents {
   display: flex;
   align-items: center;
+  margin-bottom: 10px;
 }
 
-.dispflexEvents > input {
-  border: none;
-  box-shadow: none;
-  margin-top: var(--space-3);
+.switch {
+  margin-left: 8px;
 }
 
-/* Migrated from app-fixed.module.css */
+.formLabel {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--gray-700, #374151);
+  margin-bottom: 6px;
+  display: block;
+}
+
 .inputField {
-  margin-top: var(--space-4);
-  margin-bottom: var(--space-4);
-  background-color: var(--inputField-bg, #fff);
-  border: var(--border-1) solid var(--inputField-border, #dddddd);
-  box-shadow: var(--drop-shadow);
-  border-radius: var(--radius-md);
+  background-color: var(--surface, #fff);
+  border: 1.5px solid var(--gray-200, #e5e7eb);
+  color: var(--gray-900, #111827);
+  padding: 9px 12px;
+  width: 100%;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: var(--font, 'Inter', sans-serif);
+  transition: border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+  margin-bottom: 16px;
+}
+
+.inputField:focus {
+  border-color: var(--green-500, #3ecf8e);
+  box-shadow: 0 0 0 3px rgba(62, 207, 142, 0.12);
+}
+
+.textareaField {
+  composes: inputField;
+  min-height: 80px;
+  resize: vertical;
+}
+
+.datePicker {
   width: 100%;
 }
 
-.addButton {
-  background-color: var(--color-blue-200);
-  color: var(--color-gray-700);
-  border: var(--border-1) solid var(--color-gray-100);
-  padding: var(--space-2) var(--space-4);
-  font-weight: var(--font-weight-medium);
+.datePickerLabel {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--gray-700, #374151);
+  margin-bottom: 6px;
 }
 
-.addButton:hover {
-  background-color: var(--color-blue-500);
-  color: var(--color-white);
+.recurrenceSection {
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid var(--gray-200, #e5e7eb);
+  border-radius: 10px;
+  background: var(--gray-50, #fafafa);
 }
 
-.switch input {
-  --bs-form-switch-bg: transparent;
+.submitButton {
+  background-color: var(--green-500, #3ecf8e);
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.15s;
+  width: 100%;
+  margin-top: 16px;
 }
 
-.switch input:checked {
-  background-color: var(--switch-bg-checked, #1778f2);
-  border-color: var(--switch-border-checked, #1778f2);
-  box-shadow: 0 0 var(--shadow-blur-xs) var(--shadow-spread-sm)
-    var(--switch-box-shadow-checked, #a8c7fa);
+.submitButton:hover {
+  background-color: var(--green-400, #4ade80);
 }
 
-.switch input:focus {
-  border-color: var(--switch-border-focus, #d1d5db);
+.submitButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
-/* Helper for bootstrap switch alignment */
-.switch {
-  padding-left: var(--space-13);
-  white-space: nowrap;
+.cancelButton {
+  background: none;
+  border: 1.5px solid var(--gray-200, #e5e7eb);
+  color: var(--gray-700, #374151);
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+  width: 100%;
+  margin-top: 8px;
 }
 
-/* stylelint-disable-next-line selector-pseudo-class-no-unknown -- CSS Modules :global() targets Bootstrap's .form-check-input */
-.switch :global(.form-check-input) {
-  margin-left: calc(-1 * var(--space-11));
-  margin-top: var(--space-4);
-  flex-shrink: 0;
+.cancelButton:hover {
+  background: var(--gray-50, #fafafa);
+  border-color: var(--gray-300, #d1d5db);
 }
 
 .createModalSeparator {
-  border-top: var(--border-1) solid var(--color-gray-200);
-  margin-top: var(--space-4);
-  /* The standard Bootstrap padding value ensures it perfectly cancels out parent padding */
-  margin-left: calc(-1 * var(--bs-modal-padding, var(--space-6)));
-  margin-right: calc(-1 * var(--bs-modal-padding, var(--space-6)));
-  padding-top: var(--space-3);
+  height: 1px;
+  background: var(--gray-200, #e5e7eb);
+  margin: 20px 0 16px;
 }
 
 .footerActions {
   display: flex;
-  gap: var(--space-2);
-  justify-content: flex-end;
+  gap: 8px;
   align-items: center;
+  padding: 0 20px 8px;
 }
 
-.addButton.footerButton {
-  margin-bottom: var(--space-0);
+.addButton {
+  background-color: var(--green-500, #3ecf8e);
+  color: #000;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.addButton:hover {
+  background-color: var(--green-400, #4ade80);
+}
+
+.footerButton {
+  /* no extra styles needed */
 }

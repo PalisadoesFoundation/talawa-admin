@@ -18,11 +18,11 @@
  * ```
  */
 
-import React, { useState, useEffect, useMemo, JSX } from 'react';
+import React, { useState, useEffect, useMemo, type JSX } from 'react';
+import styles from './OrganizationEvents.module.css';
 import { NetworkStatus, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import EventCalendar from 'components/EventCalender/Monthly/EventCalender';
-import styles from './OrganizationEvents.module.css';
 import {
   GET_ORGANIZATION_EVENTS_PG,
   GET_ORGANIZATION_EVENTS_PREVIEW,
@@ -36,9 +36,7 @@ import type { InterfaceEvent } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';
 import CreateEventModal from './CreateEventModal';
-import Toolbar from 'shared-components/Toolbar/Toolbar';
 import { Button } from 'shared-components/Button';
-import AddIcon from '@mui/icons-material/Add';
 import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import SafeBreadcrumbs from 'shared-components/BreadcrumbsComponent/SafeBreadcrumbs';
 
@@ -128,6 +126,8 @@ function organizationEvents(): JSX.Element {
   const [queryCurrentDateOfMonth, setQueryCurrentDateOfMonth] =
     useState(currentDateOfMonth);
   const [searchByName, setSearchByName] = useState('');
+  const [eventFilter, setEventFilter] = useState<'upcoming' | 'past' | 'recurring'>('upcoming');
+  const [viewMode, setViewMode] = useState<'cards' | 'calendar'>('calendar');
   const [dayEventsResetKey, setDayEventsResetKey] = useState(0);
   const { orgId: currentUrl } = useParams();
 
@@ -163,7 +163,8 @@ function organizationEvents(): JSX.Element {
     setCurrentDateOfMonth(dayOfMonth);
   };
 
-  const isMonthView = viewType === ViewType.MONTH;
+  // eventsPreview field doesn't exist in the API — always use the detailed events query
+  const isMonthView = false;
 
   const effectiveQueryMonth = isMonthView ? queryMonth : currentMonth;
   const effectiveQueryYear = isMonthView ? queryYear : currentYear;
@@ -211,8 +212,9 @@ function organizationEvents(): JSX.Element {
     };
   }, [currentViewDate, monthEndDate, monthStartDate, viewType]);
 
+  // API max is 100 per page
   const detailedFirst =
-    viewType === ViewType.DAY ? 40 : viewType === ViewType.WEEK ? 80 : 120;
+    viewType === ViewType.DAY ? 40 : viewType === ViewType.WEEK ? 80 : 100;
 
   const {
     data: monthPreviewData,
@@ -253,8 +255,7 @@ function organizationEvents(): JSX.Element {
     skip: isMonthView,
     notifyOnNetworkStatusChange: true,
     errorPolicy: 'all',
-    fetchPolicy: 'cache-first',
-    nextFetchPolicy: 'cache-first',
+    fetchPolicy: 'network-only',
   });
 
   const eventDataError = isMonthView ? monthPreviewError : detailedEventError;
@@ -384,6 +385,35 @@ function organizationEvents(): JSX.Element {
     });
   }, [allEvents, searchByName]);
 
+  // Filter events based on the active tab (Upcoming/Past/Recurring)
+  const filteredEvents: InterfaceEvent[] = useMemo(() => {
+    if (eventFilter === 'upcoming') {
+      return events.filter((event) => {
+        const start = event.startAt
+          ? dayjs(event.startAt)
+          : event.startDate
+            ? dayjs(event.startDate)
+            : null;
+        return start && start.isAfter(dayjs());
+      });
+    }
+    if (eventFilter === 'past') {
+      return events.filter((event) => {
+        const start = event.startAt
+          ? dayjs(event.startAt)
+          : event.startDate
+            ? dayjs(event.startDate)
+            : null;
+        return start && start.isBefore(dayjs());
+      });
+    }
+    if (eventFilter === 'recurring') {
+      return events.filter((event) => event.isRecurringEventTemplate);
+    }
+    return events;
+  }, [events, eventFilter]);
+
+
   useEffect(() => {
     // Only navigate away for serious errors, not for empty results or month navigation
     if (eventDataError || orgDataError) {
@@ -406,6 +436,15 @@ function organizationEvents(): JSX.Element {
     }
   }, [eventDataError, orgDataError]);
 
+  // Color palettes for event date strips
+  const dateStripColors = [
+    'linear-gradient(135deg, #3ecf8e, #15803d)',
+    'linear-gradient(135deg, #3b82f6, #2563eb)',
+    'linear-gradient(135deg, #a855f7, #7c3aed)',
+    'linear-gradient(135deg, #f97316, #ea580c)',
+    'linear-gradient(135deg, #6b7280, #4b5563)',
+  ];
+
   return (
     <LoadingState isLoading={orgLoading} variant="spinner" size="lg">
       <>
@@ -421,47 +460,171 @@ function organizationEvents(): JSX.Element {
             },
           ]}
         />
-        <div className={styles.mainpageright}>
-          <div className={styles.justifyspOrganizationEvents}>
-            <Toolbar
-              search={{
-                placeholder: t('searchEventName'),
-                onSearch: (value: string) => {
-                  setSearchByName(value);
-                },
-                inputTestId: 'searchEvent',
-                buttonTestId: 'searchButton',
-              }}
-              filters={[
-                {
-                  type: 'sort',
-                  title: t('viewType'),
-                  selected: viewType,
-                  options: [
-                    { label: t('selectMonth'), value: ViewType.MONTH },
-                    { label: t('selectWeek'), value: ViewType.WEEK },
-                    { label: t('selectDay'), value: ViewType.DAY },
-                    { label: t('selectYear'), value: ViewType.YEAR },
-                  ],
-                  onChange: (value) => handleChangeView(value.toString()),
-                  testIdPrefix: 'selectViewType',
-                },
-              ]}
-              actions={
-                <Button
-                  variant="toolbar"
-                  onClick={createEventModal.open}
-                  data-testid="createEventModalBtn"
-                  data-cy="createEventModalBtn"
-                >
-                  <AddIcon className={styles.addIconStyle} />
-                  <span>{t('createEvent')}</span>
-                </Button>
-              }
+        <div className="page-header">
+          <div className="page-header-left">
+            <h1 className="page-title">
+              {t('title')}{' '}
+              <span className="count-badge">{events.length}</span>
+            </h1>
+            <p className="page-subtitle">
+              {t('searchEventName')}
+            </p>
+          </div>
+          <div className="page-header-actions">
+            <Button
+              variant="toolbar"
+              onClick={createEventModal.open}
+              data-testid="createEventModalBtn"
+              data-cy="createEventModalBtn"
+              className="btn btn-primary"
+            >
+              + {t('createEvent')}
+            </Button>
+          </div>
+        </div>
+
+        <div className="tabs" role="tablist">
+          <button
+            className={`tab ${eventFilter === 'upcoming' ? 'active' : ''}`}
+            role="tab"
+            aria-selected={eventFilter === 'upcoming'}
+            onClick={() => setEventFilter('upcoming')}
+          >
+            Upcoming
+          </button>
+          <button
+            className={`tab ${eventFilter === 'past' ? 'active' : ''}`}
+            role="tab"
+            aria-selected={eventFilter === 'past'}
+            onClick={() => setEventFilter('past')}
+          >
+            Past
+          </button>
+          <button
+            className={`tab ${eventFilter === 'recurring' ? 'active' : ''}`}
+            role="tab"
+            aria-selected={eventFilter === 'recurring'}
+            onClick={() => setEventFilter('recurring')}
+          >
+            Recurring
+          </button>
+        </div>
+
+        <div className={styles.viewToggle}>
+          <button
+            className={`${styles.viewToggleBtn} ${viewMode === 'calendar' ? styles.viewToggleBtnActive : ''}`}
+            onClick={() => setViewMode('calendar')}
+            data-testid="viewToggleCalendar"
+          >
+            Calendar View
+          </button>
+          <button
+            className={`${styles.viewToggleBtn} ${viewMode === 'cards' ? styles.viewToggleBtnActive : ''}`}
+            onClick={() => setViewMode('cards')}
+            data-testid="viewToggleCards"
+          >
+            Card View
+          </button>
+        </div>
+
+        <div className="toolbar">
+          <div className="search-bar">
+            <span className="search-icon">
+              <svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </span>
+            <input
+              type="text"
+              placeholder="Search events..."
+              aria-label="Search events"
+              data-testid="searchEvent"
+              value={searchByName}
+              onChange={(e) => setSearchByName(e.target.value)}
             />
           </div>
         </div>
-        <EventCalendar
+
+        {viewMode === 'cards' && (
+          eventLoading ? (
+            <div className="empty-state"><p className="empty-state-text">Loading events...</p></div>
+          ) : filteredEvents.length === 0 ? (
+            <div className="empty-state">
+              <div className="empty-state-icon">📅</div>
+              <p className="empty-state-title">No events found</p>
+              <p className="empty-state-text">Try a different filter or create a new event.</p>
+            </div>
+          ) : (
+          <div className="grid-3">
+          {filteredEvents.map((event, index) => {
+            const start = event.startAt
+              ? dayjs(event.startAt)
+              : event.startDate
+                ? dayjs(event.startDate)
+                : null;
+            const end = event.endAt
+              ? dayjs(event.endAt)
+              : event.endDate
+                ? dayjs(event.endDate)
+                : null;
+            const monthLabel = start ? start.format('MMM') : '';
+            const dayLabel = start ? start.format('DD') : '';
+            const dateRange =
+              start && end
+                ? `${start.format('MMM D')} - ${end.format('MMM D, YYYY')}`
+                : start
+                  ? start.format('MMM D, YYYY')
+                  : '';
+            const colorIndex = index % dateStripColors.length;
+            const attendeeCount = event.attendees?.length ?? 0;
+            const isUpcoming =
+              start && start.isAfter(dayjs()) ? true : false;
+
+            return (
+              <div className="event-card" key={event.id}>
+                <div
+                  className="event-date-strip"
+                  style={{
+                    background: dateStripColors[colorIndex],
+                  }}
+                >
+                  <div className="month">{monthLabel}</div>
+                  <div className="day">{dayLabel}</div>
+                </div>
+                <div className="event-card-body">
+                  <div className="event-card-title">{event.name}</div>
+                  <div className="event-card-detail">
+                    <span className="event-card-detail-icon">
+                      <svg aria-hidden="true" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                    </span>{' '}
+                    {dateRange}
+                  </div>
+                  {event.location && (
+                    <div className="event-card-detail">
+                      <span className="event-card-detail-icon">
+                        <svg aria-hidden="true" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                      </span>{' '}
+                      {event.location}
+                    </div>
+                  )}
+                  <div className="event-card-footer">
+                    <span className="attendee-badge">
+                      <svg aria-hidden="true" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ verticalAlign: '-2px', marginRight: '2px' }}><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>{' '}
+                      {attendeeCount} attendees
+                    </span>
+                    <span
+                      className={`badge ${isUpcoming ? 'badge-green' : 'badge-gray'}`}
+                    >
+                      {isUpcoming ? 'Upcoming' : 'Draft'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+          )
+        )}
+
+        {viewMode === 'calendar' && (<EventCalendar
           eventData={events}
           refetchEvents={refetchEvents}
           orgData={orgData?.organization}
@@ -476,7 +639,7 @@ function organizationEvents(): JSX.Element {
           currentMonth={currentMonth}
           currentYear={currentYear}
           currentDateOfMonth={currentDateOfMonth}
-        />
+        />)}
 
         <CreateEventModal
           isOpen={createEventModal.isOpen}

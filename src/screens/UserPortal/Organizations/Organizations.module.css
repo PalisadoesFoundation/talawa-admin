@@ -108,8 +108,40 @@
   }
 }
 
-.alert {
+/* ── Alert banner (replaces react-bootstrap Alert) ────────────────────────── */
+.alertBanner {
+  background-color: var(--yellow-50);
+  border: 1px solid var(--yellow-500);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem;
   margin-bottom: var(--space-5);
+}
+
+.alertContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.alertActions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.alertDismiss {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--gray-600);
+  padding: 0.25rem;
+}
+
+.alertDismiss:hover {
+  color: var(--gray-900);
 }
 
 .selectOrganizationContainer {
@@ -142,4 +174,105 @@
 
 .organizationsFlexContainer {
   flex: 1;
+}
+
+/* ── Organizations grid (replaces Bootstrap .row) ─────────────────────────── */
+.organizationsGrid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* ── Screen-reader only (replaces Bootstrap .visually-hidden) ─────────────── */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Org grid (prototype: user-orgs.html) ──────────────────────────────────── */
+.orgGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+@media (max-width: 1000px) {
+  .orgGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .orgGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.orgCard {
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  padding: 28px 24px;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: box-shadow 0.2s, transform 0.15s;
+}
+
+.orgCard:hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: translateY(-2px);
+}
+
+.orgAvatar {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, var(--green-500), var(--green-700));
+}
+
+.orgName {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--gray-900);
+  margin-bottom: 4px;
+}
+
+.orgMembers {
+  font-size: 13px;
+  color: var(--gray-400);
+  margin-bottom: 14px;
+}
+
+.orgRole {
+  margin-bottom: 18px;
+}
+
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: 6px;
+  letter-spacing: -0.02em;
+}
+
+.sectionSubtitle {
+  font-size: 13px;
+  color: var(--gray-500);
+  margin-bottom: 20px;
 }

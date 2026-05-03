@@ -2,7 +2,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { UNLINK_OAUTH_ACCOUNT } from 'GraphQl/Mutations/mutations';
 import { USER_OAUTH_ACCOUNTS } from 'GraphQl/Queries/Queries';
 import { useState } from 'react';
-import { Card } from 'react-bootstrap';
+
 import { useLocation, useParams } from 'react-router';
 import GitHubOAuthButton from 'components/Auth/OAuthButton/GitHubOAuthButton';
 import GoogleOAuthButton from 'components/Auth/OAuthButton/GoogleOAuthButton';
@@ -125,13 +125,13 @@ const OAuthAccountsSettings: React.FC<OAuthAccountsSettingsProps> = ({
 
   if (loading) {
     return (
-      <Card className={styles.oauthCard}>
-        <Card.Body>
+      <div className={styles.oauthCard}>
+        <div>
           <LoadingState isLoading={true} variant="inline">
             <div />
           </LoadingState>
-        </Card.Body>
-      </Card>
+        </div>
+      </div>
     );
   }
 
@@ -143,8 +143,8 @@ const OAuthAccountsSettings: React.FC<OAuthAccountsSettingsProps> = ({
 
   return (
     <div className={styles.wrapper}>
-      <Card className={styles.oauthCard}>
-        <Card.Body>
+      <div className={styles.oauthCard}>
+        <div>
           <div className={styles.row}>
             <h6 className={styles.heading}>{t('missingOauthProviders')}</h6>
             {missingProviders.length === 0 ? (
@@ -160,11 +160,11 @@ const OAuthAccountsSettings: React.FC<OAuthAccountsSettingsProps> = ({
               </div>
             )}
           </div>
-        </Card.Body>
-      </Card>
+        </div>
+      </div>
 
-      <Card className={styles.oauthCard}>
-        <Card.Body>
+      <div className={styles.oauthCard}>
+        <div>
           <div className={styles.row}>
             <h6 className={styles.heading}>{t('connectedOauthAccounts')}</h6>
             {connectedAccounts.length === 0 ? (
@@ -213,8 +213,8 @@ const OAuthAccountsSettings: React.FC<OAuthAccountsSettingsProps> = ({
               </div>
             )}
           </div>
-        </Card.Body>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 };

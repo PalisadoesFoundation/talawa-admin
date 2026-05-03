@@ -3,11 +3,11 @@
   background-color: var(--removeButton-bg);
   color: var(--removeButton-color);
   margin-right: var(--space-4);
-  --bs-btn-border-color: var(--removeButton-border);
+  border-color: var(--removeButton-border);
 }
 
 .removeButton:is(:hover, :active, :focus) {
-  background-color: var(--removeButton-bg-hover) !important;
+  background-color: var(--removeButton-bg-hover);
   border-color: var(--removeButton-border-hover);
   color: var(--removeButton-color-hover);
 }
@@ -17,11 +17,10 @@
   color: var(--addButton-font);
   background-color: var(--light-blue);
   border-color: var(--addButton-bg);
-  --bs-btn-focus-box-shadow: none;
 }
 
 .addButton:is(:hover, :active, :focus) {
-  background-color: var(--addButton-bg-hover) !important;
+  background-color: var(--addButton-bg-hover);
   border-color: var(--addButton-border-hover);
 }
 
@@ -36,7 +35,7 @@
   border: var(--border-1) solid var(--color-gray-600);
   color: var(--color-gray-600);
   position: relative;
-  display: flex !important;
+  display: flex;
   align-items: center;
   justify-content: center;
   white-space: nowrap;
@@ -49,10 +48,10 @@
 
 .dropdown:is(:hover, :active),
 :global(.show).dropdown {
-  background-color: var(--color-gray-400) !important;
-  border-color: var(--color-gray-300) !important;
-  color: var(--color-white) !important;
-  box-shadow: none !important;
+  background-color: var(--color-gray-400);
+  border-color: var(--color-gray-300);
+  color: var(--color-white);
+  box-shadow: none;
 }
 
 .dropdown:is(:focus, :focus-visible) {
@@ -70,13 +69,13 @@
 
 /* Placeholder styling */
 .inputField::placeholder {
-  color: var(--inputField-placeholder-color) !important;
+  color: var(--inputField-placeholder-color);
   opacity: 1;
 }
 
 .inputField:focus {
-  border: var(--border-0) solid var(--inputField-border-focus) !important;
-  background-color: var(--inputField-bg-focus) !important;
+  border: var(--border-0) solid var(--inputField-border-focus);
+  background-color: var(--inputField-bg-focus);
   box-shadow: var(--drop-shadow);
   outline: none;
   transition: box-shadow 0.2s ease;

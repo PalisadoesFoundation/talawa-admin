@@ -11,9 +11,7 @@ const TS_EXTENSION_REGEX = /\.(ts|tsx)$/i;
 const CSS_MODULE_REGEX = /\.module\.css$/i;
 
 const EXEMPT_TS_FILES = [path.resolve('src/index.tsx')];
-const EXEMPT_CSS_FILES = new Set([
-  path.resolve('src/style/app-fixed.module.css'),
-]);
+const EXEMPT_CSS_FILES = new Set([]);
 const EXEMPT_CSS_DIR_PREFIXES = [
   'src/style/tokens/',
   'src/assets/css/',

@@ -10,9 +10,9 @@
  */
 import { useMutation, useQuery } from '@apollo/client';
 import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
-import IconComponent from 'shared-components/IconComponent/IconComponent';
+
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import { useNavigate, useParams, Link } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import type { FormEvent } from 'react';
 import React, { useState } from 'react';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
@@ -21,25 +21,18 @@ import {
   CreateModal,
   useModalState,
 } from 'shared-components/CRUDModalTemplate';
-import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import type { InterfaceQueryUserTagChildTags } from 'utils/interfaces';
 import styles from './SubTags.module.css';
-import { DataGridWrapper } from 'shared-components/DataGridWrapper';
 import type {
   InterfaceOrganizationSubTagsQuery,
   SortedByType,
 } from 'utils/organizationTagsUtils';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
-import type {
-  GridCellParams,
-  TokenAwareGridColDef,
-} from 'shared-components/DataGridWrapper';
 import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 
 function SubTags(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -177,241 +170,192 @@ function SubTags(): JSX.Element {
     navigate(`/admin/orgtags/${orgId}/subTags/${tagId}`);
   };
 
-  const sortDropdownConfig = {
-    id: 'subtags-sort-dropdown',
-    label: tCommon('sort'),
-    type: 'sort' as const,
-    options: [
-      { label: t('Latest'), value: 'DESCENDING' },
-      { label: t('Oldest'), value: 'ASCENDING' },
-    ],
-    selectedOption: tagSortOrder,
-    onOptionChange: (value: string | number) =>
-      setTagSortOrder(value as SortedByType),
-    dataTestIdPrefix: 'sortTags',
-  };
-
-  const additionalActionButtons = (
-    <>
-      <Button
-        onClick={() => redirectToManageTag(parentTagId as string)}
-        data-testid="manageCurrentTagBtn"
-        className={`${styles.createButton} mb-3`}
-      >
-        {`${t('manageTag')} ${subTagsData?.getChildTags.name}`}
-      </Button>
-
-      <Button
-        variant="success"
-        onClick={showAddSubTagModal}
-        data-testid="addSubTagBtn"
-        className={`${styles.createButton} mb-3`}
-      >
-        <i className={'fa fa-plus me-2'} />
-        {t('addChildTag')}
-      </Button>
-    </>
-  );
-
-  const columns: TokenAwareGridColDef[] = [
-    {
-      field: 'id',
-      headerName: '#',
-      minWidth: 'space-13',
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return <div>{params.row.id}</div>;
-      },
-    },
-    {
-      field: 'tagName',
-      headerName: t('tagName'),
-      flex: 1,
-      minWidth: 'space-13',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div
-            className={styles.subTagsLink}
-            data-testid="tagName"
-            onClick={() => redirectToSubTags(params.row._id as string)}
-          >
-            {params.row.name}
-
-            <i className={'ms-2 fa fa-caret-right'} />
-          </div>
-        );
-      },
-    },
-    {
-      field: 'totalSubTags',
-      headerName: t('totalSubTags'),
-      flex: 1,
-      align: 'center',
-      minWidth: 'space-13',
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <Link
-            className="text-secondary"
-            to={`/admin/orgtags/${orgId}/subTags/${params.row._id}`}
-            aria-label={t('viewSubTags', {
-              count: params.row.childTags.totalCount,
-            })}
-          >
-            {params.row.childTags.totalCount}
-          </Link>
-        );
-      },
-    },
-    {
-      field: 'totalAssignedUsers',
-      headerName: t('totalAssignedUsers'),
-      flex: 1,
-      align: 'center',
-      minWidth: 'space-13',
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <Link
-            className="text-secondary"
-            to={`/admin/orgtags/${orgId}/manageTag/${params.row._id}`}
-          >
-            {params.row.usersAssignedTo.totalCount}
-          </Link>
-        );
-      },
-    },
-    {
-      field: 'actions',
-      headerName: tCommon('actions'),
-      flex: 1,
-      align: 'center',
-      minWidth: 'space-13',
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <Button
-            size="sm"
-            onClick={() => redirectToManageTag(params.row._id)}
-            data-testid="manageTagBtn"
-            className={styles.editButton}
-          >
-            {t('manageTag')}
-          </Button>
-        );
-      },
-    },
-  ];
-
   return (
     <>
-      <Row>
-        <div>
-          <SearchFilterBar
-            searchPlaceholder={tCommon('searchByName')}
-            searchValue={tagSearchName}
-            onSearchChange={(value) => setTagSearchName(value.trim())}
-            searchInputTestId="searchByName"
-            searchButtonTestId="searchBtn"
-            hasDropdowns={true}
-            dropdowns={[sortDropdownConfig]}
-            additionalButtons={additionalActionButtons}
-          />
-
-          <LoadingState
-            isLoading={subTagsLoading}
-            variant="skeleton"
-            size="lg"
-            data-testid="subTagsLoadingState"
-          >
-            <div className="mb-2 ">
-              <div className="bg-white light border rounded-top mb-0 py-2 d-flex align-items-center">
-                <div className="ms-3 my-1">
-                  <IconComponent name="Tag" />
-                </div>
-
-                <Button
-                  type="button"
-                  onClick={() => navigate(`/admin/orgtags/${orgId}`)}
-                  className={`fs-6 ms-3 my-1 ${styles.tagsBreadCrumbs}`}
-                  data-testid="allTagsBtn"
-                  data-text={t('tags')}
-                >
-                  {t('tags')}
-                  <i className={'mx-2 fa fa-caret-right'} aria-hidden="true" />
-                </Button>
-
-                {orgUserTagAncestors?.map((tag, index) => (
-                  <Button
-                    type="button"
-                    key={index}
-                    className={`ms-2  ${tag._id === parentTagId ? `fs-4 fw-semibold text-secondary` : `${styles.tagsBreadCrumbs} fs-6`}`}
-                    onClick={() => redirectToSubTags(tag._id as string)}
-                    data-testid="redirectToSubTags"
-                    data-text={tag.name}
-                  >
-                    {tag.name}
-
-                    {orgUserTagAncestors.length - 1 !== index && (
-                      <i
-                        className={'mx-2 fa fa-caret-right'}
-                        aria-hidden="true"
-                      />
-                    )}
-                  </Button>
-                ))}
-              </div>
-              <div
-                id="subTagsScrollableDiv"
-                data-testid="subTagsScrollableDiv"
-                className={styles.subTagsScrollableDiv}
+      <nav className="breadcrumb" aria-label="Breadcrumb">
+        <a
+          href="#"
+          onClick={(e) => { e.preventDefault(); navigate(`/admin/orgtags/${orgId}`); }}
+          data-testid="allTagsBtn"
+        >
+          {t('tags')}
+        </a>
+        {orgUserTagAncestors?.map((tag, index) => (
+          <span key={index}>
+            {' \u203A '}
+            {tag._id === parentTagId ? (
+              <a
+                href="#"
+                onClick={(e) => { e.preventDefault(); redirectToManageTag(tag._id as string); }}
+                data-testid="redirectToSubTags"
+                data-text={tag.name}
               >
-                <InfiniteScroll
-                  dataLength={subTagsList?.length ?? 0}
-                  next={loadMoreSubTags}
-                  hasMore={
-                    subTagsData?.getChildTags.childTags.pageInfo.hasNextPage ??
-                    false
-                  }
-                  loader={
-                    <LoadingState
-                      isLoading={true}
-                      variant="inline"
-                      size="sm"
-                      data-testid="infiniteScrollLoader"
-                    >
-                      <></>
-                    </LoadingState>
-                  }
-                  scrollableTarget="subTagsScrollableDiv"
-                >
-                  <DataGridWrapper
-                    rows={subTagsList?.map((subTag, index) => ({
-                      id: index + 1,
-                      ...subTag,
-                    }))}
-                    columns={columns}
-                    emptyStateProps={{
-                      message: t('noTagsFound'),
-                    }}
-                  />
-                </InfiniteScroll>
-              </div>
-            </div>
-          </LoadingState>
+                {tag.name}
+              </a>
+            ) : (
+              <a
+                href="#"
+                onClick={(e) => { e.preventDefault(); redirectToSubTags(tag._id as string); }}
+                data-testid="redirectToSubTags"
+                data-text={tag.name}
+              >
+                {tag.name}
+              </a>
+            )}
+          </span>
+        ))}
+        {' \u203A '}{t('subTags')}
+      </nav>
+
+      <div className="page-header">
+        <div className="page-header-left">
+          <h1 className="page-title">
+            {parentTagName} &mdash; {t('subTags')}{' '}
+            <span style={{ fontSize: '16px', fontWeight: 500, color: 'var(--gray-400)', marginLeft: '8px' }}>
+              {subTagsList?.length ?? 0}
+            </span>
+          </h1>
+          <p className="page-subtitle">{t('tagName')}</p>
         </div>
-      </Row>
+        <div className="page-header-actions">
+          <Button
+            onClick={() => redirectToManageTag(parentTagId as string)}
+            data-testid="manageCurrentTagBtn"
+            className="btn btn-secondary"
+          >
+            {`${t('manageTag')} ${subTagsData?.getChildTags.name}`}
+          </Button>
+          <button
+            className="btn btn-primary"
+            onClick={showAddSubTagModal}
+            data-testid="addSubTagBtn"
+          >
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            {' '}{t('addChildTag')}
+          </button>
+        </div>
+      </div>
+
+      {/* Toolbar */}
+      <div className="toolbar">
+        <div className="search-bar">
+          <svg aria-hidden="true" className="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input
+            type="text"
+            placeholder={tCommon('searchByName')}
+            aria-label={tCommon('searchByName')}
+            value={tagSearchName}
+            onChange={(e) => setTagSearchName(e.target.value.trim())}
+            data-testid="searchByName"
+          />
+        </div>
+      </div>
+
+      {/* Sub-tags Table */}
+      {subTagsLoading ? (
+        <LoadingState
+          isLoading={true}
+          variant="spinner"
+          size="lg"
+          data-testid="subTagsLoadingState"
+        >
+          {null}
+        </LoadingState>
+      ) : (
+        <div className="card">
+          <div
+            id="subTagsScrollableDiv"
+            data-testid="subTagsScrollableDiv"
+            className={styles.subTagsScrollableDiv}
+          >
+            <InfiniteScroll
+              dataLength={subTagsList?.length ?? 0}
+              next={loadMoreSubTags}
+              hasMore={
+                subTagsData?.getChildTags.childTags.pageInfo.hasNextPage ??
+                false
+              }
+              loader={
+                <LoadingState
+                  isLoading={true}
+                  variant="inline"
+                  size="sm"
+                  data-testid="infiniteScrollLoader"
+                >
+                  <></>
+                </LoadingState>
+              }
+              scrollableTarget="subTagsScrollableDiv"
+            >
+              <div className="table-wrapper">
+                <table className="data-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">{t('tagName')}</th>
+                      <th scope="col">{t('totalAssignedUsers')}</th>
+                      <th scope="col">{t('totalSubTags')}</th>
+                      <th scope="col">{tCommon('created')}</th>
+                      <th scope="col">{tCommon('actions')}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {subTagsList.length === 0 ? (
+                      <tr>
+                        <td colSpan={5} style={{ textAlign: 'center', padding: '40px', color: 'var(--gray-400)' }}>
+                          {t('noTagsFound')}
+                        </td>
+                      </tr>
+                    ) : (
+                      subTagsList.map((subTag: InterfaceQueryUserTagChildTags['childTags']['edges'][number]['node']) => (
+                        <tr key={subTag._id}>
+                          <td className="cell-primary">
+                            <a
+                              href="#"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                redirectToManageTag(subTag._id);
+                              }}
+                              style={{ color: 'var(--green-600)' }}
+                              data-testid="tagName"
+                            >
+                              {subTag.name}
+                            </a>
+                          </td>
+                          <td>{subTag.usersAssignedTo?.totalCount ?? 0}</td>
+                          <td>{subTag.childTags?.totalCount ?? 0}</td>
+                          <td>
+                            {subTag.createdAt
+                              ? new Date(subTag.createdAt).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })
+                              : ''}
+                          </td>
+                          <td>
+                            <div style={{ display: 'flex', gap: '6px' }}>
+                              <button
+                                className="btn btn-sm btn-secondary"
+                                onClick={() => redirectToManageTag(subTag._id)}
+                                data-testid="manageTagBtn"
+                              >
+                                {tCommon('edit')}
+                              </button>
+                              <button
+                                className="btn btn-sm btn-danger"
+                                onClick={() => redirectToSubTags(subTag._id)}
+                                data-testid="subTagsBtn"
+                              >
+                                {tCommon('delete')}
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </InfiniteScroll>
+          </div>
+        </div>
+      )}
 
       {/* Create Tag Modal */}
       <CreateModal

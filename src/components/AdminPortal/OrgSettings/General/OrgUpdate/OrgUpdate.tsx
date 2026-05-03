@@ -9,7 +9,6 @@ import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
 import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import { Col, Row } from 'react-bootstrap';
 import {
   FormFieldGroup,
   FormTextField,
@@ -193,7 +192,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     return (
       <div className={styles.message}>
         <WarningAmberRounded fontSize="large" className={styles.icon} />
-        <h6 className="fw-bold text-danger text-center">
+        <h6 style={{ fontWeight: 'bold', color: '#dc3545', textAlign: 'center' }}>
           {t('errorLoadingOrganizationData')}
           <br />
           {`${error.message}`}
@@ -272,8 +271,8 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             />
           </FormFieldGroup>
 
-          <Row className="mt-3">
-            <Col sm={6} className={styles.checkboxField}>
+          <div style={{ marginTop: '1rem' }}>
+            <div className={styles.checkboxField}>
               <FormCheckField
                 name="isPublic"
                 id="isPublic"
@@ -289,13 +288,13 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
                 }
                 inline
               />
-            </Col>
-          </Row>
+            </div>
+          </div>
 
-          <div className="w-full d-flex justify-content-between mt-4 ">
-            <Row>
-              <Col sm={6}></Col>
-              <Col sm={6} className="d-flex justify-content-end">
+          <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', marginTop: '1.5rem' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', width: '100%' }}>
+              <div style={{ flex: '1 1 0' }}></div>
+              <div style={{ flex: '1 1 0', display: 'flex', justifyContent: 'flex-end' }}>
                 <Button
                   className={styles.saveChangesBtn}
                   value="savechanges"
@@ -303,11 +302,11 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
                   onClick={onSaveChangesClicked}
                   disabled={isSaving}
                 >
-                  <SaveIcon className="me-1" />
+                  <SaveIcon style={{ marginRight: '0.25rem' }} />
                   {isSaving ? tCommon('saving') : tCommon('saveChanges')}
                 </Button>
-              </Col>
-            </Row>
+              </div>
+            </div>
           </div>
         </form>
       </div>

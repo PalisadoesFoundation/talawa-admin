@@ -1,53 +1,10 @@
 /**
  * DropDownButton Component
  *
- * A reusable dropdown button component built with React and React-Bootstrap.
+ * A reusable dropdown button component built with React.
  * It supports various styles, icons, and accessibility features.
- *
- * @param id - The id of the dropdown button.
- * @param options - The options to be displayed in the dropdown.
- * @param selectedValue - The currently selected value.
- * @param onSelect - Callback function when an option is selected.
- * @param ariaLabel - ARIA label for accessibility.
- * @param dataTestIdPrefix - Data test id prefix for testing purposes.
- * @param variant - The variant/style of the button.
- * @param buttonLabel - The label of the button.
- * @param icon - The icon to be displayed on the button.
- * @param disabled - Whether the dropdown button is disabled.
- * @param placeholder - Placeholder text when no option is selected.
- * @param parentContainerStyle - Additional styles for the parent container.
- * @param btnStyle - Additional styles for the dropdown button.
- * @param menuClassName - Custom class name for the dropdown menu.
- * @param showCaret - Whether to render the caret indicator (non-searchable mode).
- *
- * @returns A DropDownButton component.
- *
- * @example
- * ```
- * <DropDownButton
- *  id="example-dropdown"
- *  options={[{ value: '1', label: 'Option 1' }, { value: '2', label: 'Option 2' }]}
- * selectedValue="1"
- * onSelect={(val) => console.log(val)}
- * ariaLabel="Example Dropdown"
- * dataTestIdPrefix="example-dropdown"
- * variant="primary"
- * buttonLabel="Select an Option"
- * icon={<SomeIcon />}
- * disabled={false}
- * placeholder="Choose..."
- * parentContainerStyle="custom-container-style"
- * btnStyle="custom-button-style"
- * />
- * ```
- * @remarks
- * This component leverages React-Bootstrap for styling and functionality.
- * It is designed to be accessible and customizable for various use cases.
- * Ensure to pass appropriate props for optimal usage.
- *
  */
-import React, { useCallback, useMemo, useState } from 'react';
-import { Dropdown } from 'react-bootstrap';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { InterfaceDropDownButtonProps } from 'types/shared-components/DropDownButton/interface';
 import styles from './DropDownButton.module.css';
 import { useTranslation } from 'react-i18next';
@@ -84,9 +41,10 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
     searchPlaceholder ?? tCommon('searchPlaceholder');
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  // Sync searchTerm with selectedValue or initial implementation
-  React.useEffect(() => {
+  // Sync searchTerm with selectedValue
+  useEffect(() => {
     const selected = options.find((o) => o.value === (selectedValue ?? ''));
     if (selected && typeof selected.label === 'string') {
       setSearchTerm(selected.label);
@@ -95,6 +53,20 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
     }
   }, [selectedValue, options]);
 
+  // Close on click outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent): void => {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   const selected = options.find((o) => o.value === (selectedValue ?? ''));
   const displayLabel = buttonLabel || selected?.label || placeholder;
 
@@ -102,7 +74,6 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
     (val: string) => {
       onSelect(val);
       setIsOpen(false);
-      // Update local search term immediately for better UX
       const selectedOpt = options.find((o) => o.value === val);
       if (selectedOpt && typeof selectedOpt.label === 'string')
         setSearchTerm(selectedOpt.label);
@@ -125,16 +96,8 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
 
   if (searchable) {
     return (
-      <Dropdown
-        drop={drop}
-        show={isOpen}
-        onToggle={(nextIsOpen, metadata) => {
-          if (metadata.source === 'select' || metadata.source === 'rootClose') {
-            setIsOpen(false);
-            return;
-          }
-          setIsOpen(nextIsOpen);
-        }}
+      <div
+        ref={containerRef}
         className={[
           styles.dropdownContainer,
           parentContainerStyle || '',
@@ -144,22 +107,15 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
           .filter(Boolean)
           .join(' ')}
         data-testid={`${dataTestIdPrefix}-container`}
+        style={{ position: 'relative' }}
       >
-        <Dropdown.Toggle
-          as={SearchToggle}
-          id={id}
-          variant={variant}
-          disabled={disabled}
-          // Pass props needed by SearchToggle
+        <SearchToggle
+          onClick={() => setIsOpen(!isOpen)}
           value={searchTerm}
-          // Type assertion needed: Dropdown.Toggle expects FormEventHandler,
-          // but SearchToggle uses ChangeEventHandler for the input element
-          onChange={
-            ((e: React.ChangeEvent<HTMLInputElement>) => {
-              setSearchTerm(e.target.value);
-              setIsOpen(true);
-            }) as unknown as React.FormEventHandler<HTMLButtonElement>
-          }
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            setSearchTerm(e.target.value);
+            setIsOpen(true);
+          }}
           onInputClick={() => setIsOpen(true)}
           placeholder={resolvedSearchPlaceholder}
           icon={icon}
@@ -173,46 +129,48 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
             .join(' ')}
         />
 
-        <Dropdown.Menu
-          role="listbox"
-          aria-label={ariaLabel || tCommon('optionsSuffix')}
-          className={`${styles.dropdownMenu} w-100 ${menuClassName || ''}`}
-          data-testid={`${dataTestIdPrefix}-menu`}
-        >
-          {filteredOptions.length > 0 ? (
-            filteredOptions.map((opt) => (
-              <Dropdown.Item
-                key={opt.value}
-                role="option"
-                aria-selected={opt.value === selectedValue}
-                disabled={opt.disabled}
-                className={[
-                  styles.dropdownItem,
-                  opt.value === selectedValue
-                    ? styles.dropdownItemSelected
-                    : '',
-                  opt.disabled ? styles.dropdownItemDisabled : '',
-                ].join(' ')}
-                onClick={() => handleSelect(opt.value)}
-                data-testid={`${dataTestIdPrefix}-item-${opt.value}`}
-              >
-                {opt.label}
-              </Dropdown.Item>
-            ))
-          ) : (
-            <div className="px-3 py-2 text-muted text-center">
-              {tCommon('noOptionsFound')}
-            </div>
-          )}
-        </Dropdown.Menu>
-      </Dropdown>
+        {isOpen && (
+          <div
+            role="listbox"
+            aria-label={ariaLabel || tCommon('optionsSuffix')}
+            className={`${styles.dropdownMenu} ${menuClassName || ''}`}
+            data-testid={`${dataTestIdPrefix}-menu`}
+            style={{ position: 'absolute', width: '100%', zIndex: 1000 }}
+          >
+            {filteredOptions.length > 0 ? (
+              filteredOptions.map((opt) => (
+                <div
+                  key={opt.value}
+                  role="option"
+                  aria-selected={opt.value === selectedValue}
+                  className={[
+                    styles.dropdownItem,
+                    opt.value === selectedValue
+                      ? styles.dropdownItemSelected
+                      : '',
+                    opt.disabled ? styles.dropdownItemDisabled : '',
+                  ].join(' ')}
+                  onClick={() => !opt.disabled && handleSelect(opt.value)}
+                  data-testid={`${dataTestIdPrefix}-item-${opt.value}`}
+                  style={{ cursor: opt.disabled ? 'default' : 'pointer' }}
+                >
+                  {opt.label}
+                </div>
+              ))
+            ) : (
+              <div style={{ padding: '0.5rem 1rem', textAlign: 'center', color: 'var(--gray-500)' }}>
+                {tCommon('noOptionsFound')}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
     );
   }
 
   return (
-    <Dropdown
-      drop={drop}
-      onToggle={setIsOpen}
+    <div
+      ref={containerRef}
       className={[
         styles.dropdownContainer,
         parentContainerStyle || '',
@@ -222,10 +180,11 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
         .filter(Boolean)
         .join(' ')}
       data-testid={`${dataTestIdPrefix}-container`}
+      style={{ position: 'relative' }}
     >
-      <Dropdown.Toggle
+      <button
+        type="button"
         id={id}
-        variant={variant}
         disabled={disabled}
         className={[
           styles.dropdownToggle,
@@ -236,6 +195,7 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
           .join(' ')}
         aria-label={ariaLabel}
         aria-expanded={isOpen}
+        onClick={() => setIsOpen(!isOpen)}
         data-testid={`${dataTestIdPrefix}-toggle`}
       >
         {(icon || type) && (
@@ -255,37 +215,40 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
           </span>
         )}
         <span className={styles.buttonLabel}>{displayLabel}</span>
-        {showCaret && <span className={styles.dropdownCaret}>▼</span>}
-      </Dropdown.Toggle>
-      <Dropdown.Menu
-        role="listbox"
-        aria-label={
-          ariaLabel
-            ? `${ariaLabel} ${tCommon('optionsSuffix')}`
-            : tCommon('optionsSuffix')
-        }
-        className={`${styles.dropdownMenu} ${menuClassName || ''}`}
-        data-testid={`${dataTestIdPrefix}-menu`}
-      >
-        {options.map((opt) => (
-          <Dropdown.Item
-            key={opt.value}
-            role="option"
-            aria-selected={opt.value === selectedValue}
-            disabled={opt.disabled}
-            className={[
-              styles.dropdownItem,
-              opt.value === selectedValue ? styles.dropdownItemSelected : '',
-              opt.disabled ? styles.dropdownItemDisabled : '',
-            ].join(' ')}
-            onClick={() => handleSelect(opt.value)}
-            data-testid={`${dataTestIdPrefix}-item-${opt.value}`}
-          >
-            {opt.label}
-          </Dropdown.Item>
-        ))}
-      </Dropdown.Menu>
-    </Dropdown>
+        {showCaret && <span className={styles.dropdownCaret}>&#9660;</span>}
+      </button>
+      {isOpen && (
+        <div
+          role="listbox"
+          aria-label={
+            ariaLabel
+              ? `${ariaLabel} ${tCommon('optionsSuffix')}`
+              : tCommon('optionsSuffix')
+          }
+          className={`${styles.dropdownMenu} ${menuClassName || ''}`}
+          data-testid={`${dataTestIdPrefix}-menu`}
+          style={{ position: 'absolute', zIndex: 1000 }}
+        >
+          {options.map((opt) => (
+            <div
+              key={opt.value}
+              role="option"
+              aria-selected={opt.value === selectedValue}
+              className={[
+                styles.dropdownItem,
+                opt.value === selectedValue ? styles.dropdownItemSelected : '',
+                opt.disabled ? styles.dropdownItemDisabled : '',
+              ].join(' ')}
+              onClick={() => !opt.disabled && handleSelect(opt.value)}
+              data-testid={`${dataTestIdPrefix}-item-${opt.value}`}
+              style={{ cursor: opt.disabled ? 'default' : 'pointer' }}
+            >
+              {opt.label}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
   );
 };
 export default DropDownButton;

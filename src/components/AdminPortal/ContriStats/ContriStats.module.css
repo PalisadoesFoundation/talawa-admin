@@ -1,0 +1,7 @@
+.fonts {
+  color: var(--fonts-color);
+}
+
+.fonts > span {
+  font-weight: 600;
+}

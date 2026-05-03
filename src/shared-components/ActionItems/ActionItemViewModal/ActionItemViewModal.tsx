@@ -144,7 +144,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
               value={category?.name || 'No category'}
               disabled
               readOnly
-              className="form-control"
+              className="form-input"
             />
           </FormFieldGroup>
         </div>
@@ -162,7 +162,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
               value={assignedInfo.name}
               disabled
               readOnly
-              className="form-control"
+              className="form-input"
               data-testid="assignee_input"
             />
           </FormFieldGroup>
@@ -179,7 +179,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
               value={getUserDisplayName(creator)}
               disabled
               readOnly
-              className="form-control"
+              className="form-input"
             />
           </FormFieldGroup>
         </div>
@@ -211,7 +211,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
               value={getEventDisplayName(item.recurringEventInstance || event)}
               disabled
               readOnly
-              className="form-control"
+              className="form-input"
             />
           </FormFieldGroup>
         </div>
@@ -250,7 +250,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
               value={preCompletionNotes || ''}
               disabled
               readOnly
-              className="form-control"
+              className="form-input"
               rows={3}
             />
           </FormFieldGroup>
@@ -265,7 +265,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
             <textarea
               id="postCompletionNotes"
               placeholder={t('postCompletionNotes')}
-              className="form-control"
+              className="form-input"
               value={postCompletionNotes || ''}
               rows={3}
               disabled

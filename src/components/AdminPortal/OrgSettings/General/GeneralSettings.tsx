@@ -1,6 +1,5 @@
 import React, { type FC } from 'react';
-import { Card, Col, Form, Row } from 'react-bootstrap';
-import styles from 'style/app-fixed.module.css';
+import styles from './GeneralSettings.module.css';
 import DeleteOrg from './DeleteOrg/DeleteOrg';
 import OrgUpdate from './OrgUpdate/OrgUpdate';
 import { useTranslation } from 'react-i18next';
@@ -24,45 +23,60 @@ const GeneralSettings: FC<InterfaceGeneralSettingsProps> = ({ orgId }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'orgSettings' });
 
   return (
-    <Row className={`${styles.settingsBody} mt-3`}>
-      <Col xxl={7} xl={12} className="mb-4">
-        <Card
-          className={`rounded-4 mb-4 shadow-sm border border-light-subtle ${styles.mainCard}`}
+    <div
+      className={styles.settingsBody}
+      style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', marginTop: '1rem' }}
+    >
+      <div style={{ flex: '1 1 58%', marginBottom: '1.5rem' }}>
+        <div
+          className={styles.mainCard}
+          style={{
+            borderRadius: '1rem',
+            marginBottom: '1.5rem',
+            boxShadow: '0 .125rem .25rem rgba(0,0,0,.075)',
+            border: '1px solid #e9ecef',
+          }}
         >
-          <Card.Header className={styles.deleteCardHeader}>
-            <h5 className={`mb-0 fw-semibold ${styles.cardHeading} `}>
+          <div className={styles.deleteCardHeader}>
+            <h5 className={styles.cardHeading} style={{ margin: 0, fontWeight: 600 }}>
               {t('editOrganization')}
             </h5>
-          </Card.Header>
-          <Card.Body className={styles.cardBody}>
+          </div>
+          <div className={styles.cardBody}>
             <div className={styles.orgCardSettings}>
               <OrgUpdate orgId={orgId} />
             </div>
-          </Card.Body>
-        </Card>
-      </Col>
+          </div>
+        </div>
+      </div>
 
-      <Col xxl={5} xl={12} className="d-flex flex-column gap-4">
+      <div style={{ flex: '1 1 40%', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
         <DeleteOrg />
-        <Card className="rounded-4 shadow-sm border border-light-subtle ">
-          <Card.Header className={styles.deleteCardHeader}>
+        <div
+          style={{
+            borderRadius: '1rem',
+            boxShadow: '0 .125rem .25rem rgba(0,0,0,.075)',
+            border: '1px solid #e9ecef',
+          }}
+        >
+          <div className={styles.deleteCardHeader}>
             <div className={styles.cardTitle}>
-              <h5 className={`mb-0 fw-semibold ${styles.cardHeading} `}>
+              <h5 className={styles.cardHeading} style={{ margin: 0, fontWeight: 600 }}>
                 {t('otherSettings')}
               </h5>
             </div>
-          </Card.Header>
-          <Card.Body className={styles.cardBody}>
+          </div>
+          <div className={styles.cardBody}>
             <div className={styles.textBox}>
-              <Form.Label className={'text-secondary fw-bold'}>
+              <label style={{ color: '#6c757d', fontWeight: 'bold' }}>
                 {t('changeLanguage')}
-              </Form.Label>
+              </label>
               <ChangeLanguageDropDown />
             </div>
-          </Card.Body>
-        </Card>
-      </Col>
-    </Row>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

@@ -19,7 +19,7 @@
  * ```
  */
 import React from 'react';
-import Card from 'react-bootstrap/Card';
+
 import Rating from '@mui/material/Rating';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -37,11 +37,11 @@ export const AverageRating = ({ data }: InterfaceStatsModal): JSX.Element => {
 
   return (
     <>
-      <Card className={styles.cardContainer}>
-        <Card.Body>
-          <Card.Title>
+      <div className={styles.cardContainer}>
+        <div>
+          <div>
             <h4>{t('title')}</h4>
-          </Card.Title>
+          </div>
           <Typography component="legend">
             {t('rated', {
               score: safeScore.toFixed(2),
@@ -63,8 +63,8 @@ export const AverageRating = ({ data }: InterfaceStatsModal): JSX.Element => {
               iconHover: styles.ratingHover,
             }}
           />
-        </Card.Body>
-      </Card>
+        </div>
+      </div>
     </>
   );
 };

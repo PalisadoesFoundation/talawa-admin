@@ -38,7 +38,6 @@
  */
 // translation-check-keyPrefix: eventAttendance
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
-import { ButtonGroup, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import Button from 'shared-components/Button';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import DropDownButton from 'shared-components/DropDownButton';
@@ -427,7 +426,7 @@ export const AttendanceStatisticsModal: React.FC<
         parentContainerStyle="p-2 m-2"
       />
       <Button
-        className="p-2 m-2"
+        style={{ padding: '0.5rem', margin: '0.5rem' }}
         variant="secondary"
         onClick={handleClose}
         data-testid="close-button"
@@ -455,18 +454,38 @@ export const AttendanceStatisticsModal: React.FC<
         footer={modalFooter}
         headerClassName={styles.modalHeader}
         title={t('historical_statistics')}
-        bodyClassName="w-100 d-flex flex-column align-items-center position-relative"
+        bodyClassName={styles.modalBody}
       >
         <div
-          className={
-            styles.positionedTopRight +
-            ' w-100 d-flex justify-content-end align-baseline position-absolute'
-          }
+          className={styles.positionedTopRight}
+          style={{
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'baseline',
+            position: 'absolute',
+          }}
         ></div>
-        <div className="w-100 border border-success d-flex flex-row rounded">
+        <div
+          style={{
+            width: '100%',
+            border: '1px solid var(--bs-success, #198754)',
+            display: 'flex',
+            flexDirection: 'row',
+            borderRadius: '0.375rem',
+          }}
+        >
           {showTrends ? (
             <div
-              className={`${styles.borderRightGreen} ${styles.chartContainer} text-success position-relative pt-4 align-items-center justify-content-center w-50 border-right-1 border-success`}
+              className={`${styles.borderRightGreen} ${styles.chartContainer}`}
+              style={{
+                color: 'var(--bs-success, #198754)',
+                position: 'relative',
+                paddingTop: '1.5rem',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '50%',
+              }}
             >
               <Line
                 data={chartData}
@@ -475,93 +494,107 @@ export const AttendanceStatisticsModal: React.FC<
                 height={400}
               />
               <div
-                className={
-                  styles.topRightCorner + ' px-1 border border-success w-30'
-                }
+                className={styles.topRightCorner}
+                style={{
+                  padding: '0 0.25rem',
+                  border: '1px solid var(--bs-success, #198754)',
+                }}
               >
-                <p className="text-black">{t('trends')}</p>
+                <p style={{ color: '#000' }}>{t('trends')}</p>
               </div>
               <div
-                className={
-                  styles.paddingBottom2Rem +
-                  ' d-flex position-absolute bottom-1 end-50 translate-middle-y'
-                }
+                className={styles.paddingBottom2Rem}
+                style={{
+                  display: 'flex',
+                  position: 'absolute',
+                  bottom: '0.25rem',
+                }}
                 role="navigation"
                 aria-label={t('chartPageNavigation')}
               >
-                <OverlayTrigger
-                  placement="bottom"
-                  overlay={
-                    <Tooltip id="tooltip-prev">{t('previousPage')}</Tooltip>
-                  }
+                <Button
+                  style={{ padding: 0 }}
+                  onClick={handlePreviousPage}
+                  disabled={currentPage === 0}
+                  aria-label={t('previousPage')}
+                  title={t('previousPage')}
                 >
-                  <Button
-                    className="p-0"
-                    onClick={handlePreviousPage}
-                    disabled={currentPage === 0}
-                    aria-label={t('previousPage')}
-                  >
-                    <img
-                      src="/images/svg/arrow-left.svg"
-                      alt=""
-                      width={20}
-                      height={20}
-                    />
-                  </Button>
-                </OverlayTrigger>
+                  <img
+                    src="/images/svg/arrow-left.svg"
+                    alt=""
+                    width={20}
+                    height={20}
+                  />
+                </Button>
                 <Button
                   data-testid="today-button"
-                  className="p-1 ms-2"
+                  style={{ padding: '0.25rem', marginLeft: '0.5rem' }}
                   onClick={() => handleDateChange(new Date())}
                   aria-label={t('goToToday')}
                 >
                   {t('today')}
                 </Button>
-                <OverlayTrigger
-                  placement="bottom"
-                  overlay={<Tooltip id="tooltip-next">{t('nextPage')}</Tooltip>}
+                <Button
+                  style={{ padding: 0, marginLeft: '0.5rem' }}
+                  onClick={handleNextPage}
+                  disabled={currentPage >= totalPages - 1}
+                  aria-label={t('nextPage')}
+                  title={t('nextPage')}
                 >
-                  <Button
-                    className="p-0 ms-2"
-                    onClick={handleNextPage}
-                    disabled={currentPage >= totalPages - 1}
-                    aria-label={t('nextPage')}
-                  >
-                    <img
-                      src="/images/svg/arrow-right.svg"
-                      alt=""
-                      width={20}
-                      height={20}
-                    />
-                  </Button>
-                </OverlayTrigger>
+                  <img
+                    src="/images/svg/arrow-right.svg"
+                    alt=""
+                    width={20}
+                    height={20}
+                  />
+                </Button>
               </div>
             </div>
           ) : (
             <div
-              className={
-                styles.borderRightGreen +
-                ' text-success position-relative d-flex align-items-center justify-content-center w-50 border-right-1 border-success'
-              }
+              className={styles.borderRightGreen}
+              style={{
+                color: 'var(--bs-success, #198754)',
+                position: 'relative',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '50%',
+              }}
             >
-              <h1 className={styles.largeBoldText + ' font-weight-bold'}>
+              <h1 className={styles.largeBoldText} style={{ fontWeight: 'bold' }}>
                 {statistics.totalMembers}
               </h1>
               <div
-                className={
-                  styles.bottomRightCorner + ' px-1 border border-success'
-                }
+                className={styles.bottomRightCorner}
+                style={{
+                  padding: '0 0.25rem',
+                  border: '1px solid var(--bs-success, #198754)',
+                }}
               >
-                <p className="text-black">{t('attendanceCount')}</p>
+                <p style={{ color: '#000' }}>{t('attendanceCount')}</p>
               </div>
             </div>
           )}
-          <div className="text-success position-relative d-flex flex-column align-items-center justify-content-start w-50">
-            <ButtonGroup className="mt-2 pb-2 p-2">
+          <div
+            style={{
+              color: 'var(--bs-success, #198754)',
+              position: 'relative',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+              width: '50%',
+            }}
+          >
+            <div style={{ marginTop: '0.5rem', paddingBottom: '0.5rem', padding: '0.5rem', display: 'flex' }}>
               <Button
                 data-testid="gender-button"
                 variant={selectedCategory === 'Gender' ? 'success' : 'light'}
-                className="border border-success p-2 pl-2"
+                style={{
+                  border: '1px solid var(--bs-success, #198754)',
+                  padding: '0.5rem',
+                }}
                 onClick={() => handleCategoryChange('Gender')}
               >
                 {t('gender')}
@@ -569,14 +602,18 @@ export const AttendanceStatisticsModal: React.FC<
               <Button
                 data-testid="age-button"
                 variant={selectedCategory === 'Age' ? 'success' : 'light'}
-                className="border border-success border-left-0 p-2"
+                style={{
+                  border: '1px solid var(--bs-success, #198754)',
+                  borderLeft: 'none',
+                  padding: '0.5rem',
+                }}
                 onClick={() => handleCategoryChange('Age')}
               >
                 {t('age')}
               </Button>
-            </ButtonGroup>
+            </div>
             <Bar
-              className="mb-3"
+              style={{ marginBottom: '1rem' }}
               options={{ responsive: true, animation: false }}
               data={{
                 labels: categoryLabels,
@@ -609,9 +646,13 @@ export const AttendanceStatisticsModal: React.FC<
               }}
             />
             <div
-              className={styles.topLeftCorner + ' px-1 border border-success'}
+              className={styles.topLeftCorner}
+              style={{
+                padding: '0 0.25rem',
+                border: '1px solid var(--bs-success, #198754)',
+              }}
             >
-              <p className="text-black">{t('demography')}</p>
+              <p style={{ color: '#000' }}>{t('demography')}</p>
             </div>
           </div>
         </div>

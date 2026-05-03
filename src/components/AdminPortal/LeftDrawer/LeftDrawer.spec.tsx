@@ -8,14 +8,6 @@ import LeftDrawer from './LeftDrawer';
 import useLocalStorage from 'utils/useLocalstorage';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'i18next';
-// Mock CSS modules
-vi.mock('style/app-fixed.module.css', () => ({
-  default: {
-    sidebarBtnActive: 'sidebarBtnActive',
-    collapsedDrawer: 'collapsedDrawer',
-    expandedDrawer: 'expandedDrawer',
-  },
-}));
 
 vi.mock('shared-components/SidebarBase/SidebarBase.module.css', () => ({
   default: {

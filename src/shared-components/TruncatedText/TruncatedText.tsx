@@ -48,10 +48,11 @@ const TruncatedText: React.FC<InterfaceTruncatedTextProps> = ({
     const charPerPx = 0.065 + fontSize * 0.002;
     const maxChars = Math.floor(maxWidth * charPerPx);
 
+    const safeText = text ?? '';
     setTruncatedText(
-      text.length > maxChars
-        ? `${text.slice(0, Math.max(0, maxChars - 3))}...`
-        : text,
+      safeText.length > maxChars
+        ? `${safeText.slice(0, Math.max(0, maxChars - 3))}...`
+        : safeText,
     );
   }, [text, maxWidthOverride]);
 

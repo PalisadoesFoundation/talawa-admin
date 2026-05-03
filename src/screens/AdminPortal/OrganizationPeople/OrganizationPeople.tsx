@@ -1,23 +1,22 @@
 /**
  * OrganizationPeople Component
  *
- * Renders a paginated and searchable card-based list of organization members,
- * administrators, or users. Uses CursorPaginationManager for cursor-based
- * pagination with "Load More" pattern.
+ * Renders a paginated and searchable table of organization members,
+ * administrators, or users matching the Talawa design prototype.
  *
  * @remarks
- * - Uses two CursorPaginationManagers: one for members/admins, one for users.
+ * - Uses useQuery with cursor-based pagination (no CursorPaginationManager component).
  * - Supports filtering by roles (members, administrators, users) via a dropdown.
  * - Includes client-side search filtering by name or email.
  * - Displays a modal for removing members.
  *
  * @returns A JSX element rendering the organization people table.
  */
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useQuery } from '@apollo/client';
 import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useParams, Link } from 'react-router';
-import Delete from '@mui/icons-material/Delete';
 
 import styles from './OrganizationPeople.module.css';
 import {
@@ -25,14 +24,12 @@ import {
   USER_LIST_FOR_TABLE,
 } from 'GraphQl/Queries/Queries';
 import OrgPeopleListCard from 'components/AdminPortal/OrgPeopleListCard/OrgPeopleListCard';
-import Avatar from 'shared-components/Avatar/Avatar';
 import AddMember from './addMember/AddMember';
-import Toolbar from 'shared-components/Toolbar/Toolbar';
-import { CursorPaginationManager } from 'components/CursorPaginationManager/CursorPaginationManager';
 import { languages } from 'utils/languages';
-import Button from 'shared-components/Button';
 import type { InterfaceMemberNode } from 'types/PeopleTab/interface';
+import type { DefaultConnectionPageInfo } from 'types/AdminPortal/pagination';
 import SafeBreadcrumbs from 'shared-components/BreadcrumbsComponent/SafeBreadcrumbs';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 
 const STATE_TO_OPTION: Record<number, string> = {
   0: 'members',
@@ -45,6 +42,71 @@ const OPTION_TO_STATE: Record<string, number> = {
   admin: 1,
   users: 2,
 };
+
+const ITEMS_PER_PAGE = 10;
+
+/**
+ * Extracts connection data from a nested GraphQL response using a dot-separated path.
+ */
+function extractConnectionData<TNode>(
+  data: unknown,
+  path: string,
+): {
+  edges: Array<{ cursor: string; node: TNode }>;
+  pageInfo?: DefaultConnectionPageInfo;
+} | null {
+  if (!data || typeof data !== 'object') return null;
+  const segments = path.split('.');
+  let current: unknown = data;
+  for (const segment of segments) {
+    if (!current || typeof current !== 'object') return null;
+    current = (current as Record<string, unknown>)[segment];
+  }
+  if (
+    current &&
+    typeof current === 'object' &&
+    'edges' in current &&
+    Array.isArray((current as Record<string, unknown>).edges)
+  ) {
+    return current as {
+      edges: Array<{ cursor: string; node: TNode }>;
+      pageInfo?: DefaultConnectionPageInfo;
+    };
+  }
+  return null;
+}
+
+/**
+ * Returns initials from a name string (up to 2 characters).
+ */
+function getInitials(name: string): string {
+  const parts = name.trim().split(/\s+/);
+  if (parts.length >= 2) {
+    return (parts[0]![0]! + parts[parts.length - 1]![0]!).toUpperCase();
+  }
+  return (name[0] ?? '').toUpperCase();
+}
+
+/**
+ * Deterministic avatar color based on name string.
+ */
+function getAvatarColor(name: string): {
+  background: string;
+  color: string;
+} {
+  const palette = [
+    { background: 'var(--green-50)', color: 'var(--green-700)' },
+    { background: 'var(--blue-50)', color: 'var(--blue-600)' },
+    { background: 'var(--orange-50)', color: 'var(--orange-500)' },
+    { background: 'var(--purple-50)', color: 'var(--purple-500)' },
+    { background: 'var(--red-50)', color: 'var(--red-600)' },
+  ];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return palette[Math.abs(hash) % palette.length]!;
+}
 
 function OrganizationPeople(): JSX.Element {
   const { t, i18n } = useTranslation('translation', {
@@ -67,6 +129,13 @@ function OrganizationPeople(): JSX.Element {
   } = useModalState();
   const [selectedMemId, setSelectedMemId] = useState<string>();
 
+  // Pagination state
+  const [items, setItems] = useState<InterfaceMemberNode[]>([]);
+  const [pageInfo, setPageInfo] = useState<DefaultConnectionPageInfo | null>(
+    null,
+  );
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+
   const whereFilter = useMemo(() => {
     return state === 1
       ? { role: { equal: 'administrator' as const } }
@@ -78,7 +147,8 @@ function OrganizationPeople(): JSX.Element {
     openRemoveModal();
   };
 
-  const handleSortChange = (value: string): void => {
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
+    const value = e.target.value;
     setState(OPTION_TO_STATE[value] ?? 0);
   };
 
@@ -96,91 +166,93 @@ function OrganizationPeople(): JSX.Element {
     () =>
       new Intl.DateTimeFormat(locale, {
         year: 'numeric',
-        month: '2-digit',
+        month: 'short',
         day: '2-digit',
         timeZone: 'UTC',
       }),
     [locale],
   );
 
-  const visibleCount = useRef(0);
+  // Query for members/admins
+  const query = state !== 2 ? ORGANIZATIONS_MEMBER_CONNECTION_LIST : USER_LIST_FOR_TABLE;
+  const dataPath = state !== 2 ? 'organization.members' : 'allUsers';
+  const queryVariables = state !== 2
+    ? { orgId: currentUrl, where: whereFilter, first: ITEMS_PER_PAGE, after: null }
+    : { first: ITEMS_PER_PAGE, after: null };
 
-  const renderMemberRow = (
-    node: InterfaceMemberNode,
-    index: number,
-  ): React.ReactNode => {
-    if (index === 0) visibleCount.current = 0;
+  const { data, loading, error, fetchMore } = useQuery(query, {
+    variables: queryVariables,
+    notifyOnNetworkStatusChange: true,
+  });
 
-    if (searchTerm) {
-      const lower = searchTerm.toLowerCase();
+  // Sync data from query results
+  useEffect(() => {
+    if (!data) return;
+    const connectionData = extractConnectionData<InterfaceMemberNode>(data, dataPath);
+    if (connectionData) {
+      const nodes = connectionData.edges.map((edge) => edge.node);
+      setItems(nodes);
+      setPageInfo(connectionData.pageInfo || null);
+    }
+  }, [data, dataPath]);
+
+  // Reset when state (role filter) changes
+  useEffect(() => {
+    setItems([]);
+    setPageInfo(null);
+  }, [state]);
+
+  // Load more handler
+  const handleLoadMore = useCallback(async () => {
+    if (!pageInfo?.hasNextPage || isLoadingMore || loading) return;
+
+    setIsLoadingMore(true);
+    try {
+      const vars: Record<string, unknown> = state !== 2
+        ? { orgId: currentUrl, where: whereFilter, first: ITEMS_PER_PAGE, after: pageInfo.endCursor }
+        : { first: ITEMS_PER_PAGE, after: pageInfo.endCursor };
+
+      const result = await fetchMore({ variables: vars });
+      const connectionData = extractConnectionData<InterfaceMemberNode>(
+        result.data,
+        dataPath,
+      );
+      if (connectionData) {
+        const newNodes = connectionData.edges.map((edge) => edge.node);
+        setItems((prev) => [...prev, ...newNodes]);
+        setPageInfo(connectionData.pageInfo || null);
+      }
+    } catch (err) {
+      console.error('Error loading more items:', err);
+    } finally {
+      setIsLoadingMore(false);
+    }
+  }, [pageInfo, isLoadingMore, loading, fetchMore, currentUrl, whereFilter, state, dataPath]);
+
+  // Filter items by search
+  const filteredItems = useMemo(() => {
+    if (!searchTerm) return items;
+    const lower = searchTerm.toLowerCase();
+    return items.filter((node) => {
       const nameMatch = node.name?.toLowerCase().includes(lower);
       const emailMatch = node.emailAddress?.toLowerCase().includes(lower);
-      if (!nameMatch && !emailMatch) return null;
-    }
+      return nameMatch || emailMatch;
+    });
+  }, [items, searchTerm]);
 
-    visibleCount.current += 1;
+  /**
+   * Determine role badge class based on role string.
+   */
+  const getRoleBadgeClass = (memberRole: string): string => {
+    if (memberRole === 'administrator') return 'badge badge-purple';
+    if (memberRole === 'moderator') return 'badge badge-blue';
+    return 'badge badge-green';
+  };
 
-    const formattedDate = node.createdAt
-      ? dateFormatter.format(new Date(node.createdAt))
-      : '-';
-
-    return (
-      <div
-        className={styles.peopleRow}
-        data-testid={`org-people-row-${node.id}`}
-        role="row"
-      >
-        <span
-          className={`d-flex ${styles.people_card_header_col_1}`}
-          role="cell"
-        >
-          <span>{visibleCount.current}</span>
-          <span className={styles.avatarCell}>
-            {node.avatarURL ? (
-              <img
-                src={node.avatarURL}
-                alt={node.name}
-                className={styles.avatarImage}
-                crossOrigin="anonymous"
-              />
-            ) : (
-              <Avatar name={node.name} alt={node.name} size={40} />
-            )}
-          </span>
-        </span>
-        <span className={styles.people_card_header_col_2} role="cell">
-          <Link
-            to={`/admin/member/${currentUrl}/${node.id}`}
-            state={{ id: node.id }}
-            className={`${styles.membername}`}
-          >
-            {node.name}
-          </Link>
-        </span>
-        <span className={styles.people_card_header_col_2} role="cell">
-          {node.emailAddress ?? t('emailNotAvailable')}
-        </span>
-        <span
-          className={styles.people_card_header_col_2}
-          role="cell"
-          data-testid={`org-people-joined-${node.id}`}
-        >
-          {t('joined')} : {formattedDate}
-        </span>
-        <span className={styles.people_card_header_col_1} role="cell">
-          <Button
-            className={styles.removeButton}
-            variant="danger"
-            disabled={state === 2}
-            onClick={() => toggleRemoveMemberModal(node.id)}
-            aria-label={tCommon('removeMember')}
-            data-testid="removeMemberModalBtn"
-          >
-            <Delete />
-          </Button>
-        </span>
-      </div>
-    );
+  const getRoleLabel = (memberRole: string): string => {
+    if (memberRole === 'administrator') return tCommon('admin');
+    if (memberRole === 'moderator') return 'Moderator';
+    return tCommon('members');
   };
 
   return (
@@ -197,127 +269,214 @@ function OrganizationPeople(): JSX.Element {
           },
         ]}
       />
-      <div className={styles.orgPeopleGrid}>
-        <Toolbar
-          search={{
-            placeholder: t('searchFullName'),
-            value: searchTerm,
-            onChange: (value) => setSearchTerm(value),
-            onSearch: (value) => setSearchTerm(value),
-            inputTestId: 'member-search-input',
-            buttonTestId: 'searchBtn',
-          }}
-          containerClassName={styles.calendar__header}
-          filters={[
-            {
-              id: 'organization-people-sort',
-              label: tCommon('sort'),
-              type: 'sort',
-              title: tCommon('sort'),
-              options: [
-                { label: tCommon('members'), value: 'members' },
-                { label: tCommon('admin'), value: 'admin' },
-                { label: tCommon('users'), value: 'users' },
-              ],
-              selected: STATE_TO_OPTION[state] ?? 'members',
-              onChange: (value) => handleSortChange(value.toString()),
-              testIdPrefix: 'sort',
-              containerClassName: styles.membersSortContainer,
-              toggleClassName: styles.membersSortToggle,
-            },
-          ]}
-          actions={
-            <AddMember
-              rootClassName={styles.membersAddHeader}
-              containerClassName={styles.membersAddContainer}
-              toggleClassName={styles.membersAddToggle}
-            />
-          }
-        />
 
-        <div
-          className={styles.people_content}
-          role="table"
-          aria-label={t('title')}
+      <div className="page-header">
+        <div className="page-header-left">
+          <h1 className="page-title">
+            {t('title')}{' '}
+            <span className="count-badge" data-testid="member-count-badge">
+              {filteredItems.length}
+            </span>
+          </h1>
+          <p className="page-subtitle">{t('searchFullName')}</p>
+        </div>
+        <div className="page-header-actions">
+          <AddMember
+            rootClassName={styles.membersAddHeader}
+            containerClassName={styles.membersAddContainer}
+            toggleClassName={styles.membersAddToggle}
+          />
+        </div>
+      </div>
+
+      <div className="toolbar">
+        <div className="search-bar">
+          <svg
+            className="search-icon"
+            aria-hidden="true"
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input
+            type="text"
+            placeholder={t('searchFullName')}
+            aria-label={t('searchFullName')}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            data-testid="member-search-input"
+          />
+        </div>
+        <select
+          className="form-input"
+          aria-label={tCommon('sort')}
+          value={STATE_TO_OPTION[state] ?? 'members'}
+          onChange={handleSortChange}
+          data-testid="sort-select"
+          style={{ width: 'auto', minWidth: '140px' }}
         >
-          <div role="rowgroup">
-            <div className={styles.people_card_header} role="row">
-              <span
-                className={`d-flex ${styles.people_card_header_col_1}`}
-                role="columnheader"
-              >
-                <span>#</span>
-              </span>
-              <span
-                className={styles.people_card_header_col_2}
-                role="columnheader"
-              >
-                {tCommon('name')}
-              </span>
-              <span
-                className={styles.people_card_header_col_2}
-                role="columnheader"
-              >
-                {tCommon('email')}
-              </span>
-              <span
-                className={styles.people_card_header_col_2}
-                role="columnheader"
-              >
-                {tCommon('joinedOn')}
-              </span>
-              <span
-                className={styles.people_card_header_col_1}
-                role="columnheader"
-              >
-                {tCommon('action')}
-              </span>
-            </div>
-          </div>
+          <option value="members">{tCommon('members')}</option>
+          <option value="admin">{tCommon('admin')}</option>
+          <option value="users">{tCommon('users')}</option>
+        </select>
+      </div>
 
-          <div className={styles.people_card_main_container} role="rowgroup">
-            {state !== 2 ? (
-              <CursorPaginationManager<
-                unknown,
-                InterfaceMemberNode,
-                Record<string, unknown>
+      <div className="card">
+        <div className="table-wrapper">
+          {loading && !items.length ? (
+            <LoadingState
+              isLoading={true}
+              variant="inline"
+              size="lg"
+              data-testid="cursor-pagination-loading"
+            >
+              <div />
+            </LoadingState>
+          ) : error && !items.length ? (
+            <div
+              role="alert"
+              aria-live="assertive"
+              data-testid="cursor-pagination-error"
+              className={styles.errorState}
+            >
+              <p>{error.message}</p>
+            </div>
+          ) : filteredItems.length === 0 ? (
+            <div className="empty-state">
+              <div
+                className="empty-state-title"
+                data-testid="organization-people-empty-state"
               >
-                query={ORGANIZATIONS_MEMBER_CONNECTION_LIST}
-                queryVariables={{
-                  orgId: currentUrl,
-                  where: whereFilter,
-                }}
-                dataPath="organization.members"
-                itemsPerPage={10}
-                keyExtractor={(node: InterfaceMemberNode) => node.id}
-                renderItem={renderMemberRow}
-                emptyStateComponent={
-                  <span data-testid="organization-people-empty-state">
-                    {t('notFound')}
-                  </span>
-                }
-              />
-            ) : (
-              <CursorPaginationManager<
-                unknown,
-                InterfaceMemberNode,
-                Record<string, unknown>
-              >
-                query={USER_LIST_FOR_TABLE}
-                queryVariables={{}}
-                dataPath="allUsers"
-                itemsPerPage={10}
-                refetchTrigger={state}
-                keyExtractor={(node: InterfaceMemberNode) => node.id}
-                renderItem={renderMemberRow}
-                emptyStateComponent={
-                  <span data-testid="organization-people-empty-state">
-                    {t('notFound')}
-                  </span>
-                }
-              />
-            )}
-          </div>
+                {t('notFound')}
+              </div>
+            </div>
+          ) : (
+            <>
+              <table className="data-table" aria-label={t('title')}>
+                <thead>
+                  <tr>
+                    <th scope="col">{tCommon('name')}</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">{tCommon('joinedOn')}</th>
+                    <th scope="col">Status</th>
+                    <th scope="col" style={{ width: '60px' }}>
+                      {tCommon('action')}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredItems.map((node) => {
+                    const formattedDate = node.createdAt
+                      ? dateFormatter.format(new Date(node.createdAt))
+                      : '-';
+                    const avatarColors = getAvatarColor(node.name);
+
+                    return (
+                      <tr
+                        key={node.id}
+                        data-testid={`org-people-row-${node.id}`}
+                      >
+                        <td>
+                          <div className={styles.memberCell}>
+                            {node.avatarURL ? (
+                              <img
+                                src={node.avatarURL}
+                                alt={node.name}
+                                className={styles.memberAvatar}
+                                crossOrigin="anonymous"
+                                style={{
+                                  background: avatarColors.background,
+                                }}
+                              />
+                            ) : (
+                              <div
+                                className={styles.memberAvatar}
+                                style={{
+                                  background: avatarColors.background,
+                                  color: avatarColors.color,
+                                }}
+                              >
+                                {getInitials(node.name)}
+                              </div>
+                            )}
+                            <div>
+                              <div className={styles.memberName}>
+                                <Link
+                                  to={`/admin/member/${currentUrl}/${node.id}`}
+                                  state={{ id: node.id }}
+                                  className={styles.membername}
+                                >
+                                  {node.name}
+                                </Link>
+                              </div>
+                              <div className={styles.memberEmail}>
+                                {node.emailAddress ?? t('emailNotAvailable')}
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <span className={getRoleBadgeClass(node.role ?? '')}>
+                            {getRoleLabel(node.role ?? '')}
+                          </span>
+                        </td>
+                        <td data-testid={`org-people-joined-${node.id}`}>
+                          {formattedDate}
+                        </td>
+                        <td>
+                          <div className={styles.statusCell}>
+                            <span
+                              className="status-dot green"
+                              aria-hidden="true"
+                            />
+                            Active
+                          </div>
+                        </td>
+                        <td>
+                          <button
+                            className={styles.actionsBtn}
+                            aria-label={tCommon('removeMember')}
+                            disabled={state === 2}
+                            onClick={() => toggleRemoveMemberModal(node.id)}
+                            data-testid="removeMemberModalBtn"
+                          >
+                            &#8943;
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+
+              <div className={styles.paginationWrapper}>
+                <span className="pagination-info">
+                  Showing {filteredItems.length} of {items.length}{' '}
+                  {tCommon('members').toLowerCase()}
+                </span>
+                <div className="pagination">
+                  {pageInfo?.hasNextPage && (
+                    <button
+                      className="pagination-btn"
+                      onClick={handleLoadMore}
+                      disabled={isLoadingMore}
+                      data-testid="load-more-button"
+                    >
+                      {isLoadingMore ? tCommon('loading') : tCommon('loadMore')}
+                    </button>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
 

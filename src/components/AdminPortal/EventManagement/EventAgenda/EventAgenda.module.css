@@ -14,7 +14,7 @@
 
 .errorIcon {
   font-size: var(--error-icon-size, var(--font-size-3xl));
-  color: var(--bs-danger, var(--errorIcon-color));
+  color: var(--red-500, var(--errorIcon-color));
   margin-bottom: var(--space-5);
 
   /* Add error icon for non-color indication */

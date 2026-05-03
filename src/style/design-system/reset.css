@@ -1,0 +1,57 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   CSS Reset — minimal, modern, replaces Bootstrap's reboot
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  tab-size: 4;
+  line-height: 1.5;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--gray-900);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+a { color: inherit; text-decoration: none; }
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+p { margin: 0 0 1rem; }
+ol, ul { list-style: none; }
+
+img, svg, video { display: block; max-width: 100%; }
+img { height: auto; }
+
+table { border-collapse: collapse; caption-side: bottom; }
+th { text-align: inherit; }
+
+button, input, optgroup, select, textarea {
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+button, select { text-transform: none; }
+button, [type='button'], [type='reset'], [type='submit'] {
+  -webkit-appearance: button;
+  appearance: button;
+}
+
+fieldset { min-width: 0; padding: 0; margin: 0; border: 0; }
+textarea { resize: vertical; }
+summary { display: list-item; cursor: pointer; }
+[hidden] { display: none !important; }

@@ -80,7 +80,8 @@ const TimePicker: React.FC<InterfaceTimePickerProps> = ({
 
                 return (
                   <div
-                    className={`${styles.fullWidth} ${textFieldClassName || ''} d-flex position-relative`.trim()}
+                    className={`${styles.fullWidth} ${textFieldClassName || ''}`}
+                    style={{ display: 'flex', position: 'relative' }}
                   >
                     <input
                       {...inputProps}
@@ -89,12 +90,12 @@ const TimePicker: React.FC<InterfaceTimePickerProps> = ({
                       disabled={disabled}
                       required={props.required}
                       data-testid={dataTestId}
-                      className={`${styles.fullWidth} form-control ${
+                      className={`${styles.fullWidth} form-input ${
                         InputProps?.endAdornment ? styles.paddedInput : ''
                       }`.trim()}
                     />
                     {InputProps?.endAdornment && (
-                      <div className="position-absolute end-0 top-50 translate-middle-y pe-2">
+                      <div style={{ position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)', paddingRight: '0.5rem' }}>
                         {InputProps.endAdornment}
                       </div>
                     )}

@@ -69,7 +69,6 @@ describe('shouldSkipFile', () => {
   });
 
   test('skips allowlisted files', () => {
-    expect(shouldSkipFile('src/style/app-fixed.module.css')).toBe(true);
     expect(shouldSkipFile('src/assets/css/app.css')).toBe(true);
   });
 

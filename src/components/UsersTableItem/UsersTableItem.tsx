@@ -12,7 +12,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
-import { Row } from 'react-bootstrap';
+
 import Button from 'shared-components/Button';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
@@ -171,29 +171,57 @@ const UsersTableItem = (props: Props): JSX.Element => {
   // If there is a super admin notion, adapt this logic to your API.
   const isAdmin = user.role === 'administrator';
 
+  /**
+   * Returns the initials for a user name (up to 2 characters).
+   */
+  const getInitials = (name: string): string => {
+    const parts = name.trim().split(/\s+/);
+    if (parts.length >= 2) {
+      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+    return (name.slice(0, 2) || '').toUpperCase();
+  };
+
+  /**
+   * Returns the role badge class and label for a user.
+   */
+  const getRoleBadge = (
+    role: string | null,
+  ): { className: string; label: string } => {
+    if (role === 'superAdministrator') {
+      return { className: 'badge badge-purple', label: 'Super Admin' };
+    }
+    if (role === 'administrator') {
+      return { className: 'badge badge-blue', label: 'Admin' };
+    }
+    return { className: 'badge badge-gray', label: 'Member' };
+  };
+
+  const badge = getRoleBadge(user.role);
+
   return (
     <>
       <tr>
-        <th scope="row">{index + 1}</th>
-        <td>{user.name}</td>
+        <td>
+          <div className="user-cell">
+            <div className="user-cell-avatar">{getInitials(user.name)}</div>
+            <div className="user-cell-name">{user.name}</div>
+          </div>
+        </td>
         <td>{user.emailAddress}</td>
         <td>
-          <Button
-            className={`btn ${styles.editButton}`}
+          <span className={badge.className}>{badge.label}</span>
+        </td>
+        <td>{memberOrgs.length}</td>
+        <td>{dayjs(user.createdAt).format('MMM D, YYYY')}</td>
+        <td>
+          <button
+            className="btn btn-ghost btn-sm"
             onClick={() => setShowJoinedOrganizations(true)}
             data-testid={`showJoinedOrgsBtn${user.id}`}
           >
-            {t('view')} ({memberOrgs.length})
-          </Button>
-        </td>
-        <td>
-          <Button
-            className={`btn ${styles.removeButton}`}
-            onClick={() => setShowBlockedOrganizations(true)}
-            data-testid={`showBlockedOrgsBtn${user.id}`}
-          >
-            {t('view')} ({blockedUsers.length})
-          </Button>
+            {tCommon('manage')}
+          </button>
         </td>
       </tr>
       <BaseModal
@@ -231,7 +259,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
             />
           </div>
         )}
-        <Row>
+        <div>
           {memberOrgs.length === 0 ? (
             <div className={styles.notJoined}>
               <h4>
@@ -361,7 +389,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
               </table>
             </div>
           )}
-        </Row>
+        </div>
       </BaseModal>
       <BaseModal
         show={showRemoveUserModal}
@@ -437,7 +465,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
             />
           </div>
         )}
-        <Row>
+        <div>
           {blockedOrgs.length === 0 ? (
             <div className={styles.notJoined}>
               <h4>
@@ -525,7 +553,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
               </table>
             </div>
           )}
-        </Row>
+        </div>
       </BaseModal>
       <BaseModal
         show={showBlockedUserModal}

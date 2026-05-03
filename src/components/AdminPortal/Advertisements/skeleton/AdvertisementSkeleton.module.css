@@ -1,0 +1,35 @@
+.itemCard {
+  /* Skeleton card wrapper */
+}
+
+.loadingWrapper {
+  background-color: var(--surface);
+  margin: 0.5rem;
+  padding: 1rem;
+  border-radius: 8px;
+  position: relative;
+}
+
+.innerContainer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.orgImgContainer {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.content {
+  flex: 1;
+}
+
+.button {
+  height: 48px;
+  width: 92px;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+}

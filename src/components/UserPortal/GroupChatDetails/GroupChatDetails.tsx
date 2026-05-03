@@ -18,7 +18,7 @@
  *
  * @remarks
  * - Uses `@mui/material` for table and modal styling.
- * - Integrates `react-bootstrap` for modal and form elements.
+ * - Uses BaseModal and plain HTML for modal and form elements.
  * - Utilizes GraphQL queries and mutations for fetching and updating chat data.
  * - Includes localization support via `react-i18next`.
  * - Displays a loader while fetching user data.
@@ -35,7 +35,7 @@
  *
  * Dependencies:
  * - `@mui/material`
- * - `react-bootstrap`
+ * - Plain HTML elements
  * - `@apollo/client`
  * - `react-i18next`
  * - `NotificationToast` (shared-components)
@@ -50,7 +50,7 @@ import React, {
   useCallback,
 } from 'react';
 import { Button } from 'shared-components/Button';
-import { ListGroup } from 'react-bootstrap';
+
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import styles from './GroupChatDetails.module.css';
 import { useMutation, useQuery } from '@apollo/client';
@@ -491,16 +491,19 @@ export default function GroupChatDetails({
           <h5>
             {chat.members?.edges?.length || 0} {t('members')}
           </h5>
-          <ListGroup className={styles.memberList} variant="flush">
-            <ListGroup.Item
+          <div className={styles.memberList} style={{ listStyle: 'none', padding: 0 }}>
+            <div
               data-testid="addMembers"
               className={styles.listItem}
               onClick={() => {
                 openAddUserModal();
               }}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openAddUserModal(); } }}
             >
               <Add /> {t('addMembers')}
-            </ListGroup.Item>
+            </div>
             {chat.members?.edges?.map((edge) => {
               const user = edge.node.user;
               const role = edge.node.role;
@@ -509,7 +512,7 @@ export default function GroupChatDetails({
                 currentUserRole === 'administrator' && !isCurrentUser;
               const canRemove = canManage && role === 'regular';
               return (
-                <ListGroup.Item
+                <div
                   className={styles.groupMembersList}
                   key={user.id}
                 >
@@ -578,10 +581,10 @@ export default function GroupChatDetails({
                       />
                     )}
                   </div>
-                </ListGroup.Item>
+                </div>
               );
             })}
-          </ListGroup>
+          </div>
         </div>
       </BaseModal>
       <BaseModal

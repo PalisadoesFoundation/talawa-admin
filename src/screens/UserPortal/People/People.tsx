@@ -46,140 +46,115 @@ export default function People(): React.JSX.Element {
 
   return (
     <>
-      <div className={`${styles.mainContainer_people}`}>
-        <div className={styles.calendar__header}>
-          <SearchFilterBar
-            searchPlaceholder={t('searchUsers')}
-            searchValue={searchTerm}
-            onSearchChange={handleSearch}
-            searchInputTestId="searchInput"
-            searchButtonTestId="searchBtn"
-            hasDropdowns={true}
-            dropdowns={[
-              {
-                id: 'people-filter',
-                label: tCommon('filter'),
-                type: 'filter',
-                options: modes.map((value, index) => ({
-                  label: value,
-                  value: index,
-                })),
-                selectedOption: mode,
-                onOptionChange: (value) => setMode(value as number),
-                dataTestIdPrefix: 'modeChangeBtn',
-              },
-            ]}
-          />
+      <div>
+        <div className="page-header">
+          <div className="page-header-left">
+            <h1 className="page-title">
+              {t('title')}
+            </h1>
+            <p className="page-subtitle">{t('searchUsers')}</p>
+          </div>
         </div>
 
-        <div
-          className={styles.people_content}
-          role="table"
-          aria-label={t('membersList')}
-        >
-          <div role="rowgroup">
-            <div className={styles.people_card_header} role="row">
-              <span
-                className={`d-flex ${styles.people_card_header_col_1}`}
-                role="columnheader"
-              >
-                <span>#</span>
-              </span>
-              <span
-                className={styles.people_card_header_col_2}
-                role="columnheader"
-              >
-                {t('name')}
-              </span>
-              <span
-                className={styles.people_card_header_col_2}
-                role="columnheader"
-              >
-                {t('email')}
-              </span>
-              <span
-                className={styles.people_card_header_col_1}
-                role="columnheader"
-              >
-                {t('role')}
-              </span>
-            </div>
-          </div>
-
-          <div className={styles.people_card_main_container} role="rowgroup">
-            <CursorPaginationManager<
-              unknown,
-              InterfaceMemberNode,
-              Record<string, unknown>
+        {/* Search toolbar */}
+        <div className="toolbar">
+          <div className="search-bar">
+            <svg
+              className="search-icon"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
             >
-              query={ORGANIZATIONS_MEMBER_CONNECTION_LIST}
-              queryVariables={{
-                orgId: organizationId,
-                where: whereFilter,
-              }}
-              dataPath="organization.members"
-              itemsPerPage={10}
-              keyExtractor={(node: InterfaceMemberNode) => node.id}
-              renderItem={(node: InterfaceMemberNode, index: number) => {
-                if (searchTerm) {
-                  const lower = searchTerm.toLowerCase();
-                  const nameMatch = node.name?.toLowerCase().includes(lower);
-                  const emailMatch = node.emailAddress
-                    ?.toLowerCase()
-                    .includes(lower);
-                  if (!nameMatch && !emailMatch) return null;
-                }
-
-                const userType =
-                  node.role === 'administrator' ? 'Admin' : 'Member';
-
-                return (
-                  <div
-                    className={styles.peopleRow}
-                    data-testid={`people-row-${node.id}`}
-                    role="row"
-                  >
-                    <span
-                      className={`d-flex ${styles.people_card_header_col_1}`}
-                      role="cell"
-                    >
-                      <span>{index + 1}</span>
-                      <span className={styles.avatarCell}>
-                        {node.avatarURL ? (
-                          <img
-                            src={node.avatarURL}
-                            alt={node.name}
-                            className={styles.avatarImage}
-                          />
-                        ) : (
-                          <Avatar name={node.name} alt={node.name} size={40} />
-                        )}
-                      </span>
-                    </span>
-                    <span
-                      className={styles.people_card_header_col_2}
-                      role="cell"
-                    >
-                      {node.name}
-                    </span>
-                    <span
-                      className={styles.people_card_header_col_2}
-                      role="cell"
-                    >
-                      {node.emailAddress ?? t('emailNotAvailable')}
-                    </span>
-                    <span
-                      className={styles.people_card_header_col_1}
-                      role="cell"
-                    >
-                      {userType}
-                    </span>
-                  </div>
-                );
-              }}
-              emptyStateComponent={<span>{t('nothingToShow')}</span>}
+              <circle cx="11" cy="11" r="8" />
+              <path d="M21 21l-4.35-4.35" />
+            </svg>
+            <input
+              type="text"
+              placeholder={t('searchUsers')}
+              aria-label={t('searchUsers')}
+              value={searchTerm}
+              onChange={(e) => handleSearch(e.target.value)}
+              data-testid="searchInput"
             />
           </div>
+        </div>
+
+        {/* Member Grid */}
+        <div className="grid-3">
+          <CursorPaginationManager<
+            unknown,
+            InterfaceMemberNode,
+            Record<string, unknown>
+          >
+            query={ORGANIZATIONS_MEMBER_CONNECTION_LIST}
+            queryVariables={{
+              orgId: organizationId,
+              where: whereFilter,
+            }}
+            dataPath="organization.members"
+            itemsPerPage={10}
+            keyExtractor={(node: InterfaceMemberNode) => node.id}
+            renderItem={(node: InterfaceMemberNode) => {
+              if (searchTerm) {
+                const lower = searchTerm.toLowerCase();
+                const nameMatch = node.name?.toLowerCase().includes(lower);
+                const emailMatch = node.emailAddress
+                  ?.toLowerCase()
+                  .includes(lower);
+                if (!nameMatch && !emailMatch) return null;
+              }
+
+              const userType =
+                node.role === 'administrator' ? 'Admin' : 'Member';
+
+              return (
+                <div
+                  className={styles.memberCard}
+                  data-testid={`people-row-${node.id}`}
+                >
+                  <div className={styles.memberAvatar} style={{ background: '#6366f1' }}>
+                    {node.avatarURL ? (
+                      <img
+                        src={node.avatarURL}
+                        alt={node.name}
+                        style={{
+                          width: '56px',
+                          height: '56px',
+                          borderRadius: '50%',
+                          objectFit: 'cover',
+                        }}
+                      />
+                    ) : (
+                      <Avatar name={node.name} alt={node.name} size={56} />
+                    )}
+                  </div>
+                  <div className={styles.memberName}>{node.name}</div>
+                  <span
+                    className={`badge ${userType === 'Admin' ? 'badge-green' : 'badge-gray'}`}
+                  >
+                    {userType}
+                  </span>
+                  <div className={styles.memberJoined}>
+                    {node.emailAddress ?? t('emailNotAvailable')}
+                  </div>
+                  <a href="#" className={styles.memberLink}>
+                    View Profile
+                  </a>
+                </div>
+              );
+            }}
+            emptyStateComponent={
+              <div className="empty-state">
+                <div className="empty-state-title">{t('nothingToShow')}</div>
+              </div>
+            }
+          />
         </div>
       </div>
     </>

@@ -191,7 +191,6 @@ const Calendar: React.FC<
           startDate,
           endDate,
           includeRecurring: true,
-          onlyStartOnDay: true,
         },
       });
 

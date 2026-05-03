@@ -29,7 +29,7 @@
  * - Supports internationalization for aria-label
  */
 import React from 'react';
-import { Spinner } from 'react-bootstrap';
+
 import { useTranslation } from 'react-i18next';
 import styles from './LoadingState.module.css';
 import type { InterfaceLoadingStateProps } from 'types/shared-components/LoadingState/interface';
@@ -64,7 +64,7 @@ const LoadingState = ({
         aria-live="polite"
         aria-label={t('loading', { defaultValue: 'Loading' })}
       >
-        <Spinner
+        <div
           className={
             size === 'sm'
               ? styles.spinnerSm
@@ -72,9 +72,8 @@ const LoadingState = ({
                 ? styles.spinnerLg
                 : styles.spinnerXl
           }
-          animation="border"
-          variant="primary"
           data-testid="spinner"
+          style={{ border: '0.25em solid currentColor', borderRightColor: 'transparent', borderRadius: '50%', animation: 'spinner-border 0.75s linear infinite', color: 'var(--green-500)' }}
         />
       </div>
     );
@@ -99,13 +98,13 @@ const LoadingState = ({
     return (
       <div
         data-testid={dataTestId}
-        className="w-100"
+        style={{ width: '100%' }}
         role="status"
         aria-live="polite"
         aria-label={t('loading', { defaultValue: 'Loading' })}
       >
         {[...Array(safeRows)].map((_, rowIndex) => (
-          <div key={rowIndex} className="d-flex mb-3 gap-3">
+          <div key={rowIndex} style={{ display: 'flex', marginBottom: '1rem', gap: '1rem' }}>
             {[...Array(safeCols)].map((_, colIndex) => (
               <div key={colIndex} className={`${styles.loadingItem} shimmer`} />
             ))}
@@ -139,7 +138,7 @@ const LoadingState = ({
         aria-live="polite"
         aria-label={t('loading', { defaultValue: 'Loading' })}
       >
-        <Spinner
+        <div
           className={
             size === 'sm'
               ? styles.spinnerSm
@@ -147,9 +146,8 @@ const LoadingState = ({
                 ? styles.spinnerLg
                 : styles.spinnerXl
           }
-          animation="border"
-          variant="primary"
           data-testid="spinner"
+          style={{ border: '0.25em solid currentColor', borderRightColor: 'transparent', borderRadius: '50%', animation: 'spinner-border 0.75s linear infinite', color: 'var(--green-500)' }}
         />
       </div>
       {/* Render children underneath overlay */}

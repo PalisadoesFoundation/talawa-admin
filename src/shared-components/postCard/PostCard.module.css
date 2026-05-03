@@ -136,7 +136,7 @@
 }
 
 .postContainerBackground {
-  background-color: var(--bs-white);
+  background-color: var(--surface);
 }
 
 .pinnedIcon {

@@ -8,7 +8,7 @@
  * @returns A loader with a spinner.
  *
  * @remarks
- * - The loader is styled using CSS modules imported from `style/app-fixed.module.css`.
+ * - The loader is styled using CSS modules imported from `./InfiniteScrollLoader.module.css`.
  * - The `data-testid` attributes are included for testing purposes.
  *
  * @example
@@ -24,7 +24,7 @@
  *
  */
 import React from 'react';
-import styles from 'style/app-fixed.module.css';
+import styles from './InfiniteScrollLoader.module.css';
 
 const InfiniteScrollLoader = (): JSX.Element => {
   return (

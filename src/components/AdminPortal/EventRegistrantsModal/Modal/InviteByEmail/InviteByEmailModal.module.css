@@ -20,7 +20,6 @@
   color: var(--addButton-font);
   background-color: var(--light-blue);
   border-color: var(--addButton-bg);
-  --bs-btn-focus-box-shadow: none;
 }
 
 .recipientsContainer {

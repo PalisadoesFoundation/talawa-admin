@@ -56,17 +56,13 @@
 .actionBtn {
   font-weight: bold;
   color: var(--color-gray-700);
-  --bs-btn-bg: var(--color-blue-200);
-  --bs-btn-border-color: var(--color-blue-200);
-  --bs-btn-hover-bg: var(--color-blue-300);
-  --bs-btn-hover-border-color: var(--color-blue-300);
-  --bs-btn-active-bg: var(--color-blue-200);
-  --bs-btn-active-border-color: var(--color-blue-200);
+  background-color: var(--color-blue-200);
+  border-color: var(--color-blue-200);
   transition: background-color 0.2s ease;
 }
 
 .actionBtn:hover {
-  color: var(--color-gray-700) !important;
+  color: var(--color-gray-700);
   box-shadow:
     0 var(--border-1) var(--border-3) 0 var(--color-blue-200),
     0 var(--border-4) var(--border-8) var(--border-3) var(--color-gray-800);

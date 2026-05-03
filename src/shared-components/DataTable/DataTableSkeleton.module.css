@@ -1,3 +1,8 @@
+/**
+ * DataTableSkeleton — Talawa design system
+ * Loading skeleton for data tables.
+ */
+
 .dataTableWrapper {
   composes: dataTableWrapper from './DataTableShared.module.css';
 }

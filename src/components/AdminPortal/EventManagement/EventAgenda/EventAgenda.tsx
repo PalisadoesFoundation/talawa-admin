@@ -125,7 +125,7 @@ function EventAgenda(props: { eventId: string }): JSX.Element {
               <div className=" d-none d-lg-inline grow d-flex align-items-center bg-light-subtle rounded-3">
                 {/* <input
                     type="search"
-                    className="form-control border-0 bg-light-subtle"
+                    className="form-input border-0 bg-light-subtle"
                     placeholder={t('search')}
                     onChange={(e) => setSearchValue(e.target.value)}
                     value={searchValue}

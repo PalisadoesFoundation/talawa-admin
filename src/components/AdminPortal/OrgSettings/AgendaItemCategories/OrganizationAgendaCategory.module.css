@@ -12,7 +12,7 @@
 
 .errorIcon {
   font-size: var(--error-icon-size, 40px);
-  color: var(--bs-danger, var(--errorIcon-color));
+  color: var(--red-500, var(--errorIcon-color));
   margin-bottom: 1rem;
 }
 
@@ -42,11 +42,10 @@
   color: var(--addButton-font);
   background-color: var(--light-blue);
   border-color: var(--addButton-bg);
-  --bs-btn-focus-box-shadow: none;
 }
 
 .addButton:is(:hover, :active, :focus) {
-  background-color: var(--addButton-bg-hover) !important;
+  background-color: var(--addButton-bg-hover);
   border-color: var(--addButton-border-hover);
 }
 

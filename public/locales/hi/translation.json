@@ -323,7 +323,8 @@
     "orgName": "नाम दर्ज करें",
     "sortOrganizations": "संगठनों को क्रमबद्ध करें",
     "admins": "प्रशासक",
-    "members": "सदस्य"
+    "members": "सदस्य",
+    "managingYourOrganizations": "सभी पंजीकृत संगठनों का प्रबंधन करें"
   },
   "orgListCard": {
     "manage": "प्रबंधित करें",

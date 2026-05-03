@@ -6,7 +6,6 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { Button } from 'shared-components/Button';
-import { Alert } from 'react-bootstrap';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
@@ -152,9 +151,9 @@ const LeaveOrganization = (): JSX.Element => {
   }
   if (orgError)
     return (
-      <Alert variant="danger">
+      <div className={styles.alertDanger} role="alert">
         {t('common:error')}: {orgError.message}
-      </Alert>
+      </div>
     );
 
   if (!orgData?.organizations?.length) {
@@ -164,13 +163,53 @@ const LeaveOrganization = (): JSX.Element => {
   const organization = orgData?.organizations[0];
 
   return (
-    <div>
-      <h1 className={styles.title}>{organization?.name}</h1>
-      <p className={styles.description}>{organization?.description}</p>
+    <div className={styles.leaveWrapper}>
+      <div className={styles.leaveCard}>
+        <div className={styles.leaveIcon}>
+          <svg
+            viewBox="0 0 24 24"
+            width="32"
+            height="32"
+            stroke="var(--red-500)"
+            strokeWidth="2"
+            fill="none"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
+        </div>
 
-      <Button variant="danger" onClick={openModal}>
-        {t('leaveOrganization.leaveOrganization')}
-      </Button>
+        <h1 className={styles.leaveTitle}>
+          {t('leaveOrganization.confirmLeaveOrganization')}{' '}
+          {organization?.name}?
+        </h1>
+        <p className={styles.leaveDesc}>
+          {t('leaveOrganization.leaveOrganizationConfirmation', {
+            orgName: organization?.name,
+          })}
+        </p>
+
+        <div className={styles.leaveActions}>
+          <button
+            className={styles.btnLeave}
+            type="button"
+            onClick={openModal}
+          >
+            {t('leaveOrganization.leaveOrganization')}
+          </button>
+          <button
+            className={styles.btnCancel}
+            type="button"
+            onClick={() => navigate(`/user/organization/${organizationId}`)}
+          >
+            {t('common:cancel')}
+          </button>
+        </div>
+      </div>
 
       <CRUDModalTemplate
         open={showModal}

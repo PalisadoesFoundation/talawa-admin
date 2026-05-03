@@ -39,7 +39,7 @@
 }
 
 .removeItem {
-  color: var(--bs-danger);
+  color: var(--red-500);
 }
 
 .modalContent {

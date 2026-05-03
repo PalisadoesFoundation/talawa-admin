@@ -118,7 +118,7 @@ const EmptyState: React.FC<InterfaceEmptyStateProps> = ({
           {typeof icon === 'string' ? (
             <IconComponent
               name={icon}
-              fill="var(--bs-secondary)"
+              fill="var(--gray-500)"
               width="48px"
               height="48px"
             />

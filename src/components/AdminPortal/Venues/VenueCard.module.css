@@ -31,7 +31,6 @@
   color: var(--addButton-font);
   background-color: var(--light-blue);
   border-color: var(--addButton-bg);
-  --bs-btn-focus-box-shadow: none;
 }
 
 .removeButton {
@@ -39,5 +38,5 @@
   margin-right: var(--space-4);
   background-color: var(--removeButton-bg);
   color: var(--removeButton-color);
-  --bs-btn-border-color: var(--removeButton-border);
+  border-color: var(--removeButton-border);
 }

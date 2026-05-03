@@ -7,7 +7,7 @@
   min-height: 200px;
   width: 100%;
   padding: 2rem;
-  background-color: var(--bs-body-bg, #f2f7ff);
+  background-color: var(--bg, #f2f7ff);
 }
 
 .errorContent {
@@ -20,13 +20,13 @@
   font-size: 1.5rem;
   font-weight: 600;
   margin-bottom: 1rem;
-  color: var(--bs-danger, #dc3545);
+  color: var(--red-500, #dc3545);
 }
 
 .errorMessage {
   font-size: 1rem;
   margin-bottom: 1.5rem;
-  color: var(--bs-body-color, #212529);
+  color: var(--gray-900, #212529);
   line-height: 1.5;
 }
 
@@ -34,10 +34,10 @@
   padding: 0.5rem 1.5rem;
   font-size: 1rem;
   font-weight: 500;
-  color: var(--bs-white, #ffffff);
-  background-color: var(--bs-primary, #0d6efd);
-  border: 1px solid var(--bs-primary, #0d6efd);
-  border-radius: var(--bs-border-radius, 0.375rem);
+  color: #ffffff;
+  background-color: var(--green-500, #3ecf8e);
+  border: 1px solid var(--green-500, #3ecf8e);
+  border-radius: var(--radius-md, 0.375rem);
   cursor: pointer;
   transition:
     background-color 0.2s ease,
@@ -46,8 +46,8 @@
 }
 
 .resetButton:hover {
-  background-color: var(--bs-primary-hover, #0b5ed7);
-  border-color: var(--bs-primary-hover, #0b5ed7);
+  background-color: var(--green-600, #16a34a);
+  border-color: var(--green-600, #16a34a);
 }
 
 .resetButton:focus {
@@ -55,27 +55,27 @@
 }
 
 .resetButton:focus-visible {
-  outline: 2px solid var(--bs-primary, #0d6efd);
+  outline: 2px solid var(--green-500, #3ecf8e);
   outline-offset: 2px;
-  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+  box-shadow: 0 0 0 0.25rem rgba(62, 207, 142, 0.25);
 }
 
 .resetButton:active {
-  background-color: var(--bs-primary-active, #0a58ca);
-  border-color: var(--bs-primary-active, #0a58ca);
+  background-color: var(--green-700, #15803d);
+  border-color: var(--green-700, #15803d);
 }
 
 /* Dark theme support */
 [data-theme='dark'] .errorBoundaryFallback {
-  background-color: var(--bs-dark-bg, #212529);
+  background-color: var(--gray-900, #212529);
 }
 
 [data-theme='dark'] .errorTitle {
-  color: var(--bs-danger, #dc3545);
+  color: var(--red-500, #dc3545);
 }
 
 [data-theme='dark'] .errorMessage {
-  color: var(--bs-light, #f8f9fa);
+  color: var(--gray-100, #f3f4f6);
 }
 
 /* High contrast mode support */

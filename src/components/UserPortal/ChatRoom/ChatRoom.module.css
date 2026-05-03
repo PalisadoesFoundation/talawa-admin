@@ -200,7 +200,6 @@
   padding: 0;
   background: none;
   border: none;
-  --bs-btn-active-bg: none;
   min-width: var(--space-7);
   height: var(--space-7);
   border-radius: 50%;
@@ -234,7 +233,6 @@
   padding: 0;
   background: none;
   border: none;
-  --bs-btn-active-bg: none;
 }
 
 .closeBtn svg {

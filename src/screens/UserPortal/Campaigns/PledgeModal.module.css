@@ -1,12 +1,12 @@
 .pledgeModal {
-  max-width: var(--vw-80);
-  margin-top: var(--vh-2);
-  margin-left: var(--vw-13);
+  max-width: 80vw;
+  margin-top: 2vh;
+  margin-left: 13vw;
   color-scheme: light;
 }
 
 .titleModal {
-  color: var(--color-gray-500);
+  color: var(--gray-500);
   font-weight: var(--font-weight-semibold);
   font-size: var(--font-size-3xl);
   width: 65%;
@@ -28,11 +28,11 @@
 }
 
 .noOutline input:disabled {
-  -webkit-text-fill-color: var(--color-gray-600) !important;
+  -webkit-text-fill-color: var(--gray-600);
 }
 
 .noOutline textarea:disabled {
-  color: var(--color-gray-600) !important;
+  color: var(--gray-600);
 }
 
 .currencyAmountRow {
@@ -43,12 +43,12 @@
   align-items: flex-start;
   margin-top: var(--space-2);
   margin-bottom: var(--space-3);
-  --pledge-compact-box-width: calc(var(--border-1) * 75);
-  --pledge-compact-box-height: calc(var(--border-1) * 25);
-  --pledge-compact-box-radius: calc(var(--border-1) * 6);
+  --pledge-compact-box-width: 75px;
+  --pledge-compact-box-height: 25px;
+  --pledge-compact-box-radius: 6px;
   --pledge-compact-text-size: var(--font-size-xs);
   --pledge-compact-text-weight: var(--font-weight-lighter);
-  --pledge-compact-line-height: calc(var(--border-1) * 14);
+  --pledge-compact-line-height: 14px;
 }
 
 .currencySection,
@@ -63,20 +63,18 @@
   align-items: center;
   gap: var(--space-3);
   width: 100%;
-  margin-bottom: var(--space-0) !important;
+  margin-bottom: 0;
 }
 
-.compactInlineGroup :global(.form-label) {
-  margin-top: var(--space-0) !important;
-  margin-bottom: var(--space-0) !important;
+.compactInlineGroup label {
+  margin-top: 0;
+  margin-bottom: 0;
   align-self: center;
   flex: 1 1 auto;
 }
 
-.compactInlineGroup :global(.form-select),
-.compactInlineGroup :global(.form-control),
-.compactInlineGroup :global(select),
-.compactInlineGroup :global(input[type='number']) {
+.compactInlineGroup select,
+.compactInlineGroup input[type='number'] {
   margin-left: auto;
   align-self: center;
   flex: 0 0 auto;
@@ -85,57 +83,50 @@
   max-width: var(--pledge-compact-box-width);
 }
 
-.currencySection :global(.form-select),
-.currencySection :global(select),
-.goalSection :global(.form-control),
-.goalSection :global(input[type='number']) {
+.currencySection select,
+.goalSection input[type='number'] {
   width: var(--pledge-compact-box-width);
   min-width: var(--pledge-compact-box-width);
   max-width: var(--pledge-compact-box-width);
   height: var(--pledge-compact-box-height);
   min-height: var(--pledge-compact-box-height);
   border-radius: var(--pledge-compact-box-radius);
-  border: var(--border-1) solid var(--color-gray-200) !important;
-  background-color: var(--color-gray-100) !important;
+  border: 1px solid var(--gray-200);
+  background-color: var(--gray-100);
   box-shadow: none;
-  color: var(--color-black);
+  color: var(--gray-900);
   font-family: 'Lato', sans-serif;
   font-style: normal;
   font-weight: var(--pledge-compact-text-weight);
   font-size: var(--pledge-compact-text-size);
   line-height: var(--pledge-compact-line-height);
-  padding: var(--space-0) var(--space-3);
+  padding: 0 var(--space-3);
 }
 
-.currencySection :global(.form-select),
-.currencySection :global(select) {
-  color-scheme: light !important;
-  appearance: menulist !important;
-  -webkit-appearance: menulist !important;
+.currencySection select {
+  color-scheme: light;
+  appearance: menulist;
+  -webkit-appearance: menulist;
 }
 
-.currencySection :global(.form-select option),
-.currencySection :global(select option) {
-  background-color: var(--color-white) !important;
-  color: var(--color-black) !important;
+.currencySection select option {
+  background-color: var(--surface);
+  color: var(--gray-900);
 }
 
-.currencySection :global(.form-select option:checked),
-.currencySection :global(select option:checked) {
-  background-color: var(--color-blue-100) !important;
-  color: var(--color-black) !important;
+.currencySection select option:checked {
+  background-color: var(--blue-50);
+  color: var(--gray-900);
 }
 
-.pledgeModal :global(option) {
-  background-color: var(--color-white) !important;
-  color: var(--color-black) !important;
+.pledgeModal option {
+  background-color: var(--surface);
+  color: var(--gray-900);
 }
 
-.goalSection :global(.form-control::placeholder),
-.goalSection :global(input::placeholder),
-.currencySection :global(.form-select::placeholder),
-.currencySection :global(select::placeholder) {
-  color: var(--color-black);
+.goalSection input::placeholder,
+.currencySection select::placeholder {
+  color: var(--gray-900);
   font-family: 'Lato', sans-serif;
   font-style: normal;
   font-weight: var(--pledge-compact-text-weight);
@@ -144,15 +135,12 @@
   opacity: 1;
 }
 
-.currencySection :global(.form-select:focus),
-.currencySection :global(select:focus),
-.goalSection :global(.form-control:focus),
-.goalSection :global(input:focus) {
-  border-color: var(--color-blue-300);
+.currencySection select:focus,
+.goalSection input:focus {
+  border-color: var(--blue-500);
   outline: none;
-  box-shadow: var(--shadow-spread-none) var(--shadow-spread-none)
-    var(--shadow-spread-none) var(--space-2) var(--color-blue-shadow-focus);
-  background-color: var(--color-gray-100) !important;
+  box-shadow: 0 0 0 var(--space-2) rgba(59, 130, 246, 0.15);
+  background-color: var(--gray-100);
 }
 
 @media (max-width: 768px) {
@@ -166,29 +154,28 @@
   height: calc(var(--space-10) + var(--space-1) + var(--space-0-5));
   margin-top: auto;
   margin-right: auto;
-  margin-bottom: var(--space-0);
+  margin-bottom: 0;
   margin-left: auto;
-  color: var(--color-gray-700);
-  background-color: var(--color-blue-200);
-  border-color: var(--color-blue-200);
+  color: var(--gray-700);
+  background-color: var(--blue-50);
+  border-color: var(--blue-50);
   border-radius: var(--radius-sm);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-semibold);
-  --bs-btn-focus-box-shadow: none;
 }
 
 .addButton:is(:hover, :active, :focus) {
-  background-color: var(--color-blue-300);
-  border-color: var(--color-blue-300);
+  background-color: var(--blue-500);
+  border-color: var(--blue-500);
 }
 
 .addButton:disabled {
-  background-color: var(--color-gray-100);
-  border-color: var(--color-gray-100);
-  color: var(--color-gray-600);
+  background-color: var(--gray-100);
+  border-color: var(--gray-100);
+  color: var(--gray-600);
 }
 
-.pledgeModal :global(.modal-footer) {
+.pledgeModalFooter {
   width: 100%;
 }
 
@@ -210,35 +197,34 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-3);
-  --bs-btn-focus-box-shadow: none;
 }
 
 .editActionButton {
-  color: var(--color-gray-700);
-  background-color: var(--color-blue-200);
-  border-color: var(--color-blue-200);
+  color: var(--gray-700);
+  background-color: var(--blue-50);
+  border-color: var(--blue-50);
 }
 
 .editActionButton:is(:hover, :active, :focus) {
-  background-color: var(--color-blue-300);
-  border-color: var(--color-blue-300);
-  color: var(--color-gray-700);
+  background-color: var(--blue-500);
+  border-color: var(--blue-500);
+  color: var(--gray-700);
 }
 
 .deleteActionButton {
-  color: var(--color-red-400);
-  background-color: var(--color-red-100);
-  border-color: var(--color-red-100);
+  color: var(--red-500);
+  background-color: var(--red-50);
+  border-color: var(--red-50);
 }
 
 .deleteActionButton:is(:hover, :active, :focus) {
-  background-color: var(--color-red-100);
-  border-color: var(--color-red-100);
-  color: var(--color-red-400);
+  background-color: var(--red-50);
+  border-color: var(--red-50);
+  color: var(--red-500);
 }
 
 .deleteActionButton i {
-  color: var(--color-red-400);
+  color: var(--red-500);
 }
 
 @media (max-width: 768px) {

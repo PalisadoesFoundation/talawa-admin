@@ -9,5 +9,5 @@
 
 /* Support for padded input when adornments present */
 .paddedInput {
-  padding-right: var(--picker-icon-space);
+  padding-right: calc(40px + 0.75rem);
 }

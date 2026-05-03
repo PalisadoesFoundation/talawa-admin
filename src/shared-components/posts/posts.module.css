@@ -1,49 +1,87 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Posts — Talawa Design System
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Page Header ────────────────────────────────────────────────────────── */
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 28px;
+}
+
+.pageTitle {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+.pageSubtitle {
+  font-size: 14px;
+  color: var(--gray-500);
+  margin-top: 4px;
+}
+
+/* ── Create Post Button ─────────────────────────────────────────────────── */
 .dropdown {
-  background-color: var(--color-white) !important;
-  border: var(--border-1) solid var(--color-gray-400) !important;
-  color: var(--color-gray-700) !important;
+  background-color: var(--surface) !important;
+  border: 1.5px solid var(--gray-200) !important;
+  color: var(--gray-700) !important;
   position: relative;
-  /* !important needed to override Bootstrap's display on .btn */
   display: flex !important;
   align-items: center;
   justify-content: center;
   white-space: nowrap;
-  gap: var(--space-2);
+  gap: 6px;
   border-radius: var(--radius-md);
-  padding: 0 var(--space-3);
+  padding: 0 16px;
   width: auto;
-  height: var(--space-10);
+  height: 38px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: all 0.15s;
 }
 
-/* :global(.show) targets Bootstrap's .show class added to open dropdowns */
-/* stylelint-disable-next-line selector-pseudo-class-no-unknown */
 .dropdown:is(:hover, :active),
 :global(.show).dropdown {
-  background-color: var(--color-blue-500) !important;
-  border-color: var(--color-blue-500) !important;
-  color: var(--color-white) !important;
-  box-shadow: none !important;
+  background-color: var(--green-500) !important;
+  border-color: var(--green-500) !important;
+  color: #000 !important;
+  box-shadow: 0 2px 10px rgba(62, 207, 142, 0.25) !important;
 }
 
 .dropdown:is(:focus, :focus-visible) {
-  outline: var(--space-1) solid var(--color-blue-200);
-  outline-offset: var(--space-1);
+  outline: 2px solid var(--green-500);
+  outline-offset: 2px;
 }
 
-.list_box {
-  overflow-y: auto;
-  width: auto;
+/* ── Post Feed Layout ───────────────────────────────────────────────────── */
+.postFeed {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 720px;
 }
 
+.postList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── Layout ─────────────────────────────────────────────────────────────── */
+.mainpagerightOrgPost {
+  min-width: 0;
+}
+
+/* ── Legacy classes kept for compatibility ──────────────────────────────── */
 .head {
   min-width: 0;
 }
 
 .postContainer {
-  min-width: 0;
-}
-
-.mainpagerightOrgPost {
   min-width: 0;
 }
 

@@ -33,8 +33,6 @@
  * @returns JSX.Element - The rendered `VolunteerManagement` component.
  */
 import React, { useState, useMemo } from 'react';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import { Navigate, useNavigate, useParams } from 'react-router';
 import { FaChevronLeft, FaTasks } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
@@ -51,14 +49,14 @@ import styles from './VolunteerManagement.module.css';
 const volunteerDashboardTabs: { value: TabOptions; icon: JSX.Element }[] = [
   {
     value: 'upcomingEvents',
-    icon: <TbCalendarEvent size={21} className="me-2" />,
+    icon: <TbCalendarEvent size={21} style={{ marginRight: '0.5rem' }} />,
   },
   {
     value: 'invitations',
-    icon: <FaRegEnvelopeOpen size={18} className="me-2" />,
+    icon: <FaRegEnvelopeOpen size={18} style={{ marginRight: '0.5rem' }} />,
   },
-  { value: 'actions', icon: <FaTasks size={18} className="me-2" /> },
-  { value: 'groups', icon: <FaUserGroup size={18} className="me-2" /> },
+  { value: 'actions', icon: <FaTasks size={18} style={{ marginRight: '0.5rem' }} /> },
+  { value: 'groups', icon: <FaUserGroup size={18} style={{ marginRight: '0.5rem' }} /> },
 ];
 
 /**
@@ -113,8 +111,8 @@ const VolunteerManagement = (): JSX.Element => {
     const translatedText = t(value);
 
     const className = selected
-      ? `rounded-3 shadow-sm ${styles.activeTab}`
-      : `rounded-3 shadow-sm ${styles.inActiveTab}`;
+      ? `${styles.tabButton} ${styles.activeTab}`
+      : `${styles.tabButton} ${styles.inActiveTab}`;
     const props = {
       variant,
       className,
@@ -149,85 +147,107 @@ const VolunteerManagement = (): JSX.Element => {
     volunteerDashboardTabs.some((option) => option.value === val);
 
   return (
-    <div className="d-flex flex-column">
-      <Row className="mt-4">
-        <Col>
-          {/* Mobile Navigation */}
-          <div className="d-md-none d-flex align-items-center gap-2 mb-2">
-            <Button
-              size="sm"
-              variant="light"
-              className="d-flex text-secondary bg-white align-items-center px-3 shadow-sm rounded-3 p-3"
-              onClick={handleBack}
-              data-testid="mobile-back-btn"
-            >
-              <FaChevronLeft cursor={'pointer'} />
-            </Button>
-            <DropDownButton
-              id="tabs-dropdown"
-              options={tabOptions}
-              selectedValue={tab}
-              onSelect={(val) => {
-                if (isTabOption(val)) setTab(val);
-              }}
-              variant="success"
-              btnStyle={styles.dropdown}
-              dataTestIdPrefix="tabs-dropdown"
-              buttonLabel={t(tab)}
-              parentContainerStyle="flex-grow-1 w-100"
-              ariaLabel={t('volunteerTabs')}
-            />
+    <div>
+      <div className="page-header">
+        <div className="page-header-left">
+          <h1 className="page-title">{t('volunteerManagement')}</h1>
+          <p className="page-subtitle">{t('volunteerTabs')}</p>
+        </div>
+      </div>
+
+      {/* Stats */}
+      <div className="stats-grid">
+        <div className="stat-card">
+          <div className="stat-card-top">
+            <span className="stat-card-label">{t('upcomingEvents')}</span>
+            <div className="stat-card-icon green">
+              <TbCalendarEvent size={18} />
+            </div>
           </div>
-
-          {/* Desktop Navigation */}
-          <div className="d-none d-md-flex gap-3">
-            <Button
-              size="sm"
-              variant="light"
-              className="d-flex text-secondary bg-white align-items-center px-3 shadow-sm rounded-3"
-              onClick={handleBack}
-            >
-              <FaChevronLeft
-                cursor={'pointer'}
-                data-testid="chevron-left-icon"
-              />
-            </Button>
-            {volunteerDashboardTabs.map(renderButton)}
+          <div className="stat-card-value">--</div>
+          <div className="stat-card-change">--</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-card-top">
+            <span className="stat-card-label">{t('invitations')}</span>
+            <div className="stat-card-icon blue">
+              <FaRegEnvelopeOpen size={18} />
+            </div>
           </div>
-        </Col>
+          <div className="stat-card-value">--</div>
+          <div className="stat-card-change">--</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-card-top">
+            <span className="stat-card-label">{t('groups')}</span>
+            <div className="stat-card-icon purple">
+              <FaUserGroup size={18} />
+            </div>
+          </div>
+          <div className="stat-card-value">--</div>
+          <div className="stat-card-change">--</div>
+        </div>
+      </div>
 
-        <Col xs={12} className="mt-4">
-          <hr />
-        </Col>
-      </Row>
+      {/* Tabs */}
+      <div className="tabs" role="tablist">
+        {volunteerDashboardTabs.map(({ value, icon }) => (
+          <button
+            key={value}
+            className={`tab${tab === value ? ' active' : ''}`}
+            role="tab"
+            aria-selected={tab === value}
+            onClick={() => setTab(value)}
+            data-testid={`${value}Btn`}
+          >
+            {icon}
+            {t(value)}
+          </button>
+        ))}
+      </div>
 
-      {/* Render content based on the selected settings category */}
+      {/* Mobile dropdown fallback */}
+      <div className={styles.mobileNav}>
+        <DropDownButton
+          id="tabs-dropdown"
+          options={tabOptions}
+          selectedValue={tab}
+          onSelect={(val) => {
+            if (isTabOption(val)) setTab(val);
+          }}
+          variant="success"
+          btnStyle={styles.dropdown}
+          dataTestIdPrefix="tabs-dropdown"
+          buttonLabel={t(tab)}
+          parentContainerStyle={styles.dropdownGrow}
+          ariaLabel={t('volunteerTabs')}
+        />
+      </div>
+
+      {/* Tab content */}
       {(() => {
         switch (tab) {
           case 'upcomingEvents':
             return (
-              <div
-                className={styles.tabContent}
-                data-testid="upcomingEventsTab"
-              >
+              <div data-testid="upcomingEventsTab">
                 <UpcomingEvents />
               </div>
             );
           case 'invitations':
             return (
-              <div className={styles.tabContent} data-testid="invitationsTab">
+              <div data-testid="invitationsTab">
                 <Invitations />
               </div>
             );
           case 'actions':
             return (
-              <div className={styles.tabContent} data-testid="actionsTab">
+              <div data-testid="actionsTab">
                 <Actions />
               </div>
             );
           case 'groups':
             return (
-              <div className={styles.tabContent} data-testid="groupsTab">
+              <div data-testid="groupsTab">
                 <Groups />
               </div>
             );

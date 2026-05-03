@@ -1,4 +1,3 @@
-import { Card } from 'react-bootstrap';
 import Button from 'shared-components/Button';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { useTranslation } from 'react-i18next';
@@ -58,11 +57,11 @@ function DeleteOrg(): JSX.Element {
   return (
     <>
       {canDelete && (
-        <Card className={styles.DeleteOrgCard}>
-          <Card.Header className={styles.deleteCardHeader}>
-            <h5 className="mb-0 fw-semibold">{t('deleteOrganization')}</h5>
-          </Card.Header>
-          <Card.Body className="p-4">
+        <div className={styles.DeleteOrgCard}>
+          <div className={styles.deleteCardHeader}>
+            <h5 style={{ margin: 0, fontWeight: 600 }}>{t('deleteOrganization')}</h5>
+          </div>
+          <div style={{ padding: '1.5rem' }}>
             <div className={styles.textBox}>{t('longDelOrgMsg')}</div>
             <Button
               variant="danger"
@@ -74,8 +73,8 @@ function DeleteOrg(): JSX.Element {
               <DeleteIcon className={styles.icon} />
               {t('delete')}
             </Button>
-          </Card.Body>
-        </Card>
+          </div>
+        </div>
       )}
       {/* Delete Organization Modal */}
       {canDelete && (

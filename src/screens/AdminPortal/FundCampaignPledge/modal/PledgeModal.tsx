@@ -221,7 +221,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 <input
                   {...inputProps}
                   type="text"
-                  className={`form-control ${styles.pledgerInput}`}
+                  className={`form-input ${styles.pledgerInput}`}
                   aria-label={t('pledgers')}
                 />
                 {InputProps.endAdornment}

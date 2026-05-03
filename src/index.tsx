@@ -12,14 +12,12 @@ import {
 import { getMainDefinition } from '@apollo/client/utilities';
 import { onError } from '@apollo/link-error';
 import { loadDevMessages, loadErrorMessages } from '@apollo/client/dev';
-import './assets/css/app.css';
-import './style/tokens/index.css';
-import './style/talawa-theme.css';
-import './style/widgets.css';
-import 'bootstrap/dist/js/bootstrap.min.js'; // Bootstrap JS (ensure Bootstrap is installed)
-import 'react-datepicker/dist/react-datepicker.css'; // React Datepicker Styles
-import 'flag-icons/css/flag-icons.min.css'; // Flag Icons Styles
-import 'react-toastify/dist/ReactToastify.css'; // React Toastify Styles
+// ── Design System (Talawa) — sole CSS foundation ──────────────
+import './style/design-system/index.css';
+// ── Third-party CSS ──────────────────────────────────────────────────────
+import 'react-datepicker/dist/react-datepicker.css';
+import 'flag-icons/css/flag-icons.min.css';
+import 'react-toastify/dist/ReactToastify.css';
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 import { Provider } from 'react-redux';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -31,8 +29,6 @@ import { BACKEND_URL, BACKEND_WEBSOCKET_URL } from 'Constant/constant';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { ApolloLink } from '@apollo/client/core';
 import { setContext } from '@apollo/client/link/context';
-import './assets/css/scrollStyles.css';
-import './style/app-fixed.module.css';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import {
   disposeWsClient,
@@ -72,7 +68,7 @@ const resolvePendingRequests = (): void => {
 const authLink = setContext((_, { headers }) => {
   const lng = i18n.language;
   const token = getItem('token');
-  const authHeaders = token ? { authorization: BEARER_PREFIX + token } : {};
+  const authHeaders = token ? { authorization: BEARER_PREFIX + String(token) } : {};
 
   return {
     headers: {

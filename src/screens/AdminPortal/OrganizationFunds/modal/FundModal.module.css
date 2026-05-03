@@ -3,7 +3,7 @@
   max-width: none;
   --fund-modal-width: var(--space-25);
   --fund-modal-content-min-height: calc(
-    var(--space-24) + var(--space-5) + var(--space-4) + var(--border-1)
+    var(--space-24) + var(--space-5) + var(--space-4) + 1px
   );
   --fund-modal-content-radius: var(--radius-xl);
   --fund-modal-header-padding-top: var(--space-6);
@@ -29,24 +29,23 @@
   --fund-modal-archive-height: var(--space-10-75);
 }
 
-.createMode :global(.modal-dialog) {
-  width: min(var(--fund-modal-width), calc(var(--vw-100) - var(--space-8)));
+.createModeDialog {
+  width: min(var(--fund-modal-width), calc(100vw - var(--space-8)));
   max-width: var(--fund-modal-width);
   margin-left: auto;
   margin-right: auto;
 }
 
-.createMode :global(.modal-content) {
+.createModeContent {
   width: 100%;
   min-height: var(--fund-modal-content-min-height);
-  background: var(--color-white);
-  border: var(--border-1) solid var(--color-black-8);
-  box-shadow: calc(-1 * var(--shadow-offset-xs)) var(--shadow-offset-lg)
-    var(--shadow-blur-xl) var(--color-black-8);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
   border-radius: var(--fund-modal-content-radius);
 }
 
-.createMode :global(.modal-header) {
+.createModeHeader {
   align-items: center;
   min-height: auto;
   padding: var(--fund-modal-header-padding-top)
@@ -56,9 +55,9 @@
   border-bottom: none;
 }
 
-.createMode :global(.modal-title) {
+.createModeTitle {
   margin: 0;
-  color: var(--color-black);
+  color: var(--gray-900);
   font-family: 'Lato', sans-serif;
   font-size: var(--font-size-2xl);
   font-style: normal;
@@ -68,30 +67,30 @@
   align-items: center;
 }
 
-.createMode :global(.modal-header .btn-danger) {
+.createModeDangerBtn {
   right: var(--space-5);
   top: var(--space-4);
-  color: var(--color-red-500) !important;
+  color: var(--red-500);
 }
 
-.createMode :global(.modal-header .btn-danger:hover) {
-  color: var(--color-red-500) !important;
+.createModeDangerBtn:hover {
+  color: var(--red-500);
 }
 
-.createMode :global(.modal-body) {
+.createModeBody {
   padding: var(--fund-modal-body-padding-top)
     var(--fund-modal-body-padding-right) var(--fund-modal-body-padding-bottom)
     var(--fund-modal-body-padding-left);
 }
 
-.createMode :global(form) {
+.createModeForm {
   display: flex;
   flex-direction: column;
   gap: 0;
 }
 
 .titlemodal {
-  color: var(--color-gray-500);
+  color: var(--gray-500);
   font-weight: var(--font-weight-semibold);
   font-size: var(--font-size-3xl);
   width: 65%;
@@ -103,11 +102,11 @@
 }
 
 .noOutline input:disabled {
-  -webkit-text-fill-color: var(--color-gray-600);
+  -webkit-text-fill-color: var(--gray-600);
 }
 
 .noOutline textarea:disabled {
-  color: var(--color-gray-600);
+  color: var(--gray-600);
   opacity: 1;
 }
 
@@ -116,27 +115,25 @@
 }
 
 .switch input {
-  --bs-form-switch-bg: transparent;
+  background-image: none;
 }
 
 .switch input:checked {
-  background-color: var(--color-blue-500);
-  border-color: var(--color-blue-500);
-  box-shadow: 0 0 var(--shadow-blur-xs) var(--shadow-spread-sm)
-    var(--color-blue-200);
+  background-color: var(--blue-500);
+  border-color: var(--blue-500);
+  box-shadow: 0 0 2px 1px rgba(59, 130, 246, 0.3);
 }
 
 .switch input:focus {
-  border-color: var(--color-gray-200);
+  border-color: var(--gray-200);
 }
 
-/* Helper for bootstrap switch alignment */
 .switch {
   padding-left: var(--space-13);
   white-space: nowrap;
 }
 
-.switch :global(.form-check-input) {
+.switch .switchInput {
   margin-left: calc(-1 * var(--space-11));
   margin-top: var(--space-4);
   flex-shrink: 0;
@@ -145,20 +142,17 @@
 .fieldRow {
   width: 100%;
   margin: 0;
-}
-
-.fieldRow {
   margin-bottom: calc(var(--space-4) + var(--space-1));
 }
 
-.fieldRow :global(.mb-3) {
-  margin-bottom: 0 !important;
+.fieldRowInner {
+  margin-bottom: 0;
 }
 
-.fieldRow :global(label) {
+.fieldRow label {
   display: inline-block;
   margin-bottom: var(--space-3);
-  color: var(--color-black);
+  color: var(--gray-900);
   font-family: 'Lato', sans-serif;
   font-size: var(--font-size-md);
   font-style: normal;
@@ -167,25 +161,27 @@
   align-items: center;
 }
 
-.fieldRow :global(.form-control) {
+.fieldRow input,
+.fieldRow textarea {
   width: 100%;
   max-width: 100%;
   height: var(--fund-modal-input-height);
   border-radius: var(--radius-md);
-  border: var(--border-1) solid var(--color-gray-200);
-  background: var(--color-gray-50);
+  border: 1px solid var(--gray-200);
+  background: var(--gray-50);
   box-shadow: none;
-  color: var(--color-black);
+  color: var(--gray-900);
   font-family: 'Lato', sans-serif;
   font-size: var(--font-size-md);
   font-style: normal;
   font-weight: var(--font-weight-regular);
   line-height: var(--fund-modal-label-line-height);
-  padding: var(--space-0) var(--fund-modal-input-padding-x);
+  padding: 0 var(--fund-modal-input-padding-x);
 }
 
-.fieldRow :global(.form-control::placeholder) {
-  color: var(--color-gray-600);
+.fieldRow input::placeholder,
+.fieldRow textarea::placeholder {
+  color: var(--gray-600);
   font-family: 'Lato', sans-serif;
   font-weight: var(--font-weight-regular);
   font-size: var(--font-size-md);
@@ -193,14 +189,14 @@
   opacity: 0.85;
 }
 
-.fieldRow :global(.form-control:focus) {
-  border-color: var(--color-blue-300);
-  box-shadow: var(--shadow-spread-none) var(--shadow-spread-none)
-    var(--shadow-spread-none) var(--space-2) var(--color-blue-shadow-focus);
-  background: var(--color-gray-50);
+.fieldRow input:focus,
+.fieldRow textarea:focus {
+  border-color: var(--blue-500);
+  box-shadow: 0 0 0 var(--space-2) rgba(59, 130, 246, 0.15);
+  background: var(--gray-50);
 }
 
-.fieldRow :global(.invalid-feedback) {
+.fieldRow .invalidFeedback {
   margin-top: var(--space-2);
   margin-bottom: 0;
   font-size: var(--font-size-xs);
@@ -224,7 +220,7 @@
 
 .switchField > label {
   margin-bottom: 0;
-  color: var(--color-black);
+  color: var(--gray-900);
   font-family: 'Inter', sans-serif;
   font-style: normal;
   font-weight: var(--font-weight-regular);
@@ -232,25 +228,25 @@
   line-height: var(--fund-modal-label-line-height);
 }
 
-.createMode :global(.modal-footer) {
+.createModeFooter {
   min-height: auto;
   justify-content: center;
   align-items: center;
   gap: 0;
-  padding: calc(var(--space-2) + var(--space-1)) var(--space-0)
+  padding: calc(var(--space-2) + var(--space-1)) 0
     calc(var(--space-4) + var(--space-1));
   border-top: none;
 }
 
-.createMode :global(.modal-footer .btn-secondary) {
-  display: none !important;
+.createModeFooterSecondaryBtn {
+  display: none;
 }
 
-.createMode :global([data-testid='modal-cancel-btn']) {
-  display: none !important;
+.createModeFooterCancelBtn {
+  display: none;
 }
 
-.createMode :global(.modal-footer .btn) {
+.createModeFooterBtn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -262,58 +258,57 @@
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-none);
-  padding: var(--space-0) var(--space-5);
+  padding: 0 var(--space-5);
 }
 
-.createMode :global(.modal-footer .btn > span) {
+.createModeFooterBtn > span {
   width: 100%;
   justify-content: center;
 }
 
-.createMode :global(.modal-footer .btn > span > span) {
+.createModeFooterBtn > span > span {
   justify-content: center;
 }
 
-.createMode :global(.modal-footer .btn-secondary) {
-  background-color: var(--color-gray-400);
-  color: var(--color-white);
+.createModeSecondaryBtn {
+  background-color: var(--gray-400);
+  color: var(--surface);
 }
 
-.createMode :global(.modal-footer .btn-secondary:hover) {
-  background-color: var(--color-gray-500);
+.createModeSecondaryBtn:hover {
+  background-color: var(--gray-500);
 }
 
-.createMode :global(.modal-footer .btn-primary) {
-  background-color: var(--color-blue-200);
-  color: var(--color-gray-700);
+.createModePrimaryBtn {
+  background-color: var(--blue-50);
+  color: var(--gray-700);
 }
 
-.createMode :global(.modal-footer .btn-primary:hover) {
-  background-color: var(--color-blue-300);
+.createModePrimaryBtn:hover {
+  background-color: var(--blue-500);
 }
 
-.createMode :global(.modal-footer .btn:disabled) {
+.createModeFooterBtn:disabled {
   opacity: 1;
 }
 
-.editMode :global(.modal-dialog) {
-  width: min(var(--fund-modal-width), calc(var(--vw-100) - var(--space-8)));
+.editModeDialog {
+  width: min(var(--fund-modal-width), calc(100vw - var(--space-8)));
   max-width: var(--fund-modal-width);
   margin-left: auto;
   margin-right: auto;
 }
 
-.editMode :global(.modal-content) {
+.editModeContent {
   width: 100%;
   min-height: auto;
-  background: var(--color-white);
-  border: var(--border-1) solid var(--color-black-8);
-  box-shadow: calc(-1 * var(--shadow-offset-xs)) var(--shadow-offset-lg)
-    var(--shadow-blur-xl) var(--color-black-8);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
   border-radius: var(--fund-modal-content-radius);
 }
 
-.editMode :global(.modal-header) {
+.editModeHeader {
   align-items: center;
   min-height: auto;
   padding: var(--fund-modal-header-padding-top)
@@ -323,9 +318,9 @@
   border-bottom: none;
 }
 
-.editMode :global(.modal-title) {
+.editModeTitle {
   margin: 0;
-  color: var(--color-black);
+  color: var(--gray-900);
   font-family: 'Lato', sans-serif;
   font-size: var(--font-size-2xl);
   font-style: normal;
@@ -335,23 +330,23 @@
   align-items: center;
 }
 
-.editMode :global(.modal-header .btn-danger) {
+.editModeDangerBtn {
   right: var(--space-5);
   top: var(--space-4);
-  color: var(--color-red-500) !important;
+  color: var(--red-500);
 }
 
-.editMode :global(.modal-header .btn-danger:hover) {
-  color: var(--color-red-500) !important;
+.editModeDangerBtn:hover {
+  color: var(--red-500);
 }
 
-.editMode :global(.modal-body) {
+.editModeBody {
   padding: var(--fund-modal-body-padding-top)
     var(--fund-modal-body-padding-right) var(--fund-modal-body-padding-right)
     var(--fund-modal-body-padding-left);
 }
 
-.editMode :global(form) {
+.editModeForm {
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -361,12 +356,12 @@
   margin-bottom: var(--space-6);
 }
 
-.editMode :global(.modal-footer) {
+.editModeFooter {
   min-height: auto;
   justify-content: center;
   align-items: center;
   gap: 0;
-  padding: var(--space-4) var(--space-0) calc(var(--space-4) + var(--space-1));
+  padding: var(--space-4) 0 calc(var(--space-4) + var(--space-1));
   border-top: none;
 }
 
@@ -401,23 +396,23 @@
 }
 
 .editActionButton {
-  background: var(--color-blue-200);
-  color: var(--color-gray-700);
+  background: var(--blue-50);
+  color: var(--gray-700);
 }
 
 .editActionButton:hover {
-  background: var(--color-blue-300);
-  color: var(--color-gray-700);
+  background: var(--blue-500);
+  color: var(--gray-700);
 }
 
 .deleteActionButton {
-  background: var(--color-red-100);
-  color: var(--color-red-400);
+  background: var(--red-50);
+  color: var(--red-500);
 }
 
 .deleteActionButton:hover {
-  background: var(--color-red-100);
-  color: var(--color-red-400);
+  background: var(--red-50);
+  color: var(--red-500);
 }
 
 .archiveActionButton {
@@ -425,8 +420,8 @@
   height: var(--fund-modal-archive-height);
   border-radius: var(--radius-sm);
   border: none;
-  background: var(--color-gray-100);
-  color: var(--color-gray-700);
+  background: var(--gray-100);
+  color: var(--gray-700);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -439,77 +434,78 @@
 }
 
 .archiveActionButton:hover {
-  background: var(--color-gray-200);
-  color: var(--color-gray-700);
+  background: var(--gray-200);
+  color: var(--gray-700);
 }
 
 .editActionButton i,
 .archiveActionButton i {
-  color: var(--color-gray-700);
+  color: var(--gray-700);
 }
 
 .deleteActionButton i {
-  color: var(--color-red-400);
+  color: var(--red-500);
 }
 
 @media (max-width: 991px) {
-  .createMode :global(.modal-dialog) {
+  .createModeDialog {
     max-width: min(
-      calc(var(--vw-100) - var(--space-8)),
+      calc(100vw - var(--space-8)),
       var(--fund-modal-width)
     );
   }
 
-  .createMode :global(.modal-header),
-  .createMode :global(.modal-body),
-  .createMode :global(.modal-footer) {
+  .createModeHeader,
+  .createModeBody,
+  .createModeFooter {
     padding-left: var(--space-5);
     padding-right: var(--space-5);
   }
 
-  .createMode :global(.modal-title) {
+  .createModeTitle {
     font-size: var(--font-size-2xl);
     line-height: var(--line-height-tight);
   }
 
-  .fieldRow :global(label),
+  .fieldRow label,
   .switchField > label {
     font-size: var(--font-size-15);
   }
 
-  .fieldRow :global(.form-control) {
+  .fieldRow input,
+  .fieldRow textarea {
     width: 100%;
     height: var(--fund-modal-input-height);
     font-size: var(--font-size-15);
   }
 
-  .createMode :global(.modal-footer .btn) {
+  .createModeFooterBtn {
     width: 100%;
     max-width: var(--fund-modal-action-width);
     height: var(--fund-modal-action-height);
     font-size: var(--font-size-15);
   }
 
-  .editMode :global(.modal-dialog) {
+  .editModeDialog {
     max-width: min(
-      calc(var(--vw-100) - var(--space-8)),
+      calc(100vw - var(--space-8)),
       var(--fund-modal-width)
     );
   }
 
-  .editMode :global(.modal-header),
-  .editMode :global(.modal-body),
-  .editMode :global(.modal-footer) {
+  .editModeHeader,
+  .editModeBody,
+  .editModeFooter {
     padding-left: var(--space-5);
     padding-right: var(--space-5);
   }
 
-  .editMode :global(.modal-title) {
+  .editModeTitle {
     font-size: var(--font-size-2xl);
     line-height: var(--line-height-tight);
   }
 
-  .editMode :global(.modal-footer .btn) {
+  .editModeFooterBtn {
     font-size: var(--font-size-15);
   }
 
@@ -535,15 +531,15 @@
 
 @media (max-width: 575px) {
   .fundModal {
-    max-width: calc(var(--vw-100) - var(--space-5));
+    max-width: calc(100vw - var(--space-5));
   }
 
-  .createMode :global(.modal-header) {
+  .createModeHeader {
     padding-top: var(--space-5);
     padding-bottom: calc(var(--space-2) + var(--space-1));
   }
 
-  .createMode :global(.modal-title) {
+  .createModeTitle {
     font-size: calc(var(--font-size-xl) + var(--space-2));
     line-height: var(--line-height-tight);
   }
@@ -552,27 +548,27 @@
     gap: var(--space-3) var(--space-4);
   }
 
-  .createMode :global(.modal-footer) {
+  .createModeFooter {
     padding-top: var(--space-2);
     padding-bottom: calc(var(--space-7) + var(--space-1));
   }
 
-  .createMode :global(.modal-footer .btn) {
+  .createModeFooterBtn {
     height: var(--space-10);
     font-size: var(--font-size-sm);
   }
 
-  .editMode :global(.modal-header) {
+  .editModeHeader {
     padding-top: var(--space-5);
     padding-bottom: calc(var(--space-2) + var(--space-1));
   }
 
-  .editMode :global(.modal-title) {
+  .editModeTitle {
     font-size: calc(var(--font-size-xl) + var(--space-2));
     line-height: var(--line-height-tight);
   }
 
-  .editMode :global(.modal-footer) {
+  .editModeFooter {
     padding-top: var(--space-2);
     padding-bottom: var(--space-4);
   }
@@ -601,19 +597,18 @@
 
 .addButton {
   margin-bottom: var(--space-4);
-  color: var(--color-gray-700);
-  background-color: var(--color-blue-200);
-  border-color: var(--color-blue-200);
-  --bs-btn-focus-box-shadow: none;
+  color: var(--gray-700);
+  background-color: var(--blue-50);
+  border-color: var(--blue-50);
 }
 
 .addButton:is(:hover, :active, :focus) {
-  background-color: var(--color-blue-500);
-  border-color: var(--color-gray-700);
+  background-color: var(--blue-500);
+  border-color: var(--gray-700);
 }
 
 .addButton:disabled {
   margin-bottom: var(--space-4);
-  background-color: var(--color-gray-50);
-  border-color: var(--color-blue-200);
+  background-color: var(--gray-50);
+  border-color: var(--blue-50);
 }

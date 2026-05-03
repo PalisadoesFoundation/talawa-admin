@@ -1,5 +1,67 @@
+.twoColGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 0.25rem;
+}
+
+.cardWrapper {
+  min-width: 0;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.formCol6 {
+  grid-column: span 1;
+}
+
+.formCol12 {
+  grid-column: span 2;
+}
+
+.cardBodyPadding {
+  padding: 0.75rem;
+}
+
+.footerActions {
+  grid-column: 1 / -1;
+}
+
+.footerActionsInner {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 0.75rem 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .twoColGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .formCol6 {
+    grid-column: span 1;
+  }
+
+  .formCol12 {
+    grid-column: span 1;
+  }
+}
+
 .allRound {
   border-radius: var(--space-4);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border);
+  overflow: hidden;
 }
 
 .cardControl {

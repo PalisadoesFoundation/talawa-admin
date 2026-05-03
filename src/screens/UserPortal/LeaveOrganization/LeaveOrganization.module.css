@@ -31,11 +31,116 @@
   margin-top: var(--space-7);
 }
 
+.alertDanger {
+  background-color: var(--red-50);
+  color: var(--red-600);
+  border: 1px solid var(--red-500);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.25rem;
+  margin: 1rem 0;
+  font-weight: 500;
+}
+
 .title {
   margin-top: var(--space-6);
-  /* Approx replacement for <br /> + default h1 margin behavior */
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--gray-900);
 }
 
 .description {
   margin-bottom: var(--space-3);
+}
+
+/* ── Leave organization (prototype: leave-org.html) ────────────────────────── */
+.leaveWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - var(--topbar-h, 60px));
+  padding: 40px;
+}
+
+.leaveCard {
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+  padding: 48px 40px;
+  width: 100%;
+  max-width: 480px;
+  text-align: center;
+}
+
+.leaveIcon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--red-50);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+}
+
+.leaveTitle {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin-bottom: 10px;
+}
+
+.leaveDesc {
+  font-size: 14px;
+  color: var(--gray-500);
+  line-height: 1.6;
+  margin-bottom: 32px;
+  max-width: 380px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.leaveActions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.btnLeave {
+  padding: 11px 28px;
+  font-size: 14px;
+  font-weight: 600;
+  background: var(--red-500);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-family: var(--font);
+  transition: all 0.15s;
+}
+
+.btnLeave:hover {
+  background: var(--red-600);
+  box-shadow: 0 2px 12px rgba(239, 68, 68, 0.3);
+}
+
+.btnCancel {
+  padding: 11px 28px;
+  font-size: 14px;
+  font-weight: 600;
+  background: var(--surface);
+  color: var(--gray-700);
+  border: 1.5px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-family: var(--font);
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btnCancel:hover {
+  background: var(--gray-50);
+  border-color: var(--gray-300);
 }

@@ -547,7 +547,7 @@ const ItemModal: FC<IItemModalProps> = ({
                   {startAdornment}
                   <input
                     {...inputProps}
-                    className={`${(inputProps as { className?: string }).className ?? ''} form-control`}
+                    className={`${(inputProps as { className?: string }).className ?? ''} form-input`}
                     required
                   />
                   {endAdornment}
@@ -618,7 +618,7 @@ const ItemModal: FC<IItemModalProps> = ({
                         {startAdornment}
                         <input
                           {...inputProps}
-                          className={`${(inputProps as { className?: string }).className ?? ''} form-control`}
+                          className={`${(inputProps as { className?: string }).className ?? ''} form-input`}
                           required
                         />
                         {endAdornment}
@@ -677,7 +677,7 @@ const ItemModal: FC<IItemModalProps> = ({
                         {startAdornment}
                         <input
                           {...inputProps}
-                          className={`${(inputProps as { className?: string }).className ?? ''} form-control`}
+                          className={`${(inputProps as { className?: string }).className ?? ''} form-input`}
                           required
                         />
                         {endAdornment}

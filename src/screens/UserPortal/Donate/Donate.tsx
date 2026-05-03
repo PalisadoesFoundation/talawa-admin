@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { FormControl, InputGroup } from 'react-bootstrap';
 import DropDownButton from 'shared-components/DropDownButton';
 import Button from 'shared-components/Button';
 import { useQuery, useMutation, type ApolloError } from '@apollo/client';
@@ -270,24 +269,28 @@ export default function Donate(): JSX.Element {
   };
 
   return (
-    <div className="mt-2">
-      <div className={styles.mainContainer50}>
-        <SearchFilterBar
-          searchPlaceholder={t('searchDonations')}
-          searchValue={searchText}
-          onSearchChange={setSearchText}
-          searchInputTestId="searchInput"
-          searchButtonTestId="searchButton"
-          containerClassName={styles.donateSearchContainer}
-          hasDropdowns={false}
-        />
+    <div>
+      <div className="page-header">
+        <div className="page-header-left">
+          <h1 className="page-title">{t('donations')}</h1>
+          <p className="page-subtitle">{t('donateForThe')} {organizationDetails.name}</p>
+        </div>
+      </div>
 
-        <div className={styles.box}>
-          <div className={styles.heading}>
+      {/* Active Campaign Card */}
+      <div className={styles.campaignGrid}>
+        <div className={styles.campaignCard}>
+          <div className={`${styles.campaignIcon} ${styles.campaignIconGreen}`}>
+            <SendIcon />
+          </div>
+          <div className={styles.campaignName}>
+            {t('donateForThe')} {organizationDetails.name}
+          </div>
+          <div className={styles.campaignDesc}>
             {t('donateForThe')} {organizationDetails.name}
           </div>
 
-          <InputGroup className={styles.width100}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '18px' }}>
             <DropDownButton
               id="currency-dropdown"
               options={currencyOptions}
@@ -300,35 +303,50 @@ export default function Donate(): JSX.Element {
               ariaLabel={t('selectCurrency')}
             />
 
-            <label htmlFor="donationAmountInput" className="visually-hidden">
+            <label htmlFor="donationAmountInput" className={styles.srOnly}>
               {t('amount')}
             </label>
-            <FormControl
+            <input
               id="donationAmountInput"
               type="text"
+              className="form-input"
               data-testid="donationAmount"
               placeholder={t('amount')}
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
             />
-          </InputGroup>
+          </div>
 
-          <Button
-            size="sm"
+          <button
+            className="btn btn-primary"
+            style={{ width: '100%' }}
             data-testid="donateBtn"
             onClick={donateToOrg}
-            className={`${styles.addButton} ${styles.donateBtn}`}
-            variant="primary"
           >
-            {t('donate')} <SendIcon />
-          </Button>
+            {t('donate')}
+          </button>
         </div>
+      </div>
 
-        <div className={styles.container}>
-          <h5>{t('yourPreviousDonations')}</h5>
+      {/* Recent Donations */}
+      <h2 className={styles.sectionTitle}>{t('yourPreviousDonations')}</h2>
+      <div className={styles.sectionSubtitle}>Your donation history</div>
 
+      <div className="toolbar">
+        <SearchFilterBar
+          searchPlaceholder={t('searchDonations')}
+          searchValue={searchText}
+          onSearchChange={setSearchText}
+          searchInputTestId="searchInput"
+          searchButtonTestId="searchButton"
+          hasDropdowns={false}
+        />
+      </div>
+
+      <div className="card">
+        <div className="table-wrapper">
           {loading ? (
-            <div data-testid="loading-state">
+            <div className="empty-state" data-testid="loading-state">
               <HourglassBottomIcon /> {t('loading')}
             </div>
           ) : (
@@ -340,21 +358,21 @@ export default function Donate(): JSX.Element {
               emptyMessage={t('nothingToShow')}
             />
           )}
-
-          {filteredDonationRows.length > 0 && (
-            <PaginationList
-              count={filteredDonationRows.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={(_, p) => setPage(p)}
-              onRowsPerPageChange={(e) => {
-                setRowsPerPage(parseInt(e.target.value, 10));
-                setPage(0);
-              }}
-            />
-          )}
         </div>
       </div>
+
+      {filteredDonationRows.length > 0 && (
+        <PaginationList
+          count={filteredDonationRows.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={(_, p) => setPage(p)}
+          onRowsPerPageChange={(e) => {
+            setRowsPerPage(parseInt(e.target.value, 10));
+            setPage(0);
+          }}
+        />
+      )}
     </div>
   );
 }

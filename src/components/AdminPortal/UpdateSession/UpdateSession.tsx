@@ -26,12 +26,11 @@
  * - Displays a success toast on successful update or handles errors gracefully.
  *
  * Dependencies:
- * - `react`, `react-bootstrap`, `@mui/material`, `@apollo/client`
+ * - `react`, `@mui/material`, `@apollo/client`
  * - Custom modules: `GraphQl/Queries/Queries`, `GraphQl/Mutations/mutations`, `utils/errorHandler`, `shared-components/LoadingState/LoadingState`
  */
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Card } from 'react-bootstrap';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import { useMutation, useQuery } from '@apollo/client';
@@ -130,16 +129,22 @@ const UpdateSession: React.FC<InterfaceUpdateSessionProps> = ({
 
   return (
     <LoadingState isLoading={loading} variant="spinner">
-      <Card className={`${styles.updateTimeoutCard} rounded-4 shadow-sm`}>
-        <Card.Header className={styles.updateTimeoutCardHeader}>
+      <div
+        className={styles.updateTimeoutCard}
+        style={{
+          borderRadius: '1rem',
+          boxShadow: '0 .125rem .25rem rgba(0,0,0,.075)',
+        }}
+      >
+        <div className={styles.updateTimeoutCardHeader}>
           <div className={styles.updateTimeoutCardTitle}>
             {t('communityProfile.sessionTimeout.title')}
           </div>
-        </Card.Header>
-        <Card.Body className={styles.updateTimeoutCardBody}>
+        </div>
+        <div className={styles.updateTimeoutCardBody}>
           <form onSubmit={handleOnSubmit}>
             <div className={styles.updateTimeoutLabelsContainer}>
-              <div className={`form-label ${styles.updateTimeoutCurrent}`}>
+              <div className={styles.updateTimeoutCurrent}>
                 {t('communityProfile.sessionTimeout.currentTimeout')}
                 <span
                   className={styles.updateTimeoutValue}
@@ -155,7 +160,7 @@ const UpdateSession: React.FC<InterfaceUpdateSessionProps> = ({
 
               <label
                 htmlFor="session-timeout-slider"
-                className={`form-label ${styles.updateTimeoutLabel}`}
+                className={styles.updateTimeoutLabel}
               >
                 {t('communityProfile.sessionTimeout.updateSession')}
               </label>
@@ -194,8 +199,8 @@ const UpdateSession: React.FC<InterfaceUpdateSessionProps> = ({
               </Button>
             </div>
           </form>
-        </Card.Body>
-      </Card>
+        </div>
+      </div>
     </LoadingState>
   );
 };

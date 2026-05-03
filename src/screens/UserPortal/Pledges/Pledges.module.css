@@ -1,19 +1,19 @@
 .errorIcon {
-  font-size: var(--font-size-4xl);
-  color: var(--color-red-500);
-  margin-bottom: var(--space-5);
+  font-size: 2.25rem;
+  color: var(--red-500);
+  margin-bottom: 1.25rem;
 
   &::before {
     content: '⚠️';
-    margin-right: var(--space-3);
+    margin-right: 0.75rem;
   }
 }
 
 .TableImagePledge {
   object-fit: cover;
-  width: var(--space-7);
-  height: var(--space-7);
-  border-radius: var(--radius-full);
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 9999px;
 }
 
 .imageContainerPledge {
@@ -24,18 +24,18 @@
 
 .TableImage {
   object-fit: cover;
-  margin-right: var(--space-2);
-  width: var(--space-10);
-  height: var(--space-10);
-  border-radius: var(--radius-full);
+  margin-right: 0.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
 }
 
 .container {
-  min-height: var(--vh-100);
+  min-height: 100vh;
 }
 
 .message {
-  margin-top: var(--space-20);
+  margin-top: 5rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -46,41 +46,39 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: var(--space-4) var(--space-2) var(--space-1);
-  gap: var(--space-2);
-  padding: var(--space-2) var(--space-3);
+  margin: 1rem 0.5rem 0.25rem;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
   border-radius: var(--radius-sm);
-  background-color: color-mix(in srgb, var(--color-green-500) 20%, transparent);
-  height: var(--space-8);
+  background-color: color-mix(in srgb, var(--green-500) 20%, transparent);
+  height: 2rem;
 }
 
 .editButton {
-  background-color: var(--color-blue-200);
-  color: var(--color-gray-700);
+  background-color: var(--green-50);
+  color: var(--gray-700);
   border: none;
   border-radius: var(--radius-sm);
-  font-weight: var(--font-weight-semibold);
-  padding: var(--space-3) var(--space-5);
-  --bs-btn-active-bg: var(--color-blue-300);
-  --bs-btn-active-border-color: transparent;
+  font-weight: 600;
+  padding: 0.75rem 1.25rem;
 }
 
 .editButton:is(:hover, :active) {
-  background-color: var(--color-blue-300);
-  color: var(--color-gray-700);
+  background-color: var(--green-100);
+  color: var(--gray-700);
   border-color: transparent;
   box-shadow: none;
 }
 
 .progressPie {
-  --pie-fill-color: var(--color-blue-500);
-  width: var(--space-8);
-  height: var(--space-8);
+  --pie-fill-color: var(--blue-500);
+  width: 2rem;
+  height: 2rem;
   display: block;
 }
 
 .progressTrack {
-  fill: var(--color-gray-100);
+  fill: var(--gray-100);
 }
 
 .progressSlice {
@@ -88,30 +86,30 @@
 }
 
 .progressComplete {
-  --pie-fill-color: var(--color-green-500);
+  --pie-fill-color: var(--green-500);
 }
 
 .progressHalf {
-  --pie-fill-color: var(--color-yellow-500);
+  --pie-fill-color: var(--yellow-500);
 }
 
 .progressLow {
-  --pie-fill-color: var(--color-blue-500);
+  --pie-fill-color: var(--blue-500);
 }
 
 .progressTypography {
-  font-weight: var(--font-weight-bold);
+  font-weight: 700;
 }
 
 .progressCellContainer {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-3);
+  gap: 0.75rem;
 }
 
 .contentWrapper {
-  padding-right: var(--space-7);
+  padding-right: 2rem;
 }
 
 .uniformTableLayout {

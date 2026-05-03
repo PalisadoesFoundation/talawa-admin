@@ -317,7 +317,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
                   <input
                     {...params.inputProps}
                     id="leaderSelect"
-                    className={`form-control ${styles.noOutline}`}
+                    className={`form-input ${styles.noOutline}`}
                     placeholder={t('leader')}
                     aria-label={t('leader')}
                   />
@@ -361,7 +361,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
                 <input
                   {...params.inputProps}
                   id="volunteers"
-                  className="form-control"
+                  className="form-input"
                   data-testid="volunteersInput"
                 />
                 {params.InputProps.endAdornment}

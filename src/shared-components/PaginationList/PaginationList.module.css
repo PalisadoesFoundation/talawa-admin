@@ -1,7 +1,53 @@
+/**
+ * PaginationList — Talawa design system
+ * Pagination buttons with green active state.
+ */
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin-top: 20px;
+}
+
 .pagination :global(.MuiTablePagination-selectLabel) {
-  margin-top: 1rem;
+  margin-top: 0;
+  font-size: 12px;
+  font-family: var(--font);
+  color: var(--gray-500);
 }
 
 .pagination :global(.MuiTablePagination-displayedRows) {
-  margin-top: 1rem;
+  margin-top: 0;
+  font-size: 12px;
+  font-family: var(--font);
+  color: var(--gray-400);
+}
+
+/* Style MUI pagination buttons to match design system */
+.pagination :global(.MuiButtonBase-root) {
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--gray-600);
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font);
+  transition: all 0.12s ease;
+}
+
+.pagination :global(.MuiButtonBase-root:hover) {
+  background: var(--gray-50);
+  border-color: var(--gray-300);
+}
+
+.pagination :global(.Mui-selected) {
+  background: var(--green-500) !important;
+  color: #000 !important;
+  border-color: var(--green-500) !important;
+}
+
+.pagination :global(.Mui-disabled) {
+  opacity: 0.4;
 }

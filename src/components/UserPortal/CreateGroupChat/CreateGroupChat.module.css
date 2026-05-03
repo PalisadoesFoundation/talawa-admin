@@ -67,7 +67,6 @@
 .colorPrimary {
   background: var(--color-blue-200);
   color: var(--color-gray-700);
-  --bs-btn-active-bg: var(--color-blue-200);
   cursor: pointer;
 }
 

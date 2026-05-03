@@ -259,7 +259,7 @@ export default function CreateGroupChat({
               <input
                 id="groupTitleInput"
                 type="text"
-                className="form-control"
+                className="form-input"
                 placeholder={t('groupName', { defaultValue: 'Group name' })}
                 autoComplete="off"
                 required
@@ -280,7 +280,7 @@ export default function CreateGroupChat({
               <input
                 id="groupDescriptionInput"
                 type="text"
-                className="form-control"
+                className="form-input"
                 placeholder={t('groupDescription', {
                   defaultValue: 'Group Description',
                 })}

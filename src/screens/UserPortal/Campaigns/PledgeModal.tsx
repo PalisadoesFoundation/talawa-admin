@@ -313,7 +313,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                   type="text"
                   placeholder={t('pledgers')}
                   aria-label={t('pledgers')}
-                  className={`form-control ${styles.noOutline}`}
+                  className={`form-input ${styles.noOutline}`}
                 />
                 {params.InputProps.endAdornment}
               </div>

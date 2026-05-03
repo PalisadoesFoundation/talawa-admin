@@ -1,13 +1,16 @@
 .holidayCard {
-  color: var(--color-black);
-  background-color: var(--color-black);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-regular);
+  color: var(--orange-500, #f97316);
+  background-color: var(--orange-50, #fff7ed);
+  font-size: 11px;
+  font-weight: 500;
   display: flex;
-  padding: var(--space-3) var(--space-2);
-  border-radius: var(--radius-sm);
-  margin-bottom: var(--space-2);
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 6px;
+  margin-bottom: 4px;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+  height: 28px;
+  cursor: default;
 }

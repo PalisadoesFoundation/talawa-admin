@@ -38,13 +38,13 @@
 
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import styles from './MemberDetail.module.css';
+
 import {
   AdapterDayjs,
   LocalizationProvider,
 } from 'shared-components/DateRangePicker';
 
-import PeopleTabNavbarButton from 'shared-components/PeopleTabNavbarButton/PeopleTabNavbarButton';
+
 import UserContactDetails from './UserContactDetails';
 import UserOrganizations from 'components/UserDetails/UserOrganizations';
 import UserEvents from 'components/UserDetails/UserEvents';
@@ -67,57 +67,96 @@ const MemberDetail: React.FC = (): JSX.Element => {
   if (!userId) {
     return <div>{tCommon('noUserId')}</div>;
   }
+
+  const tabItems = [
+    { key: tCommon('overview'), label: tCommon('overview') },
+    { key: tCommon('security'), label: tCommon('security') },
+    { key: tCommon('organizations'), label: tCommon('organizations') },
+    { key: tCommon('events'), label: tCommon('events') },
+    { key: tCommon('tags'), label: tCommon('tags') },
+  ];
+
   return (
-    <div className={styles.peopleTabComponent}>
+    <div>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <div className={styles.peopleTabNavbarButtonHeader}>
-          <PeopleTabNavbarButton
-            title={tCommon('overview')}
-            icon={'/images/svg/material-symbols_dashboard-outline.svg'}
-            isActive={activeTab === tCommon('overview')}
-            action={() => setActiveTab(tCommon('overview'))}
-          />
-          <PeopleTabNavbarButton
-            title={tCommon('security')}
-            icon={'/images/svg/shield-user.svg'}
-            isActive={activeTab === tCommon('security')}
-            action={() => setActiveTab(tCommon('security'))}
-          />
-          <PeopleTabNavbarButton
-            title={tCommon('organizations')}
-            icon={'/images/svg/octicon_organization-24.svg'}
-            isActive={activeTab === tCommon('organizations')}
-            action={() => setActiveTab(tCommon('organizations'))}
-          />
-          <PeopleTabNavbarButton
-            title={tCommon('events')}
-            icon={'/images/svg/mdi_events.svg'}
-            isActive={activeTab === tCommon('events')}
-            action={() => setActiveTab(tCommon('events'))}
-          />
-          <PeopleTabNavbarButton
-            title={tCommon('tags')}
-            icon={'/images/svg/bi_tags.svg'}
-            isActive={activeTab === tCommon('tags')}
-            action={() => setActiveTab(tCommon('tags'))}
-          />
+        <nav className="breadcrumb" aria-label="Breadcrumb">
+          <a href={`/admin/orgpeople/${orgId ?? ''}`}>{tCommon('members') || 'Members'}</a>
+          {' \u203A '}{tCommon('overview')}
+        </nav>
+
+        {/* Profile Header */}
+        <div
+          className="profile-header"
+          style={{
+            background: 'var(--surface)',
+            borderRadius: 'var(--radius-xl)',
+            padding: '28px',
+            boxShadow: 'var(--shadow-card)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '20px',
+            marginBottom: '24px',
+            flexWrap: 'wrap',
+          }}
+        >
+          <div
+            className="profile-avatar-lg"
+            style={{
+              width: '80px',
+              height: '80px',
+              borderRadius: '50%',
+              background: 'linear-gradient(135deg, var(--green-500), var(--green-700))',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '28px',
+              fontWeight: 700,
+              color: '#fff',
+              flexShrink: 0,
+            }}
+          >
+            {/* Avatar initials placeholder */}
+          </div>
+          <div className="profile-info" style={{ flex: 1, minWidth: '200px' }}>
+            <div className="profile-name" style={{ fontSize: '22px', fontWeight: 700, letterSpacing: '-0.03em', marginBottom: '2px' }}>
+              {tCommon('overview')}
+            </div>
+          </div>
         </div>
 
-        <div className={styles.peopleTabComponentSection}>
-          {activeTab === tCommon('overview') && (
-            <UserContactDetails id={userId} />
-          )}
-          {activeTab === tCommon('security') && (
-            <div className={styles.securitySection}>
-              <Security />
-              <OAuthAccountsSettings id={userId} />
-            </div>
-          )}
-          {activeTab === tCommon('organizations') && <UserOrganizations />}
-          {activeTab === tCommon('events') && (
-            <UserEvents orgId={orgId} userId={userId} />
-          )}
-          {activeTab === tCommon('tags') && <UserTags id={userId} />}
+        {/* Tabs */}
+        <div className="tabs" role="tablist">
+          {tabItems.map((item) => (
+            <button
+              key={item.key}
+              className={`tab${activeTab === item.key ? ' active' : ''}`}
+              role="tab"
+              aria-selected={activeTab === item.key}
+              onClick={() => setActiveTab(item.key)}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Tab Content */}
+        <div className="card">
+          <div className="card-body">
+            {activeTab === tCommon('overview') && (
+              <UserContactDetails id={userId} />
+            )}
+            {activeTab === tCommon('security') && (
+              <div>
+                <Security />
+                <OAuthAccountsSettings id={userId} />
+              </div>
+            )}
+            {activeTab === tCommon('organizations') && <UserOrganizations />}
+            {activeTab === tCommon('events') && (
+              <UserEvents orgId={orgId} userId={userId} />
+            )}
+            {activeTab === tCommon('tags') && <UserTags id={userId} />}
+          </div>
         </div>
       </LocalizationProvider>
     </div>

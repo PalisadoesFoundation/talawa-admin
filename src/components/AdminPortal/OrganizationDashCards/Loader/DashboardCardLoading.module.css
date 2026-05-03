@@ -1,17 +1,28 @@
+/**
+ * DashboardCardLoading — Skeleton loading card
+ * Talawa design system.
+ */
+
 .cardBody {
-  padding: 1rem 0rem;
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+  padding: 22px 24px;
   display: flex;
-  width: 100% !important;
-  justify-content: center;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
 }
 
 .cardItem .iconWrapper {
   position: relative;
-  height: 40px;
-  width: 40px;
+  height: 34px;
+  width: 34px;
   display: flex;
   justify-content: center;
   align-items: center;
+  border-radius: var(--radius-md);
+  background: var(--gray-100);
 }
 
 @media (max-width: 600px) {
@@ -20,25 +31,25 @@
   }
   .cardBody .iconWrapper {
     position: absolute;
-    top: 1rem;
-    inset-inline-start: 1rem;
+    top: 22px;
+    inset-inline-start: 24px;
   }
   .cardBody .textWrapper {
-    margin-top: calc(0.5rem + 36px);
+    margin-top: calc(8px + 34px);
     text-align: end;
   }
 
   .cardBody .textWrapper .primaryText {
-    font-size: 1.5rem;
+    font-size: 24px;
   }
   .cardBody .textWrapper .secondaryText {
-    font-size: 1rem;
+    font-size: 13px;
   }
 }
 
 .secondaryText {
-  font-size: 0.9rem;
-  color: var(--secondText-color);
+  font-size: 13px;
+  color: var(--gray-400);
 }
 
 .iconWrapper {
@@ -54,15 +65,15 @@
       content: attr(data-tooltip);
       position: absolute;
       inset-inline-start: 100%;
-      background: var(--iconWrapper-bg);
-      color: var(--iconWrapper-color);
-      padding: 0.25rem 0.5rem;
-      border-radius: 4px;
-      font-size: 0.875rem;
+      background: var(--gray-800);
+      color: var(--surface);
+      padding: 4px 8px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
       opacity: 0;
       visibility: hidden;
-      transform: translateX(var(--transform-direction, 8px));
-      transition: all 0.2s ease;
+      transform: translateX(8px);
+      transition: all 0.15s ease;
     }
 
     &:hover::after {
@@ -74,24 +85,54 @@
 }
 
 .cardItem .iconWrapper .themeOverlay {
-  background: var(--cardItem-iconWrapper-bg);
+  background: var(--green-50);
   position: absolute;
   top: 0;
   bottom: 0;
   opacity: 0.12;
   inset-inline-start: 0;
   inset-inline-end: 0;
-  border-radius: 50%;
+  border-radius: var(--radius-md);
 }
 
 .primaryText {
-  font-weight: bold;
-  color: var(--bs-emphasis-color, var(--primaryText-color));
+  font-weight: 700;
+  color: var(--gray-900);
 }
 
 .shimmer1 {
-  height: 1.75rem;
+  height: 28px;
+  width: 60%;
+  background: linear-gradient(
+    90deg,
+    var(--gray-200) 25%,
+    var(--gray-100) 50%,
+    var(--gray-200) 75%
+  );
+  background-size: 200px 100%;
+  border-radius: var(--radius-sm);
+  animation: shimmer 1.2s ease-in-out infinite;
 }
+
 .shimmer2 {
-  height: 1.25rem;
+  height: 16px;
+  width: 40%;
+  background: linear-gradient(
+    90deg,
+    var(--gray-200) 25%,
+    var(--gray-100) 50%,
+    var(--gray-200) 75%
+  );
+  background-size: 200px 100%;
+  border-radius: var(--radius-sm);
+  animation: shimmer 1.2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
 }

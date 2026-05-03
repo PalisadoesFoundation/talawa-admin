@@ -1,22 +1,54 @@
-.cardHeader {
-  padding: var(--space-6) var(--space-5) var(--space-5) var(--space-5);
-  border-bottom: var(--border-1) solid var(--color-gray-100);
+/**
+ * UpcomingEventsCard — Talawa design system
+ * Consistent with the parent dashboard card styles.
+ */
+
+.twCard {
+  background-color: var(--surface, #fff);
+  border-radius: var(--radius-xl, 18px);
+  border: 1px solid var(--border, rgba(0, 0, 0, 0.06));
+  box-shadow:
+    0 0 0 1px var(--border, rgba(0, 0, 0, 0.06)),
+    0 2px 8px rgba(0, 0, 0, 0.02);
+  overflow: hidden;
+  width: 100%;
+  transition: box-shadow 0.22s ease;
+}
+
+.twCard:hover {
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.08),
+    0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.twCardHeader {
+  padding: 18px 22px 14px;
+  border-bottom: 1px solid var(--gray-100, #f3f4f6);
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.cardHeader .cardTitle {
-  font-size: var(--font-size-19);
-  font-weight: var(--font-weight-semibold);
+.twCardHeader .cardTitle {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--gray-900, #111827);
+  letter-spacing: -0.01em;
 }
 
-.containerBody {
-  padding: var(--space-5);
+.twCardBody {
+  padding: 4px 14px 14px;
 }
 
 .emptyContainer {
-  padding: var(--space-5);
+  padding: 40px 20px;
   text-align: center;
-  color: var(--color-gray-700);
+  color: var(--gray-400, #9ca3af);
+  font-size: 14px;
+}
+
+.emptyContainer h6 {
+  font-weight: 400;
+  color: var(--gray-400, #9ca3af);
+  margin: 0;
 }

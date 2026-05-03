@@ -107,7 +107,7 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
               <span className={`${styles.location} fst-normal fw-semibold`}>
                 <MarkerIcon
                   title={tCommon('location')}
-                  stroke="var(--bs-primary)"
+                  stroke="var(--green-500)"
                   width={22}
                   height={22}
                 />{' '}

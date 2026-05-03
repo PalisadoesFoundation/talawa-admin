@@ -1,4 +1,14 @@
 .securityCard {
   border-radius: var(--radius-xl);
   width: 100%;
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border);
+}
+
+.securityCardBody {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
 }

@@ -93,7 +93,7 @@
 }
 
 /* Remove border from the actual input to seamlessly blend it */
-.inputGroup :global(.form-control) {
+.inputGroup :global(.form-input) {
   border: none !important;
   box-shadow: none !important;
   border-radius: 0 !important;

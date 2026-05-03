@@ -18,11 +18,11 @@ const VisibilitySelector: React.FC<InterfaceVisibilitySelectorProps> = ({
 }) => {
   const { t: tCommon } = useTranslation('common');
   return (
-    <fieldset className="mb-3" aria-label={tCommon('eventVisibility')}>
-      <legend className={`form-label ${styles.visibilityLabel}`}>
+    <fieldset className={styles.fieldset} aria-label={tCommon('eventVisibility')}>
+      <legend className={styles.visibilityLabel}>
         {tCommon('eventVisibility')}
       </legend>
-      <div className="ms-3">
+      <div className={styles.optionsGroup}>
         <FormCheckField
           type="radio"
           id="visibility-public"
@@ -30,7 +30,7 @@ const VisibilitySelector: React.FC<InterfaceVisibilitySelectorProps> = ({
           label={
             <div>
               <strong>{tCommon('publicEvent')}</strong>
-              <div className="text-muted small">
+              <div className={styles.optionDescription}>
                 {tCommon('publicEventDescription')}
               </div>
             </div>
@@ -48,7 +48,7 @@ const VisibilitySelector: React.FC<InterfaceVisibilitySelectorProps> = ({
           label={
             <div>
               <strong>{tCommon('organizationEvent')}</strong>
-              <div className="text-muted small">
+              <div className={styles.optionDescription}>
                 {tCommon('organizationEventDescription')}
               </div>
             </div>
@@ -66,7 +66,7 @@ const VisibilitySelector: React.FC<InterfaceVisibilitySelectorProps> = ({
           label={
             <div>
               <strong>{tCommon('inviteOnlyEvent')}</strong>
-              <div className="text-muted small">
+              <div className={styles.optionDescription}>
                 {tCommon('inviteOnlyEventDescription')}
               </div>
             </div>

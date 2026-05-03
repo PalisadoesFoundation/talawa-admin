@@ -30,8 +30,8 @@
 }
 
 .searchBarContainer:focus-within {
-  border-color: var(--color-blue-300);
-  box-shadow: 0 0 0 var(--border-2) var(--color-blue-shadow-focus);
+  border-color: var(--green-500, var(--color-blue-300));
+  box-shadow: 0 0 0 3px rgba(62, 207, 142, 0.12);
 }
 
 .searchBarInputWrapper {
