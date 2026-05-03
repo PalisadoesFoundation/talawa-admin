@@ -1,9 +1,25 @@
 /* Chat — Talawa three-panel messaging layout */
 
 .chatMain {
-  padding: 0 !important;
   display: flex;
-  height: calc(100vh - 52px);
+  height: calc(100vh - var(--topbar-h, 52px));
+  /* Negate parent .main padding so chat sits flush */
+  margin: -32px -36px;
+  width: calc(100% + 72px);
+}
+
+@media (max-width: 768px) {
+  .chatMain {
+    margin: -20px -16px;
+    width: calc(100% + 32px);
+  }
+}
+
+@media (max-width: 374px) {
+  .chatMain {
+    margin: -16px -12px;
+    width: calc(100% + 24px);
+  }
 }
 
 /* ── Left Panel ────────────────────────────────────────────────── */

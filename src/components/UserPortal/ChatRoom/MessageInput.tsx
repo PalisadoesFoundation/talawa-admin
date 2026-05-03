@@ -74,7 +74,7 @@ export default function MessageInput({
     keyPrefix: 'userChatRoom',
   });
   return (
-    <div id="messageInput">
+    <div id="messageInput" className={styles.inputArea}>
       <input
         type="file"
         accept="image/*"

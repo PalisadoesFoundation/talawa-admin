@@ -1,16 +1,30 @@
 /* MessageInput — input area matching prototype */
 
 .inputArea {
-  padding: 12px 24px 16px;
+  padding: 14px 24px 20px;
   background: var(--surface, #fff);
   border-top: 1px solid var(--gray-100, #f3f4f6);
   flex-shrink: 0;
 }
 
+/* Space out the adornments and input rendered by FormTextField */
+.inputArea > div > div {
+  gap: 12px !important;
+  align-items: center !important;
+}
+
+/* Ensure the text input has proper height */
+.inputArea input[type="text"],
+.inputArea input[data-testid="messageInput"] {
+  height: 40px;
+  border-radius: 10px;
+  padding: 8px 14px;
+}
+
 .inputRow {
   display: flex;
   align-items: flex-end;
-  gap: 10px;
+  gap: 12px;
 }
 
 .addAttachmentBtn {
