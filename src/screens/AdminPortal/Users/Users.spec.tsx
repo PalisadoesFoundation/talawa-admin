@@ -11,6 +11,12 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import Users, { isValidSortingOption, isValidFilteringOption } from './Users';
 import {
+  getMockDataTable,
+  getMockDataTableWithAccessors,
+  getMockSearchFilterBar,
+  getMockUsersTableItem,
+} from './UsersTestHelpers';
+import {
   EMPTY_MOCKS,
   MOCKS_NEW,
   MOCKS_NEW_2,
@@ -81,6 +87,100 @@ afterEach(() => {
   vi.restoreAllMocks();
   vi.resetModules();
 });
+
+type SearchMockRow = {
+  id: string;
+  name?: string;
+  emailAddress?: string;
+  createdAt: string;
+  role?: string;
+};
+
+const renderUsersWithSearchMocks = async (options: {
+  rows: SearchMockRow[];
+  organizations?: Array<{ id: string; name: string }>;
+}) => {
+  const { rows, organizations = [{ id: 'org1', name: 'Org' }] } = options;
+
+  vi.resetModules();
+
+  const refetch = vi.fn();
+
+  vi.doMock('@apollo/client', async () => {
+    const actual =
+      await vi.importActual<typeof import('@apollo/client')>('@apollo/client');
+    return {
+      ...actual,
+      useQuery: vi.fn(() => ({
+        data: { organizations },
+        loading: false,
+        error: undefined,
+        refetch: vi.fn(),
+      })),
+    };
+  });
+
+  vi.doMock('shared-components/DataTable/hooks/useTableData', () => {
+    return {
+      useTableData: vi.fn(() => ({
+        rows,
+        loading: false,
+        pageInfo: { hasNextPage: false, endCursor: null },
+        error: undefined,
+        fetchMore: vi.fn(),
+        refetch,
+      })),
+    };
+  });
+
+  vi.doMock('components/UsersTableItem/UsersTableItem', () => ({
+    default: () => <div data-testid="users-table-item" />,
+  }));
+
+  vi.doMock('shared-components/SearchFilterBar/SearchFilterBar', () => {
+    type SearchFilterBarProps = {
+      searchValue: string;
+      onSearchChange: (value: string) => void;
+      searchInputTestId?: string;
+      searchButtonTestId?: string;
+    };
+    return {
+      default: ({
+        searchValue,
+        onSearchChange,
+        searchInputTestId,
+        searchButtonTestId,
+      }: SearchFilterBarProps) => (
+        <div>
+          <input
+            data-testid={searchInputTestId}
+            value={searchValue}
+            onChange={(event) => onSearchChange(event.target.value)}
+          />
+          <button
+            type="button"
+            data-testid={searchButtonTestId}
+            onClick={() => onSearchChange(searchValue)}
+          />
+        </div>
+      ),
+    };
+  });
+
+  const { default: UsersWithMocks } = await import('./Users');
+
+  render(
+    <BrowserRouter>
+      <Provider store={store}>
+        <I18nextProvider i18n={i18nForTest}>
+          <UsersWithMocks />
+        </I18nextProvider>
+      </Provider>
+    </BrowserRouter>,
+  );
+
+  return { refetch };
+};
 
 describe('Testing Users screen', () => {
   it('Component should be rendered properly', async () => {
@@ -340,17 +440,16 @@ describe('Testing Users screen', () => {
   });
 
   it('Testing seach by name functionality', async () => {
-    render(
-      <MockedProvider link={createLink(MOCKS)}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Users />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    const { refetch } = await renderUsersWithSearchMocks({
+      rows: [
+        {
+          id: '1',
+          name: 'John Doe',
+          emailAddress: 'john@example.com',
+          createdAt: new Date().toISOString(),
+        },
+      ],
+    });
 
     const searchBtn = await screen.findByTestId('searchButton');
     const search1 = 'John';
@@ -379,22 +478,12 @@ describe('Testing Users screen', () => {
     await waitFor(() => {
       expect(screen.getByTestId('testcomp')).toBeInTheDocument();
     });
+
+    expect(refetch).toHaveBeenCalled();
   });
 
   it('testing search not found', async () => {
-    await act(async () => {
-      render(
-        <MockedProvider link={createLink(EMPTY_MOCKS)}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <Users />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-    });
+    await renderUsersWithSearchMocks({ rows: [] });
 
     const searchBtn = await screen.findByTestId('searchButton');
     const searchInput = screen.getByTestId(/searchByName/i);
@@ -419,9 +508,11 @@ describe('Testing Users screen', () => {
       );
     });
 
-    expect(
-      screen.getByTestId('users-empty-state-description'),
-    ).toHaveTextContent(i18nForTest.t('common:tryAdjustingFilters'));
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('users-empty-state-description'),
+      ).toHaveTextContent(i18nForTest.t('common:tryAdjustingFilters'));
+    });
   });
 
   it('should show noUserFound when user is empty', async () => {
@@ -661,17 +752,16 @@ describe('Testing Users screen', () => {
     });
 
     it('should reset search and refetch on clear', async () => {
-      render(
-        <MockedProvider link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <Users />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
+      const { refetch } = await renderUsersWithSearchMocks({
+        rows: [
+          {
+            id: '1',
+            name: 'John Doe',
+            emailAddress: 'john@example.com',
+            createdAt: new Date().toISOString(),
+          },
+        ],
+      });
 
       const searchInput = await screen.findByTestId('searchByName');
       await userEvent.type(searchInput, 'John');
@@ -688,6 +778,10 @@ describe('Testing Users screen', () => {
       await waitFor(() => {
         expect(screen.queryByText(/no results found/i)).not.toBeInTheDocument();
       });
+
+      expect(refetch).toHaveBeenCalledWith(
+        expect.objectContaining({ where: undefined }),
+      );
     });
 
     it('should set document title correctly', () => {
@@ -822,17 +916,16 @@ describe('Testing Users screen', () => {
 
     it('should handle search with same value without refetch', async () => {
       vi.spyOn(console, 'log').mockImplementation(() => {});
-      render(
-        <MockedProvider link={link}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <Users />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
+      await renderUsersWithSearchMocks({
+        rows: [
+          {
+            id: '1',
+            name: 'John Doe',
+            emailAddress: 'john@example.com',
+            createdAt: new Date().toISOString(),
+          },
+        ],
+      });
 
       const searchInput = await screen.findByTestId('searchByName');
       await userEvent.type(searchInput, 'John');
@@ -1263,45 +1356,7 @@ describe('useEffect loadMoreUsers trigger', () => {
   });
 
   it('should render "no results found" when search yields empty result', async () => {
-    const emptySearchMock = [
-      {
-        request: {
-          query: USER_LIST_FOR_ADMIN,
-          variables: {
-            first: 12,
-            after: null,
-            orgFirst: 32,
-            where: { name: 'zzzz' },
-          },
-        },
-        result: {
-          data: {
-            allUsers: {
-              edges: [],
-              pageInfo: { hasNextPage: false, endCursor: null },
-            },
-          },
-        },
-      },
-      {
-        request: { query: ORGANIZATION_LIST },
-        result: {
-          data: { organizations: [{ id: '1', name: 'Org' }] },
-        },
-      },
-    ];
-
-    render(
-      <MockedProvider mocks={emptySearchMock}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Users />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    await renderUsersWithSearchMocks({ rows: [] });
 
     const input = await screen.findByTestId('searchByName');
     await userEvent.type(input, 'zzzz');
@@ -1312,15 +1367,7 @@ describe('useEffect loadMoreUsers trigger', () => {
   });
 
   it('should return early when search value is empty and already empty', async () => {
-    render(
-      <MockedProvider mocks={MOCKS_NEW}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <Users />
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    await renderUsersWithSearchMocks({ rows: [] });
 
     const input = await screen.findByTestId('searchByName');
 
@@ -1437,15 +1484,16 @@ describe('useEffect loadMoreUsers trigger', () => {
   });
 
   it('should reset and refetch when clearing search after entering value', async () => {
-    render(
-      <MockedProvider mocks={MOCKS_NEW}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <Users />
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    const { refetch } = await renderUsersWithSearchMocks({
+      rows: [
+        {
+          id: '1',
+          name: 'John Doe',
+          emailAddress: 'john@example.com',
+          createdAt: new Date().toISOString(),
+        },
+      ],
+    });
 
     const input = await screen.findByTestId('searchByName');
 
@@ -1457,16 +1505,10 @@ describe('useEffect loadMoreUsers trigger', () => {
     await waitFor(() => {
       expect(input).toHaveValue('');
     });
-  });
 
-  // Placeholder: full test deferred (flaky on CI – timing). See issue #5820.
-  it('should block second fetchMore call when isLoadingMore is true', () => {
-    expect(true).toBe(true);
-  });
-
-  // Placeholder: full test deferred (flaky on CI – timing). See issue #5820.
-  it('should handle rapid consecutive scroll events gracefully', () => {
-    expect(true).toBe(true);
+    expect(refetch).toHaveBeenCalledWith(
+      expect.objectContaining({ where: undefined }),
+    );
   });
 
   it('should explicitly hit oldest sorting logic branch', async () => {
@@ -1532,11 +1574,6 @@ describe('useEffect loadMoreUsers trigger', () => {
     expect(loadMoreUsers).not.toHaveBeenCalled();
   });
 
-  // Placeholder: full test deferred (flaky on CI – mock matching). See issue #5820.
-  it('should load more users with active search filter (searchByName truthy)', () => {
-    expect(true).toBe(true);
-  });
-
   it('should handle organizations being null/undefined without crashing', async () => {
     const nullOrgsMock = [
       {
@@ -1600,11 +1637,6 @@ describe('useEffect loadMoreUsers trigger', () => {
       // Should not crash and should still render users
       expect(screen.getByTestId('testcomp')).toBeInTheDocument();
     });
-  });
-
-  // Placeholder: full test deferred (flaky on CI – mock timing). See issue #5820.
-  it('should show loading state when isLoadingMore is true', () => {
-    expect(true).toBe(true);
   });
 
   it('should render empty state when usersData returns no users', async () => {
@@ -2154,11 +2186,6 @@ describe('useEffect loadMoreUsers trigger', () => {
     });
   });
 
-  // Placeholder: full test deferred (flaky on CI – pagination mocking). See issue #5820.
-  it('should handle loadMoreUsers when pageInfoState has no hasNextPage after second fetch', () => {
-    expect(true).toBe(true);
-  });
-
   it('should show noUserFound when usersData is empty array and no search term', async () => {
     // This test covers line 390-391: usersData.length === 0 branch
     // When the query returns empty edges, usersData becomes [], and we show "No User Found"
@@ -2204,11 +2231,6 @@ describe('useEffect loadMoreUsers trigger', () => {
       // With empty edges, usersData becomes [] and we should see "No User Found"
       expect(screen.getByText(/No User Found/i)).toBeInTheDocument();
     });
-  });
-
-  // Placeholder: full test deferred (flaky on CI – null-edge mocking). See issue #5820.
-  it('should handle fetchMore returning null edges gracefully', () => {
-    expect(true).toBe(true);
   });
 
   it('should handle loadMoreUsers when pageInfoState hasNextPage is explicitly false', async () => {
@@ -2576,5 +2598,635 @@ describe('Additional uncovered lines coverage', () => {
     await waitFor(() => {
       expect(screen.getByTestId('users-empty-state')).toBeInTheDocument();
     });
+  });
+
+  it('should call fetchMore when InfiniteScroll requests the next page', async () => {
+    vi.resetModules();
+
+    const fetchMore = vi.fn(() => Promise.resolve());
+    const refetch = vi.fn();
+
+    vi.doMock('@apollo/client', async () => {
+      const actual =
+        await vi.importActual<typeof import('@apollo/client')>(
+          '@apollo/client',
+        );
+      return {
+        ...actual,
+        useQuery: vi.fn(() => ({
+          data: { organizations: [{ id: 'org1', name: 'Org' }] },
+          loading: false,
+          error: undefined,
+          refetch: vi.fn(),
+        })),
+      };
+    });
+
+    vi.doMock('shared-components/DataTable/hooks/useTableData', () => {
+      return {
+        useTableData: vi.fn(() => ({
+          rows: [
+            {
+              id: '1',
+              name: 'User One',
+              emailAddress: 'u1@test.com',
+              role: 'regular',
+              createdAt: new Date().toISOString(),
+              orgsWhereUserIsBlocked: { edges: [] },
+              organizationsWhereMember: { edges: [] },
+            },
+          ],
+          loading: false,
+          pageInfo: { hasNextPage: true, endCursor: 'cursor-1' },
+          error: undefined,
+          fetchMore,
+          refetch,
+        })),
+      };
+    });
+
+    vi.doMock('react-infinite-scroll-component', async () => {
+      const React = await vi.importActual<typeof import('react')>('react');
+      type InfiniteScrollProps = {
+        next: () => void;
+        children: React.ReactNode;
+      };
+      return {
+        default: ({ next, children }: InfiniteScrollProps) => {
+          const didRun = React.useRef(false);
+          React.useEffect(() => {
+            if (didRun.current) return;
+            didRun.current = true;
+            next();
+          }, [next]);
+          return <div data-testid="infinite-scroll">{children}</div>;
+        },
+      };
+    });
+
+    vi.doMock('components/UsersTableItem/UsersTableItem', () => ({
+      default: () => <div data-testid="users-table-item" />,
+    }));
+
+    const { default: UsersWithMocks } = await import('./Users');
+
+    render(
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <UsersWithMocks />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>,
+    );
+
+    await waitFor(() => {
+      expect(fetchMore).toHaveBeenCalledTimes(1);
+    });
+
+    expect(fetchMore).toHaveBeenCalledWith({
+      variables: {
+        first: 12,
+        after: 'cursor-1',
+        orgFirst: 32,
+        where: undefined,
+      },
+    });
+  });
+
+  it('should build where clause with name and admin filter on refetch', async () => {
+    vi.resetModules();
+
+    const refetch = vi.fn();
+
+    vi.doMock('@apollo/client', async () => {
+      const actual =
+        await vi.importActual<typeof import('@apollo/client')>(
+          '@apollo/client',
+        );
+      return {
+        ...actual,
+        useQuery: vi.fn(() => ({
+          data: { organizations: [{ id: 'org1', name: 'Org' }] },
+          loading: false,
+          error: undefined,
+          refetch: vi.fn(),
+        })),
+      };
+    });
+
+    vi.doMock('shared-components/DataTable/hooks/useTableData', () => {
+      return {
+        useTableData: vi.fn(() => ({
+          rows: [],
+          loading: false,
+          pageInfo: { hasNextPage: false, endCursor: null },
+          error: undefined,
+          fetchMore: vi.fn(),
+          refetch,
+        })),
+      };
+    });
+
+    vi.doMock('shared-components/SearchFilterBar/SearchFilterBar', async () => {
+      const React = await vi.importActual<typeof import('react')>('react');
+      type SearchFilterBarProps = {
+        onSearchChange: (value: string) => void;
+        dropdowns: Array<{ onOptionChange: (value: unknown) => void }>;
+      };
+      return {
+        default: ({ onSearchChange, dropdowns }: SearchFilterBarProps) => {
+          const [didSearch, setDidSearch] = React.useState(false);
+          React.useEffect(() => {
+            onSearchChange('Alpha');
+            setDidSearch(true);
+          }, [onSearchChange]);
+          React.useEffect(() => {
+            if (didSearch) {
+              dropdowns[1].onOptionChange('admin');
+            }
+          }, [didSearch, dropdowns]);
+          return <div data-testid="mock-search-filter" />;
+        },
+      };
+    });
+
+    const { default: UsersWithMocks } = await import('./Users');
+
+    render(
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <UsersWithMocks />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>,
+    );
+
+    await waitFor(() => {
+      expect(refetch).toHaveBeenCalled();
+    });
+
+    expect(refetch).toHaveBeenCalledWith(
+      expect.objectContaining({
+        first: 12,
+        after: null,
+        orgFirst: 32,
+        where: expect.objectContaining({ name: 'Alpha' }),
+      }),
+    );
+
+    expect(refetch).toHaveBeenCalledWith(
+      expect.objectContaining({
+        first: 12,
+        after: null,
+        orgFirst: 32,
+        where: expect.objectContaining({ role: 'administrator' }),
+      }),
+    );
+  });
+
+  it('should show empty state without description when search is empty', async () => {
+    await renderUsersWithSearchMocks({ rows: [] });
+
+    const emptyState = await screen.findByTestId('users-empty-state');
+    expect(emptyState).toBeInTheDocument();
+    expect(
+      screen.queryByTestId('users-empty-state-description'),
+    ).not.toBeInTheDocument();
+  });
+
+  it('should reset and refetch when UsersTableItem invokes reset', async () => {
+    vi.resetModules();
+
+    const refetch = vi.fn();
+
+    vi.doMock('@apollo/client', async () => {
+      const actual =
+        await vi.importActual<typeof import('@apollo/client')>(
+          '@apollo/client',
+        );
+      return {
+        ...actual,
+        useQuery: vi.fn(() => ({
+          data: { organizations: [{ id: 'org1', name: 'Org' }] },
+          loading: false,
+          error: undefined,
+          refetch: vi.fn(),
+        })),
+      };
+    });
+
+    vi.doMock('shared-components/DataTable/hooks/useTableData', () => {
+      return {
+        useTableData: vi.fn(() => ({
+          rows: [
+            {
+              id: '1',
+              name: 'John Doe',
+              emailAddress: 'john@example.com',
+              createdAt: new Date().toISOString(),
+              orgsWhereUserIsBlocked: { edges: [] },
+              organizationsWhereMember: { edges: [] },
+            },
+          ],
+          loading: false,
+          pageInfo: { hasNextPage: false, endCursor: null },
+          error: undefined,
+          fetchMore: vi.fn(),
+          refetch,
+        })),
+      };
+    });
+
+    vi.doMock('components/UsersTableItem/UsersTableItem', async () => {
+      const React = await vi.importActual<typeof import('react')>('react');
+      return {
+        default: ({ resetAndRefetch }: { resetAndRefetch: () => void }) => {
+          React.useEffect(() => {
+            resetAndRefetch();
+          }, [resetAndRefetch]);
+          return <div data-testid="users-table-item" />;
+        },
+      };
+    });
+
+    const { default: UsersWithMocks } = await import('./Users');
+
+    render(
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <UsersWithMocks />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>,
+    );
+
+    await waitFor(() => {
+      expect(refetch).toHaveBeenCalledWith({
+        first: 12,
+        after: null,
+        orgFirst: 32,
+        where: undefined,
+      });
+    });
+  });
+
+  it('should apply user filter and sorting option updates', async () => {
+    vi.resetModules();
+
+    const refetch = vi.fn();
+    let latestData: Array<{ id: string }> = [];
+
+    vi.doMock('@apollo/client', async () => {
+      const actual =
+        await vi.importActual<typeof import('@apollo/client')>(
+          '@apollo/client',
+        );
+      return {
+        ...actual,
+        useQuery: vi.fn(() => ({
+          data: { organizations: [{ id: 'org1', name: 'Org' }] },
+          loading: false,
+          error: undefined,
+          refetch: vi.fn(),
+        })),
+      };
+    });
+
+    vi.doMock('shared-components/DataTable/hooks/useTableData', () => {
+      return {
+        useTableData: vi.fn(() => ({
+          rows: [
+            {
+              id: '1',
+              name: 'Older User',
+              emailAddress: 'old@example.com',
+              createdAt: dayjs.utc().subtract(2, 'year').toISOString(),
+              orgsWhereUserIsBlocked: { edges: [] },
+              organizationsWhereMember: { edges: [] },
+            },
+            {
+              id: '2',
+              name: 'Newer User',
+              emailAddress: 'new@example.com',
+              createdAt: dayjs.utc().toISOString(),
+              orgsWhereUserIsBlocked: { edges: [] },
+              organizationsWhereMember: { edges: [] },
+            },
+          ],
+          loading: false,
+          pageInfo: { hasNextPage: false, endCursor: null },
+          error: undefined,
+          fetchMore: vi.fn(),
+          refetch,
+        })),
+      };
+    });
+
+    const MockDataTable = getMockDataTable((data) => {
+      latestData = data;
+    });
+
+    vi.doMock('shared-components/DataTable/DataTable', () => ({
+      DataTable: MockDataTable,
+    }));
+
+    const MockSearchFilterBar = getMockSearchFilterBar((dropdowns) => {
+      dropdowns[0].onOptionChange('oldest');
+      dropdowns[1].onOptionChange('user');
+    });
+
+    vi.doMock('shared-components/SearchFilterBar/SearchFilterBar', () => ({
+      default: MockSearchFilterBar,
+    }));
+
+    const { default: UsersWithMocks } = await import('./Users');
+
+    render(
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <UsersWithMocks />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>,
+    );
+
+    await waitFor(() => {
+      expect(refetch).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: expect.objectContaining({ role: 'regular' }),
+        }),
+      );
+    });
+
+    await waitFor(() => {
+      expect(latestData[0]?.id).toBe('1');
+    });
+  });
+
+  it('should execute table column accessors for organization fields', async () => {
+    vi.resetModules();
+
+    const rows = [
+      {
+        id: '1',
+        name: 'User One',
+        emailAddress: 'u1@test.com',
+        createdAt: new Date().toISOString(),
+        orgsWhereUserIsBlocked: { edges: [{ node: { id: 'b1' } }] },
+        organizationsWhereMember: { edges: [{ node: { id: 'm1' } }] },
+      },
+    ];
+
+    vi.doMock('@apollo/client', async () => {
+      const actual =
+        await vi.importActual<typeof import('@apollo/client')>(
+          '@apollo/client',
+        );
+      return {
+        ...actual,
+        useQuery: vi.fn(() => ({
+          data: { organizations: [{ id: 'org1', name: 'Org' }] },
+          loading: false,
+          error: undefined,
+          refetch: vi.fn(),
+        })),
+      };
+    });
+
+    vi.doMock('shared-components/DataTable/hooks/useTableData', () => {
+      return {
+        useTableData: vi.fn(() => ({
+          rows,
+          loading: false,
+          pageInfo: { hasNextPage: false, endCursor: null },
+          error: undefined,
+          fetchMore: vi.fn(),
+          refetch: vi.fn(),
+        })),
+      };
+    });
+
+    const MockDataTableWithAccessors = getMockDataTableWithAccessors();
+
+    vi.doMock('shared-components/DataTable/DataTable', () => ({
+      DataTable: MockDataTableWithAccessors,
+    }));
+
+    const MockUsersTableItem = getMockUsersTableItem();
+
+    vi.doMock('components/UsersTableItem/UsersTableItem', () => ({
+      default: MockUsersTableItem,
+    }));
+
+    const { default: UsersWithMocks } = await import('./Users');
+
+    render(
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <UsersWithMocks />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>,
+    );
+
+    expect(await screen.findByTestId('datatable-mock')).toBeInTheDocument();
+  });
+});
+it('should build where clause with admin role filter (line 214)', async () => {
+  vi.resetModules();
+  const refetch = vi.fn();
+
+  vi.doMock('@apollo/client', async () => {
+    const actual =
+      await vi.importActual<typeof import('@apollo/client')>('@apollo/client');
+    return {
+      ...actual,
+      useQuery: vi.fn(() => ({
+        data: { organizations: [{ id: 'org1', name: 'Org' }] },
+        loading: false,
+        error: undefined,
+        refetch: vi.fn(),
+      })),
+    };
+  });
+
+  vi.doMock('shared-components/DataTable/hooks/useTableData', () => {
+    return {
+      useTableData: vi.fn(() => ({
+        rows: [
+          {
+            id: '1',
+            name: 'Admin User',
+            emailAddress: 'admin@test.com',
+            createdAt: new Date().toISOString(),
+            orgsWhereUserIsBlocked: { edges: [] },
+            organizationsWhereMember: { edges: [] },
+          },
+        ],
+        loading: false,
+        pageInfo: { hasNextPage: false, endCursor: null },
+        error: undefined,
+        fetchMore: vi.fn(),
+        refetch,
+      })),
+    };
+  });
+
+  vi.doMock('shared-components/SearchFilterBar/SearchFilterBar', async () => {
+    const React = await vi.importActual<typeof import('react')>('react');
+    type SearchFilterBarProps = {
+      dropdowns: Array<{ onOptionChange: (value: unknown) => void }>;
+    };
+    return {
+      default: ({ dropdowns }: SearchFilterBarProps) => {
+        React.useEffect(() => {
+          dropdowns[1].onOptionChange('admin');
+        }, [dropdowns]);
+        return <div data-testid="mock-search-filter" />;
+      },
+    };
+  });
+
+  const { default: UsersWithMocks } = await import('./Users');
+
+  render(
+    <BrowserRouter>
+      <Provider store={store}>
+        <I18nextProvider i18n={i18nForTest}>
+          <UsersWithMocks />
+        </I18nextProvider>
+      </Provider>
+    </BrowserRouter>,
+  );
+
+  await waitFor(() => {
+    expect(refetch).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({ role: 'administrator' }),
+      }),
+    );
+  });
+});
+
+it('should return early from loadMoreUsers when endCursor is null (line 251)', async () => {
+  const slowMocks = [
+    {
+      request: {
+        query: USER_LIST_FOR_ADMIN,
+        variables: { first: 12, after: null, orgFirst: 32, where: undefined },
+      },
+      result: {
+        data: {
+          allUsers: {
+            edges: [
+              {
+                cursor: '1',
+                node: {
+                  id: '1',
+                  name: 'User One',
+                  role: 'regular',
+                  emailAddress: 'u@test.com',
+                  createdAt: new Date().toISOString(),
+                  city: '',
+                  state: '',
+                  countryCode: '',
+                  postalCode: '',
+                  avatarURL: '',
+                  orgsWhereUserIsBlocked: { edges: [] },
+                  organizationsWhereMember: { edges: [] },
+                },
+              },
+            ],
+            pageInfo: {
+              hasNextPage: true,
+              endCursor: null,
+            },
+          },
+        },
+      },
+    },
+    {
+      request: { query: ORGANIZATION_LIST },
+      result: {
+        data: { organizations: [{ id: '1', name: 'Org' }] },
+      },
+    },
+  ];
+
+  render(
+    <MockedProvider mocks={slowMocks}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <Users />
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+
+  await screen.findByText('User One');
+
+  Object.defineProperty(window, 'scrollY', { value: 5000, writable: true });
+  window.dispatchEvent(new Event('scroll'));
+
+  await waitFor(() => {
+    expect(screen.getByTestId('testcomp')).toBeInTheDocument();
+  });
+});
+
+it('should show empty state with search description (line 374)', async () => {
+  const emptySearchMocks = [
+    {
+      request: {
+        query: USER_LIST_FOR_ADMIN,
+        variables: {
+          first: 12,
+          after: null,
+          orgFirst: 32,
+          where: { name: 'SearchTerm' },
+        },
+      },
+      result: {
+        data: {
+          allUsers: {
+            edges: [],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      },
+    },
+    {
+      request: { query: ORGANIZATION_LIST },
+      result: {
+        data: { organizations: [{ id: 'org1', name: 'Org' }] },
+      },
+    },
+  ];
+
+  render(
+    <MockedProvider mocks={emptySearchMocks}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Users />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+
+  const searchInput = await screen.findByTestId('searchByName');
+  await userEvent.type(searchInput, 'SearchTerm');
+  await userEvent.keyboard('{Enter}');
+
+  await waitFor(() => {
+    expect(screen.getByTestId('users-empty-state')).toBeInTheDocument();
+    expect(
+      screen.getByTestId('users-empty-state-description'),
+    ).toBeInTheDocument();
   });
 });
