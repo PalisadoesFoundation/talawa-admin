@@ -172,7 +172,7 @@ export interface ICreatePostInput {
   body?: string;
   organizationId: string;
   isPinned: boolean;
-  attachments?: File[];
+  attachment?: File;
 }
 
 export interface IFileMetadataInput {

@@ -939,7 +939,6 @@ describe('CreatePostModal Integration Tests', () => {
         type: 'image/jpeg',
       });
 
-      // Use a matcher function for the mock since File objects are hard to compare
       const updatePostWithFileMock = {
         request: {
           query: UPDATE_POST_MUTATION,
@@ -1015,7 +1014,6 @@ describe('CreatePostModal Integration Tests', () => {
         type: 'image/jpeg',
       });
 
-      // Use a matcher function for the mock since File objects are hard to compare
       const createPostWithFileMock = {
         request: {
           query: CREATE_POST_MUTATION,

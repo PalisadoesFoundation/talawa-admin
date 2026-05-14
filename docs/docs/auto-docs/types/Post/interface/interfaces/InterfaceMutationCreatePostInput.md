@@ -8,9 +8,9 @@ Defined in: [src/types/Post/interface.ts:69](https://github.com/PalisadoesFounda
 
 ## Properties
 
-### attachments?
+### attachment?
 
-> `optional` **attachments**: `File`[]
+> `optional` **attachment**: `File`
 
 Defined in: [src/types/Post/interface.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L73)
 

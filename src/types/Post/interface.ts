@@ -70,7 +70,7 @@ export interface InterfaceMutationCreatePostInput {
   caption: string;
   organizationId: string;
   isPinned: boolean;
-  attachments?: File[];
+  attachment?: File;
 }
 
 export interface InterfaceAttachment {

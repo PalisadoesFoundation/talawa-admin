@@ -3268,9 +3268,14 @@ Input for creating a new post
 """
 input MutationCreatePostInput {
   """
-  Metadata for files already uploaded via presigned URL
+  Direct file upload
   """
-  attachments: [FileMetadataInput!]!
+  attachment: Upload
+
+  """
+  Body content of the post.
+  """
+  body: String
 
   """
   Caption about the post.
@@ -4646,9 +4651,14 @@ Input for updating a post.
 """
 input MutationUpdatePostInput {
   """
-  Metadata for files already uploaded via presigned URL
+  Direct file upload
   """
-  attachments: [FileMetadataInput!]
+  attachment: Upload
+
+  """
+  Body content of the post.
+  """
+  body: String
 
   """
   Caption about the post.
@@ -5407,9 +5417,19 @@ type Plugin {
 
 type Post {
   """
+  URL to the media attachment (image or video) of the post.
+  """
+  attachmentURL: String
+
+  """
   Array of attachments.
   """
   attachments: [PostAttachment!]
+
+  """
+  Body for the post.
+  """
+  body: String
 
   """
   Caption for the post.
