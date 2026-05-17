@@ -228,5 +228,7 @@ pnpm run install-deps
 
 Write-Host ""
 Write-Host "✅ Installation complete!" -ForegroundColor Green
-Write-Host "ℹ️ Next: Run 'pnpm run setup' to configure your application" -ForegroundColor Cyan
+Write-Host "ℹ️ Next steps:" -ForegroundColor Cyan
+Write-Host "  1. Run 'pnpm run setup' to configure your application" -ForegroundColor Cyan
+Write-Host "  2. Run 'pnpm run serve' to start the development server" -ForegroundColor Cyan
 
