@@ -6,7 +6,7 @@
 
 > **getMockSearchFilterBar**(`onMount`): `FC`\<`SearchFilterBarProps`\>
 
-Defined in: [src/screens/AdminPortal/Users/UsersTestHelpers.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/Users/UsersTestHelpers.ts#L66)
+Defined in: [src/screens/AdminPortal/Users/UsersTestHelpers.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/Users/UsersTestHelpers.ts#L69)
 
 ## Parameters
 
