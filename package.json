@@ -151,7 +151,7 @@
     "@typescript-eslint/utils": "^8.53.1",
     "@vitejs/plugin-react": "^5.1.2",
     "@vitest/coverage-istanbul": "^3.2.4",
-    "@vitest/eslint-plugin": "^1.4.2",
+    "@vitest/eslint-plugin": "^1.6.19",
     "@vitest/ui": "^3.2.4",
     "cross-env": "^7.0.3",
     "cypress": "^14.5.4",
