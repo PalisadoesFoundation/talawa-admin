@@ -170,7 +170,7 @@
     "prettier": "^3.8.0",
     "sass": "^1.93.3",
     "ts-unused-exports": "^11.0.1",
-    "tsx": "^4.21.0",
+    "tsx": "^4.22.4",
     "typedoc": "^0.28.1",
     "typedoc-plugin-markdown": "^4.5.0",
     "typescript": "^5.8.3",
