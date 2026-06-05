@@ -1,0 +1,178 @@
+.pathBreadcrumb {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.pathBreadcrumbLink[class~='btn'] {
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--color-gray-600);
+  text-decoration: none;
+  font-size: var(--font-size-md);
+  line-height: 1.3;
+}
+
+.pathBreadcrumbLink[class~='btn']:is(:hover, :focus-visible) {
+  color: var(--color-blue-700);
+  text-decoration: underline;
+}
+
+.pathBreadcrumbSeparator {
+  color: var(--color-gray-500);
+}
+
+.pathBreadcrumbSeparator::before {
+  content: '/';
+}
+
+.pathBreadcrumbCurrent {
+  color: var(--color-gray-700);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.3;
+}
+
+.loadingDiv {
+  min-height: var(--space-20);
+  min-height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tagActionsScrollableDiv {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  margin-bottom: 12px;
+}
+
+.listItem {
+  position: relative;
+  width: 100%;
+  list-style: none;
+}
+
+.folderRow {
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  padding: 6px 8px;
+  color: var(--color-gray-700);
+  font-weight: 500;
+  line-height: normal;
+}
+
+.folderNavButton {
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  padding: 6px 8px;
+  color: var(--color-gray-700);
+  text-decoration: none;
+  font-weight: 500;
+  line-height: normal;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  justify-content: flex-start;
+}
+
+.folderNavButton:is(:hover, :focus-visible) {
+  color: var(--color-blue-700);
+  text-decoration: underline;
+}
+
+.folderIcon {
+  color: var(--color-gray-700);
+}
+
+.folderToggleButton {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  border: none;
+  border-radius: 6px;
+  padding: 0;
+  margin-right: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--color-gray-600);
+  box-shadow: none;
+}
+
+.folderToggleButton:is(:hover, :active, :focus) {
+  background: var(--color-blue-200);
+  color: var(--color-gray-700);
+  border: none;
+  box-shadow: none;
+}
+
+.folderTogglePlaceholder {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+.folderLoadingRow {
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+}
+
+.folderEmptyRow {
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  color: var(--color-gray-500);
+}
+
+.listItemLabel {
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  padding: 6px 8px;
+  cursor: pointer;
+  font-weight: 500;
+  line-height: normal;
+}
+
+.tagRow {
+  color: var(--color-gray-700);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tagRowMain {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.tagName {
+  font-weight: 500;
+  color: var(--color-gray-700);
+}
+
+.tagIcon {
+  color: var(--color-gray-700);
+  line-height: 1;
+}
+
+.listCheckbox {
+  margin: 0;
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+}

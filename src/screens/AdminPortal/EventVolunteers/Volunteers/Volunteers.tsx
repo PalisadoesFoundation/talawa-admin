@@ -227,7 +227,7 @@ function Volunteers(): JSX.Element {
           className={`${styles.icon} ${styles.iconLg}`}
           aria-hidden="true"
         />
-        <h6 style={{ textAlign: "center" }}>
+        <h6 style={{ textAlign: 'center' }}>
           {tErrors('errorLoading', { entity: 'Volunteers' })}
         </h6>
       </div>
@@ -247,10 +247,7 @@ function Volunteers(): JSX.Element {
       renderCell: (params: GridCellParams) => {
         const { id, name, avatarURL } = params.row.user;
         return (
-          <div
-            style={{ alignItems: "center" }}
-            data-testid="volunteerName"
-          >
+          <div style={{ alignItems: 'center' }} data-testid="volunteerName">
             {avatarURL ? (
               <img
                 src={avatarURL}
@@ -306,10 +303,7 @@ function Volunteers(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <div
-            style={{ justifyContent: "center" }}
-            data-testid="categoryName"
-          >
+          <div style={{ justifyContent: 'center' }} data-testid="categoryName">
             {params.row.hoursVolunteered ?? '-'}
           </div>
         );
@@ -367,8 +361,7 @@ function Volunteers(): JSX.Element {
               aria-label={t('eventVolunteers.deleteVolunteerEntry', {
                 name: params.row.name,
               })}
-            >
-            </Button>
+            ></Button>
           </>
         );
       },
@@ -436,8 +429,7 @@ function Volunteers(): JSX.Element {
               className={styles.actionsButton}
               data-testid="addVolunteerBtn"
             >
-              +
-              {t('eventVolunteers.add')}
+              +{t('eventVolunteers.add')}
             </Button>
           }
         />

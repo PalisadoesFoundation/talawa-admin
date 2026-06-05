@@ -260,11 +260,16 @@ const UsersTableItem = (props: Props): JSX.Element => {
         <div>
           {memberOrgs.length === 0 ? (
             <div className={styles.notJoined}>
-              <p>{user.name} {t('hasNotJoinedAnyOrg')}</p>
+              <p>
+                {user.name} {t('hasNotJoinedAnyOrg')}
+              </p>
             </div>
           ) : joinedOrgs.length === 0 ? (
             <div className={styles.notJoined}>
-              <p>{tCommon('noResultsFoundFor')} &quot;{searchByNameJoinedOrgs}&quot;</p>
+              <p>
+                {tCommon('noResultsFoundFor')} &quot;{searchByNameJoinedOrgs}
+                &quot;
+              </p>
             </div>
           ) : (
             <div className={styles.orgList}>
@@ -295,21 +300,33 @@ const UsersTableItem = (props: Props): JSX.Element => {
                       </div>
                       <div className={styles.orgMeta}>
                         {org.city && <span>{org.city}</span>}
-                        <span>{dayjs(org.createdAt).format('MMM D, YYYY')}</span>
+                        <span>
+                          {dayjs(org.createdAt).format('MMM D, YYYY')}
+                        </span>
                       </div>
                     </div>
                   </div>
                   <div className={styles.orgRowRight}>
                     <select
                       className="form-input"
-                      style={{ padding: '4px 10px', fontSize: 13, width: 'auto' }}
+                      style={{
+                        padding: '4px 10px',
+                        fontSize: 13,
+                        width: 'auto',
+                      }}
                       onChange={changeRoleInOrg}
                       data-testid={`changeRoleInOrg${org.id}`}
                       disabled={isAdmin}
-                      defaultValue={isAdmin ? `ADMIN?${org.id}` : `USER?${org.id}`}
+                      defaultValue={
+                        isAdmin ? `ADMIN?${org.id}` : `USER?${org.id}`
+                      }
                     >
-                      <option value={`USER?${org.id}`}>{tCommon('user')}</option>
-                      <option value={`ADMIN?${org.id}`}>{tCommon('admin')}</option>
+                      <option value={`USER?${org.id}`}>
+                        {tCommon('user')}
+                      </option>
+                      <option value={`ADMIN?${org.id}`}>
+                        {tCommon('admin')}
+                      </option>
                     </select>
                     <button
                       className={styles.removeButton}
@@ -340,9 +357,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         onHide={() => onHideRemoveUserModal()}
         headerClassName={styles.modalHeader}
         title={
-          <span>
-            {t('removeUserFrom', { org: removeUserProps.orgName })}
-          </span>
+          <span>{t('removeUserFrom', { org: removeUserProps.orgName })}</span>
         }
         footer={
           <>
@@ -394,7 +409,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         }
       >
         {blockedOrgs.length !== 0 && (
-          <div style={{ display: "flex", gap: 8 }}>
+          <div style={{ display: 'flex', gap: 8 }}>
             <SearchBar
               placeholder={t('searchByOrgName')}
               value={searchByNameBlockedOrgs}
@@ -504,9 +519,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         onHide={() => onHideBlockUserModal()}
         headerClassName={styles.modalHeader}
         title={
-          <span>
-            {t('unblockUserFrom', { org: removeUserProps.orgName })}
-          </span>
+          <span>{t('unblockUserFrom', { org: removeUserProps.orgName })}</span>
         }
         footer={
           <>

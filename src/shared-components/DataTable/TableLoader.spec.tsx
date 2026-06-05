@@ -20,7 +20,6 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-
 describe('TableLoader', () => {
   afterEach(() => {
     vi.clearAllMocks();

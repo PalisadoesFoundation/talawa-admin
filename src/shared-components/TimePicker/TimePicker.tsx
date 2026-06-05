@@ -95,7 +95,15 @@ const TimePicker: React.FC<InterfaceTimePickerProps> = ({
                       }`.trim()}
                     />
                     {InputProps?.endAdornment && (
-                      <div style={{ position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)', paddingRight: '0.5rem' }}>
+                      <div
+                        style={{
+                          position: 'absolute',
+                          right: 0,
+                          top: '50%',
+                          transform: 'translateY(-50%)',
+                          paddingRight: '0.5rem',
+                        }}
+                      >
                         {InputProps.endAdornment}
                       </div>
                     )}

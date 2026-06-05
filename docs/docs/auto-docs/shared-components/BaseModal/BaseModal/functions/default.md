@@ -4,9 +4,9 @@
 
 # Function: default()
 
-> **default**(`__namedParameters`): `Element`
+> **default**(`__namedParameters`): `ReactPortal`
 
-Defined in: [src/shared-components/BaseModal/BaseModal.tsx:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/BaseModal/BaseModal.tsx#L29)
+Defined in: [src/shared-components/BaseModal/BaseModal.tsx:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/BaseModal/BaseModal.tsx#L15)
 
 ## Parameters
 
@@ -16,4 +16,4 @@ Defined in: [src/shared-components/BaseModal/BaseModal.tsx:29](https://github.co
 
 ## Returns
 
-`Element`
+`ReactPortal`

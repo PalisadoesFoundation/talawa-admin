@@ -249,10 +249,7 @@ function OrganizationDashboard(): JSX.Element {
   useEffect(() => {
     // Only navigate away if ALL critical queries fail (not just one)
     // Individual query failures are shown inline as empty states
-    const criticalErrors = [
-      orgMemberError,
-      orgEventsError,
-    ].filter(Boolean);
+    const criticalErrors = [orgMemberError, orgEventsError].filter(Boolean);
 
     // If both member and event data fail, the page is unusable
     if (criticalErrors.length >= 2) {
@@ -261,10 +258,7 @@ function OrganizationDashboard(): JSX.Element {
       );
       navigate('/');
     }
-  }, [
-    orgMemberError,
-    orgEventsError,
-  ]);
+  }, [orgMemberError, orgEventsError]);
 
   const membershipRequests =
     membershipRequestData?.organization?.membershipRequests ?? [];
@@ -380,23 +374,21 @@ function OrganizationDashboard(): JSX.Element {
               ) : (
                 postData?.organization.posts.edges
                   .slice(0, 5)
-                  .map(
-                    (edge: InterfaceOrganizationPostsConnectionEdgePg) => {
-                      const post = edge.node;
-                      return (
-                        <CardItem
-                          type="Post"
-                          key={post.id}
-                          title={post.caption}
-                          time={post.createdAt}
-                          creator={{
-                            id: post.creator.id,
-                            name: post.creator.name,
-                          }}
-                        />
-                      );
-                    },
-                  )
+                  .map((edge: InterfaceOrganizationPostsConnectionEdgePg) => {
+                    const post = edge.node;
+                    return (
+                      <CardItem
+                        type="Post"
+                        key={post.id}
+                        title={post.caption}
+                        time={post.createdAt}
+                        creator={{
+                          id: post.creator.id,
+                          name: post.creator.name,
+                        }}
+                      />
+                    );
+                  })
               )}
             </LoadingState>
           </div>
@@ -426,9 +418,7 @@ function OrganizationDashboard(): JSX.Element {
               ))}
             >
               {pendingMembershipRequests.length === 0 ? (
-                <div
-                  className="tw-card-empty"
-                >
+                <div className="tw-card-empty">
                   <h6>{t('noMembershipRequests')}</h6>
                 </div>
               ) : (

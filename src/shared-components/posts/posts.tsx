@@ -352,17 +352,19 @@ export default function PostsPage() {
   const formatTimestamp = (dateStr: string): string => {
     try {
       const d = new Date(dateStr);
-      return d.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-      }) +
+      return (
+        d.toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+        }) +
         ' at ' +
         d.toLocaleTimeString('en-US', {
           hour: 'numeric',
           minute: '2-digit',
           hour12: true,
-        });
+        })
+      );
     } catch {
       return '';
     }
@@ -373,8 +375,7 @@ export default function PostsPage() {
       <div className="page-header">
         <div className="page-header-left">
           <h1 className="page-title">
-            {t('title')}{' '}
-            <span className="count-badge">{allPosts.length}</span>
+            {t('title')} <span className="count-badge">{allPosts.length}</span>
           </h1>
           <p className="page-subtitle">{t('searchTitle')}</p>
         </div>
@@ -391,7 +392,10 @@ export default function PostsPage() {
         </div>
       </div>
 
-      <div className="toolbar" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+      <div
+        className="toolbar"
+        style={{ display: 'flex', alignItems: 'center', gap: 12 }}
+      >
         <div style={{ flex: 1 }}>
           <Toolbar
             search={{
@@ -422,7 +426,20 @@ export default function PostsPage() {
             title="Feed view"
             aria-label="Feed view"
           >
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" /></svg>
+            <svg
+              viewBox="0 0 24 24"
+              width="16"
+              height="16"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
           </button>
           <button
             className={`${styles.layoutBtn} ${layout === 'grid' ? styles.layoutBtnActive : ''}`}
@@ -430,7 +447,21 @@ export default function PostsPage() {
             title="Grid view"
             aria-label="Grid view"
           >
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /></svg>
+            <svg
+              viewBox="0 0 24 24"
+              width="16"
+              height="16"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect x="3" y="3" width="7" height="7" rx="1" />
+              <rect x="14" y="3" width="7" height="7" rx="1" />
+              <rect x="3" y="14" width="7" height="7" rx="1" />
+              <rect x="14" y="14" width="7" height="7" rx="1" />
+            </svg>
           </button>
         </div>
       </div>
@@ -457,34 +488,52 @@ export default function PostsPage() {
 
         {/* Post Feed */}
         {isFiltering ? (
-          <div className={layout === 'grid' ? 'post-feed post-feed-grid' : 'post-feed post-feed-single'}>
+          <div
+            className={
+              layout === 'grid'
+                ? 'post-feed post-feed-grid'
+                : 'post-feed post-feed-single'
+            }
+          >
             {postsToDisplay.map((post) => {
               const authorName = post.creator?.name ?? 'Unknown User';
               const initials = getInitials(authorName);
               const isPinned = !!post.pinnedAt;
               const hasImage = !!post.attachmentURL;
               return (
-                <div className="post-card" key={post.id} data-testid={`post-card-${post.id}`}>
+                <div
+                  className="post-card"
+                  key={post.id}
+                  data-testid={`post-card-${post.id}`}
+                >
                   <div className="post-header">
                     <div className="post-avatar">{initials}</div>
                     <div>
                       <div className="post-author-name">{authorName}</div>
-                      <div className="post-timestamp">{formatTimestamp(post.createdAt)}</div>
+                      <div className="post-timestamp">
+                        {formatTimestamp(post.createdAt)}
+                      </div>
                     </div>
                     {isPinned && (
-                      <span className="post-pin-badge badge badge-orange">{'\uD83D\uDCCC'} {t('pinnedPosts')}</span>
+                      <span className="post-pin-badge badge badge-orange">
+                        {'\uD83D\uDCCC'} {t('pinnedPosts')}
+                      </span>
                     )}
                   </div>
                   <div className="post-content">{post.caption ?? ''}</div>
                   {hasImage && (
-                    <div className="post-image-placeholder">{'\uD83D\uDCF7'} Photo</div>
+                    <div className="post-image-placeholder">
+                      {'\uD83D\uDCF7'} Photo
+                    </div>
                   )}
                   <div className="post-footer">
                     <div className="post-action">
-                      <span className="post-action-icon">{'\u2764'}</span> {post.upVotesCount ?? 0} likes
+                      <span className="post-action-icon">{'\u2764'}</span>{' '}
+                      {post.upVotesCount ?? 0} likes
                     </div>
                     <div className="post-action">
-                      <span className="post-action-icon">{'\uD83D\uDCAC'}</span> {post.commentsCount ?? 0} comments
+                      <span className="post-action-icon">{'\uD83D\uDCAC'}</span>{' '}
+                      {post.commentsCount ?? 0} comments
                     </div>
                   </div>
                 </div>
@@ -508,34 +557,54 @@ export default function PostsPage() {
             }
             scrollThreshold={0.8}
           >
-            <div className={layout === 'grid' ? 'post-feed post-feed-grid' : 'post-feed post-feed-single'}>
+            <div
+              className={
+                layout === 'grid'
+                  ? 'post-feed post-feed-grid'
+                  : 'post-feed post-feed-single'
+              }
+            >
               {postsToDisplay.map((post) => {
                 const authorName = post.creator?.name ?? 'Unknown User';
                 const initials = getInitials(authorName);
                 const isPinned = !!post.pinnedAt;
                 const hasImage = !!post.attachmentURL;
                 return (
-                  <div className="post-card" key={post.id} data-testid={`post-card-${post.id}`}>
+                  <div
+                    className="post-card"
+                    key={post.id}
+                    data-testid={`post-card-${post.id}`}
+                  >
                     <div className="post-header">
                       <div className="post-avatar">{initials}</div>
                       <div>
                         <div className="post-author-name">{authorName}</div>
-                        <div className="post-timestamp">{formatTimestamp(post.createdAt)}</div>
+                        <div className="post-timestamp">
+                          {formatTimestamp(post.createdAt)}
+                        </div>
                       </div>
                       {isPinned && (
-                        <span className="post-pin-badge badge badge-orange">{'\uD83D\uDCCC'} {t('pinnedPosts')}</span>
+                        <span className="post-pin-badge badge badge-orange">
+                          {'\uD83D\uDCCC'} {t('pinnedPosts')}
+                        </span>
                       )}
                     </div>
                     <div className="post-content">{post.caption ?? ''}</div>
                     {hasImage && (
-                      <div className="post-image-placeholder">{'\uD83D\uDCF7'} Photo</div>
+                      <div className="post-image-placeholder">
+                        {'\uD83D\uDCF7'} Photo
+                      </div>
                     )}
                     <div className="post-footer">
                       <div className="post-action">
-                        <span className="post-action-icon">{'\u2764'}</span> {post.upVotesCount ?? 0} likes
+                        <span className="post-action-icon">{'\u2764'}</span>{' '}
+                        {post.upVotesCount ?? 0} likes
                       </div>
                       <div className="post-action">
-                        <span className="post-action-icon">{'\uD83D\uDCAC'}</span> {post.commentsCount ?? 0} comments
+                        <span className="post-action-icon">
+                          {'\uD83D\uDCAC'}
+                        </span>{' '}
+                        {post.commentsCount ?? 0} comments
                       </div>
                     </div>
                   </div>
@@ -546,15 +615,11 @@ export default function PostsPage() {
         )}
 
         {/* Empty State */}
-        {postsToDisplay.length === 0 &&
-          !orgPostListLoading &&
-          !isFiltering && (
-            <div className="empty-state">
-              <p className="empty-state-text">
-                {t('noPosts')}
-              </p>
-            </div>
-          )}
+        {postsToDisplay.length === 0 && !orgPostListLoading && !isFiltering && (
+          <div className="empty-state">
+            <p className="empty-state-text">{t('noPosts')}</p>
+          </div>
+        )}
       </div>
 
       {userId && (

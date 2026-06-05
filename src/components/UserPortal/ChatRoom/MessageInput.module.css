@@ -14,8 +14,8 @@
 }
 
 /* Ensure the text input has proper height */
-.inputArea input[type="text"],
-.inputArea input[data-testid="messageInput"] {
+.inputArea input[type='text'],
+.inputArea input[data-testid='messageInput'] {
   height: 40px;
   border-radius: 10px;
   padding: 8px 14px;

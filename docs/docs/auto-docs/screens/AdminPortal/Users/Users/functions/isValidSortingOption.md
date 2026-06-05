@@ -6,7 +6,7 @@
 
 > **isValidSortingOption**(`option`): `option is SortingOption`
 
-Defined in: [src/screens/AdminPortal/Users/Users.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/Users/Users.tsx#L43)
+Defined in: [src/screens/AdminPortal/Users/Users.tsx:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/Users/Users.tsx#L40)
 
 Type guard that validates if a value is a valid SortingOption.
 

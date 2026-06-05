@@ -65,10 +65,14 @@ const OrganizationPeople = lazy(
   () => import('screens/AdminPortal/OrganizationPeople/OrganizationPeople'),
 );
 const OrganizationTags = lazy(
-  () => import('screens/AdminPortal/OrganizationTags/OrganizationTags'),
+  () => import('screens/AdminPortal/OrganizationTags/RootView/RootView'),
 );
-const ManageTag = lazy(() => import('screens/AdminPortal/ManageTag/ManageTag'));
-const SubTags = lazy(() => import('screens/AdminPortal/SubTags/SubTags'));
+const ManageTag = lazy(
+  () => import('screens/AdminPortal/OrganizationTags/TagDetails/TagDetails'),
+);
+const Tags = lazy(
+  () => import('screens/AdminPortal/OrganizationTags/FolderView/FolderView'),
+);
 const Requests = lazy(() => import('screens/AdminPortal/Requests/Requests'));
 const Users = lazy(() => import('screens/AdminPortal/Users/Users'));
 const CommunityProfile = lazy(
@@ -273,8 +277,8 @@ function App(): React.ReactElement {
                 element={<ManageTag />}
               />
               <Route
-                path="/admin/orgtags/:orgId/subTags/:tagId"
-                element={<SubTags />}
+                path="/admin/orgtags/:orgId/tags/:tagId"
+                element={<Tags />}
               />
               <Route
                 path="/admin/member/:orgId/:userId"

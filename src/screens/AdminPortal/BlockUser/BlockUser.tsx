@@ -274,18 +274,29 @@ const BlockUser = (): JSX.Element => {
             {t('title')}{' '}
             <span
               className="badge badge-red"
-              style={{ fontSize: '13px', verticalAlign: 'middle', marginLeft: '8px' }}
+              style={{
+                fontSize: '13px',
+                verticalAlign: 'middle',
+                marginLeft: '8px',
+              }}
             >
               {blockedUsers.length}
             </span>
           </h1>
-          <p className="page-subtitle">
-            {t('manageBlockedUsers')}
-          </p>
+          <p className="page-subtitle">{t('manageBlockedUsers')}</p>
         </div>
       </div>
 
-      <div className="toolbar" data-testid="testcomp" style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '20px' }}>
+      <div
+        className="toolbar"
+        data-testid="testcomp"
+        style={{
+          display: 'flex',
+          gap: '12px',
+          alignItems: 'center',
+          marginBottom: '20px',
+        }}
+      >
         <input
           type="text"
           className="search-input"
@@ -293,14 +304,28 @@ const BlockUser = (): JSX.Element => {
           value={searchTerm}
           onChange={(e) => handleSearch(e.target.value)}
           data-testid="searchByName"
-          style={{ flex: 1, padding: '8px 12px', border: '1px solid var(--gray-200)', borderRadius: 'var(--radius-md)', fontSize: '13px' }}
+          style={{
+            flex: 1,
+            padding: '8px 12px',
+            border: '1px solid var(--gray-200)',
+            borderRadius: 'var(--radius-md)',
+            fontSize: '13px',
+          }}
         />
         <select
           className="filter-dropdown"
           value={showBlockedMembers ? 'blockedUsers' : 'allMembers'}
-          onChange={(e) => setShowBlockedMembers(e.target.value === 'blockedUsers')}
+          onChange={(e) =>
+            setShowBlockedMembers(e.target.value === 'blockedUsers')
+          }
           data-testid="blockUserView-filter"
-          style={{ padding: '8px 12px', border: '1px solid var(--gray-200)', borderRadius: 'var(--radius-md)', fontSize: '13px', background: 'var(--surface)' }}
+          style={{
+            padding: '8px 12px',
+            border: '1px solid var(--gray-200)',
+            borderRadius: 'var(--radius-md)',
+            fontSize: '13px',
+            background: 'var(--surface)',
+          }}
         >
           <option value="allMembers">{t('allMembers')}</option>
           <option value="blockedUsers">{t('blockedUsers')}</option>
@@ -342,8 +367,12 @@ const BlockUser = (): JSX.Element => {
                             <div className="user-cell">
                               <div className="user-cell-avatar">{initials}</div>
                               <div>
-                                <div className="user-cell-name">{user.name}</div>
-                                <div className="user-cell-email">{user.emailAddress}</div>
+                                <div className="user-cell-name">
+                                  {user.name}
+                                </div>
+                                <div className="user-cell-email">
+                                  {user.emailAddress}
+                                </div>
                               </div>
                             </div>
                           </td>

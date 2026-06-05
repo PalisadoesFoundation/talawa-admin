@@ -101,7 +101,9 @@
   border-radius: var(--radius-sm);
   padding: 4px 8px;
   cursor: pointer;
-  transition: background 0.12s, color 0.12s;
+  transition:
+    background 0.12s,
+    color 0.12s;
 }
 
 .closeButtonOrganizationEvents:is(:hover, :focus-visible) {

@@ -258,20 +258,39 @@ export default function AgendaDragAndDrop({
                         }}
                       >
                         {/* Folder header */}
-                        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
+                        <div
+                          style={{
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            alignItems: 'center',
+                          }}
+                        >
                           <div
-                            style={{ textAlign: 'center', alignSelf: 'center', flex: '0 0 auto', width: '8%' }}
+                            style={{
+                              textAlign: 'center',
+                              alignSelf: 'center',
+                              flex: '0 0 auto',
+                              width: '8%',
+                            }}
                           >
                             <span
                               {...provided.dragHandleProps}
-                              style={{ display: 'inline-flex', alignItems: 'center', cursor: 'grab' }}
+                              style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                cursor: 'grab',
+                              }}
                             >
                               ☰
                             </span>
                           </div>
 
                           <div
-                            style={{ textAlign: 'start', alignSelf: 'center', flex: '1 1 auto' }}
+                            style={{
+                              textAlign: 'start',
+                              alignSelf: 'center',
+                              flex: '1 1 auto',
+                            }}
                           >
                             <span className={styles.categoryChip}>
                               {agendaFolder.name}
@@ -279,7 +298,11 @@ export default function AgendaDragAndDrop({
                           </div>
 
                           <div
-                            style={{ textAlign: 'start', alignSelf: 'center', flex: '2 1 auto' }}
+                            style={{
+                              textAlign: 'start',
+                              alignSelf: 'center',
+                              flex: '2 1 auto',
+                            }}
                           >
                             <span className={styles.categoryChip}>
                               {agendaFolder.description}
@@ -287,7 +310,12 @@ export default function AgendaDragAndDrop({
                           </div>
 
                           <div
-                            style={{ display: 'flex', justifyContent: 'flex-end', alignSelf: 'center', flex: '1 1 auto' }}
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'flex-end',
+                              alignSelf: 'center',
+                              flex: '1 1 auto',
+                            }}
                           >
                             <div style={{ display: 'flex', gap: '0.5rem' }}>
                               <Button
@@ -296,16 +324,14 @@ export default function AgendaDragAndDrop({
                                 variant="outline-secondary"
                                 onClick={() => onEditFolder(agendaFolder)}
                                 aria-label={t('editFolder')}
-                              >
-                              </Button>
+                              ></Button>
                               <Button
                                 size="sm"
                                 disabled={isDefault}
                                 variant="danger"
                                 onClick={() => onDeleteFolder(agendaFolder)}
                                 aria-label={t('deleteFolder')}
-                              >
-                              </Button>
+                              ></Button>
                             </div>
                           </div>
                         </div>
@@ -320,7 +346,10 @@ export default function AgendaDragAndDrop({
                         <div
                           style={{
                             boxShadow: '0 .125rem .25rem rgba(0,0,0,.075)',
-                            margin: agendaFolderConnection === 'Event' ? '0 1.5rem' : '0',
+                            margin:
+                              agendaFolderConnection === 'Event'
+                                ? '0 1.5rem'
+                                : '0',
                           }}
                         >
                           <div
@@ -332,22 +361,58 @@ export default function AgendaDragAndDrop({
                               padding: '1rem 0',
                             }}
                           >
-                            <div style={{ flex: '0 0 8.33%', fontWeight: 'bold', textAlign: 'center' }}>
+                            <div
+                              style={{
+                                flex: '0 0 8.33%',
+                                fontWeight: 'bold',
+                                textAlign: 'center',
+                              }}
+                            >
                               {t('sequence')}
                             </div>
-                            <div style={{ flex: '0 0 16.67%', fontWeight: 'bold', textAlign: 'center' }}>
+                            <div
+                              style={{
+                                flex: '0 0 16.67%',
+                                fontWeight: 'bold',
+                                textAlign: 'center',
+                              }}
+                            >
                               {t('title')}
                             </div>
-                            <div style={{ flex: '0 0 16.67%', fontWeight: 'bold', textAlign: 'center' }}>
+                            <div
+                              style={{
+                                flex: '0 0 16.67%',
+                                fontWeight: 'bold',
+                                textAlign: 'center',
+                              }}
+                            >
                               {t('category')}
                             </div>
-                            <div style={{ flex: '0 0 25%', fontWeight: 'bold', textAlign: 'center' }}>
+                            <div
+                              style={{
+                                flex: '0 0 25%',
+                                fontWeight: 'bold',
+                                textAlign: 'center',
+                              }}
+                            >
                               {t('description')}
                             </div>
-                            <div style={{ flex: '0 0 16.67%', fontWeight: 'bold', textAlign: 'center' }}>
+                            <div
+                              style={{
+                                flex: '0 0 16.67%',
+                                fontWeight: 'bold',
+                                textAlign: 'center',
+                              }}
+                            >
                               {t('duration')}
                             </div>
-                            <div style={{ flex: '0 0 16.67%', fontWeight: 'bold', textAlign: 'center' }}>
+                            <div
+                              style={{
+                                flex: '0 0 16.67%',
+                                fontWeight: 'bold',
+                                textAlign: 'center',
+                              }}
+                            >
                               {t('options')}
                             </div>
                           </div>
@@ -403,8 +468,19 @@ export default function AgendaDragAndDrop({
                                         )}`}
                                         style={{ padding: '0.5rem 0' }}
                                       >
-                                        <div style={{ display: 'flex', margin: '1rem', alignItems: 'center' }}>
-                                          <div style={{ flex: '0 0 8.33%', textAlign: 'center' }}>
+                                        <div
+                                          style={{
+                                            display: 'flex',
+                                            margin: '1rem',
+                                            alignItems: 'center',
+                                          }}
+                                        >
+                                          <div
+                                            style={{
+                                              flex: '0 0 8.33%',
+                                              textAlign: 'center',
+                                            }}
+                                          >
                                             <span
                                               {...provided.dragHandleProps}
                                               style={{ cursor: 'grab' }}
@@ -413,25 +489,50 @@ export default function AgendaDragAndDrop({
                                             </span>
                                           </div>
 
-                                          <div style={{ flex: '0 0 16.67%', textAlign: 'center' }}>
+                                          <div
+                                            style={{
+                                              flex: '0 0 16.67%',
+                                              textAlign: 'center',
+                                            }}
+                                          >
                                             {agendaItem.name}
                                           </div>
 
-                                          <div style={{ flex: '0 0 16.67%', textAlign: 'center' }}>
+                                          <div
+                                            style={{
+                                              flex: '0 0 16.67%',
+                                              textAlign: 'center',
+                                            }}
+                                          >
                                             {agendaItem.category?.name ??
                                               t('noCategory')}
                                           </div>
 
-                                          <div style={{ flex: '0 0 25%', textAlign: 'center' }}>
+                                          <div
+                                            style={{
+                                              flex: '0 0 25%',
+                                              textAlign: 'center',
+                                            }}
+                                          >
                                             {agendaItem.description}
                                           </div>
 
-                                          <div style={{ flex: '0 0 16.67%', textAlign: 'center' }}>
+                                          <div
+                                            style={{
+                                              flex: '0 0 16.67%',
+                                              textAlign: 'center',
+                                            }}
+                                          >
                                             {agendaItem.duration ?? '-'}
                                           </div>
 
                                           <div
-                                            style={{ flex: '0 0 16.67%', display: 'flex', justifyContent: 'center', gap: '0.5rem' }}
+                                            style={{
+                                              flex: '0 0 16.67%',
+                                              display: 'flex',
+                                              justifyContent: 'center',
+                                              gap: '0.5rem',
+                                            }}
                                           >
                                             <Button
                                               size="sm"
@@ -450,8 +551,7 @@ export default function AgendaDragAndDrop({
                                                 onEditItem(agendaItem)
                                               }
                                               aria-label={t('editItem')}
-                                            >
-                                            </Button>
+                                            ></Button>
                                             <Button
                                               size="sm"
                                               variant="danger"
@@ -459,8 +559,7 @@ export default function AgendaDragAndDrop({
                                                 onDeleteItem(agendaItem)
                                               }
                                               aria-label={t('deleteItem')}
-                                            >
-                                            </Button>
+                                            ></Button>
                                           </div>
                                         </div>
                                       </div>

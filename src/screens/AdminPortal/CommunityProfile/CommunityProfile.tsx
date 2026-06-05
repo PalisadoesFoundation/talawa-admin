@@ -254,7 +254,9 @@ const CommunityProfile = (): JSX.Element => {
             <h2>{t('communityName')}</h2>
             <p className="form-section-desc">{t('communityProfileInfo')}</p>
             <div className="form-group">
-              <label className="field-label" htmlFor="community-name">{t('communityName')}</label>
+              <label className="field-label" htmlFor="community-name">
+                {t('communityName')}
+              </label>
               <input
                 type="text"
                 id="community-name"
@@ -268,7 +270,9 @@ const CommunityProfile = (): JSX.Element => {
               />
             </div>
             <div className="form-group">
-              <label className="field-label" htmlFor="community-desc">{tCommon('description')}</label>
+              <label className="field-label" htmlFor="community-desc">
+                {tCommon('description')}
+              </label>
               <textarea
                 id="community-desc"
                 className="form-input"
@@ -278,7 +282,9 @@ const CommunityProfile = (): JSX.Element => {
               />
             </div>
             <div className="form-group">
-              <label className="field-label" htmlFor="community-url">{t('wesiteLink')}</label>
+              <label className="field-label" htmlFor="community-url">
+                {t('wesiteLink')}
+              </label>
               <input
                 type="url"
                 id="community-url"
@@ -312,9 +318,25 @@ const CommunityProfile = (): JSX.Element => {
                 }}
               >
                 <div className="upload-area-icon">
-                  <svg aria-hidden="true" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  <svg
+                    aria-hidden="true"
+                    width="36"
+                    height="36"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="17 8 12 3 7 8" />
+                    <line x1="12" y1="3" x2="12" y2="15" />
+                  </svg>
                 </div>
-                <div className="upload-area-text">Click to upload or drag and drop</div>
+                <div className="upload-area-text">
+                  Click to upload or drag and drop
+                </div>
                 <div className="upload-area-hint">SVG, PNG or JPG, max 2MB</div>
               </div>
               <input
@@ -358,10 +380,22 @@ const CommunityProfile = (): JSX.Element => {
               />
             </div>
             <div className="form-group">
-              <label className="field-label" htmlFor="primary-color">Primary Color</label>
+              <label className="field-label" htmlFor="primary-color">
+                Primary Color
+              </label>
               <div className="color-picker-row">
-                <div className="color-swatch" style={{ background: '#3ecf8e' }} title="Primary color preview"></div>
-                <input type="text" id="primary-color" className="form-input color-hex-input" defaultValue="#3ecf8e" aria-label="Primary color hex value" />
+                <div
+                  className="color-swatch"
+                  style={{ background: '#3ecf8e' }}
+                  title="Primary color preview"
+                ></div>
+                <input
+                  type="text"
+                  id="primary-color"
+                  className="form-input color-hex-input"
+                  defaultValue="#3ecf8e"
+                  aria-label="Primary color hex value"
+                />
               </div>
             </div>
           </div>
@@ -372,7 +406,9 @@ const CommunityProfile = (): JSX.Element => {
             <p className="form-section-desc">{t('communityProfileInfo')}</p>
             <div className="form-grid-2">
               <div className="form-group">
-                <label className="field-label" htmlFor="social-facebook">Facebook URL</label>
+                <label className="field-label" htmlFor="social-facebook">
+                  Facebook URL
+                </label>
                 <input
                   type="url"
                   id="social-facebook"
@@ -388,7 +424,9 @@ const CommunityProfile = (): JSX.Element => {
               </div>
 
               <div className="form-group">
-                <label className="field-label" htmlFor="social-twitter">X (Twitter) URL</label>
+                <label className="field-label" htmlFor="social-twitter">
+                  X (Twitter) URL
+                </label>
                 <input
                   type="url"
                   id="social-twitter"
@@ -404,7 +442,9 @@ const CommunityProfile = (): JSX.Element => {
               </div>
 
               <div className="form-group">
-                <label className="field-label" htmlFor="social-github">GitHub URL</label>
+                <label className="field-label" htmlFor="social-github">
+                  GitHub URL
+                </label>
                 <input
                   type="url"
                   id="social-github"
@@ -420,7 +460,9 @@ const CommunityProfile = (): JSX.Element => {
               </div>
 
               <div className="form-group">
-                <label className="field-label" htmlFor="social-linkedin">LinkedIn URL</label>
+                <label className="field-label" htmlFor="social-linkedin">
+                  LinkedIn URL
+                </label>
                 <input
                   type="url"
                   id="social-linkedin"
@@ -436,7 +478,9 @@ const CommunityProfile = (): JSX.Element => {
               </div>
 
               <div className="form-group">
-                <label className="field-label" htmlFor="social-instagram">Instagram URL</label>
+                <label className="field-label" htmlFor="social-instagram">
+                  Instagram URL
+                </label>
                 <input
                   type="url"
                   id="social-instagram"
@@ -452,7 +496,9 @@ const CommunityProfile = (): JSX.Element => {
               </div>
 
               <div className="form-group">
-                <label className="field-label" htmlFor="social-youtube">YouTube URL</label>
+                <label className="field-label" htmlFor="social-youtube">
+                  YouTube URL
+                </label>
                 <input
                   type="url"
                   id="social-youtube"
@@ -468,7 +514,9 @@ const CommunityProfile = (): JSX.Element => {
               </div>
 
               <div className="form-group">
-                <label className="field-label" htmlFor="social-reddit">Reddit URL</label>
+                <label className="field-label" htmlFor="social-reddit">
+                  Reddit URL
+                </label>
                 <input
                   type="url"
                   id="social-reddit"
@@ -484,7 +532,9 @@ const CommunityProfile = (): JSX.Element => {
               </div>
 
               <div className="form-group">
-                <label className="field-label" htmlFor="social-slack">Slack URL</label>
+                <label className="field-label" htmlFor="social-slack">
+                  Slack URL
+                </label>
                 <input
                   type="url"
                   id="social-slack"

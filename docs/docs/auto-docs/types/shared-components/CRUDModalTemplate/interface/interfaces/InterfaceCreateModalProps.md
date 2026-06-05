@@ -4,7 +4,7 @@
 
 # Interface: InterfaceCreateModalProps
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:141](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L141)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:146](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L146)
 
 Props for CreateModal template
 
@@ -34,7 +34,7 @@ Whether to center the modal vertically on the page
 
 > **children**: `ReactNode`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:145](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L145)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:150](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L150)
 
 Form content to render inside the modal body
 
@@ -58,7 +58,7 @@ Additional CSS class name for the modal
 
 > `optional` **customFooter**: `ReactNode`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:163](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L163)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:168](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L168)
 
 Custom footer content to replace the default create footer actions.
 
@@ -90,6 +90,20 @@ When provided, shows an Alert component with the error
 #### Inherited from
 
 [`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`error`](InterfaceCrudModalBaseProps.md#error)
+
+***
+
+### id?
+
+> `optional` **id**: `string`
+
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:89](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L89)
+
+HTML id attribute for the modal/form
+
+#### Inherited from
+
+[`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`id`](InterfaceCrudModalBaseProps.md#id)
 
 ***
 
@@ -131,7 +145,7 @@ Triggered by close button, backdrop click, or Escape key
 
 > **onSubmit**: (`event`) => `void` \| `Promise`\<`void`\>
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:151](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L151)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:156](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L156)
 
 Callback function invoked when the form is submitted
 Should handle the creation logic and return a Promise
@@ -208,7 +222,7 @@ Modal size variant
 
 > `optional` **submitDisabled**: `boolean`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:158](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L158)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:163](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L163)
 
 Whether the submit button should be disabled
 Useful for form validation

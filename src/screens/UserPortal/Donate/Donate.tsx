@@ -17,9 +17,7 @@ import {
 import styles from './Donate.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import { errorHandler } from 'utils/errorHandler';
-import type {
-  InterfaceDonation,
-} from 'types/UserPortal/Donation/interface';
+import type { InterfaceDonation } from 'types/UserPortal/Donation/interface';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 const currencies = ['USD', 'INR', 'EUR'];
@@ -34,19 +32,26 @@ export default function Donate(): JSX.Element {
   const { orgId: organizationId } = useParams();
 
   const [amount, setAmount] = useState('');
-  const [organizationDetails, setOrganizationDetails] = useState<{ name: string }>({ name: '' });
+  const [organizationDetails, setOrganizationDetails] = useState<{
+    name: string;
+  }>({ name: '' });
   const [donations, setDonations] = useState<InterfaceDonation[]>([]);
   const [selectedCurrency, setSelectedCurrency] = useState('USD');
 
-  const { data: donationData, loading, refetch } = useQuery(
-    ORGANIZATION_DONATION_CONNECTION_LIST,
-    { variables: { orgId: organizationId } },
-  );
+  const {
+    data: donationData,
+    loading,
+    refetch,
+  } = useQuery(ORGANIZATION_DONATION_CONNECTION_LIST, {
+    variables: { orgId: organizationId },
+  });
   const { data } = useQuery(ORGANIZATION_LIST, {
     variables: { id: organizationId },
   });
   const [donate] = useMutation(DONATE_TO_ORGANIZATION);
-  const [donateWithCurrency] = useMutation(DONATE_TO_ORGANIZATION_WITH_CURRENCY);
+  const [donateWithCurrency] = useMutation(
+    DONATE_TO_ORGANIZATION_WITH_CURRENCY,
+  );
 
   useEffect(() => {
     if (data?.organizations?.length) {
@@ -72,7 +77,9 @@ export default function Donate(): JSX.Element {
     return (
       combinedMessage.includes('unknown argument "currencycode"') ||
       combinedMessage.includes('unknown type "iso4217currencycode"') ||
-      combinedMessage.includes('field "createdonation" argument "currencycode" is not defined')
+      combinedMessage.includes(
+        'field "createdonation" argument "currencycode" is not defined',
+      )
     );
   };
 
@@ -83,24 +90,33 @@ export default function Donate(): JSX.Element {
       return;
     }
     if (Number(amount) < 1 || Number(amount) > 10000000) {
-      NotificationToast.error(t('donationOutOfRange', { min: 1, max: 10000000 }));
+      NotificationToast.error(
+        t('donationOutOfRange', { min: 1, max: 10000000 }),
+      );
       return;
     }
     try {
       try {
         await donateWithCurrency({
           variables: {
-            userId, createDonationOrgId2: organizationId, payPalId: 'paypalId',
-            nameOfUser: userName, amount: Number(amount),
-            nameOfOrg: organizationDetails.name, currencyCode: selectedCurrency,
+            userId,
+            createDonationOrgId2: organizationId,
+            payPalId: 'paypalId',
+            nameOfUser: userName,
+            amount: Number(amount),
+            nameOfOrg: organizationDetails.name,
+            currencyCode: selectedCurrency,
           },
         });
       } catch (error) {
         if (shouldFallbackToLegacyDonationMutation(error)) {
           await donate({
             variables: {
-              userId, createDonationOrgId2: organizationId, payPalId: 'paypalId',
-              nameOfUser: userName, amount: Number(amount),
+              userId,
+              createDonationOrgId2: organizationId,
+              payPalId: 'paypalId',
+              nameOfUser: userName,
+              amount: Number(amount),
               nameOfOrg: organizationDetails.name,
             },
           });
@@ -181,7 +197,13 @@ export default function Donate(): JSX.Element {
         {/* Right: Donation history */}
         <div className={styles.historyPanel}>
           {loading ? (
-            <div style={{ textAlign: 'center', padding: 32, color: 'var(--gray-400)' }}>
+            <div
+              style={{
+                textAlign: 'center',
+                padding: 32,
+                color: 'var(--gray-400)',
+              }}
+            >
               <HourglassBottomIcon /> {t('loading')}
             </div>
           ) : donations.length === 0 ? (
@@ -195,9 +217,12 @@ export default function Donate(): JSX.Element {
           ) : (
             <>
               <div className={styles.sectionHeader}>
-                <h3 className={styles.sectionTitle}>{t('yourPreviousDonations')}</h3>
+                <h3 className={styles.sectionTitle}>
+                  {t('yourPreviousDonations')}
+                </h3>
                 <span className={styles.donationCount}>
-                  {donations.length} {donations.length === 1 ? 'donation' : 'donations'}
+                  {donations.length}{' '}
+                  {donations.length === 1 ? 'donation' : 'donations'}
                 </span>
               </div>
               <div className="table-wrapper">

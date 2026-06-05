@@ -139,9 +139,7 @@ const EventManagement = (): JSX.Element => {
       </div>
 
       {/* Tab content */}
-      <div style={{ marginTop: 4 }}>
-        {currentTab?.component}
-      </div>
+      <div style={{ marginTop: 4 }}>{currentTab?.component}</div>
     </div>
   );
 };

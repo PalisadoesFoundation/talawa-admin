@@ -6,4 +6,4 @@
 
 > `const` **DropDownButton**: `React.FC`\<[`InterfaceDropDownButtonProps`](../../../types/shared-components/DropDownButton/interface/interfaces/InterfaceDropDownButtonProps.md)\>
 
-Defined in: [src/shared-components/DropDownButton/DropDownButton.tsx:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DropDownButton/DropDownButton.tsx#L58)
+Defined in: [src/shared-components/DropDownButton/DropDownButton.tsx:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DropDownButton/DropDownButton.tsx#L15)

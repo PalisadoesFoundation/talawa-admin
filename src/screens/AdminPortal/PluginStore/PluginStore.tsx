@@ -275,10 +275,7 @@ export default function PluginStore() {
           <span>
             {t('showingPlugins', {
               start: page * rowsPerPage + 1,
-              end: Math.min(
-                (page + 1) * rowsPerPage,
-                filteredPlugins.length,
-              ),
+              end: Math.min((page + 1) * rowsPerPage, filteredPlugins.length),
               total: filteredPlugins.length,
             })}
           </span>
@@ -325,9 +322,7 @@ export default function PluginStore() {
             >
               <FaUpload className={styles.dropzoneIcon} />
               <div className={styles.dropzoneTitle}>
-                {selectedFile
-                  ? selectedFile.name
-                  : tCommon('selectAZipFile')}
+                {selectedFile ? selectedFile.name : tCommon('selectAZipFile')}
               </div>
               <div className={styles.dropzoneHint}>
                 {tCommon('clickToBrowseFile')}
@@ -351,9 +346,7 @@ export default function PluginStore() {
 
             {manifest && zipStructure && (
               <div className={styles.pluginInfo}>
-                <div className={styles.pluginInfoHeader}>
-                  {t('pluginInfo')}
-                </div>
+                <div className={styles.pluginInfoHeader}>{t('pluginInfo')}</div>
                 <div className={styles.pluginInfoBody}>
                   <div className={styles.infoRow}>
                     <strong>{tCommon('name')}:</strong> {manifest.name}

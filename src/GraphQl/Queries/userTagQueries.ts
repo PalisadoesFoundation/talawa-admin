@@ -9,29 +9,25 @@ import gql from 'graphql-tag';
 
 export const USER_TAGS_ASSIGNED_MEMBERS = gql`
   query UserTagDetails(
-    $id: ID!
+    $id: String!
     $after: String
     $before: String
-    $first: PositiveInt
-    $last: PositiveInt
-    $where: UserTagUsersAssignedToWhereInput
-    $sortedBy: UserTagUsersAssignedToSortedByInput
+    $first: Int
+    $last: Int
   ) {
-    getAssignedUsers: getUserTag(id: $id) {
+    getAssignedUsers: tag(input: { id: $id }) {
+      id
       name
-      usersAssignedTo(
+      usersAssignedTo: assignees(
         after: $after
         before: $before
         first: $first
         last: $last
-        where: $where
-        sortedBy: $sortedBy
       ) {
         edges {
           node {
-            _id
-            firstName
-            lastName
+            _id: id
+            name
           }
         }
         pageInfo {
@@ -40,56 +36,64 @@ export const USER_TAGS_ASSIGNED_MEMBERS = gql`
           hasNextPage
           hasPreviousPage
         }
-        totalCount
       }
-      ancestorTags {
-        _id
+      folder {
+        _id: id
         name
+        parentFolder {
+          _id: id
+          name
+          parentFolder {
+            _id: id
+            name
+          }
+        }
       }
     }
   }
 `;
 
 /**
- * GraphQL query to retrieve the sub tags of a certain tag.
+ * GraphQL query to retrieve child folders for a given folder node.
  *
- * @param id - The ID of the parent tag.
- * @returns The list of sub tags.
+ * @param id - The ID of the parent folder.
+ * @returns The list of child folders for tree rendering.
  */
 
-export const USER_TAG_SUB_TAGS = gql`
-  query GetChildTags(
-    $id: ID!
+export const TAG_FOLDER_CHILD_FOLDERS_FOR_NODE = gql`
+  query GetTagFolderChildFolders(
+    $id: String!
     $after: String
     $before: String
-    $first: PositiveInt
-    $last: PositiveInt
-    $where: UserTagWhereInput
-    $sortedBy: UserTagSortedByInput
+    $first: Int
+    $last: Int
   ) {
-    getChildTags: getUserTag(id: $id) {
+    tagFolder: tagFolder(input: { id: $id }) {
+      _id: id
       name
-      childTags(
+      childFolders: childFolders(
         after: $after
         before: $before
         first: $first
         last: $last
-        where: $where
-        sortedBy: $sortedBy
       ) {
         edges {
           node {
-            _id
+            _id: id
             name
-            usersAssignedTo(first: $first, last: $last) {
-              totalCount
+            tags(first: 32) {
+              edges {
+                node {
+                  id
+                }
+              }
             }
-            childTags(first: $first, last: $last) {
-              totalCount
-            }
-            ancestorTags {
-              _id
-              name
+            childTags: childFolders(first: 32) {
+              edges {
+                node {
+                  id
+                }
+              }
             }
           }
         }
@@ -99,11 +103,216 @@ export const USER_TAG_SUB_TAGS = gql`
           hasNextPage
           hasPreviousPage
         }
-        totalCount
       }
-      ancestorTags {
-        _id
+      parentFolder {
+        _id: id
         name
+        parentFolder {
+          _id: id
+          name
+          parentFolder {
+            _id: id
+            name
+          }
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * GraphQL query to retrieve details of a tag folder and its child folders.
+ *
+ * @param input - The id of the tag folder.
+ * @returns The current folder metadata and child folders.
+ */
+
+export const TAG_FOLDER_CHILD_FOLDERS = gql`
+  query TagFolderChildFolders(
+    $input: QueryTagFolderInput!
+    $after: String
+    $before: String
+    $first: Int
+    $last: Int
+  ) {
+    tagFolder(input: $input) {
+      id
+      name
+      tags(first: 32) {
+        edges {
+          node {
+            id
+            name
+            createdAt
+            creator {
+              id
+              name
+            }
+          }
+        }
+      }
+      childFolders(after: $after, before: $before, first: $first, last: $last) {
+        edges {
+          node {
+            id
+            name
+            createdAt
+            creator {
+              id
+              name
+            }
+            childFolders(first: 32) {
+              edges {
+                node {
+                  id
+                }
+              }
+            }
+            tags(first: 32) {
+              edges {
+                node {
+                  id
+                }
+              }
+            }
+          }
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+      parentFolder {
+        id
+        name
+        parentFolder {
+          id
+          name
+          parentFolder {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * GraphQL query to retrieve tags for an organization with their folder id.
+ *
+ * Used as a compatibility fallback in folder view while tagFolder.tags
+ * resolver alignment is being completed in the API.
+ */
+
+export const ORGANIZATION_TAGS_WITH_FOLDER = gql`
+  query OrganizationTagsWithFolder(
+    $id: String!
+    $after: String
+    $before: String
+    $first: Int
+    $last: Int
+  ) {
+    organization(input: { id: $id }) {
+      id
+      tags(after: $after, before: $before, first: $first, last: $last) {
+        edges {
+          node {
+            id
+            name
+            createdAt
+            creator {
+              id
+              name
+            }
+            folder {
+              id
+            }
+            assignees(first: 32) {
+              edges {
+                node {
+                  id
+                }
+              }
+            }
+          }
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * GraphQL query to retrieve organization tags and tag folders.
+ *
+ * Used in assign/remove tag actions to display a folder-tree view of tags.
+ */
+
+export const ORGANIZATION_TAGS_AND_FOLDERS = gql`
+  query OrganizationRootTagFolders(
+    $id: String!
+    $tagFoldersAfter: String
+    $tagFoldersFirst: Int
+  ) {
+    organization(input: { id: $id }) {
+      id
+      tagFolders(after: $tagFoldersAfter, first: $tagFoldersFirst) {
+        edges {
+          node {
+            id
+            name
+            parentFolder {
+              id
+            }
+          }
+        }
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * GraphQL query to retrieve a folder node lazily with paginated children and tags.
+ */
+
+export const TAG_FOLDER_TREE_NODE = gql`
+  query TagFolderTreeNode(
+    $input: QueryTagFolderInput!
+    $childFoldersAfter: String
+    $childFoldersFirst: Int
+  ) {
+    tagFolder(input: $input) {
+      id
+      name
+      parentFolder {
+        id
+      }
+      childFolders(after: $childFoldersAfter, first: $childFoldersFirst) {
+        edges {
+          node {
+            id
+            name
+            parentFolder {
+              id
+            }
+          }
+        }
+        pageInfo {
+          endCursor
+          hasNextPage
+        }
       }
     }
   }
@@ -118,16 +327,17 @@ export const USER_TAG_SUB_TAGS = gql`
 
 export const USER_TAGS_MEMBERS_TO_ASSIGN_TO = gql`
   query GetMembersToAssignTo(
-    $id: ID!
+    $organizationId: String!
+    $tagId: String!
     $after: String
     $before: String
-    $first: PositiveInt
-    $last: PositiveInt
-    $where: UserTagUsersToAssignToWhereInput
+    $first: Int
+    $last: Int
+    $where: MembersWhereInput
   ) {
-    getUsersToAssignTo: getUserTag(id: $id) {
-      name
-      usersToAssignTo(
+    organization(input: { id: $organizationId }) {
+      id
+      members(
         after: $after
         before: $before
         first: $first
@@ -136,9 +346,8 @@ export const USER_TAGS_MEMBERS_TO_ASSIGN_TO = gql`
       ) {
         edges {
           node {
-            _id
-            firstName
-            lastName
+            _id: id
+            name
           }
         }
         pageInfo {
@@ -147,7 +356,16 @@ export const USER_TAGS_MEMBERS_TO_ASSIGN_TO = gql`
           hasNextPage
           hasPreviousPage
         }
-        totalCount
+      }
+    }
+    tag(input: { id: $tagId }) {
+      id
+      assignees(first: 32) {
+        edges {
+          node {
+            id
+          }
+        }
       }
     }
   }

@@ -3331,9 +3331,19 @@ input MutationCreatePresignedUrlInput {
 """
 input MutationCreateTagFolderInput {
   """
-  Name of the tag.
+  Name of the tag folder.
   """
-  type: AdvertisementType!
+  name: String!
+
+  """
+  Global identifier of the associated organization.
+  """
+  organizationId: ID!
+
+  """
+  Global identifier of the associated parent tag folder.
+  """
+  parentFolderId: ID
 }
 
 input QueryOrganizationInput {

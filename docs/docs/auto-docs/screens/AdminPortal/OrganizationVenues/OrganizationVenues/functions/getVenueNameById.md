@@ -6,7 +6,7 @@
 
 > **getVenueNameById**(`venues`, `venueId`): `string`
 
-Defined in: [src/screens/AdminPortal/OrganizationVenues/OrganizationVenues.tsx:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationVenues/OrganizationVenues.tsx#L67)
+Defined in: [src/screens/AdminPortal/OrganizationVenues/OrganizationVenues.tsx:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationVenues/OrganizationVenues.tsx#L62)
 
 ## Parameters
 

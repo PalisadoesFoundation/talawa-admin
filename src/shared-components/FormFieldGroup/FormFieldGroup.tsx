@@ -35,7 +35,17 @@ export const FormFieldGroup: React.FC<
         {label && !hideLabel && (
           <label
             htmlFor={effectiveInputId}
-            style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', borderWidth: 0 }}
+            style={{
+              position: 'absolute',
+              width: '1px',
+              height: '1px',
+              padding: 0,
+              margin: '-1px',
+              overflow: 'hidden',
+              clip: 'rect(0,0,0,0)',
+              whiteSpace: 'nowrap',
+              borderWidth: 0,
+            }}
           >
             {label}
             {required && <span aria-label={tCommon('required')}>*</span>}
@@ -43,7 +53,14 @@ export const FormFieldGroup: React.FC<
         )}
         {children}
         {showError && (
-          <div style={{ display: 'block', color: 'var(--red-500, #ef4444)', fontSize: '0.875em', marginTop: '0.25rem' }}>
+          <div
+            style={{
+              display: 'block',
+              color: 'var(--red-500, #ef4444)',
+              fontSize: '0.875em',
+              marginTop: '0.25rem',
+            }}
+          >
             {error}
           </div>
         )}
@@ -56,7 +73,23 @@ export const FormFieldGroup: React.FC<
       <label
         htmlFor={effectiveInputId}
         className={labelClassName || undefined}
-        style={hideLabel ? { position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', borderWidth: 0 } : disabled ? { opacity: 0.5 } : undefined}
+        style={
+          hideLabel
+            ? {
+                position: 'absolute',
+                width: '1px',
+                height: '1px',
+                padding: 0,
+                margin: '-1px',
+                overflow: 'hidden',
+                clip: 'rect(0,0,0,0)',
+                whiteSpace: 'nowrap',
+                borderWidth: 0,
+              }
+            : disabled
+              ? { opacity: 0.5 }
+              : undefined
+        }
       >
         {label}
         {required && <span aria-label={tCommon('required')}> *</span>}
@@ -65,7 +98,10 @@ export const FormFieldGroup: React.FC<
       {children}
 
       {helpText && !showError && (
-        <small id={`${effectiveInputId}-help`} style={{ color: 'var(--gray-500, #6b7280)' }}>
+        <small
+          id={`${effectiveInputId}-help`}
+          style={{ color: 'var(--gray-500, #6b7280)' }}
+        >
           {helpText}
         </small>
       )}
@@ -73,7 +109,12 @@ export const FormFieldGroup: React.FC<
       {showError && (
         <div
           id={`${effectiveInputId}-error`}
-          style={{ display: 'block', color: 'var(--red-500, #ef4444)', fontSize: '0.875em', marginTop: '0.25rem' }}
+          style={{
+            display: 'block',
+            color: 'var(--red-500, #ef4444)',
+            fontSize: '0.875em',
+            marginTop: '0.25rem',
+          }}
         >
           {error}
         </div>

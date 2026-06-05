@@ -285,7 +285,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   const formContent = (
     <>
       {userData?.user?.role !== 'regular' && (
-        <div style={{ width: "100%" }}>
+        <div style={{ width: '100%' }}>
           <Autocomplete
             id="pledgerSelect"
             className={`${styles.noOutline}`}

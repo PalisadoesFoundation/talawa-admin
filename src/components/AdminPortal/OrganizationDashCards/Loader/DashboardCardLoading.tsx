@@ -48,7 +48,11 @@ const DashBoardCardLoading = (): JSX.Element => {
           <div style={{ flex: '0 0 66.67%' }} className={styles.textWrapper}>
             <span
               className={`${styles.primaryText} ${styles.shimmer1} shimmer`}
-              style={{ borderRadius: '0.25rem', width: '75%', marginBottom: '0.5rem' }}
+              style={{
+                borderRadius: '0.25rem',
+                width: '75%',
+                marginBottom: '0.5rem',
+              }}
             />
             <span
               className={`${styles.secondaryText} ${styles.shimmer2} shimmer`}

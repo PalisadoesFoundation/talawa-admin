@@ -17,7 +17,6 @@ import { useMutation, useQuery } from '@apollo/client';
 import cookies from 'js-cookie';
 import i18next from 'i18next';
 
-
 import {
   InterfaceUserPortalNavbarProps,
   DEFAULT_USER_MODE_PROPS,
@@ -174,7 +173,15 @@ export const UserPortalNavigationBar = (
     if (!navigationLinks || navigationLinks.length === 0) return null;
 
     return (
-      <nav style={{ display: 'flex', flexGrow: 1, paddingRight: '1rem', paddingTop: '0.25rem', marginRight: 'auto' }}>
+      <nav
+        style={{
+          display: 'flex',
+          flexGrow: 1,
+          paddingRight: '1rem',
+          paddingTop: '0.25rem',
+          marginRight: 'auto',
+        }}
+      >
         {navigationLinks.map((link: NavigationLink) => {
           const linkLabel = link.translationKey
             ? t(link.translationKey.split(':').pop() || link.translationKey)
@@ -184,12 +191,20 @@ export const UserPortalNavigationBar = (
             <button
               key={link.id}
               type="button"
-              className={isLinkActive(link) ? styles.navLinkActive : styles.navLink}
+              className={
+                isLinkActive(link) ? styles.navLinkActive : styles.navLink
+              }
               onClick={async (): Promise<void> => {
                 await handleNavigation(link);
               }}
               data-testid={link.testId || `navigationLink-${link.id}`}
-              style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: '0.5rem 1rem' }}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: 'inherit',
+                cursor: 'pointer',
+                padding: '0.5rem 1rem',
+              }}
             >
               {link.icon && <link.icon style={{ marginRight: '0.5rem' }} />}
               {linkLabel}
@@ -204,7 +219,13 @@ export const UserPortalNavigationBar = (
   const renderDesktopContent = (): JSX.Element => (
     <>
       {renderNavigationLinks()}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+        }}
+      >
         <LanguageSelector
           showLanguageSelector={showLanguageSelector}
           testIdPrefix={''}
@@ -232,7 +253,13 @@ export const UserPortalNavigationBar = (
   const renderMobileContent = (): JSX.Element => (
     <>
       {renderNavigationLinks()}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+        }}
+      >
         <LanguageSelector
           showLanguageSelector={showLanguageSelector}
           testIdPrefix={'mobile'}
@@ -264,7 +291,12 @@ export const UserPortalNavigationBar = (
     return (
       <nav
         className={navbarClassName}
-        style={{ display: 'flex', alignItems: 'center', padding: '0.5rem 1rem', ...customStyles }}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          padding: '0.5rem 1rem',
+          ...customStyles,
+        }}
       >
         <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
           <a
@@ -273,7 +305,13 @@ export const UserPortalNavigationBar = (
               e.preventDefault();
               handleBrandClick();
             }}
-            style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit', marginRight: 'auto' }}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              textDecoration: 'none',
+              color: 'inherit',
+              marginRight: 'auto',
+            }}
           >
             <img
               className={styles.talawaImage}
@@ -293,7 +331,12 @@ export const UserPortalNavigationBar = (
   return (
     <nav
       className={navbarClassName}
-      style={{ display: 'flex', alignItems: 'center', padding: '0.5rem 1rem', ...customStyles }}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        padding: '0.5rem 1rem',
+        ...customStyles,
+      }}
     >
       <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
         <a
@@ -302,7 +345,13 @@ export const UserPortalNavigationBar = (
             e.preventDefault();
             handleBrandClick();
           }}
-          style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit', marginRight: 'auto' }}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            textDecoration: 'none',
+            color: 'inherit',
+            marginRight: 'auto',
+          }}
         >
           <img
             className={styles.talawaImage}

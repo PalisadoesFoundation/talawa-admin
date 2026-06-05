@@ -67,7 +67,7 @@ export const RecurrenceMonthlySection: React.FC<
     <div style={{ marginBottom: 16 }}>
       <span className="text-secondary">{t('monthlyOn')}</span>
       <br />
-      <div style={{ margin: "0 8px" }}>
+      <div style={{ margin: '0 8px' }}>
         <DropDownButton
           id="monthly-dropdown"
           options={options}

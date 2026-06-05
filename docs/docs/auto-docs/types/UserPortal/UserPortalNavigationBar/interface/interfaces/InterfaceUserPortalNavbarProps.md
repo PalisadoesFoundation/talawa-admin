@@ -231,7 +231,7 @@ If not provided, reads from localStorage
 
 ### variant?
 
-> `optional` **variant**: `"dark"` \| `"light"`
+> `optional` **variant**: `"light"` \| `"dark"`
 
 Defined in: [src/types/UserPortal/UserPortalNavigationBar/interface.ts:118](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/UserPortalNavigationBar/interface.ts#L118)
 

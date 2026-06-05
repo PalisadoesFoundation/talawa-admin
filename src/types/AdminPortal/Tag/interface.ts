@@ -2,16 +2,18 @@ import type { ApolloError } from '@apollo/client';
 
 export interface InterfaceMemberData {
   _id: string;
-  firstName: string;
-  lastName: string;
+  name: string;
+  firstName?: string;
+  lastName?: string;
 }
 
 export interface InterfaceTagMembersData {
   edges: {
     node: {
       _id: string;
-      firstName: string;
-      lastName: string;
+      name: string;
+      firstName?: string;
+      lastName?: string;
     };
   }[];
   pageInfo: {
@@ -21,6 +23,14 @@ export interface InterfaceTagMembersData {
     hasPreviousPage: boolean;
   };
   totalCount: number;
+}
+
+export interface InterfaceTagAssigneesData {
+  edges: {
+    node: {
+      id: string;
+    } | null;
+  }[];
 }
 
 export interface InterfaceAddPeopleToTagProps {
@@ -46,17 +56,75 @@ export interface InterfaceBaseFetchMoreOptions<T> {
 }
 
 export interface InterfaceQueryUserTagsMembersToAssignTo {
-  name: string;
-  usersToAssignTo: InterfaceTagMembersData;
+  organization?: {
+    id: string;
+    members: InterfaceTagMembersData;
+  };
+  tag?: {
+    id: string;
+    assignees: InterfaceTagAssigneesData;
+  };
 }
 
 export interface InterfaceTagUsersToAssignToQuery extends InterfaceBaseQueryResult {
-  data?: {
-    getUsersToAssignTo: InterfaceQueryUserTagsMembersToAssignTo;
-  };
+  data?: InterfaceQueryUserTagsMembersToAssignTo;
   fetchMore: (
-    options: InterfaceBaseFetchMoreOptions<{
-      getUsersToAssignTo: InterfaceQueryUserTagsMembersToAssignTo;
-    }>,
+    options: InterfaceBaseFetchMoreOptions<InterfaceQueryUserTagsMembersToAssignTo>,
   ) => void;
+}
+
+export interface InterfaceTagFolderNode {
+  id: string;
+  name: string;
+  createdAt?: string | null;
+  creator?: {
+    id?: string;
+    name?: string | null;
+  } | null;
+  childFolders?: {
+    edges?: Array<{
+      node: {
+        id: string;
+      };
+    }>;
+  };
+  tags?: {
+    edges?: Array<{
+      node: {
+        id: string;
+      };
+    }>;
+  };
+}
+
+export interface InterfaceOrganizationTagFoldersQuery {
+  organization?: {
+    id: string;
+    name: string;
+    tagFolders?: {
+      edges: Array<{
+        node: InterfaceTagFolderNode;
+      }>;
+      pageInfo?: {
+        hasNextPage?: boolean;
+        endCursor?: string | null;
+      };
+    };
+  };
+}
+
+export interface InterfaceOrganizationTagCountsQuery {
+  organization?: {
+    id: string;
+    tags?: {
+      edges?: Array<{
+        node: {
+          id: string;
+          folder?: {
+            id: string;
+          } | null;
+        };
+      }>;
+    };
+  };
 }

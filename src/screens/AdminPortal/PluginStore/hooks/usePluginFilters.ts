@@ -19,12 +19,16 @@ function formatPluginName(pluginId: string): string {
 
 /** Known plugin descriptions — keyed by pluginId */
 const PLUGIN_DESCRIPTIONS: Record<string, string> = {
-  analytics: 'Track engagement, growth, and activity metrics across your organization.',
-  volunteerTracker: 'Track volunteer hours, manage sign-ups, and generate reports.',
-  chatExtended: 'Real-time messaging with threads, reactions, and file sharing.',
+  analytics:
+    'Track engagement, growth, and activity metrics across your organization.',
+  volunteerTracker:
+    'Track volunteer hours, manage sign-ups, and generate reports.',
+  chatExtended:
+    'Real-time messaging with threads, reactions, and file sharing.',
   donationManager: 'Accept and manage online donations and pledges.',
   calendarSync: 'Sync events with Google Calendar and Outlook.',
-  emailNotifications: 'Send automated email alerts for organization activities.',
+  emailNotifications:
+    'Send automated email alerts for organization activities.',
 };
 
 interface IUsePluginFiltersProps {
@@ -139,7 +143,9 @@ export function usePluginFilters({ pluginData }: IUsePluginFiltersProps) {
         .map((gqlPlugin: IPlugin) => ({
           id: gqlPlugin.pluginId,
           name: formatPluginName(gqlPlugin.pluginId),
-          description: PLUGIN_DESCRIPTIONS[gqlPlugin.pluginId] || `Extends your organization with ${formatPluginName(gqlPlugin.pluginId).toLowerCase()} capabilities.`,
+          description:
+            PLUGIN_DESCRIPTIONS[gqlPlugin.pluginId] ||
+            `Extends your organization with ${formatPluginName(gqlPlugin.pluginId).toLowerCase()} capabilities.`,
           author: 'Talawa',
           icon: '',
         })),

@@ -387,7 +387,10 @@ const LoginPage = (): JSX.Element => {
               role="tabpanel"
               aria-hidden={showTab !== 'REGISTER'}
             >
-              <h1 className={styles.registerHeading} data-testid="register-text">
+              <h1
+                className={styles.registerHeading}
+                data-testid="register-text"
+              >
                 {tCommon('register')}
               </h1>
               <RegistrationForm

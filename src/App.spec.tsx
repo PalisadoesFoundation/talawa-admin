@@ -6,6 +6,7 @@ import * as Apollo from '@apollo/client';
 import { MemoryRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import userEvent from '@testing-library/user-event';
 import App from './App';
 import { store } from 'state/store';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
@@ -74,11 +75,20 @@ vi.mock('screens/UserPortal/UserScreen/UserScreen', async () => {
 });
 
 // Mock all lazy loaded components
-vi.mock('components/AdminPortal/OrganizationScreen/OrganizationScreen', () => ({
-  default: () => (
-    <div data-testid="mock-organization-screen">Mock Organization Screen</div>
-  ),
-}));
+vi.mock(
+  'components/AdminPortal/OrganizationScreen/OrganizationScreen',
+  async () => {
+    const { Outlet } = await import('react-router');
+    return {
+      default: () => (
+        <div data-testid="mock-organization-screen">
+          Mock Organization Screen
+          <Outlet />
+        </div>
+      ),
+    };
+  },
+);
 
 vi.mock('shared-components/posts/posts', () => ({
   default: () => <div data-testid="mock-posts">Mock Posts</div>,
@@ -160,19 +170,77 @@ vi.mock('screens/AdminPortal/OrganizationPeople/OrganizationPeople', () => ({
   ),
 }));
 
-vi.mock('screens/AdminPortal/OrganizationTags/OrganizationTags', () => ({
-  default: () => (
-    <div data-testid="mock-organization-tags">Mock Organization Tags</div>
-  ),
+vi.mock('screens/AdminPortal/OrganizationTags/RootView/RootView', async () => {
+  const { useNavigate, useParams } = await import('react-router');
+
+  return {
+    default: () => {
+      const navigate = useNavigate();
+      const { orgId } = useParams();
+
+      return (
+        <div data-testid="mock-organization-tags">
+          Mock Organization Tags
+          <button
+            data-testid="mock-create-tag-flow"
+            onClick={() => navigate(`/admin/orgtags/${orgId}/tags/new-folder`)}
+          >
+            Create Tag
+          </button>
+        </div>
+      );
+    },
+  };
+});
+
+vi.mock('screens/AdminPortal/OrganizationTags/TagDetails/TagDetails', () => ({
+  default: () => {
+    const [assigned, setAssigned] = React.useState(false);
+
+    return (
+      <div data-testid="mock-manage-tag">
+        Mock Manage Tag
+        <button
+          data-testid="mock-assign-user-flow"
+          onClick={() => setAssigned(true)}
+        >
+          Assign User
+        </button>
+        {assigned && (
+          <div data-testid="mock-assign-user-success">User assigned</div>
+        )}
+      </div>
+    );
+  },
 }));
 
-vi.mock('screens/AdminPortal/ManageTag/ManageTag', () => ({
-  default: () => <div data-testid="mock-manage-tag">Mock Manage Tag</div>,
-}));
+vi.mock(
+  'screens/AdminPortal/OrganizationTags/FolderView/FolderView',
+  async () => {
+    const { useNavigate, useParams } = await import('react-router');
 
-vi.mock('screens/AdminPortal/SubTags/SubTags', () => ({
-  default: () => <div data-testid="mock-sub-tags">Mock Sub Tags</div>,
-}));
+    return {
+      default: () => {
+        const navigate = useNavigate();
+        const { orgId } = useParams();
+
+        return (
+          <div data-testid="mock-sub-tags">
+            Mock Sub Tags
+            <button
+              data-testid="mock-manage-tag-flow"
+              onClick={() =>
+                navigate(`/admin/orgtags/${orgId}/manageTag/new-tag`)
+              }
+            >
+              Manage Tag
+            </button>
+          </div>
+        );
+      },
+    };
+  },
+);
 
 vi.mock('screens/AdminPortal/Requests/Requests', () => ({
   default: () => <div data-testid="mock-requests">Mock Requests</div>,
@@ -293,7 +361,10 @@ const MOCKS = [
         user: {
           id: '123',
           name: 'John Doe',
-          createdAt: dayjs().subtract(1, 'year').toISOString(),
+          createdAt: dayjs
+            .utc(new Date(Date.UTC(2025, 0, 1, 0, 0, 0)))
+            .subtract(1, 'year')
+            .toISOString(),
           image: 'john.jpg',
           emailAddress: 'johndoe@gmail.com',
           birthDate: '1990-01-01',
@@ -366,7 +437,6 @@ const setupAdminAuthState = (): void => {
 const { clearAllItems } = useLSModule.useLocalStorage();
 describe('Testing the App Component', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
     clearAllItems();
     vi.spyOn(console, 'log').mockImplementation(() => {});
     vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -732,5 +802,27 @@ describe('Testing the App Component', () => {
     } finally {
       useQuerySpy.mockRestore();
     }
+  });
+
+  it('regression #7247: create-tag -> manage -> assign-user flow works end-to-end', async () => {
+    const user = userEvent.setup();
+    setupAdminAuthState();
+
+    renderApp(adminLink, '/admin/orgtags/1');
+
+    expect(
+      await screen.findByTestId('mock-organization-tags'),
+    ).toBeInTheDocument();
+
+    await user.click(screen.getByTestId('mock-create-tag-flow'));
+    expect(await screen.findByTestId('mock-sub-tags')).toBeInTheDocument();
+
+    await user.click(screen.getByTestId('mock-manage-tag-flow'));
+    expect(await screen.findByTestId('mock-manage-tag')).toBeInTheDocument();
+
+    await user.click(screen.getByTestId('mock-assign-user-flow'));
+    expect(
+      await screen.findByTestId('mock-assign-user-success'),
+    ).toBeInTheDocument();
   });
 });

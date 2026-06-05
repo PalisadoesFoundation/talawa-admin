@@ -1,0 +1,421 @@
+.pageHeader {
+  margin-bottom: var(--space-7);
+}
+
+.pageHeader h1 {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--gray-900);
+  margin: 0 0 0.5rem 0;
+}
+
+.pageHeader p {
+  color: var(--gray-500);
+  font-size: var(--space-5);
+  margin: 0;
+}
+
+.errorContainer {
+  min-height: var(--vh-100);
+}
+
+.errorMessage {
+  margin-top: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.errorIcon {
+  font-size: var(--font-size-3xl);
+  color: var(--red-500);
+  margin-bottom: var(--space-6);
+
+  &::before {
+    content: '⚠️';
+  }
+}
+
+.tableHeader {
+  background-color: var(--red-500);
+  font-weight: var(--font-weight-bold);
+}
+
+.tableItemIndex {
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  font-weight: var(--font-weight-medium);
+  color: var(--gray-700);
+}
+
+.pageBreadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-3);
+}
+
+.breadcrumbCurrent {
+  color: var(--color-gray-700);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.3;
+}
+
+.breadcrumbDivider {
+  color: var(--color-gray-500);
+}
+
+.tagsBreadCrumbs {
+  color: var(--gray-400);
+  cursor: pointer;
+  &::after {
+    display: block;
+    content: attr(data-text);
+    font-weight: var(--font-weight-semibold);
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+  }
+}
+
+.tagsBreadCrumbs:hover,
+.tagsBreadCrumbs:focus {
+  color: var(--green-700);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: underline;
+}
+
+.childFoldersLink i {
+  visibility: hidden;
+}
+
+.childFoldersLink:hover,
+.childFoldersLink:focus {
+  color: var(--color-gray-500);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: underline;
+}
+
+.childFoldersLink:hover i,
+.childFoldersLink:focus i {
+  visibility: visible;
+}
+
+.childFoldersLink {
+  color: var(--color-blue-800);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+
+  &::after {
+    display: block;
+    content: attr(data-text);
+    font-weight: var(--font-weight-semibold);
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+  }
+}
+
+.folderNameButton {
+  color: var(--color-blue-500);
+  cursor: pointer;
+  padding: 0;
+  text-decoration: none;
+  font-weight: var(--font-weight-regular);
+}
+
+.folderNameButton:hover {
+  color: var(--color-blue-500);
+  text-decoration: underline;
+}
+
+.nameIcon {
+  color: var(--color-gray-500);
+}
+
+.orgUserTagsScrollableDiv {
+  scrollbar-width: auto;
+  scrollbar-color: var(--gray-300) transparent;
+  max-height: calc(100vh - 5rem);
+  overflow: auto;
+  position: sticky;
+  top: 0;
+}
+
+.editButton {
+  background-color: var(--green-50);
+  color: var(--gray-700);
+  border-color: var(--gray-100);
+}
+
+.editButton:is(:hover, :active) {
+  background-color: var(--green-500);
+  border-color: var(--gray-700);
+  box-shadow: none;
+}
+
+.createButton:global(.btn) {
+  background-color: var(--color-white) !important;
+  color: var(--color-gray-700) !important;
+  border: var(--border-1) solid var(--color-gray-300) !important;
+  border-radius: var(--radius-md);
+  margin: 0;
+  width: auto;
+  min-width: var(--space-15);
+  height: var(--space-9);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  white-space: nowrap;
+}
+
+.createButton:global(.btn):is(:hover, :focus-visible, :active) {
+  box-shadow: none;
+  background-color: var(--color-blue-500) !important;
+  color: var(--color-white) !important;
+  border: var(--border-1) solid var(--color-blue-500) !important;
+}
+
+.buttonNoWrap {
+  white-space: nowrap;
+}
+
+.listTable tbody td {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-regular);
+}
+
+.inputField {
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-4);
+  background-color: var(--color-white);
+  border: var(--border-1) solid var(--color-gray-200);
+  box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-lg)
+    color-mix(in srgb, var(--color-black) 10%, transparent);
+}
+
+.folderCreateModal {
+  max-width: calc(460px);
+}
+
+.fieldRow {
+  margin-bottom: var(--space-5);
+}
+
+.fieldRow :global(label) {
+  display: block;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--gray-700, #374151);
+  margin-bottom: calc(6px);
+}
+
+.fieldRow :global(input.form-control),
+.fieldRow :global(input) {
+  width: 100%;
+  padding: calc(9px) 12px;
+  border: var(--border-1-5) solid var(--gray-200, #e5e7eb);
+  border-radius: var(--space-3-75);
+  font-size: var(--space-4-5);
+  background: var(--surface, var(--color-white));
+  color: var(--gray-900, #111827);
+  outline: none;
+  transition: border-color 0.15s;
+  box-shadow: none;
+  height: auto;
+}
+
+.fieldRow :global(input::placeholder) {
+  color: var(--gray-400, #9ca3af);
+  opacity: 1;
+}
+
+.fieldRow :global(input:focus) {
+  border-color: var(--green-500, #3ecf8e);
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--color-green-500) 12%, transparent);
+  background: var(--surface, var(--color-white));
+}
+
+.editFooterActions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3-75);
+  width: 100%;
+}
+
+.editActionRow {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.editActionButton {
+  flex: 1;
+  padding: var(--space-3) 16px;
+  border-radius: var(--space-3-75);
+  border: none;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(6px);
+  background: var(--green-500, #3ecf8e);
+  color: var(--color-black);
+  transition: background 0.15s;
+}
+
+.editActionButton:hover {
+  background: var(--green-400, #4ade80);
+}
+
+.deleteActionButton {
+  flex: 1;
+  padding: var(--space-3) 16px;
+  border-radius: var(--space-3-75);
+  border: var(--border-1) solid var(--red-200, #fecaca);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: calc(6px);
+  background: var(--red-50, #fef2f2);
+  color: var(--red-600, #dc2626);
+  transition: all 0.15s;
+}
+
+.deleteActionButton:hover {
+  background: var(--red-500, #ef4444);
+  color: var(--color-white);
+  border-color: var(--red-500, #ef4444);
+}
+
+.inputField::placeholder {
+  color: var(--gray-500);
+  opacity: 1;
+}
+
+.inputField:focus {
+  border: none;
+  background-color: var(--gray-50);
+  box-shadow: 0 4px 6px color-mix(in srgb, var(--color-black) 25%, transparent);
+  outline: none;
+  transition: box-shadow 0.2s ease;
+}
+
+.removeButton {
+  margin-bottom: var(--space-5);
+  background-color: var(--red-50);
+  color: var(--red-500);
+  margin-right: var(--space-6);
+  border-color: var(--red-50);
+}
+
+.removeButton:is(:hover, :active, :focus) {
+  background-color: var(--red-500);
+  border-color: var(--red-500);
+  color: var(--surface);
+}
+
+.addButton {
+  margin-bottom: var(--space-5);
+  color: var(--gray-700);
+  background-color: var(--green-50);
+  border-color: var(--green-100);
+}
+
+.addButton:is(:hover, :active, :focus) {
+  background-color: var(--green-600);
+  border-color: var(--gray-700);
+}
+
+.addButton:disabled {
+  margin-bottom: var(--space-5);
+}
+
+.btnsContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.btnsContainer > :first-child {
+  flex: 1 1 540px;
+  min-width: calc(400px);
+  max-width: 100%;
+}
+
+.btnsContainer .btnsBlock {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  flex-wrap: wrap;
+}
+
+.btnsContainer .btnsBlock button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0;
+}
+
+@media (max-width: 1020px) {
+  .btnsContainer {
+    flex-direction: column;
+    margin: var(--space-8) 0;
+  }
+
+  .btnsContainer > div {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .btnsContainer .btnsBlock {
+    display: block;
+    margin: var(--space-8) 0 0 0;
+    justify-content: space-between;
+  }
+
+  .btnsContainer .btnsBlock button {
+    margin: 0;
+    margin-left: 0;
+    width: 100%;
+    max-width: calc(720px);
+  }
+
+  .btnsContainer .btnsBlock div button {
+    margin-right: var(--space-8);
+  }
+}
+
+@media (max-width: 520px) {
+  .btnsContainer {
+    margin-bottom: 0;
+  }
+
+  .btnsContainer .btnsBlock {
+    display: block;
+    margin-top: var(--space-6);
+    margin-right: 0;
+  }
+
+  .btnsContainer .btnsBlock div {
+    flex: 1;
+  }
+
+  .btnsContainer .btnsBlock button {
+    margin-bottom: var(--space-6);
+    margin-right: 0;
+    width: 100%;
+  }
+}

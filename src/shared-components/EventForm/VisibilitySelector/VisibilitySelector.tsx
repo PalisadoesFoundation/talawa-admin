@@ -18,7 +18,10 @@ const VisibilitySelector: React.FC<InterfaceVisibilitySelectorProps> = ({
 }) => {
   const { t: tCommon } = useTranslation('common');
   return (
-    <fieldset className={styles.fieldset} aria-label={tCommon('eventVisibility')}>
+    <fieldset
+      className={styles.fieldset}
+      aria-label={tCommon('eventVisibility')}
+    >
       <legend className={styles.visibilityLabel}>
         {tCommon('eventVisibility')}
       </legend>

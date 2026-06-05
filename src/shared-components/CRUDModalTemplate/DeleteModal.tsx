@@ -117,11 +117,7 @@ export const DeleteModal: React.FC<InterfaceDeleteModalProps> = ({
       data-testid={dataTestId}
       customFooter={customFooter}
     >
-      {showWarning && (
-        <div>
-          ⚠
-        </div>
-      )}
+      {showWarning && <div>⚠</div>}
 
       {children ? (
         children

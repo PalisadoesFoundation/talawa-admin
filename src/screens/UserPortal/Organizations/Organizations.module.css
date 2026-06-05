@@ -224,7 +224,9 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  transition: box-shadow 0.2s, transform 0.15s;
+  transition:
+    box-shadow 0.2s,
+    transform 0.15s;
 }
 
 .orgCard:hover {

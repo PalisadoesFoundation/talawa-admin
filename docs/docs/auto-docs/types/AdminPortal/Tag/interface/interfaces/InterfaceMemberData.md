@@ -16,16 +16,24 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:4](https://github.com/Palisa
 
 ***
 
-### firstName
+### firstName?
 
-> **firstName**: `string`
+> `optional` **firstName**: `string`
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L5)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L6)
 
 ***
 
-### lastName
+### lastName?
 
-> **lastName**: `string`
+> `optional` **lastName**: `string`
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L6)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L7)
+
+***
+
+### name
+
+> **name**: `string`
+
+Defined in: [src/types/AdminPortal/Tag/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L5)

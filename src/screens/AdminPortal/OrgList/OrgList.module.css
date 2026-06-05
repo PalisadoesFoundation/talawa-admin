@@ -63,7 +63,9 @@
   gap: 6px;
   font-weight: 600;
   font-size: 13px;
-  transition: background-color 0.15s, box-shadow 0.15s;
+  transition:
+    background-color 0.15s,
+    box-shadow 0.15s;
   cursor: pointer;
   white-space: nowrap;
 }
@@ -142,7 +144,9 @@
   border-radius: var(--radius-xl, 18px);
   box-shadow: var(--shadow-card, 0 1px 3px rgba(0, 0, 0, 0.06));
   padding: 24px;
-  transition: box-shadow 0.2s, transform 0.15s;
+  transition:
+    box-shadow 0.2s,
+    transform 0.15s;
   cursor: pointer;
   display: block;
   text-decoration: none;
@@ -302,7 +306,9 @@
   padding: 10px 20px;
   border-radius: var(--radius-md, 10px);
   font-weight: 600;
-  transition: background-color 0.15s, box-shadow 0.15s;
+  transition:
+    background-color 0.15s,
+    box-shadow 0.15s;
   cursor: pointer;
 }
 

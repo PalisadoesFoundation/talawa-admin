@@ -176,8 +176,15 @@ const VerifyEmail = (): JSX.Element => {
       variant="spinner"
     >
       <div className={styles.pageWrapper}>
-        <div style={{ display: "flex", flexWrap: "wrap", width: "100%", alignItems: "center" }}>
-          <div style={{ flex: "0 0 33.33%", maxWidth: "33.33%", padding: 0 }}>
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            width: '100%',
+            alignItems: 'center',
+          }}
+        >
+          <div style={{ flex: '0 0 33.33%', maxWidth: '33.33%', padding: 0 }}>
             <div className={styles.cardTemplate}>
               <TalawaLogo className={styles.logo} />
 
@@ -190,7 +197,7 @@ const VerifyEmail = (): JSX.Element => {
                   >
                     <span className="visually-hidden">{t('verifying')}</span>
                   </div>
-                  <h3 style={{ textAlign: "center" }}>{t('verifying')}</h3>
+                  <h3 style={{ textAlign: 'center' }}>{t('verifying')}</h3>
                 </div>
               )}
 
@@ -203,11 +210,9 @@ const VerifyEmail = (): JSX.Element => {
                     className={styles.successIcon}
                     data-testid="success-icon"
                   />
-                  <h3 style={{ textAlign: "center" }}>{t('success')}</h3>
-                  <p style={{ textAlign: "center" }}>
-                    {t('successMessage')}
-                  </p>
-                  <Link to="/" style={{ width: "100%" }}>
+                  <h3 style={{ textAlign: 'center' }}>{t('success')}</h3>
+                  <p style={{ textAlign: 'center' }}>{t('successMessage')}</p>
+                  <Link to="/" style={{ width: '100%' }}>
                     <Button
                       className={`${styles.actionBtn}`}
                       data-testid="goToLoginBtn"
@@ -227,14 +232,14 @@ const VerifyEmail = (): JSX.Element => {
                     className={styles.errorIcon}
                     data-testid="error-icon"
                   />
-                  <h3 style={{ textAlign: "center" }}>{t('error')}</h3>
-                  <p style={{ textAlign: "center" }}>
+                  <h3 style={{ textAlign: 'center' }}>{t('error')}</h3>
+                  <p style={{ textAlign: 'center' }}>
                     {token ? t('invalidToken') : t('noToken')}
                   </p>
 
                   <Button
                     variant="outline-primary"
-                    style={{ width: "100%" }}
+                    style={{ width: '100%' }}
                     onClick={handleResendEmail}
                     disabled={verifyLoading || resendLoading || isResending}
                     data-testid="resendVerificationBtn"
@@ -244,7 +249,7 @@ const VerifyEmail = (): JSX.Element => {
                       : t('resendButton')}
                   </Button>
 
-                  <div style={{ justifyContent: "center" }}>
+                  <div style={{ justifyContent: 'center' }}>
                     <Link
                       to="/"
                       className="text-secondary"

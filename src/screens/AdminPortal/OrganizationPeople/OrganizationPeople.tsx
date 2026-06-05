@@ -174,11 +174,18 @@ function OrganizationPeople(): JSX.Element {
   );
 
   // Query for members/admins
-  const query = state !== 2 ? ORGANIZATIONS_MEMBER_CONNECTION_LIST : USER_LIST_FOR_TABLE;
+  const query =
+    state !== 2 ? ORGANIZATIONS_MEMBER_CONNECTION_LIST : USER_LIST_FOR_TABLE;
   const dataPath = state !== 2 ? 'organization.members' : 'allUsers';
-  const queryVariables = state !== 2
-    ? { orgId: currentUrl, where: whereFilter, first: ITEMS_PER_PAGE, after: null }
-    : { first: ITEMS_PER_PAGE, after: null };
+  const queryVariables =
+    state !== 2
+      ? {
+          orgId: currentUrl,
+          where: whereFilter,
+          first: ITEMS_PER_PAGE,
+          after: null,
+        }
+      : { first: ITEMS_PER_PAGE, after: null };
 
   const { data, loading, error, fetchMore } = useQuery(query, {
     variables: queryVariables,
@@ -188,7 +195,10 @@ function OrganizationPeople(): JSX.Element {
   // Sync data from query results
   useEffect(() => {
     if (!data) return;
-    const connectionData = extractConnectionData<InterfaceMemberNode>(data, dataPath);
+    const connectionData = extractConnectionData<InterfaceMemberNode>(
+      data,
+      dataPath,
+    );
     if (connectionData) {
       const nodes = connectionData.edges.map((edge) => edge.node);
       setItems(nodes);
@@ -208,9 +218,15 @@ function OrganizationPeople(): JSX.Element {
 
     setIsLoadingMore(true);
     try {
-      const vars: Record<string, unknown> = state !== 2
-        ? { orgId: currentUrl, where: whereFilter, first: ITEMS_PER_PAGE, after: pageInfo.endCursor }
-        : { first: ITEMS_PER_PAGE, after: pageInfo.endCursor };
+      const vars: Record<string, unknown> =
+        state !== 2
+          ? {
+              orgId: currentUrl,
+              where: whereFilter,
+              first: ITEMS_PER_PAGE,
+              after: pageInfo.endCursor,
+            }
+          : { first: ITEMS_PER_PAGE, after: pageInfo.endCursor };
 
       const result = await fetchMore({ variables: vars });
       const connectionData = extractConnectionData<InterfaceMemberNode>(
@@ -227,7 +243,16 @@ function OrganizationPeople(): JSX.Element {
     } finally {
       setIsLoadingMore(false);
     }
-  }, [pageInfo, isLoadingMore, loading, fetchMore, currentUrl, whereFilter, state, dataPath]);
+  }, [
+    pageInfo,
+    isLoadingMore,
+    loading,
+    fetchMore,
+    currentUrl,
+    whereFilter,
+    state,
+    dataPath,
+  ]);
 
   // Filter items by search
   const filteredItems = useMemo(() => {

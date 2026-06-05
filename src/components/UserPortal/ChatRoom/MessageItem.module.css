@@ -117,7 +117,9 @@
   height: 24px;
   border-radius: 50%;
   cursor: pointer;
-  transition: opacity 0.15s, visibility 0.15s;
+  transition:
+    opacity 0.15s,
+    visibility 0.15s;
 }
 
 .messageReceived:hover .customToggle,
@@ -167,8 +169,12 @@
 }
 
 @keyframes highlightMsg {
-  from { background: var(--green-50, #ecfdf5); }
-  to { background: transparent; }
+  from {
+    background: var(--green-50, #ecfdf5);
+  }
+  to {
+    background: transparent;
+  }
 }
 
 .dropdownCursor {

@@ -82,6 +82,11 @@ export interface InterfaceCrudModalBaseProps {
    * Test ID for the modal container (useful for testing)
    */
   'data-testid'?: string;
+
+  /**
+   * HTML id attribute for the modal/form
+   */
+  id?: string;
 }
 
 /**

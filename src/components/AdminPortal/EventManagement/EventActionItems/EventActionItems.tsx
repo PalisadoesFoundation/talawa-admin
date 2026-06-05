@@ -218,7 +218,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
     return (
       <div className={styles.message} data-testid="errorMsg">
         <WarningAmberRounded className={`${styles.icon} ${styles.iconLarge}`} />
-        <h6 style={{ textAlign: "center" }}>
+        <h6 style={{ textAlign: 'center' }}>
           {tErrors('errorLoading', { entity: 'Action Items' })}
         </h6>
       </div>
@@ -285,10 +285,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <div
-            style={{ justifyContent: "center" }}
-            data-testid="categoryName"
-          >
+          <div style={{ justifyContent: 'center' }} data-testid="categoryName">
             {params.row.category?.name || t('noCategory')}
           </div>
         );
@@ -357,8 +354,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
               data-testid={`editItemBtn${params.row.id}`}
               onClick={() => handleOpenItemModal(params.row)}
               aria-label={t('editActionItem')}
-            >
-            </Button>
+            ></Button>
             <Button
               size="sm"
               variant="danger"
@@ -366,8 +362,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
               data-testid={`deleteItemBtn${params.row.id}`}
               onClick={() => handleOpenDeleteModal(params.row)}
               aria-label={t('deleteActionItem')}
-            >
-            </Button>
+            ></Button>
           </>
         );
       },
@@ -383,7 +378,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <div style={{ alignItems: "center" }}>
+          <div style={{ alignItems: 'center' }}>
             <input
               type="checkbox"
               data-testid={`statusCheckbox${params.row.id}`}
@@ -483,8 +478,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
             data-testid="createActionItemBtn"
             data-cy="createActionItemBtn"
           >
-            +
-            {tCommon('create')}
+            +{tCommon('create')}
           </Button>
         </div>
       </div>

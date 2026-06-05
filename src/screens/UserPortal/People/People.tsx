@@ -49,9 +49,7 @@ export default function People(): React.JSX.Element {
       <div>
         <div className="page-header">
           <div className="page-header-left">
-            <h1 className="page-title">
-              {t('title')}
-            </h1>
+            <h1 className="page-title">{t('title')}</h1>
             <p className="page-subtitle">{t('searchUsers')}</p>
           </div>
         </div>
@@ -118,7 +116,10 @@ export default function People(): React.JSX.Element {
                   className={styles.memberCard}
                   data-testid={`people-row-${node.id}`}
                 >
-                  <div className={styles.memberAvatar} style={{ background: '#6366f1' }}>
+                  <div
+                    className={styles.memberAvatar}
+                    style={{ background: '#6366f1' }}
+                  >
                     {node.avatarURL ? (
                       <img
                         src={node.avatarURL}

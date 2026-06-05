@@ -17,7 +17,9 @@
   color: var(--gray-700, #374151);
   border: 1.5px solid var(--gray-200, #e5e7eb);
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
   height: 40px;
   white-space: nowrap;
 }
@@ -85,7 +87,9 @@
   border-radius: 12px;
   border: 1px solid var(--gray-200, #e5e7eb);
   background: var(--surface, #fff);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(0, 0, 0, 0.04);
   max-height: 280px;
   overflow-y: auto;
   margin-top: 4px;

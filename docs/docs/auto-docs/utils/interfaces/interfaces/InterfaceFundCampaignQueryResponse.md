@@ -4,7 +4,7 @@
 
 # Interface: InterfaceFundCampaignQueryResponse
 
-Defined in: [src/utils/interfaces.ts:1386](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1386)
+Defined in: [src/utils/interfaces.ts:1418](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1418)
 
 Defines the fund campaign query response structure.
 
@@ -14,7 +14,7 @@ Defines the fund campaign query response structure.
 
 > **fund**: `object`
 
-Defined in: [src/utils/interfaces.ts:1387](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1387)
+Defined in: [src/utils/interfaces.ts:1419](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1419)
 
 #### campaigns
 

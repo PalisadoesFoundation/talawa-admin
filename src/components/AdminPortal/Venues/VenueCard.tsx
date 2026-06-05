@@ -77,7 +77,11 @@ const VenueCard = ({
               {venueItem.node.capacity != null && (
                 <div className={styles.capacityLabel}>
                   {tCommon('capacity')}: {venueItem.node.capacity}
-                  <PeopleIcon style={{ marginLeft: '0.25rem' }} width={16} height={16} />
+                  <PeopleIcon
+                    style={{ marginLeft: '0.25rem' }}
+                    width={16}
+                    height={16}
+                  />
                 </div>
               )}
             </h3>
@@ -89,7 +93,15 @@ const VenueCard = ({
                 : venueItem.node.description}
             </p>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginBottom: '0.5rem', marginRight: '1rem' }}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              gap: '0.5rem',
+              marginBottom: '0.5rem',
+              marginRight: '1rem',
+            }}
+          >
             {/* Edit button */}
             <Button
               size="sm"
