@@ -317,9 +317,9 @@ function TagDetails(): JSX.Element {
         className="toolbar"
         style={{
           display: 'flex',
-          gap: 'var(--space-4)',
+          gap: '12px',
           alignItems: 'center',
-          marginBottom: 'var(--space-6)',
+          marginBottom: '20px',
         }}
       >
         <input
@@ -331,10 +331,10 @@ function TagDetails(): JSX.Element {
           data-testid="searchInput"
           style={{
             flex: 1,
-            padding: 'var(--space-3) var(--space-4)',
+            padding: '8px 12px',
             border: '1px solid var(--gray-200)',
             borderRadius: 'var(--radius-md)',
-            fontSize: 'var(--font-size-sm)',
+            fontSize: '13px',
           }}
         />
       </div>

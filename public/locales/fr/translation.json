@@ -531,6 +531,8 @@
     "card_test_id": "organization-card-{{id}}"
   },
   "organizationTags": {
+    "folderName": "Nom du dossier",
+    "folderNamePlaceholder": "Entrez le nom du dossier",
     "title": "Étiquettes d'Organisation",
     "createTag": "Créer une nouvelle étiquette",
     "manageTag": "Gérer",

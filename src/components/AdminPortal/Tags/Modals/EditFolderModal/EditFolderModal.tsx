@@ -145,7 +145,7 @@ const EditFolderModal: React.FC<InterfaceManageFolderModalProps> = ({
           <div
             style={{
               display: 'flex',
-              gap: 'var(--space-4)',
+              gap: '8px',
               justifyContent: 'flex-end',
               width: '100%',
             }}
@@ -158,7 +158,7 @@ const EditFolderModal: React.FC<InterfaceManageFolderModalProps> = ({
             >
               <i
                 className="fa fa-trash"
-                style={{ marginRight: 'var(--space-3)' }}
+                style={{ marginRight: '8px' }}
               />
               {tCommon('delete') as string}
             </Button>
@@ -170,7 +170,7 @@ const EditFolderModal: React.FC<InterfaceManageFolderModalProps> = ({
             >
               <i
                 className="fa fa-edit"
-                style={{ marginRight: 'var(--space-3)' }}
+                style={{ marginRight: '8px' }}
               />
               {tCommon('save') as string}
             </Button>

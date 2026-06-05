@@ -526,6 +526,8 @@
     "card_test_id": "organization-card-{{id}}"
   },
   "organizationTags": {
+    "folderName": "Nombre de la carpeta",
+    "folderNamePlaceholder": "Introduzca el nombre de la carpeta",
     "title": "Etiquetas de Organización",
     "createTag": "Crear una nueva etiqueta",
     "manageTag": "Gestionar",

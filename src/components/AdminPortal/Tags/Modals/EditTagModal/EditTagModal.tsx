@@ -155,7 +155,7 @@ const EditTagModal: React.FC<InterfaceManageTagModalProps> = ({
             >
               <i
                 className="fa fa-trash"
-                style={{ marginRight: 'var(--space-3)' }}
+                style={{ marginRight: '8px' }}
               />
               {tCommon('delete') as string}
             </Button>
@@ -167,7 +167,7 @@ const EditTagModal: React.FC<InterfaceManageTagModalProps> = ({
             >
               <i
                 className="fa fa-edit"
-                style={{ marginRight: 'var(--space-3)' }}
+                style={{ marginRight: '8px' }}
               />
               {tCommon('save') as string}
             </Button>

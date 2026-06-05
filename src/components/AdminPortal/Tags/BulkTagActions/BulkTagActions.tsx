@@ -494,8 +494,7 @@ const BulkTagActions: React.FC<InterfaceTagActionsProps> = ({
   const modalFooter = (
     <>
       <Button
-        variant="outline-danger"
-        className={styles.removeButton}
+        variant="danger"
         onClick={hideTagActionsModal}
         data-testid="closeTagActionsModalBtn"
       >
@@ -505,7 +504,7 @@ const BulkTagActions: React.FC<InterfaceTagActionsProps> = ({
         type="submit"
         form="tagActionForm"
         data-testid="tagActionSubmitBtn"
-        className={styles.addButton}
+        variant="primary"
         disabled={!hasAssignees}
       >
         {tagActionType === 'assignToTags' ? t('move') : t('remove')}
@@ -526,8 +525,9 @@ const BulkTagActions: React.FC<InterfaceTagActionsProps> = ({
       <form id="tagActionForm" onSubmit={handleTagAction}>
         <div className={styles.scrollContainer}>
           {selectedTags.length === 0 ? (
-            <div style={{ margin: 'auto', color: 'var(--gray-500)' }}>
-              {t('noTagSelected')}
+            <div style={{ margin: 'auto', color: 'var(--gray-500)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+              <i className="fa fa-tags" style={{ fontSize: '24px', opacity: 0.5 }} />
+              <span>{t('noTagSelected')}</span>
             </div>
           ) : (
             selectedTags.map((tag) => (

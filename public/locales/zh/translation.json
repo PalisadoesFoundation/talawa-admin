@@ -531,6 +531,8 @@
     "card_test_id": "organization-card-{{id}}"
   },
   "organizationTags": {
+    "folderName": "文件夹名称",
+    "folderNamePlaceholder": "输入文件夹名称",
     "title": "组织标签",
     "createTag": "创建新标签",
     "manageTag": "管理",

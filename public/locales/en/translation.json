@@ -532,6 +532,8 @@
     "emailNotAvailable": "Email not available"
   },
   "organizationTags": {
+    "folderName": "Folder Name",
+    "folderNamePlaceholder": "Enter folder name",
     "title": "Organization Tag Folders",
     "type": "Type",
     "viewFolder": "View Folder",

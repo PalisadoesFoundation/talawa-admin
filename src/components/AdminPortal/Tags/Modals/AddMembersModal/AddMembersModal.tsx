@@ -230,9 +230,8 @@ const AddMembersModal: React.FC<InterfaceAddPeopleToTagProps> = ({
     <>
       <Button
         onClick={hideAddPeopleToTagModal}
-        variant="outline-danger"
+        variant="danger"
         data-testid="closeAddPeopleToTagModal"
-        className={styles.removeButton}
       >
         {tCommon('cancel')}
       </Button>
@@ -240,7 +239,7 @@ const AddMembersModal: React.FC<InterfaceAddPeopleToTagProps> = ({
         type="submit"
         disabled={addPeopleToTagLoading}
         data-testid="assignPeopleBtn"
-        className={styles.addButton}
+        variant="primary"
         form="addPeopleToTagForm"
       >
         {t('assign')}
@@ -267,8 +266,9 @@ const AddMembersModal: React.FC<InterfaceAddPeopleToTagProps> = ({
           <div className={styles.scrollContainer}>
             <div className={styles.badgeContainer}>
               {assignToMembers.length === 0 ? (
-                <div style={{ margin: 'auto', color: 'var(--gray-500)' }}>
-                  {t('noOneSelected')}
+                <div style={{ margin: 'auto', color: 'var(--gray-500)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+                  <i className="fa fa-users" style={{ fontSize: '24px', opacity: 0.5 }} />
+                  <span>{t('noOneSelected')}</span>
                 </div>
               ) : (
                 assignToMembers.map((member) => (
@@ -289,7 +289,7 @@ const AddMembersModal: React.FC<InterfaceAddPeopleToTagProps> = ({
             </div>
           </div>
 
-          <div style={{ marginBottom: 'var(--space-5)' }}>
+          <div style={{ marginBottom: '20px' }}>
             <SearchBar
               placeholder={tCommon('searchByName')}
               value={memberToAssignToSearchInput}
@@ -365,7 +365,7 @@ const AddMembersModal: React.FC<InterfaceAddPeopleToTagProps> = ({
                                   ? 'selectedMemberBtn'
                                   : 'selectMemberBtn'
                               }
-                              className={`btn btn-sm ${isToBeAssigned ? styles.selectedMemberButton : styles.editButton}`}
+                              className={`btn btn-sm ${isToBeAssigned ? 'btn-secondary' : 'btn-primary'}`}
                               aria-label={t('addMember')}
                               disabled={isToBeAssigned}
                             >

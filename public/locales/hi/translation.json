@@ -526,6 +526,8 @@
     "card_test_id": "organization-card-{{id}}"
   },
   "organizationTags": {
+    "folderName": "फ़ोल्डर का नाम",
+    "folderNamePlaceholder": "फ़ोल्डर का नाम दर्ज करें",
     "title": "संस्थान टैग",
     "createTag": "नया टैग बनाएँ",
     "manageTag": "प्रबंधित करें",

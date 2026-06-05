@@ -38,17 +38,20 @@
 
 .loadingDiv {
   min-height: var(--space-20);
+  min-height: 80px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .tagActionsScrollableDiv {
-  height: var(--space-20);
-  overflow: auto;
   list-style: none;
   padding: 0;
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  margin-bottom: 12px;
 }
 
 .listItem {
@@ -57,23 +60,32 @@
   list-style: none;
 }
 
-.folderNavButton[class~='btn'] {
+.folderRow {
   display: inline-flex;
   align-items: center;
   width: 100%;
-  padding: var(--space-2) var(--space-2);
+  padding: 6px 8px;
+  color: var(--color-gray-700);
+  font-weight: 500;
+  line-height: normal;
+}
+
+.folderNavButton {
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  padding: 6px 8px;
   color: var(--color-gray-700);
   text-decoration: none;
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-medium);
-  line-height: var(--line-height-normal);
+  font-weight: 500;
+  line-height: normal;
   border: none;
   background: transparent;
   box-shadow: none;
   justify-content: flex-start;
 }
 
-.folderNavButton[class~='btn']:is(:hover, :focus-visible) {
+.folderNavButton:is(:hover, :focus-visible) {
   color: var(--color-blue-700);
   text-decoration: underline;
 }
@@ -82,29 +94,57 @@
   color: var(--color-gray-700);
 }
 
+.folderToggleButton {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  border: none;
+  border-radius: 6px;
+  padding: 0;
+  margin-right: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--color-gray-600);
+  box-shadow: none;
+}
+
+.folderToggleButton:is(:hover, :active, :focus) {
+  background: var(--color-blue-200);
+  color: var(--color-gray-700);
+  border: none;
+  box-shadow: none;
+}
+
+.folderTogglePlaceholder {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  margin-right: 8px;
+}
+
 .folderLoadingRow {
-  min-height: var(--space-8);
+  min-height: 32px;
   display: flex;
   align-items: center;
 }
 
 .folderEmptyRow {
-  min-height: var(--space-8);
+  min-height: 32px;
   display: flex;
   align-items: center;
   color: var(--color-gray-500);
-  font-size: var(--font-size-sm);
 }
 
 .listItemLabel {
   display: inline-flex;
   align-items: center;
   width: 100%;
-  padding: var(--space-2) var(--space-2);
+  padding: 6px 8px;
   cursor: pointer;
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-medium);
-  line-height: var(--line-height-normal);
+  font-weight: 500;
+  line-height: normal;
 }
 
 .tagRow {
@@ -117,24 +157,22 @@
 .tagRowMain {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: 12px;
 }
 
 .tagName {
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-medium);
+  font-weight: 500;
   color: var(--color-gray-700);
 }
 
 .tagIcon {
   color: var(--color-gray-700);
-  font-size: var(--font-size-md);
   line-height: 1;
 }
 
 .listCheckbox {
   margin: 0;
-  width: var(--space-4);
-  height: var(--space-4);
+  width: 16px;
+  height: 16px;
   flex: 0 0 auto;
 }

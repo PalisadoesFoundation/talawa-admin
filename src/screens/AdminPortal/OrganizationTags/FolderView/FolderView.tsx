@@ -391,7 +391,7 @@ function FolderView(): JSX.Element {
         </div>
         <div
           className="page-header-actions"
-          style={{ gap: 'var(--space-4)', display: 'flex' }}
+          style={{ gap: '12px', display: 'flex' }}
         >
           <button
             className="btn btn-secondary"
@@ -414,9 +414,9 @@ function FolderView(): JSX.Element {
         className="toolbar"
         style={{
           display: 'flex',
-          gap: 'var(--space-4)',
+          gap: '12px',
           alignItems: 'center',
-          marginBottom: 'var(--space-6)',
+          marginBottom: '20px',
         }}
       >
         <input
@@ -428,10 +428,10 @@ function FolderView(): JSX.Element {
           data-testid="searchByName"
           style={{
             flex: 1,
-            padding: 'var(--space-3) var(--space-4)',
+            padding: '8px 12px',
             border: '1px solid var(--gray-200)',
             borderRadius: 'var(--radius-md)',
-            fontSize: 'var(--font-size-sm)',
+            fontSize: '13px',
           }}
         />
       </div>
