@@ -213,9 +213,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
       loading={isSubmitting}
       showFooter={false}
     >
-      <fieldset
-        className={`btn-group ${styles.toggleGroup} mt-0`}
-      >
+      <fieldset className={`btn-group ${styles.toggleGroup} mt-0`}>
         <legend className="visually-hidden">{t('viewToggle')}</legend>
         <input
           type="radio"
@@ -351,7 +349,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
           </Button>
         </form>
       ) : (
-        <div style={{ padding: "0 12px" }}>
+        <div style={{ padding: '0 12px' }}>
           {requests.length === 0 ? (
             <Stack height="100%" alignItems="center" justifyContent="center">
               {t('noRequests')}

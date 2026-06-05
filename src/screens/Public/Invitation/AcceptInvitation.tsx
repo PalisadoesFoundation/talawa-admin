@@ -143,7 +143,7 @@ const AcceptInvitation = (): JSX.Element => {
       size="xl"
       data-testid="invitation-loading"
     >
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "24px 16px" }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 16px' }}>
         <div className="card p-4">
           <h3>
             {invite?.eventId
@@ -208,17 +208,18 @@ const AcceptInvitation = (): JSX.Element => {
                   )}
 
                   {requiresConfirmation && (
-                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <div
+                      style={{ display: 'flex', alignItems: 'center', gap: 8 }}
+                    >
                       <input
                         id="confirmIsInvitee"
                         type="checkbox"
-                        
                         checked={confirmIsInvitee}
                         onChange={(e) => setConfirmIsInvitee(e.target.checked)}
                       />
                       <label
                         htmlFor="confirmIsInvitee"
-                        style={{ marginLeft: 6, cursor: "pointer" }}
+                        style={{ marginLeft: 6, cursor: 'pointer' }}
                       >
                         {t('confirmMatch', {
                           defaultValue:

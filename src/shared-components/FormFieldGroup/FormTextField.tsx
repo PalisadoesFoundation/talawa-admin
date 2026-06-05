@@ -42,7 +42,9 @@ export const FormTextField: React.FC<IFormTextFieldProps> = ({
           disabled={disabled}
           data-testid={dataTestId}
           className="form-input"
-          style={isInvalid ? { borderColor: 'var(--red-500, #ef4444)' } : undefined}
+          style={
+            isInvalid ? { borderColor: 'var(--red-500, #ef4444)' } : undefined
+          }
         />
       );
     }
@@ -58,7 +60,9 @@ export const FormTextField: React.FC<IFormTextFieldProps> = ({
         disabled={disabled}
         data-testid={dataTestId}
         className="form-input"
-        style={isInvalid ? { borderColor: 'var(--red-500, #ef4444)' } : undefined}
+        style={
+          isInvalid ? { borderColor: 'var(--red-500, #ef4444)' } : undefined
+        }
         {...(props as React.InputHTMLAttributes<HTMLInputElement>)}
       />
     );

@@ -42,7 +42,7 @@ Defined in: [src/types/SidebarNavItem/interface.ts:27](https://github.com/Palisa
 
 ### iconType?
 
-> `optional` **iconType**: `"svg"` \| `"react-icon"`
+> `optional` **iconType**: `"react-icon"` \| `"svg"`
 
 Defined in: [src/types/SidebarNavItem/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L23)
 
@@ -81,6 +81,14 @@ Defined in: [src/types/SidebarNavItem/interface.ts:15](https://github.com/Palisa
 > **to**: `string`
 
 Defined in: [src/types/SidebarNavItem/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L9)
+
+***
+
+### tooltip?
+
+> `optional` **tooltip**: `string`
+
+Defined in: [src/types/SidebarNavItem/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L29)
 
 ***
 

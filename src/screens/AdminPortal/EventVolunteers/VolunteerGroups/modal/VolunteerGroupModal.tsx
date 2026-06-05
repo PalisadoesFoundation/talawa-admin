@@ -284,7 +284,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
         data-testid="groupDescriptionInput"
       />
 
-      <div style={{ width: "100%" }}>
+      <div style={{ width: '100%' }}>
         <FormFieldGroup
           name="leaderSelect"
           label={t('leader')}
@@ -311,7 +311,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
               });
             }}
             renderInput={(params) => (
-              <div ref={params.InputProps.ref} style={{ width: "100%" }}>
+              <div ref={params.InputProps.ref} style={{ width: '100%' }}>
                 <div style={{ gap: 8 }}>
                   {params.InputProps.startAdornment}
                   <input
@@ -329,7 +329,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
         </FormFieldGroup>
       </div>
 
-      <div style={{ width: "100%" }}>
+      <div style={{ width: '100%' }}>
         <Autocomplete
           id="volunteerSelect"
           multiple
@@ -353,10 +353,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
           }}
           renderInput={(params) => (
             <FormFieldGroup name="volunteers" label={t('volunteers')} required>
-              <div
-                ref={params.InputProps.ref}
-                style={{ width: "100%" }}
-              >
+              <div ref={params.InputProps.ref} style={{ width: '100%' }}>
                 {params.InputProps.startAdornment}
                 <input
                   {...params.inputProps}

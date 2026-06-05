@@ -4,7 +4,7 @@
 
 # Interface: InterfaceAddress
 
-Defined in: [src/utils/interfaces.ts:1647](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1647)
+Defined in: [src/utils/interfaces.ts:1679](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1679)
 
 Defines the structure for an address.
 
@@ -14,7 +14,7 @@ Defines the structure for an address.
 
 > **city**: `string`
 
-Defined in: [src/utils/interfaces.ts:1648](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1648)
+Defined in: [src/utils/interfaces.ts:1680](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1680)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:1648](https://github.com/PalisadoesFoundati
 
 > **countryCode**: `string`
 
-Defined in: [src/utils/interfaces.ts:1649](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1649)
+Defined in: [src/utils/interfaces.ts:1681](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1681)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/utils/interfaces.ts:1649](https://github.com/PalisadoesFoundati
 
 > **dependentLocality**: `string`
 
-Defined in: [src/utils/interfaces.ts:1650](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1650)
+Defined in: [src/utils/interfaces.ts:1682](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1682)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/utils/interfaces.ts:1650](https://github.com/PalisadoesFoundati
 
 > **line1**: `string`
 
-Defined in: [src/utils/interfaces.ts:1651](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1651)
+Defined in: [src/utils/interfaces.ts:1683](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1683)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/utils/interfaces.ts:1651](https://github.com/PalisadoesFoundati
 
 > **line2**: `string`
 
-Defined in: [src/utils/interfaces.ts:1652](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1652)
+Defined in: [src/utils/interfaces.ts:1684](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1684)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/utils/interfaces.ts:1652](https://github.com/PalisadoesFoundati
 
 > **postalCode**: `string`
 
-Defined in: [src/utils/interfaces.ts:1653](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1653)
+Defined in: [src/utils/interfaces.ts:1685](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1685)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/utils/interfaces.ts:1653](https://github.com/PalisadoesFoundati
 
 > **sortingCode**: `string`
 
-Defined in: [src/utils/interfaces.ts:1654](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1654)
+Defined in: [src/utils/interfaces.ts:1686](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1686)
 
 ***
 
@@ -70,4 +70,4 @@ Defined in: [src/utils/interfaces.ts:1654](https://github.com/PalisadoesFoundati
 
 > **state**: `string`
 
-Defined in: [src/utils/interfaces.ts:1655](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1655)
+Defined in: [src/utils/interfaces.ts:1687](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1687)

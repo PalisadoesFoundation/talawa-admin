@@ -47,7 +47,9 @@
   font-family: var(--font, 'Inter', sans-serif);
   margin-top: 6px;
   margin-bottom: 6px;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
   outline: none;
 }
 

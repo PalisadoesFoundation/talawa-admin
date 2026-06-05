@@ -170,7 +170,7 @@ vi.mock('screens/AdminPortal/OrganizationPeople/OrganizationPeople', () => ({
   ),
 }));
 
-vi.mock('screens/AdminPortal/OrganizationTags/OrganizationTags', async () => {
+vi.mock('screens/AdminPortal/OrganizationTags/RootView/RootView', async () => {
   const { useNavigate, useParams } = await import('react-router');
 
   return {
@@ -193,7 +193,7 @@ vi.mock('screens/AdminPortal/OrganizationTags/OrganizationTags', async () => {
   };
 });
 
-vi.mock('screens/AdminPortal/ManageTag/ManageTag', () => ({
+vi.mock('screens/AdminPortal/OrganizationTags/TagDetails/TagDetails', () => ({
   default: () => {
     const [assigned, setAssigned] = React.useState(false);
 
@@ -214,30 +214,33 @@ vi.mock('screens/AdminPortal/ManageTag/ManageTag', () => ({
   },
 }));
 
-vi.mock('screens/AdminPortal/Tags/Tags', async () => {
-  const { useNavigate, useParams } = await import('react-router');
+vi.mock(
+  'screens/AdminPortal/OrganizationTags/FolderView/FolderView',
+  async () => {
+    const { useNavigate, useParams } = await import('react-router');
 
-  return {
-    default: () => {
-      const navigate = useNavigate();
-      const { orgId } = useParams();
+    return {
+      default: () => {
+        const navigate = useNavigate();
+        const { orgId } = useParams();
 
-      return (
-        <div data-testid="mock-sub-tags">
-          Mock Sub Tags
-          <button
-            data-testid="mock-manage-tag-flow"
-            onClick={() =>
-              navigate(`/admin/orgtags/${orgId}/manageTag/new-tag`)
-            }
-          >
-            Manage Tag
-          </button>
-        </div>
-      );
-    },
-  };
-});
+        return (
+          <div data-testid="mock-sub-tags">
+            Mock Sub Tags
+            <button
+              data-testid="mock-manage-tag-flow"
+              onClick={() =>
+                navigate(`/admin/orgtags/${orgId}/manageTag/new-tag`)
+              }
+            >
+              Manage Tag
+            </button>
+          </div>
+        );
+      },
+    };
+  },
+);
 
 vi.mock('screens/AdminPortal/Requests/Requests', () => ({
   default: () => <div data-testid="mock-requests">Mock Requests</div>,

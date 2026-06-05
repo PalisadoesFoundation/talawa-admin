@@ -4,7 +4,7 @@
 
 # Interface: InterfacePledgeInfoPG
 
-Defined in: [src/utils/interfaces.ts:1429](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1429)
+Defined in: [src/utils/interfaces.ts:1461](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1461)
 
 Defines the structure for pledge information with PostgreSQL-specific fields.
 
@@ -14,7 +14,7 @@ Defines the structure for pledge information with PostgreSQL-specific fields.
 
 > **amount**: `number`
 
-Defined in: [src/utils/interfaces.ts:1438](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1438)
+Defined in: [src/utils/interfaces.ts:1470](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1470)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:1438](https://github.com/PalisadoesFoundati
 
 > `optional` **campaign**: `object`
 
-Defined in: [src/utils/interfaces.ts:1431](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1431)
+Defined in: [src/utils/interfaces.ts:1463](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1463)
 
 #### currencyCode
 
@@ -50,7 +50,7 @@ Defined in: [src/utils/interfaces.ts:1431](https://github.com/PalisadoesFoundati
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:1440](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1440)
+Defined in: [src/utils/interfaces.ts:1472](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1472)
 
 ***
 
@@ -58,7 +58,7 @@ Defined in: [src/utils/interfaces.ts:1440](https://github.com/PalisadoesFoundati
 
 > **currencyCode**: `string`
 
-Defined in: [src/utils/interfaces.ts:1439](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1439)
+Defined in: [src/utils/interfaces.ts:1471](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1471)
 
 ***
 
@@ -66,7 +66,7 @@ Defined in: [src/utils/interfaces.ts:1439](https://github.com/PalisadoesFoundati
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:1430](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1430)
+Defined in: [src/utils/interfaces.ts:1462](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1462)
 
 ***
 
@@ -74,7 +74,7 @@ Defined in: [src/utils/interfaces.ts:1430](https://github.com/PalisadoesFoundati
 
 > **pledger**: [`InterfaceUserInfoPG`](InterfaceUserInfoPG.md)
 
-Defined in: [src/utils/interfaces.ts:1442](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1442)
+Defined in: [src/utils/interfaces.ts:1474](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1474)
 
 ***
 
@@ -82,4 +82,4 @@ Defined in: [src/utils/interfaces.ts:1442](https://github.com/PalisadoesFoundati
 
 > `optional` **updatedAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:1441](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1441)
+Defined in: [src/utils/interfaces.ts:1473](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1473)

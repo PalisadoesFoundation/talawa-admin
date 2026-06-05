@@ -238,7 +238,7 @@ const UpcomingEvents = (): JSX.Element => {
           <span className={styles.errorIcon} aria-hidden="true">
             <WarningAmberRounded />
           </span>
-          <h6 style={{ textAlign: "center" }}>
+          <h6 style={{ textAlign: 'center' }}>
             {tErrors('errorLoading', { entity: 'Events' })}
           </h6>
         </div>
@@ -303,7 +303,7 @@ const UpcomingEvents = (): JSX.Element => {
                 </div>
               </AccordionSummary>
               <AccordionDetails className="gaflex-column">
-                <div style={{ alignItems: "center" }}>
+                <div style={{ alignItems: 'center' }}>
                   <div className="gaflex-column">
                     {event.description && (
                       <div style={{ gap: 12 }}>
@@ -382,13 +382,12 @@ const UpcomingEvents = (): JSX.Element => {
                       );
                       const GroupIcon = groupStatus.icon;
                       return (
-                        <div
-                          key={group._id}
-                          className="border rounded"
-                        >
+                        <div key={group._id} className="border rounded">
                           <div style={{ gap: 4 }}>
                             <div style={{ gap: 8 }}>
-                              <span style={{ fontWeight: 600 }}>{group.name}</span>
+                              <span style={{ fontWeight: 600 }}>
+                                {group.name}
+                              </span>
                               {groupStatus.status !== 'none' && (
                                 <StatusBadge
                                   {...getStatusBadgeProps(groupStatus.status)}
@@ -398,11 +397,13 @@ const UpcomingEvents = (): JSX.Element => {
                               )}
                             </div>
                             {group.description && (
-                              <span style={{ color: "var(--gray-500, #6b7280)" }}>
+                              <span
+                                style={{ color: 'var(--gray-500, #6b7280)' }}
+                              >
                                 {group.description}
                               </span>
                             )}
-                            <span style={{ color: "var(--gray-500, #6b7280)" }}>
+                            <span style={{ color: 'var(--gray-500, #6b7280)' }}>
                               {t('volunteersRequired')}:{' '}
                               {group.volunteersRequired}, {t('signedUp')}:{' '}
                               {group.volunteers.length}

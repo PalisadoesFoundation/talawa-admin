@@ -62,6 +62,16 @@ When provided, shows an Alert component with the error
 
 ***
 
+### id?
+
+> `optional` **id**: `string`
+
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:89](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L89)
+
+HTML id attribute for the modal/form
+
+***
+
 ### loading?
 
 > `optional` **loading**: `boolean`

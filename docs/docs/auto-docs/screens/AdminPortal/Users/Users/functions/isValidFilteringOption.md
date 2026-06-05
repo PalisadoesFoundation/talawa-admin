@@ -6,7 +6,7 @@
 
 > **isValidFilteringOption**(`option`): `option is FilteringOption`
 
-Defined in: [src/screens/AdminPortal/Users/Users.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/Users/Users.tsx#L55)
+Defined in: [src/screens/AdminPortal/Users/Users.tsx:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/Users/Users.tsx#L52)
 
 Type guard that validates if a value is a valid FilteringOption.
 

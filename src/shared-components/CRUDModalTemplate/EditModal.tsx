@@ -55,11 +55,14 @@ export const EditModal: React.FC<InterfaceEditModalProps> = ({
   'data-testid': dataTestId,
   submitDisabled = false,
   customFooter,
+  id,
 }) => {
   const { t: tCommon } = useTranslation('common');
   const isOpen = open ?? false;
   const formRef = useRef<HTMLFormElement>(null);
   const isLoading = loading || loadingData;
+  const generatedId = React.useId();
+  const formId = id ?? generatedId;
 
   useEffect(() => {
     if (isOpen && !isLoading && formRef.current) {
@@ -98,7 +101,7 @@ export const EditModal: React.FC<InterfaceEditModalProps> = ({
       </Button>
       <Button
         type="submit"
-        form="crud-edit-form"
+        form={formId}
         variant="primary"
         disabled={isLoading || submitDisabled}
         data-testid="modal-submit-btn"
@@ -122,7 +125,7 @@ export const EditModal: React.FC<InterfaceEditModalProps> = ({
       customFooter={customFooter ?? defaultFooter}
     >
       <form
-        id="crud-edit-form"
+        id={formId}
         ref={formRef}
         onSubmit={handleSubmit}
         onKeyDown={handleKeyDown}

@@ -245,18 +245,28 @@ const Requests = (): JSX.Element => {
             {t('requests.title')}{' '}
             <span
               className="badge badge-orange"
-              style={{ fontSize: '13px', verticalAlign: 'middle', marginLeft: '8px' }}
+              style={{
+                fontSize: '13px',
+                verticalAlign: 'middle',
+                marginLeft: '8px',
+              }}
             >
               {displayedRequests.length} {t('requests.pending')}
             </span>
           </h1>
-          <p className="page-subtitle">
-            {t('requests.reviewAndManage')}
-          </p>
+          <p className="page-subtitle">{t('requests.reviewAndManage')}</p>
         </div>
       </div>
 
-      <div className="toolbar" style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '20px' }}>
+      <div
+        className="toolbar"
+        style={{
+          display: 'flex',
+          gap: '12px',
+          alignItems: 'center',
+          marginBottom: '20px',
+        }}
+      >
         <input
           type="text"
           className="search-input"
@@ -264,7 +274,13 @@ const Requests = (): JSX.Element => {
           value={searchByName}
           onChange={(e) => handleSearch(e.target.value)}
           data-testid="searchByName"
-          style={{ flex: 1, padding: '8px 12px', border: '1px solid var(--gray-200)', borderRadius: 'var(--radius-md)', fontSize: '13px' }}
+          style={{
+            flex: 1,
+            padding: '8px 12px',
+            border: '1px solid var(--gray-200)',
+            borderRadius: 'var(--radius-md)',
+            fontSize: '13px',
+          }}
         />
       </div>
 
@@ -317,15 +333,19 @@ const Requests = (): JSX.Element => {
                 </thead>
                 <tbody>
                   {displayedRequests.map((req) => {
-                    const user = req.user || ({} as InterfaceRequestsListItem['user']);
+                    const user =
+                      req.user || ({} as InterfaceRequestsListItem['user']);
                     const initials = getInitials(user.name || '');
                     const requestedDate = (() => {
                       try {
-                        return new Date(req.createdAt).toLocaleDateString('en-US', {
-                          month: 'short',
-                          day: 'numeric',
-                          year: 'numeric',
-                        });
+                        return new Date(req.createdAt).toLocaleDateString(
+                          'en-US',
+                          {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric',
+                          },
+                        );
                       } catch {
                         return '';
                       }
@@ -337,7 +357,9 @@ const Requests = (): JSX.Element => {
                             <div className="user-cell-avatar">{initials}</div>
                             <div>
                               <div className="user-cell-name">{user.name}</div>
-                              <div className="user-cell-email">{user.emailAddress}</div>
+                              <div className="user-cell-email">
+                                {user.emailAddress}
+                              </div>
                             </div>
                           </div>
                         </td>

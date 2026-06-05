@@ -198,7 +198,8 @@ export default function Chat(): JSX.Element {
 
   const getAvatarColor = (id: string) => {
     let hash = 0;
-    for (let i = 0; i < id.length; i++) hash = id.charCodeAt(i) + ((hash << 5) - hash);
+    for (let i = 0; i < id.length; i++)
+      hash = id.charCodeAt(i) + ((hash << 5) - hash);
     return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
   };
 
@@ -217,7 +218,12 @@ export default function Chat(): JSX.Element {
                 onSelect={handleNewChatSelect}
                 ariaLabel={t('newChat')}
                 dataTestIdPrefix="dropdown"
-                icon={<AddIcon data-testid="new-chat-icon" style={{ fontSize: 18 }} />}
+                icon={
+                  <AddIcon
+                    data-testid="new-chat-icon"
+                    style={{ fontSize: 18 }}
+                  />
+                }
                 buttonLabel=" "
                 placeholder=""
                 btnStyle={styles.newChatBtn}
@@ -226,7 +232,19 @@ export default function Chat(): JSX.Element {
             </div>
             <div className={styles.chatSearch}>
               <span style={{ color: 'var(--gray-400)', fontSize: 14 }}>
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+                <svg
+                  viewBox="0 0 24 24"
+                  width="16"
+                  height="16"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
               </span>
               <input
                 type="text"
@@ -284,13 +302,21 @@ export default function Chat(): JSX.Element {
                   >
                     <div
                       className={styles.chatItemAvatar}
-                      style={{ background: avatarColor.bg, color: avatarColor.color }}
+                      style={{
+                        background: avatarColor.bg,
+                        color: avatarColor.color,
+                      }}
                     >
                       {chat.avatarURL ? (
                         <img
                           src={chat.avatarURL}
                           alt=""
-                          style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            borderRadius: '50%',
+                            objectFit: 'cover',
+                          }}
                         />
                       ) : (
                         initials
@@ -301,7 +327,12 @@ export default function Chat(): JSX.Element {
                         <span className={styles.chatItemName}>{chatName}</span>
                         <span className={styles.chatItemTime}>
                           {chat.lastMessage?.createdAt
-                            ? new Date(chat.lastMessage.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                            ? new Date(
+                                chat.lastMessage.createdAt,
+                              ).toLocaleTimeString([], {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })
                             : ''}
                         </span>
                       </div>

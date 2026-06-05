@@ -65,10 +65,14 @@ const OrganizationPeople = lazy(
   () => import('screens/AdminPortal/OrganizationPeople/OrganizationPeople'),
 );
 const OrganizationTags = lazy(
-  () => import('screens/AdminPortal/OrganizationTags/OrganizationTags'),
+  () => import('screens/AdminPortal/OrganizationTags/RootView/RootView'),
 );
-const ManageTag = lazy(() => import('screens/AdminPortal/ManageTag/ManageTag'));
-const Tags = lazy(() => import('screens/AdminPortal/Tags/Tags'));
+const ManageTag = lazy(
+  () => import('screens/AdminPortal/OrganizationTags/TagDetails/TagDetails'),
+);
+const Tags = lazy(
+  () => import('screens/AdminPortal/OrganizationTags/FolderView/FolderView'),
+);
 const Requests = lazy(() => import('screens/AdminPortal/Requests/Requests'));
 const Users = lazy(() => import('screens/AdminPortal/Users/Users'));
 const CommunityProfile = lazy(

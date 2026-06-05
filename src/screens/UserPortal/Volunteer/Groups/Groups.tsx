@@ -163,7 +163,7 @@ function Groups(): JSX.Element {
     return (
       <div className={styles.message} data-testid="errorMsg">
         <WarningAmberRounded className={styles.icon} />
-        <h6 style={{ textAlign: "center" }}>
+        <h6 style={{ textAlign: 'center' }}>
           {tErrors('errorLoading', { entity: t('volunteerGroups') })}
         </h6>
       </div>
@@ -181,10 +181,7 @@ function Groups(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <div
-            style={{ justifyContent: "center" }}
-            data-testid="groupName"
-          >
+          <div style={{ justifyContent: 'center' }} data-testid="groupName">
             {params.row.name}
           </div>
         );
@@ -202,10 +199,7 @@ function Groups(): JSX.Element {
       renderCell: (params: GridCellParams) => {
         const { id, name, avatarURL } = params.row.leader;
         return (
-          <div
-            style={{ alignItems: "center" }}
-            data-testid="leaderName"
-          >
+          <div style={{ alignItems: 'center' }} data-testid="leaderName">
             {avatarURL ? (
               <img
                 src={avatarURL}
@@ -239,7 +233,7 @@ function Groups(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <div style={{ justifyContent: "center" }}>
+          <div style={{ justifyContent: 'center' }}>
             {params.row.volunteers.length}
           </div>
         );
@@ -275,8 +269,7 @@ function Groups(): JSX.Element {
                 data-testid="editGroupBtn"
                 onClick={() => handleEditClick(params.row)}
                 aria-label={t('editGroup')}
-              >
-              </Button>
+              ></Button>
             )}
           </>
         );

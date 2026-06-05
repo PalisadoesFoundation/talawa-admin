@@ -242,7 +242,7 @@ function EventRegistrants(): JSX.Element {
       render: (_value: unknown, row) => {
         const name = row.name || tCommon('unknownMember');
         return (
-          <div style={{ alignItems: "center" }}>
+          <div style={{ alignItems: 'center' }}>
             <ProfileAvatarDisplay
               imageUrl={row.user?.avatarURL ?? undefined}
               fallbackName={row.name || 'N/A'}
@@ -309,7 +309,7 @@ function EventRegistrants(): JSX.Element {
       resetButtonText={tErrors('resetButton')}
     >
       <div>
-        <div style={{ alignItems: "center" }}>
+        <div style={{ alignItems: 'center' }}>
           {eventId ? (
             <CheckInWrapper
               eventId={eventId.toString()}

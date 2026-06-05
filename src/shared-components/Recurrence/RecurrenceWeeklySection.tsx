@@ -30,11 +30,7 @@ export const RecurrenceWeeklySection: React.FC<
     <div style={{ marginBottom: 16 }}>
       <span className="text-secondary">{t('repeatsOn')}</span>
       <br />
-      <div
-        style={{ gap: 4 }}
-        role="group"
-        aria-label={t('repeatsOn')}
-      >
+      <div style={{ gap: 4 }} role="group" aria-label={t('repeatsOn')}>
         {daysOptions.map((day, index) => (
           <Button
             key={index}

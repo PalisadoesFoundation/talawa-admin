@@ -166,7 +166,7 @@ function EventAttendance(): JSX.Element {
         sortable: false,
         filterable: false,
         renderCell: (params) => (
-          <div style={{ alignItems: "center" }}>
+          <div style={{ alignItems: 'center' }}>
             <ProfileAvatarDisplay
               imageUrl={params.row.avatarURL}
               fallbackName={params.row.name || t('unknownMember')}
@@ -282,7 +282,7 @@ function EventAttendance(): JSX.Element {
         memberData={filteredAttendees}
         t={t}
       />
-      <div style={{ alignItems: "center" }}>
+      <div style={{ alignItems: 'center' }}>
         <Button
           className={`border-1 text-success ${styles.createButton}`}
           onClick={showModal}
@@ -290,7 +290,7 @@ function EventAttendance(): JSX.Element {
         >
           {t('historical_statistics')}
         </Button>
-        <div style={{ alignItems: "center" }}>
+        <div style={{ alignItems: 'center' }}>
           <div className={`${styles.input}`}>
             <SearchBar
               placeholder={t('Search member')}

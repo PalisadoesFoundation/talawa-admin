@@ -43,7 +43,9 @@ export const FormSelectField: React.FC<InterfaceFormSelectFieldProps> = ({
         aria-required={required ? 'true' : undefined}
         data-testid={dataTestId}
         className="form-input"
-        style={isInvalid ? { borderColor: 'var(--red-500, #ef4444)' } : undefined}
+        style={
+          isInvalid ? { borderColor: 'var(--red-500, #ef4444)' } : undefined
+        }
       >
         {children}
       </select>

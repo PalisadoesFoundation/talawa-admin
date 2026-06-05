@@ -21,7 +21,6 @@ vi.mock('shared-components/SidebarBase/SidebarBase.module.css', () => ({
   },
 }));
 
-
 vi.mock(
   'shared-components/SidebarOrgSection/SidebarOrgSection.module.css',
   () => ({

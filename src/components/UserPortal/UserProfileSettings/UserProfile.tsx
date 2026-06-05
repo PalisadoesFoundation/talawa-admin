@@ -74,12 +74,17 @@ const UserProfile = ({
 
   return (
     <>
-      <div style={{ border: 'none', borderRadius: '1rem', marginBottom: '1.5rem' }}>
+      <div
+        style={{ border: 'none', borderRadius: '1rem', marginBottom: '1.5rem' }}
+      >
         <div className={styles.cardHeader}>
           <div className={styles.cardTitle}>{t('profileDetails')}</div>
         </div>
         <div className={styles.cardBody}>
-          <div className={styles.profileContainer} style={{ display: 'flex', marginBottom: '0.5rem' }}>
+          <div
+            className={styles.profileContainer}
+            style={{ display: 'flex', marginBottom: '0.5rem' }}
+          >
             <div className={styles.imgContainer}>
               <ProfileAvatarDisplay
                 imageUrl={image && image !== 'null' ? image : undefined}
@@ -124,7 +129,14 @@ const UserProfile = ({
               </span>
             </div>
           </div>
-          <div style={{ marginTop: '1.5rem', marginBottom: '0.25rem', display: 'flex', justifyContent: 'center' }}>
+          <div
+            style={{
+              marginTop: '1.5rem',
+              marginBottom: '0.25rem',
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+          >
             {/* TODO(#6707): Implement copy-to-clipboard functionality for profile link */}
             <Button data-testid="copyProfileLink">{t('copyLink')}</Button>
           </div>

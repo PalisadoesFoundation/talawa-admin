@@ -249,7 +249,11 @@ function organizationVenues(props?: {
             {t('title')}{' '}
             <span
               className="badge badge-gray"
-              style={{ fontSize: '14px', verticalAlign: 'middle', marginLeft: '8px' }}
+              style={{
+                fontSize: '14px',
+                verticalAlign: 'middle',
+                marginLeft: '8px',
+              }}
             >
               {venues.length}
             </span>
@@ -267,7 +271,15 @@ function organizationVenues(props?: {
         </div>
       </div>
 
-      <div className="toolbar" style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '20px' }}>
+      <div
+        className="toolbar"
+        style={{
+          display: 'flex',
+          gap: '12px',
+          alignItems: 'center',
+          marginBottom: '20px',
+        }}
+      >
         <input
           type="text"
           className="search-input"
@@ -275,14 +287,26 @@ function organizationVenues(props?: {
           value={searchTerm}
           onChange={(e) => handleSearch(e.target.value)}
           data-testid="searchInput"
-          style={{ flex: 1, padding: '8px 12px', border: '1px solid var(--gray-200)', borderRadius: 'var(--radius-md)', fontSize: '13px' }}
+          style={{
+            flex: 1,
+            padding: '8px 12px',
+            border: '1px solid var(--gray-200)',
+            borderRadius: 'var(--radius-md)',
+            fontSize: '13px',
+          }}
         />
         <select
           className="filter-dropdown"
           value={searchBy}
           onChange={(e) => handleSearchByChange(e.target.value)}
           data-testid="searchByButton-filter"
-          style={{ padding: '8px 12px', border: '1px solid var(--gray-200)', borderRadius: 'var(--radius-md)', fontSize: '13px', background: 'var(--surface)' }}
+          style={{
+            padding: '8px 12px',
+            border: '1px solid var(--gray-200)',
+            borderRadius: 'var(--radius-md)',
+            fontSize: '13px',
+            background: 'var(--surface)',
+          }}
         >
           <option value="name">{tCommon('name')}</option>
           <option value="desc">{tCommon('description')}</option>
@@ -292,7 +316,13 @@ function organizationVenues(props?: {
           value={sortOrder}
           onChange={(e) => handleSortChange(e.target.value)}
           data-testid="sortVenues-filter"
-          style={{ padding: '8px 12px', border: '1px solid var(--gray-200)', borderRadius: 'var(--radius-md)', fontSize: '13px', background: 'var(--surface)' }}
+          style={{
+            padding: '8px 12px',
+            border: '1px solid var(--gray-200)',
+            borderRadius: 'var(--radius-md)',
+            fontSize: '13px',
+            background: 'var(--surface)',
+          }}
         >
           <option value="highest">{t('highestCapacity')}</option>
           <option value="lowest">{t('lowestCapacity')}</option>
@@ -300,10 +330,7 @@ function organizationVenues(props?: {
       </div>
 
       <LoadingState isLoading={venueLoading} variant="spinner" size="lg">
-        <div
-          className="grid-3"
-          data-testid="orgvenueslist"
-        >
+        <div className="grid-3" data-testid="orgvenueslist">
           {venues.length ? (
             venues.map((venueItem: InterfaceQueryVenueListItem) => (
               <div className="venue-card" key={venueItem.node.id}>
@@ -312,7 +339,11 @@ function organizationVenues(props?: {
                     <img
                       src={venueItem.node.image}
                       alt={venueItem.node.name}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                      }}
                     />
                   ) : (
                     'Image Placeholder'
@@ -325,7 +356,8 @@ function organizationVenues(props?: {
                   </div>
                   <div className="venue-meta">
                     <span className="venue-capacity">
-                      {t('capacity')}: <strong>{venueItem.node.capacity ?? 0}</strong>
+                      {t('capacity')}:{' '}
+                      <strong>{venueItem.node.capacity ?? 0}</strong>
                     </span>
                     <button
                       className="btn btn-secondary btn-sm"

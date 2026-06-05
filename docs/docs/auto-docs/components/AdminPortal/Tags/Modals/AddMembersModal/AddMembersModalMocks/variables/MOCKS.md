@@ -1,0 +1,9 @@
+[Admin Docs](/)
+
+***
+
+# Variable: MOCKS
+
+> `const` **MOCKS**: (\{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `first`: `number`; `organizationId`: `string`; `tagId`: `string`; \}; \}; `result`: \{ `data`: \{ `organization`: \{ `id`: `string`; `members`: \{ `edges`: `object`[]; `pageInfo`: \{ `endCursor`: `string`; `hasNextPage`: `boolean`; `hasPreviousPage`: `boolean`; `startCursor`: `string`; \}; \}; \}; `tag`: \{ `assignees`: \{ `edges`: `any`[]; \}; `id`: `string`; \}; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `after`: `string`; `first`: `number`; `organizationId`: `string`; `tagId`: `string`; `userId?`: `undefined`; \}; \}; `result`: \{ `data`: \{ `organization`: \{ `id`: `string`; `members`: \{ `edges`: `object`[]; `pageInfo`: \{ `endCursor`: `string`; `hasNextPage`: `boolean`; `hasPreviousPage`: `boolean`; `startCursor`: `string`; \}; \}; \}; `tag`: \{ `assignees`: \{ `edges`: `any`[]; \}; `id`: `string`; \}; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `first`: `number`; `organizationId`: `string`; `tagId`: `string`; `userId?`: `undefined`; `where`: \{ `name_contains`: `string`; \}; \}; \}; `result`: \{ `data`: \{ `organization`: \{ `id`: `string`; `members`: \{ `edges`: `object`[]; `pageInfo`: \{ `endCursor`: `string`; `hasNextPage`: `boolean`; `hasPreviousPage`: `boolean`; `startCursor`: `string`; \}; \}; \}; `tag`: \{ `assignees`: \{ `edges`: `any`[]; \}; `id`: `string`; \}; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `tagId`: `string`; `userId`: `string`; \}; \}; `result`: \{ `data`: \{ `assignUserTag`: `boolean`; \}; \}; \})[]
+
+Defined in: [src/components/AdminPortal/Tags/Modals/AddMembersModal/AddMembersModalMocks.ts:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/Tags/Modals/AddMembersModal/AddMembersModalMocks.ts#L59)

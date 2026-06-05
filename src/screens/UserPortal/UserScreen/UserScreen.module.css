@@ -3,17 +3,31 @@
  * Layout handled by design system — these are kept as no-ops for test compatibility.
  */
 
-.expand {}
-.contract {}
-.titleContainer {}
-.drawer {}
-.profileDropdownBtn {}
-.profileContainer {}
-.imageContainer {}
-.profileImage {}
-.profileText {}
-.profileName {}
-.profileRole {}
-.logoutBtn {}
-.profileDropdownMenu {}
-.contentContainer {}
+.expand {
+}
+.contract {
+}
+.titleContainer {
+}
+.drawer {
+}
+.profileDropdownBtn {
+}
+.profileContainer {
+}
+.imageContainer {
+}
+.profileImage {
+}
+.profileText {
+}
+.profileName {
+}
+.profileRole {
+}
+.logoutBtn {
+}
+.profileDropdownMenu {
+}
+.contentContainer {
+}

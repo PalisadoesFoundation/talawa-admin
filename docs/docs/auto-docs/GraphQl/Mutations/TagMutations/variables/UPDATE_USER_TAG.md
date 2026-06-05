@@ -6,7 +6,7 @@
 
 > `const` **UPDATE\_USER\_TAG**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/TagMutations.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/TagMutations.ts#L47)
+Defined in: [src/GraphQl/Mutations/TagMutations.ts:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/TagMutations.ts#L103)
 
 GraphQL mutation to update a user tag.
 

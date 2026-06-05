@@ -119,7 +119,7 @@ const SidebarNavItem = ({
       }}
       data-testid={testId}
       data-cy={dataCy}
-      title={hideDrawer ? (tooltip || label) : undefined}
+      title={hideDrawer ? tooltip || label : undefined}
     >
       {({ isActive }) => (
         <div className={styles.linkContent}>

@@ -55,8 +55,14 @@ const volunteerDashboardTabs: { value: TabOptions; icon: JSX.Element }[] = [
     value: 'invitations',
     icon: <FaRegEnvelopeOpen size={18} style={{ marginRight: '0.5rem' }} />,
   },
-  { value: 'actions', icon: <FaTasks size={18} style={{ marginRight: '0.5rem' }} /> },
-  { value: 'groups', icon: <FaUserGroup size={18} style={{ marginRight: '0.5rem' }} /> },
+  {
+    value: 'actions',
+    icon: <FaTasks size={18} style={{ marginRight: '0.5rem' }} />,
+  },
+  {
+    value: 'groups',
+    icon: <FaUserGroup size={18} style={{ marginRight: '0.5rem' }} />,
+  },
 ];
 
 /**

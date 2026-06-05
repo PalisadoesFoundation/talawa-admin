@@ -342,9 +342,7 @@ export default function Organizations(): React.JSX.Element {
         <div className="page-header">
           <div className="page-header-left">
             <h1 className="page-title">{t('selectOrganization')}</h1>
-            <p className="page-subtitle">
-              {t('joinedOrganizations')}
-            </p>
+            <p className="page-subtitle">{t('joinedOrganizations')}</p>
           </div>
         </div>
 
@@ -426,7 +424,10 @@ export default function Organizations(): React.JSX.Element {
               <>
                 {/* My Organizations */}
                 {myOrgs.length > 0 && (
-                  <div className={styles.orgGrid} data-testid="organizations-list">
+                  <div
+                    className={styles.orgGrid}
+                    data-testid="organizations-list"
+                  >
                     {(rowsPerPage > 0
                       ? myOrgs.slice(
                           page * rowsPerPage,
@@ -440,7 +441,9 @@ export default function Organizations(): React.JSX.Element {
                         key={index}
                         data-testid="organization-card"
                         data-organization-name={organization.name}
-                        data-membership-status={organization.membershipRequestStatus}
+                        data-membership-status={
+                          organization.membershipRequestStatus
+                        }
                         data-cy="orgCard"
                         style={{ textDecoration: 'none', color: 'inherit' }}
                       >
@@ -452,12 +455,16 @@ export default function Organizations(): React.JSX.Element {
                         <div className={styles.orgAvatar}>
                           {getInitials(organization.name)}
                         </div>
-                        <div className={styles.orgName}>{organization.name}</div>
+                        <div className={styles.orgName}>
+                          {organization.name}
+                        </div>
                         <div className={styles.orgMembers}>
                           {organization.membersCount || 0} members
                         </div>
                         <div className={styles.orgRole}>
-                          <span className={`badge ${organization.membershipRequestStatus === 'created' || role === 'administrator' ? 'badge-green' : 'badge-blue'}`}>
+                          <span
+                            className={`badge ${organization.membershipRequestStatus === 'created' || role === 'administrator' ? 'badge-green' : 'badge-blue'}`}
+                          >
                             {role === 'administrator' ? 'Admin' : 'Member'}
                           </span>
                         </div>
@@ -475,8 +482,12 @@ export default function Organizations(): React.JSX.Element {
                 {/* Browse Organizations */}
                 {browseOrgs.length > 0 && (
                   <>
-                    <h2 className={styles.sectionTitle}>{t('allOrganizations')}</h2>
-                    <div className={styles.sectionSubtitle}>Discover and join new organizations</div>
+                    <h2 className={styles.sectionTitle}>
+                      {t('allOrganizations')}
+                    </h2>
+                    <div className={styles.sectionSubtitle}>
+                      Discover and join new organizations
+                    </div>
                     <div className={styles.orgGrid}>
                       {browseOrgs.map((organization: IOrganization, index) => (
                         <div
@@ -484,7 +495,9 @@ export default function Organizations(): React.JSX.Element {
                           key={`browse-${index}`}
                           data-testid="organization-card"
                           data-organization-name={organization.name}
-                          data-membership-status={organization.membershipRequestStatus}
+                          data-membership-status={
+                            organization.membershipRequestStatus
+                          }
                           data-cy="orgCard"
                         >
                           <div
@@ -495,7 +508,9 @@ export default function Organizations(): React.JSX.Element {
                           <div className={styles.orgAvatar}>
                             {getInitials(organization.name)}
                           </div>
-                          <div className={styles.orgName}>{organization.name}</div>
+                          <div className={styles.orgName}>
+                            {organization.name}
+                          </div>
                           <div className={styles.orgMembers}>
                             {organization.membersCount || 0} members
                           </div>
@@ -510,9 +525,12 @@ export default function Organizations(): React.JSX.Element {
                               avatarURL: organization.avatarURL || '',
                               addressLine1: organization.addressLine1 || '',
                               admins: organization.admins,
-                              membershipRequestStatus: organization.membershipRequestStatus,
-                              userRegistrationRequired: organization.userRegistrationRequired,
-                              membershipRequests: organization.membershipRequests,
+                              membershipRequestStatus:
+                                organization.membershipRequestStatus,
+                              userRegistrationRequired:
+                                organization.userRegistrationRequired,
+                              membershipRequests:
+                                organization.membershipRequests,
                               isJoined: organization.isJoined,
                               membersCount: organization.membersCount || 0,
                               adminsCount: organization.adminsCount || 0,
@@ -534,7 +552,10 @@ export default function Organizations(): React.JSX.Element {
             ) : (
               <div className="empty-state">
                 <div className="empty-state-icon">&#128269;</div>
-                <div className="empty-state-title" data-testid="no-organizations-message">
+                <div
+                  className="empty-state-title"
+                  data-testid="no-organizations-message"
+                >
                   {t('nothingToShow')}
                 </div>
               </div>

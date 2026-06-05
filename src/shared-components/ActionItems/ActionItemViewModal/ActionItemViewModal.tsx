@@ -131,7 +131,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
       data-testid="actionItemViewModal"
     >
       <div style={{ padding: 12 }}>
-        <div style={{ width: "100%" }}>
+        <div style={{ width: '100%' }}>
           <FormFieldGroup
             name="category"
             label={t('category')}
@@ -183,7 +183,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
             />
           </FormFieldGroup>
         </div>
-        <div style={{ marginLeft: "auto", alignItems: "flex-start" }}>
+        <div style={{ marginLeft: 'auto', alignItems: 'flex-start' }}>
           <div style={{ marginBottom: 12 }}>
             <span className="field-label">{t('status')}</span>
 

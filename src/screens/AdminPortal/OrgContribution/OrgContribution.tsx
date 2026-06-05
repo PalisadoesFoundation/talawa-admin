@@ -54,57 +54,57 @@ function OrgContribution(): JSX.Element {
       <div className={styles.layoutGrid}>
         <div className={styles.sidebar}>
           <div className={styles.sidebarsticky}>
-              {/* Input for filtering by organization name */}
-              <label htmlFor="filterByName" className={styles.searchtitle}>
-                {t('filterByName')}
-              </label>
-              <SearchBar
-                id="filterByName"
-                placeholder={t('orgname')}
-                showSearchButton={false}
-                onSearch={(term) => setOrgNameFilter(term)}
-                inputTestId="filterOrgName"
-              />
+            {/* Input for filtering by organization name */}
+            <label htmlFor="filterByName" className={styles.searchtitle}>
+              {t('filterByName')}
+            </label>
+            <SearchBar
+              id="filterByName"
+              placeholder={t('orgname')}
+              showSearchButton={false}
+              onSearch={(term) => setOrgNameFilter(term)}
+              inputTestId="filterOrgName"
+            />
 
-              {/* Input for filtering by transaction ID */}
-              <label htmlFor="searchTransaction" className={styles.searchtitle}>
-                {t('filterByTransId')}
-              </label>
-              <SearchBar
-                id="searchTransaction"
-                placeholder={t('searchtransaction')}
-                showSearchButton={false}
-                onSearch={(term) => setTransactionFilter(term)}
-                inputTestId="filterTransaction"
-              />
+            {/* Input for filtering by transaction ID */}
+            <label htmlFor="searchTransaction" className={styles.searchtitle}>
+              {t('filterByTransId')}
+            </label>
+            <SearchBar
+              id="searchTransaction"
+              placeholder={t('searchtransaction')}
+              showSearchButton={false}
+              onSearch={(term) => setTransactionFilter(term)}
+              inputTestId="filterTransaction"
+            />
 
-              {/* Section displaying recent contribution statistics */}
-              <label htmlFor="21" className={styles.searchtitle}>
-                {t('recentStats')}
-              </label>
-              <ContriStats
-                key="129"
-                id="21"
-                recentAmount="90"
-                highestAmount="500"
-                totalAmount="6000"
-              />
-            </div>
+            {/* Section displaying recent contribution statistics */}
+            <label htmlFor="21" className={styles.searchtitle}>
+              {t('recentStats')}
+            </label>
+            <ContriStats
+              key="129"
+              id="21"
+              recentAmount="90"
+              highestAmount="500"
+              totalAmount="6000"
+            />
           </div>
+        </div>
         <div className={styles.mainpageright}>
           <div className={styles.justifysp}>
             <p className={styles.logintitle}>{t('contribution')}</p>
           </div>
-            {/* Section displaying a list of contribution cards */}
-            <OrgContriCards
-              key="129"
-              id="21"
-              userName="John Doe"
-              contriDate="20/7/2021"
-              contriAmount="21"
-              contriTransactionId="21WE98YU"
-              userEmail="johndoexyz@gmail.com"
-            />
+          {/* Section displaying a list of contribution cards */}
+          <OrgContriCards
+            key="129"
+            id="21"
+            userName="John Doe"
+            contriDate="20/7/2021"
+            contriAmount="21"
+            contriTransactionId="21WE98YU"
+            userEmail="johndoexyz@gmail.com"
+          />
         </div>
       </div>
     </>

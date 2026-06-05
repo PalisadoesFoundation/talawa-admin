@@ -4,7 +4,7 @@
 
 # Interface: InterfaceUserInfoPG
 
-Defined in: [src/utils/interfaces.ts:1448](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1448)
+Defined in: [src/utils/interfaces.ts:1480](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1480)
 
 Defines the structure for user information with PostgreSQL-specific fields.
 
@@ -14,7 +14,7 @@ Defines the structure for user information with PostgreSQL-specific fields.
 
 > `optional` **avatarURL**: `string`
 
-Defined in: [src/utils/interfaces.ts:1453](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1453)
+Defined in: [src/utils/interfaces.ts:1485](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1485)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:1453](https://github.com/PalisadoesFoundati
 
 > `optional` **firstName**: `string`
 
-Defined in: [src/utils/interfaces.ts:1449](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1449)
+Defined in: [src/utils/interfaces.ts:1481](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1481)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/utils/interfaces.ts:1449](https://github.com/PalisadoesFoundati
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:1452](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1452)
+Defined in: [src/utils/interfaces.ts:1484](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1484)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/utils/interfaces.ts:1452](https://github.com/PalisadoesFoundati
 
 > `optional` **lastName**: `string`
 
-Defined in: [src/utils/interfaces.ts:1450](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1450)
+Defined in: [src/utils/interfaces.ts:1482](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1482)
 
 ***
 
@@ -46,4 +46,4 @@ Defined in: [src/utils/interfaces.ts:1450](https://github.com/PalisadoesFoundati
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:1451](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1451)
+Defined in: [src/utils/interfaces.ts:1483](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1483)

@@ -194,7 +194,9 @@
   object-fit: cover;
   border-radius: 8px;
   border: 1px solid var(--gray-200, #e5e7eb);
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
 }
 
 .screenshotThumbnail:hover {

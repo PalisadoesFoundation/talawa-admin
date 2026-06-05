@@ -148,3 +148,18 @@ export interface InterfaceTagActionsContentProps {
     isSelected: boolean,
   ) => void;
 }
+export interface InterfaceTagTreeRendererParams {
+  folderStateMap: Map<string, InterfaceTagFolderItem>;
+  expandedFolderIds: Set<string>;
+  checkedTags: Set<string>;
+  searchTerm: string;
+  styles: Record<string, string>;
+  onToggleFolderExpansion: (folderId: string) => void;
+  onToggleTagSelection: (
+    tag: InterfaceTagSelectionItem,
+    isSelected: boolean,
+  ) => void;
+  noTagsFoundText: string;
+  expandFolderAriaLabel: string;
+  collapseFolderAriaLabel: string;
+}

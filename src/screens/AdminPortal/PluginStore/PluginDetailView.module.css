@@ -210,7 +210,9 @@
   border: 1px solid var(--gray-200, #e5e7eb);
   cursor: pointer;
   flex-shrink: 0;
-  transition: transform 0.15s, box-shadow 0.15s;
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s;
 }
 
 .screenshotThumb:hover {

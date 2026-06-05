@@ -177,7 +177,7 @@ const Campaigns = (): JSX.Element => {
             className={`${styles.errorIcon} ${styles.errorIconLarge}`}
             aria-hidden="true"
           />
-          <h6 style={{ textAlign: "center" }}>
+          <h6 style={{ textAlign: 'center' }}>
             {tErrors('errorLoading', { entity: 'Campaigns' })}
             <br />
             {campaignError.message}
@@ -370,8 +370,7 @@ const Campaigns = (): JSX.Element => {
               !canCreatePledge && isEnded ? t('campaignEnded') : t('addPledge')
             }
           >
-            +
-            {t('addPledge')}
+            +{t('addPledge')}
           </Button>
         );
       },

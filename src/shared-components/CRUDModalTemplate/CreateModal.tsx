@@ -54,10 +54,13 @@ export const CreateModal: React.FC<InterfaceCreateModalProps> = ({
   'data-testid': dataTestId,
   submitDisabled = false,
   customFooter,
+  id,
 }) => {
   const { t: tCommon } = useTranslation('common');
   const isOpen = open ?? false;
   const formRef = useRef<HTMLFormElement>(null);
+  const generatedId = React.useId();
+  const formId = id ?? generatedId;
 
   useEffect(() => {
     if (isOpen && formRef.current) {
@@ -107,7 +110,7 @@ export const CreateModal: React.FC<InterfaceCreateModalProps> = ({
       </Button>
       <Button
         type="submit"
-        form="crud-create-form"
+        form={formId}
         variant="primary"
         disabled={loading || submitDisabled}
         data-testid="modal-submit-btn"
@@ -132,7 +135,7 @@ export const CreateModal: React.FC<InterfaceCreateModalProps> = ({
       customFooter={customFooter ?? defaultFooter}
     >
       <form
-        id="crud-create-form"
+        id={formId}
         ref={formRef}
         onSubmit={handleSubmit}
         onKeyDown={handleKeyDown}

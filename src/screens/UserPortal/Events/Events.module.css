@@ -22,7 +22,10 @@
   cursor: pointer;
   background: transparent;
   color: var(--gray-600, #4b5563);
-  transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+  transition:
+    background-color 0.2s,
+    color 0.2s,
+    box-shadow 0.2s;
 }
 
 .viewToggleBtn:hover {

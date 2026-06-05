@@ -31,9 +31,7 @@ interface IPluginDetailViewProps {
 function isImageUrl(icon: string | undefined): boolean {
   if (!icon) return false;
   return (
-    icon.startsWith('http') ||
-    icon.startsWith('/') ||
-    icon.startsWith('data:')
+    icon.startsWith('http') || icon.startsWith('/') || icon.startsWith('data:')
   );
 }
 
@@ -127,10 +125,7 @@ export default function PluginDetailView({
                 <button
                   className={styles.actionBtn}
                   onClick={() =>
-                    togglePluginStatus(
-                      plugin,
-                      isActive ? 'inactive' : 'active',
-                    )
+                    togglePluginStatus(plugin, isActive ? 'inactive' : 'active')
                   }
                   disabled={loading}
                 >
@@ -178,9 +173,7 @@ export default function PluginDetailView({
       <div className={styles.tabContent}>
         {tab === 'details' && (
           <>
-            <div className={styles.sectionTitle}>
-              {tCommon('description')}
-            </div>
+            <div className={styles.sectionTitle}>{tCommon('description')}</div>
             <div className={styles.description}>{info.description}</div>
 
             {details?.screenshots && details.screenshots.length > 0 && (

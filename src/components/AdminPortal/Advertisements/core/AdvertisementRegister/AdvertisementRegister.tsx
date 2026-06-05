@@ -484,8 +484,7 @@ function AdvertisementRegister({
           onClick={handleShow}
           data-testid="createAdvertisement"
         >
-          +
-          &nbsp;
+          + &nbsp;
           {t('createAdvertisement')}
         </Button>
       ) : (

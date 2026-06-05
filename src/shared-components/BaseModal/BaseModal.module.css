@@ -2,7 +2,9 @@
   padding: 0;
   border: none;
   border-radius: var(--radius-xl);
-  box-shadow: 0 24px 80px rgba(0,0,0,0.12), 0 8px 24px rgba(0,0,0,0.08);
+  box-shadow:
+    0 24px 80px rgba(0, 0, 0, 0.12),
+    0 8px 24px rgba(0, 0, 0, 0.08);
   background: var(--surface);
   max-height: 90vh;
   width: 100%;
@@ -18,10 +20,18 @@
   animation: backdropFadeIn 0.2s ease;
 }
 
-.centered { margin: auto; }
-.sizeSm { max-width: 380px; }
-.sizeLg { max-width: 720px; }
-.sizeXl { max-width: 900px; }
+.centered {
+  margin: auto;
+}
+.sizeSm {
+  max-width: 380px;
+}
+.sizeLg {
+  max-width: 720px;
+}
+.sizeXl {
+  max-width: 900px;
+}
 
 .dialogContent {
   display: flex;
@@ -83,23 +93,47 @@
 }
 
 @keyframes modalSlideIn {
-  from { opacity: 0; transform: translateY(16px) scale(0.97); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 @keyframes backdropFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @media (max-width: 640px) {
-  .dialog { max-width: calc(100% - 32px); margin: auto 16px; border-radius: var(--radius-lg); }
-  .header { padding: 16px; }
-  .body { padding: 16px; }
-  .footer { padding: 12px 16px; }
+  .dialog {
+    max-width: calc(100% - 32px);
+    margin: auto 16px;
+    border-radius: var(--radius-lg);
+  }
+  .header {
+    padding: 16px;
+  }
+  .body {
+    padding: 16px;
+  }
+  .footer {
+    padding: 12px 16px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .dialog { animation: none; }
-  .dialog::backdrop { animation: none; }
+  .dialog {
+    animation: none;
+  }
+  .dialog::backdrop {
+    animation: none;
+  }
 }

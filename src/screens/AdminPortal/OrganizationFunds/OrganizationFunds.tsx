@@ -157,7 +157,10 @@ const organizationFunds = (): JSX.Element => {
 
   // Compute aggregated campaign data for each fund
   const fundAggregates = useMemo(() => {
-    const map = new Map<string, { totalGoal: number; totalRaised: number; nearestEnd: string | null }>();
+    const map = new Map<
+      string,
+      { totalGoal: number; totalRaised: number; nearestEnd: string | null }
+    >();
     for (const f of filteredAndSortedFunds) {
       const campaigns = f.campaigns?.edges || [];
       let totalGoal = 0;
@@ -192,7 +195,7 @@ const organizationFunds = (): JSX.Element => {
           <WarningAmberRounded
             className={`${styles.errorIcon} ${styles.errorIconLarge}`}
           />
-          <h6 style={{ textAlign: "center" }}>
+          <h6 style={{ textAlign: 'center' }}>
             {t('funds.errorLoadingFundsData')}
             <br />
             {fundError.message}
@@ -211,9 +214,7 @@ const organizationFunds = (): JSX.Element => {
       <div className="page-header">
         <div className="page-header-left">
           <h1 className="page-title">{t('funds.title')}</h1>
-          <p className="page-subtitle">
-            {t('funds.manageFundsDescription')}
-          </p>
+          <p className="page-subtitle">{t('funds.manageFundsDescription')}</p>
         </div>
         <div className="page-header-actions">
           <button
@@ -249,7 +250,15 @@ const organizationFunds = (): JSX.Element => {
         </div>
       </div>
 
-      <div className="toolbar" style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '20px' }}>
+      <div
+        className="toolbar"
+        style={{
+          display: 'flex',
+          gap: '12px',
+          alignItems: 'center',
+          marginBottom: '20px',
+        }}
+      >
         <input
           type="text"
           className="search-input"
@@ -257,7 +266,13 @@ const organizationFunds = (): JSX.Element => {
           value={searchText}
           onChange={(e) => setSearchText(e.target.value.trim())}
           data-testid="searchByName"
-          style={{ flex: 1, padding: '8px 12px', border: '1px solid var(--gray-200)', borderRadius: 'var(--radius-md)', fontSize: '13px' }}
+          style={{
+            flex: 1,
+            padding: '8px 12px',
+            border: '1px solid var(--gray-200)',
+            borderRadius: 'var(--radius-md)',
+            fontSize: '13px',
+          }}
         />
       </div>
 
@@ -305,7 +320,10 @@ const organizationFunds = (): JSX.Element => {
                     const agg = fundAggregates.get(fundItem.id);
                     const totalGoal = agg?.totalGoal || 0;
                     const totalRaised = agg?.totalRaised || 0;
-                    const progress = totalGoal > 0 ? Math.round((totalRaised / totalGoal) * 100) : 0;
+                    const progress =
+                      totalGoal > 0
+                        ? Math.round((totalRaised / totalGoal) * 100)
+                        : 0;
                     const nearestEnd = agg?.nearestEnd;
 
                     return (
@@ -321,46 +339,73 @@ const organizationFunds = (): JSX.Element => {
                         <td data-testid="fundGoal">
                           {totalGoal > 0 ? (
                             <span>
-                              <span style={{ fontWeight: 600, color: 'var(--gray-900, #111827)' }}>
+                              <span
+                                style={{
+                                  fontWeight: 600,
+                                  color: 'var(--gray-900, #111827)',
+                                }}
+                              >
                                 ${totalRaised.toLocaleString()}
                               </span>
-                              <span style={{ color: 'var(--gray-400, #9ca3af)' }}>
-                                {' '}/ ${totalGoal.toLocaleString()}
+                              <span
+                                style={{ color: 'var(--gray-400, #9ca3af)' }}
+                              >
+                                {' '}
+                                / ${totalGoal.toLocaleString()}
                               </span>
                             </span>
                           ) : (
-                            <span style={{ color: 'var(--gray-400, #9ca3af)' }}>—</span>
+                            <span style={{ color: 'var(--gray-400, #9ca3af)' }}>
+                              —
+                            </span>
                           )}
                         </td>
-                        <td data-testid="fundProgress" style={{ minWidth: 120 }}>
+                        <td
+                          data-testid="fundProgress"
+                          style={{ minWidth: 120 }}
+                        >
                           {totalGoal > 0 ? (
                             <div>
                               <div className={styles.progressBarBg}>
                                 <div
                                   className={styles.progressBarFill}
-                                  style={{ width: `${Math.min(progress, 100)}%` }}
+                                  style={{
+                                    width: `${Math.min(progress, 100)}%`,
+                                  }}
                                 />
                               </div>
-                              <span style={{ fontSize: 12, color: 'var(--gray-500, #6b7280)' }}>
+                              <span
+                                style={{
+                                  fontSize: 12,
+                                  color: 'var(--gray-500, #6b7280)',
+                                }}
+                              >
                                 {progress}%
                               </span>
                             </div>
                           ) : (
-                            <span style={{ color: 'var(--gray-400, #9ca3af)' }}>—</span>
+                            <span style={{ color: 'var(--gray-400, #9ca3af)' }}>
+                              —
+                            </span>
                           )}
                         </td>
                         <td>
                           <span
                             className={`badge ${fundItem.isArchived ? 'badge-gray' : 'badge-green'}`}
                           >
-                            {fundItem.isArchived ? t('funds.archived') : tCommon('active')}
+                            {fundItem.isArchived
+                              ? t('funds.archived')
+                              : tCommon('active')}
                           </span>
                         </td>
                         <td data-testid="fundEndDate">
-                          {nearestEnd
-                            ? dayjs(nearestEnd).format('MMM D, YYYY')
-                            : <span style={{ color: 'var(--gray-400, #9ca3af)' }}>—</span>
-                          }
+                          {nearestEnd ? (
+                            dayjs(nearestEnd).format('MMM D, YYYY')
+                          ) : (
+                            <span style={{ color: 'var(--gray-400, #9ca3af)' }}>
+                              —
+                            </span>
+                          )}
                         </td>
                         <td>
                           <button

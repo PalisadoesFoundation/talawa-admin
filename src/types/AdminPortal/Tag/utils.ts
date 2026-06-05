@@ -1,1 +1,0 @@
-export const TAGS_QUERY_DATA_CHUNK_SIZE = 10;

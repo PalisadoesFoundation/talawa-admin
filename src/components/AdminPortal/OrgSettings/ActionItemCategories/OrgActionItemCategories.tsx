@@ -29,18 +29,39 @@ interface IActionItemCategoryProps {
 
 /** SVG icons */
 const EyeIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
     <circle cx="12" cy="12" r="3" />
   </svg>
 );
 const PencilIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
   </svg>
 );
 const PlusIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <line x1="12" y1="5" x2="12" y2="19" />
     <line x1="5" y1="12" x2="19" y2="12" />
   </svg>
@@ -53,9 +74,13 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
-  const [category, setCategory] = useState<IActionItemCategoryInfo | null>(null);
+  const [category, setCategory] = useState<IActionItemCategoryInfo | null>(
+    null,
+  );
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState<'createdAt_ASC' | 'createdAt_DESC'>('createdAt_DESC');
+  const [sortBy, setSortBy] = useState<'createdAt_ASC' | 'createdAt_DESC'>(
+    'createdAt_DESC',
+  );
   const [status, setStatus] = useState<CategoryStatus | null>(null);
   const [categories, setCategories] = useState<IActionItemCategoryInfo[]>([]);
   const [modalMode, setModalMode] = useState<'edit' | 'create'>('create');
@@ -106,7 +131,8 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
     }
 
     filtered = [...filtered].sort((a, b) => {
-      const d = new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      const d =
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
       return sortBy === 'createdAt_DESC' ? d : -d;
     });
 
@@ -150,7 +176,9 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
               ? tCommon('createdLatest')
               : tCommon('createdEarliest')
           }
-          onSortChange={(v) => setSortBy(v as 'createdAt_DESC' | 'createdAt_ASC')}
+          onSortChange={(v) =>
+            setSortBy(v as 'createdAt_DESC' | 'createdAt_ASC')
+          }
           dataTestIdPrefix="sort"
           buttonLabel={tCommon('sort')}
           type="sort"

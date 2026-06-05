@@ -261,9 +261,7 @@ export default function UploadPluginView({
           </div>
 
           <div className={styles.refSection}>
-            <div className={styles.refLabel}>
-              {t('requiredManifestFields')}
-            </div>
+            <div className={styles.refLabel}>{t('requiredManifestFields')}</div>
             <pre className={styles.codeBlock}>{MANIFEST}</pre>
             <p className={styles.refNote}>
               Each folder needs its own manifest.json with these fields.

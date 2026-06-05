@@ -4,7 +4,7 @@
 
 # Interface: InterfaceDeleteModalProps
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:208](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L208)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:213](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L213)
 
 Props for DeleteModal template
 
@@ -34,7 +34,7 @@ Whether to center the modal vertically on the page
 
 > `optional` **children**: `ReactNode`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:213](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L213)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:218](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L218)
 
 Optional custom content to display in the modal body
 If not provided, shows the confirmationMessage
@@ -73,7 +73,7 @@ Test ID for the modal container (useful for testing)
 
 > `optional` **entityName**: `string`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:225](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L225)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:230](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L230)
 
 Name of the entity being deleted (for display purposes)
 When provided, will be shown in the confirmation message
@@ -92,6 +92,20 @@ When provided, shows an Alert component with the error
 #### Inherited from
 
 [`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`error`](InterfaceCrudModalBaseProps.md#error)
+
+***
+
+### id?
+
+> `optional` **id**: `string`
+
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:89](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L89)
+
+HTML id attribute for the modal/form
+
+#### Inherited from
+
+[`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`id`](InterfaceCrudModalBaseProps.md#id)
 
 ***
 
@@ -133,7 +147,7 @@ Triggered by close button, backdrop click, or Escape key
 
 > **onDelete**: () => `void` \| `Promise`\<`void`\>
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:219](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L219)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:224](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L224)
 
 Callback function invoked when deletion is confirmed
 Should handle the delete logic and return a Promise
@@ -176,7 +190,7 @@ Text for the primary action button
 
 > `optional` **recurringEventContent**: `ReactNode`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:237](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L237)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:242](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L242)
 
 Optional content to display for recurring event support
 Allows users to choose between deleting series or single instance
@@ -201,7 +215,7 @@ Text for the secondary action button
 
 > `optional` **showWarning**: `boolean`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:231](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L231)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:236](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L236)
 
 Whether to show warning styling (danger variant)
 

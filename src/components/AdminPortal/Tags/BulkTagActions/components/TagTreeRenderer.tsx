@@ -1,0 +1,186 @@
+/**
+ * Tag Tree Renderer Utilities
+ *
+ * Contains pure functions and rendering helpers to recursively render the
+ * infinite scrolling tag tree inside the TagActions modal. It calculates indentation,
+ * applies search filters, and constructs the folder/tag hierarchy.
+ */
+import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/InfiniteScrollLoader';
+import type {
+  InterfaceTagFolderItem,
+  InterfaceTagSelectionItem,
+  InterfaceTagTreeRendererParams,
+} from 'types/AdminPortal/TagActions/interface';
+
+const MAX_INDENT_LEVEL = 12;
+
+const getIndentClassName = (
+  depth: number,
+  styles: Record<string, string>,
+): string => {
+  const safeDepth = Math.max(0, Math.min(depth, MAX_INDENT_LEVEL));
+  return styles[`indent${safeDepth}`] ?? styles.indent0;
+};
+
+const doesTagMatchSearch = (
+  tag: InterfaceTagSelectionItem,
+  searchTerm: string,
+): boolean => !searchTerm || tag.name.toLowerCase().includes(searchTerm);
+
+const folderHasVisibleContent = (
+  folderId: string,
+  params: InterfaceTagTreeRendererParams,
+): boolean => {
+  const { folderStateMap, searchTerm } = params;
+
+  if (!searchTerm) return true;
+
+  const folder = folderStateMap.get(folderId);
+  if (!folder) return false;
+
+  if (folder.name.toLowerCase().includes(searchTerm)) return true;
+  if (folder.tags.some((tag) => doesTagMatchSearch(tag, searchTerm))) {
+    return true;
+  }
+
+  return folder.childFolderIds.some((childFolderId) =>
+    folderHasVisibleContent(childFolderId, params),
+  );
+};
+
+const renderTagRow = (
+  tag: InterfaceTagSelectionItem,
+  depth: number,
+  params: InterfaceTagTreeRendererParams,
+): JSX.Element => {
+  const { styles, checkedTags, onToggleTagSelection } = params;
+  const indentClassName = getIndentClassName(depth, styles);
+
+  return (
+    <li key={tag.id} className={styles.listItem}>
+      <label
+        className={`${styles.listItemLabel} ${styles.tagRow} ${indentClassName}`}
+        data-testid="orgUserTag"
+      >
+        <span className={styles.tagRowMain}>
+          <i className={`fa fa-tag ${styles.tagIcon}`} aria-hidden="true" />
+          <span className={styles.tagName}>{tag.name}</span>
+        </span>
+        <input
+          type="checkbox"
+          className={styles.listCheckbox}
+          checked={checkedTags.has(tag.id)}
+          onChange={(e) => onToggleTagSelection(tag, e.target.checked)}
+          data-testid={`checkTag${tag.id}`}
+          aria-label={tag.name}
+        />
+      </label>
+    </li>
+  );
+};
+
+/**
+ * Returns root folder ids sorted by folder name.
+ *
+ * @param folderStateMap - Map of all loaded folders keyed by folder id.
+ * @returns Sorted root folder ids.
+ */
+export const getRootFolderIds = (
+  folderStateMap: Map<string, InterfaceTagFolderItem>,
+): string[] =>
+  Array.from(folderStateMap.values())
+    .filter((folder) => folder.parentFolderId === null)
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .map((folder) => folder.id);
+
+/**
+ * Renders a folder row and, when expanded, its child folder and tag rows.
+ *
+ * @param folderId - Folder id to render.
+ * @param depth - Nesting depth used for indentation.
+ * @param params - Rendering state and event handlers.
+ * @returns JSX rows for the requested folder subtree.
+ */
+export const renderFolderTree = (
+  folderId: string,
+  depth: number,
+  params: InterfaceTagTreeRendererParams,
+): JSX.Element[] => {
+  const { folderStateMap, expandedFolderIds, searchTerm, styles } = params;
+  const folder = folderStateMap.get(folderId);
+
+  if (!folder || !folderHasVisibleContent(folder.id, params)) {
+    return [];
+  }
+
+  const isExpanded = expandedFolderIds.has(folder.id);
+  const visibleTags = folder.tags.filter((tag) =>
+    doesTagMatchSearch(tag, searchTerm),
+  );
+  const hasKnownChildren =
+    folder.childFolderIds.length > 0 || visibleTags.length > 0;
+  const rowIndentClassName = getIndentClassName(depth, styles);
+  const childIndentClassName = getIndentClassName(depth + 1, styles);
+
+  const row: JSX.Element = (
+    <li key={`folder-${folder.id}`} className={styles.listItem}>
+      <div className={`${styles.folderRow} ${rowIndentClassName}`}>
+        <button
+          type="button"
+          className={styles.folderToggleButton}
+          onClick={() => params.onToggleFolderExpansion(folder.id)}
+          data-testid={`expandFolder${folder.id}`}
+          aria-label={
+            isExpanded
+              ? params.collapseFolderAriaLabel
+              : params.expandFolderAriaLabel
+          }
+        >
+          <i
+            className={`fa ${isExpanded ? 'fa-chevron-down' : 'fa-chevron-right'}`}
+            aria-hidden="true"
+          />
+        </button>
+        <i className="fa fa-folder me-2" aria-hidden="true" />
+        <span>{folder.name}</span>
+      </div>
+    </li>
+  );
+
+  if (!isExpanded) {
+    return [row];
+  }
+
+  const childFolderRows = folder.childFolderIds.flatMap((childFolderId) =>
+    renderFolderTree(childFolderId, depth + 1, params),
+  );
+
+  const tagRows = visibleTags.map((tag) =>
+    renderTagRow(tag, depth + 1, params),
+  );
+
+  const loadingRow = folder.loading ? (
+    <li key={`folder-loading-${folder.id}`} className={styles.listItem}>
+      <div className={`${styles.folderLoadingRow} ${childIndentClassName}`}>
+        <InfiniteScrollLoader />
+      </div>
+    </li>
+  ) : null;
+
+  const emptyRow =
+    !folder.loading && folder.loaded && !hasKnownChildren ? (
+      <li key={`folder-empty-${folder.id}`} className={styles.listItem}>
+        <div className={`${styles.folderEmptyRow} ${childIndentClassName}`}>
+          {params.noTagsFoundText}
+        </div>
+      </li>
+    ) : null;
+
+  return [
+    row,
+    ...(loadingRow ? [loadingRow] : []),
+    ...(emptyRow ? [emptyRow] : []),
+    ...childFolderRows,
+    ...tagRows,
+  ];
+};

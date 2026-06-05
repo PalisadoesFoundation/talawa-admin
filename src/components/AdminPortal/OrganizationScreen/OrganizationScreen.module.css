@@ -3,16 +3,29 @@
  * Layout handled by design system — these are kept as no-ops for test compatibility.
  */
 
-.pageContainer {}
-.expand {}
-.contract {}
-.avatarStyle {}
-.profileContainer {}
-.imageContainer {}
-.profileDropdown {}
-.dropdownToggle {}
-.opendrawer {}
-.collapseSidebarButton {}
-.flexContainerColumn {}
-.titleMargin {}
-.angleDown {}
+.pageContainer {
+}
+.expand {
+}
+.contract {
+}
+.avatarStyle {
+}
+.profileContainer {
+}
+.imageContainer {
+}
+.profileDropdown {
+}
+.dropdownToggle {
+}
+.opendrawer {
+}
+.collapseSidebarButton {
+}
+.flexContainerColumn {
+}
+.titleMargin {
+}
+.angleDown {
+}

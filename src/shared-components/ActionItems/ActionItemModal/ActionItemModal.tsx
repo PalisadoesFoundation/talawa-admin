@@ -570,7 +570,7 @@ const ItemModal: FC<IItemModalProps> = ({
           />
 
           {assignmentType === 'volunteer' && (
-            <div style={{ width: "100%" }}>
+            <div style={{ width: '100%' }}>
               <Autocomplete
                 className={`${styles.noOutline}`}
                 data-testid="volunteerSelect"
@@ -631,7 +631,7 @@ const ItemModal: FC<IItemModalProps> = ({
           )}
 
           {assignmentType === 'volunteerGroup' && (
-            <div style={{ width: "100%" }}>
+            <div style={{ width: '100%' }}>
               <Autocomplete
                 className={`${styles.noOutline}`}
                 data-testid="volunteerGroupSelect"

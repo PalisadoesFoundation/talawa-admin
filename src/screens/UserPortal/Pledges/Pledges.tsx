@@ -245,7 +245,7 @@ const Pledges = (): JSX.Element => {
       <div className={styles.container + ' rounded-4 my-3'}>
         <div className={styles.message} data-testid="errorMsg">
           <WarningAmberRounded className={styles.errorIcon} />
-          <h6 style={{ textAlign: "center" }}>
+          <h6 style={{ textAlign: 'center' }}>
             {tErrors('errorLoading', { entity: 'Pledges' })}
             <br />
             {pledgeError.message}

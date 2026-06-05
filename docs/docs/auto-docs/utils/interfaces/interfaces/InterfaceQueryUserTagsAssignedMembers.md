@@ -4,7 +4,7 @@
 
 # Interface: InterfaceQueryUserTagsAssignedMembers
 
-Defined in: [src/utils/interfaces.ts:1159](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1159)
+Defined in: [src/utils/interfaces.ts:1165](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1165)
 
 Defines the structure for a query result containing user tags and their assigned members.
 
@@ -14,7 +14,7 @@ Defines the structure for a query result containing user tags and their assigned
 
 > **ancestorTags**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:1162](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1162)
+Defined in: [src/utils/interfaces.ts:1168](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1168)
 
 #### \_id
 
@@ -26,11 +26,51 @@ Defined in: [src/utils/interfaces.ts:1162](https://github.com/PalisadoesFoundati
 
 ***
 
+### folder?
+
+> `optional` **folder**: `object`
+
+Defined in: [src/utils/interfaces.ts:1172](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1172)
+
+#### \_id
+
+> **\_id**: `string`
+
+#### name
+
+> **name**: `string`
+
+#### parentFolder?
+
+> `optional` **parentFolder**: `object`
+
+##### parentFolder.\_id
+
+> **\_id**: `string`
+
+##### parentFolder.name
+
+> **name**: `string`
+
+##### parentFolder.parentFolder?
+
+> `optional` **parentFolder**: `object`
+
+##### parentFolder.parentFolder.\_id
+
+> **\_id**: `string`
+
+##### parentFolder.parentFolder.name
+
+> **name**: `string`
+
+***
+
 ### name
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:1160](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1160)
+Defined in: [src/utils/interfaces.ts:1166](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1166)
 
 ***
 
@@ -38,4 +78,4 @@ Defined in: [src/utils/interfaces.ts:1160](https://github.com/PalisadoesFoundati
 
 > **usersAssignedTo**: `InterfaceTagMembersData`
 
-Defined in: [src/utils/interfaces.ts:1161](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1161)
+Defined in: [src/utils/interfaces.ts:1167](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1167)
