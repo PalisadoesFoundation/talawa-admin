@@ -22,7 +22,6 @@
   "login": "Se connecter",
   "register": "Registre",
   "menu": "Menu",
-  "notifications": "Notifications",
   "settings": "Paramètres",
   "users": "Utilisateurs",
   "requests": "Demandes",
@@ -132,6 +131,7 @@
   "breadcrumbs": "Fil d'Ariane",
   "to": "À",
   "loadingOrganizations": "Chargement des organisations...",
+  "errorLoadingOrganizations": "Erreur lors du chargement des organisations. Veuillez réessayer.",
   "noOrganizationsFound": "Aucune organisation trouvée",
   "title": "Titre",
   "assignedTo": "Attribué à",
@@ -139,7 +139,6 @@
   "overview": "Aperçu",
   "events": "Événements",
   "tags": "Étiquettes",
-  "viewSubTagsOf": "Voir les sous-étiquettes de {{tagName}}",
   "memberDetailNumberExample": "Ex. +1234567890",
   "commentUpdatedSuccessfully": "Commentaire mis à jour avec succès",
   "memberDetailExampleLane": "Ex. Allée 2",
@@ -178,7 +177,6 @@
   "postalCode": "Code postal",
   "showPassword": "Afficher le mot de passe",
   "hidePassword": "Masquer le mot de passe",
-  "security": "Sécurité",
   "volunteer": "Bénévole",
   "moreCount": "+{{count}} de plus",
   "togglePledgedRaised": "Basculer entre les montants promis et collectés",
@@ -234,8 +232,8 @@
   "enterName": "Entrez le nom",
   "imageUploadError": "Échec du téléchargement de l'image",
   "imageUploadSuccess": "Image téléchargée avec succès",
-  "paginationPrev": "Préc ‹",
-  "paginationNext": "Suiv ›",
+  "paginationPrev": "Préc \u2039",
+  "paginationNext": "Suiv \u203a",
   "tablePagination": "Pagination du tableau",
   "paginationPrevLabel": "Page précédente",
   "paginationNextLabel": "Page suivante",
@@ -320,9 +318,5 @@
   "loginSuccessWithName": "Bienvenue, {{name}} !",
   "signupSuccess": "Inscription réussie !",
   "authError": "Erreur d'authentification",
-  "networkError": "Erreur réseau",
-  "organizationCard": {
-    "card_aria": "Carte de l'organisation"
-  },
-  "oauthSectionAriaLabel": "Options de connexion OAuth"
+  "networkError": "Erreur réseau"
 }

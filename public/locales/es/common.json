@@ -22,7 +22,6 @@
   "login": "Login",
   "register": "Register",
   "menu": "Menu",
-  "notifications": "Notificaciones",
   "settings": "Settings",
   "gender": "Género",
   "users": "Users",
@@ -131,6 +130,7 @@
   "userProfileMenu": "Menú de perfil de usuario",
   "breadcrumbs": "Migas de navegación",
   "loadingOrganizations": "Cargando organizaciones...",
+  "errorLoadingOrganizations": "Error al cargar las organizaciones. Por favor, inténtalo de nuevo.",
   "noOrganizationsFound": "No se encontraron organizaciones",
   "title": "Título",
   "assignedTo": "Asignado a",
@@ -168,7 +168,6 @@
   "workPhoneNumber": "Número de teléfono del trabajo",
   "showPassword": "Mostrar contraseña",
   "hidePassword": "Ocultar contraseña",
-  "security": "Seguridad",
   "volunteer": "Voluntario",
   "moreCount": "+{{count}} más",
   "togglePledgedRaised": "Alternar entre cantidades prometidas y recaudadas",
@@ -231,8 +230,8 @@
   "imageUploadSuccess": "Imagen subida con éxito",
   "postalCode": "Código Postal",
   "state": "Estado",
-  "paginationPrev": "Anterior ‹",
-  "paginationNext": "Siguiente ›",
+  "paginationPrev": "Anterior \u2039",
+  "paginationNext": "Siguiente \u203a",
   "tablePagination": "Paginación de la tabla",
   "paginationPrevLabel": "Página anterior",
   "paginationNextLabel": "Página siguiente",
@@ -248,7 +247,6 @@
   "nextPage": "Siguiente página",
   "pageNumber": "Página {{page}}",
   "tags": "Etiquetas",
-  "viewSubTagsOf": "Ver subetiquetas de {{tagName}}",
   "loadMoreItems": "Cargar más elementos",
   "loadMore": "Cargar Más",
   "loadOlderMessages": "Cargar mensajes más antiguos",
@@ -320,9 +318,5 @@
   "loginSuccessWithName": "¡Bienvenido, {{name}}!",
   "signupSuccess": "¡Registro exitoso!",
   "authError": "Error de autenticación",
-  "networkError": "Error de red",
-  "organizationCard": {
-    "card_aria": "Tarjeta de organización"
-  },
-  "oauthSectionAriaLabel": "Opciones de inicio de sesión OAuth"
+  "networkError": "Error de red"
 }

@@ -22,7 +22,6 @@
   "login": "लॉग इन करें",
   "register": "पंजीकरण करें",
   "menu": "मेन्यू",
-  "notifications": "सूचनाएं",
   "settings": "सेटिंग्स",
   "users": "उपयोगकर्ता",
   "requests": "अनुरोध",
@@ -129,6 +128,7 @@
   "profilePicture": "प्रोफ़ाइल चित्र",
   "profilePicturePlaceholder": "डमी चित्र",
   "loadingOrganizations": "संगठन लोड हो रहे हैं...",
+  "errorLoadingOrganizations": "संगठन लोड करने में त्रुटि। कृपया पुनः प्रयास करें।",
   "noOrganizationsFound": "कोई संगठन नहीं मिला",
   "assignedTo": "सौंपा गया",
   "eventType": "कार्यक्रम प्रकार",
@@ -213,7 +213,6 @@
   "enterCityName": "शहर का नाम दर्ज करें",
   "enterStateName": "राज्य का नाम दर्ज करें",
   "select": "चुनें",
-  "security": "सुरक्षा",
   "selectAsYourCountry": "{{country}} को अपने देश के रूप में चुनें",
   "selectACountry": "एक देश चुनें",
   "passwordLengthRequirement": "पासवर्ड कम से कम {{length}} अक्षरों का होना चाहिए।",
@@ -228,8 +227,8 @@
   "imageUploadSuccess": "छवि सफलतापूर्वक अपलोड हुई",
   "postalCode": "डाक कोड",
   "state": "राज्य",
-  "paginationPrev": "पिछला ‹",
-  "paginationNext": "अगला ›",
+  "paginationPrev": "पिछला \u2039",
+  "paginationNext": "अगला \u203a",
   "tablePagination": "तालिका पृष्ठांकन",
   "paginationPrevLabel": "पिछला पृष्ठ",
   "paginationNextLabel": "अगला पृष्ठ",
@@ -245,7 +244,6 @@
   "nextPage": "अगला पृष्ठ",
   "pageNumber": "पृष्ठ {{page}}",
   "tags": "टैग",
-  "viewSubTagsOf": "{{tagName}} के उप-टैग देखें",
   "loadMoreItems": "और चीज़ें लोड करें",
   "loadMore": "और लोड करें",
   "loadOlderMessages": "पुराने संदेश लोड करें",
@@ -320,9 +318,5 @@
   "loginSuccessWithName": "स्वागत है, {{name}}!",
   "signupSuccess": "पंजीकरण सफल!",
   "authError": "प्रमाणीकरण त्रुटि",
-  "networkError": "नेटवर्क त्रुटि",
-  "organizationCard": {
-    "card_aria": "संस्था कार्ड"
-  },
-  "oauthSectionAriaLabel": "OAuth लॉगिन विकल्प"
+  "networkError": "नेटवर्क त्रुटि"
 }

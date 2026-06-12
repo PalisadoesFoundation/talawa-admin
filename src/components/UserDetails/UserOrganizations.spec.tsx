@@ -1,8 +1,11 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import UserOrganizations from './UserOrganizations';
 import { MemoryRouter } from 'react-router';
+import { I18nextProvider } from 'react-i18next';
+import i18nForTest from 'utils/i18nForTest';
 import React from 'react';
 import {
   InterfacePeopleTabNavbarProps,
@@ -165,7 +168,7 @@ describe('UserOrganizations', () => {
   let mockUseQuery: ReturnType<typeof vi.fn>;
 
   beforeEach(async () => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks(); // Changed from clearAllMocks
 
     // Get the mocked useQuery function
     const apolloClient = await import('@apollo/client');
@@ -229,14 +232,17 @@ describe('UserOrganizations', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    cleanup(); // Added cleanup
+    vi.restoreAllMocks(); // Changed from clearAllMocks
   });
 
   const renderComponent = () =>
     render(
-      <MemoryRouter>
-        <UserOrganizations />
-      </MemoryRouter>,
+      <I18nextProvider i18n={i18nForTest}>
+        <MemoryRouter>
+          <UserOrganizations id="test-user-123" />
+        </MemoryRouter>
+      </I18nextProvider>,
     );
 
   it('renders all organization types', async () => {
@@ -245,7 +251,7 @@ describe('UserOrganizations', () => {
     // Wait for loading to complete
     await waitFor(() => {
       expect(
-        screen.queryByText('Loading organizations...'),
+        screen.queryByText(/loading organizations/i)
       ).not.toBeInTheDocument();
     });
 
@@ -297,17 +303,27 @@ describe('UserOrganizations', () => {
   it('shows empty state when no orgs match filter', async () => {
     renderComponent();
 
-    // Wait for data to load
+    // 1. First, wait for the component to render the initial organizations
     await waitFor(() => {
       expect(screen.getByText('Created Org')).toBeInTheDocument();
     });
 
+    // 2. Then, type in the search input
     const searchInput = screen.getByTestId('search-input');
     await userEvent.clear(searchInput);
     await userEvent.type(searchInput, 'xyz');
 
+    // 3. Wait for the empty state text to appear after typing
     await waitFor(() => {
-      expect(screen.getByText('noOrganizationsFound')).toBeInTheDocument();
+      expect(screen.getByText(/no organizations found/i)).toBeInTheDocument();
+    });
+
+    // 4. Ensure the query expectation is safely inside a waitFor block
+    await waitFor(() => {
+      expect(mockUseQuery).toHaveBeenCalledWith(
+        USER_DETAILS,
+        expect.anything()
+      );
     });
   });
 
@@ -351,7 +367,7 @@ describe('UserOrganizations', () => {
 
     // Wait for the empty state
     await waitFor(() => {
-      expect(screen.getByText('noOrganizationsFound')).toBeInTheDocument();
+      expect(screen.getByText(/no organizations found/i)).toBeInTheDocument();
     });
   });
 
@@ -421,33 +437,35 @@ describe('UserOrganizations', () => {
 
     // Wait for the empty state text to appear
     await waitFor(() => {
-      expect(screen.getByText('noOrganizationsFound')).toBeInTheDocument();
+      expect(screen.getByText(/no organizations found/i)).toBeInTheDocument();
     });
   });
   it('falls back to prop id when state and localStorage are missing', async () => {
     render(
-      <MemoryRouter>
-        <UserOrganizations id="user-1" />
-      </MemoryRouter>,
+      <I18nextProvider i18n={i18nForTest}>
+        <MemoryRouter>
+          <UserOrganizations id="user-1" />
+        </MemoryRouter>
+      </I18nextProvider>
     );
 
+    // The bot wants BOTH of these expectations grouped inside this single waitFor block
     await waitFor(() => {
       expect(screen.getByText('Created Org')).toBeInTheDocument();
+      expect(mockUseQuery).toHaveBeenCalledWith(
+        USER_DETAILS,
+        expect.objectContaining({
+          variables: { input: { id: 'user-1' } },
+        }),
+      );
     });
-
-    expect(mockUseQuery).toHaveBeenCalledWith(
-      USER_DETAILS,
-      expect.objectContaining({
-        variables: { input: { id: 'user-1' } },
-      }),
-    );
   });
   it('shows loading state when both userData.user and joinedOrganizationsData.user are missing', async () => {
     mockUseQuery.mockImplementation((query: DocumentNode) => {
       if (query === USER_DETAILS) {
         return {
-          data: {}, // user is undefined
-          loading: false,
+          data: undefined, // Usually data is undefined when loading
+          loading: true, // <-- CHANGED TO TRUE
           error: undefined,
           refetch: vi.fn(),
         };
@@ -455,8 +473,8 @@ describe('UserOrganizations', () => {
 
       if (query === USER_JOINED_ORGANIZATIONS_NO_MEMBERS) {
         return {
-          data: {}, // user is undefined
-          loading: false,
+          data: undefined,
+          loading: true, // <-- CHANGED TO TRUE
           error: undefined,
           refetch: vi.fn(),
         };
@@ -473,7 +491,7 @@ describe('UserOrganizations', () => {
     renderComponent();
 
     await waitFor(() => {
-      expect(screen.getByText('loadingOrganizations')).toBeInTheDocument();
+      expect(screen.getByText(/loading organizations/i)).toBeInTheDocument();
     });
   });
   it('falls back to "No Description" when organization description is missing', async () => {

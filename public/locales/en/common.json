@@ -22,7 +22,6 @@
   "login": "Login",
   "register": "Register",
   "menu": "Menu",
-  "notifications": "Notifications",
   "settings": "Settings",
   "users": "Users",
   "requests": "Requests",
@@ -126,14 +125,13 @@
   "save": "Save",
   "saving": "Saving...",
   "loadingOrganizations": "Loading organizations...",
+  "errorLoadingOrganizations": "Error loading organizations. Please try again.",
   "noOrganizationsFound": "No organizations found.",
   "assignedTo": "Assigned to",
   "eventType": "Event Type",
   "overview": "Overview",
-  "security": "Security",
   "events": "Events",
   "tags": "Tags",
-  "viewSubTagsOf": "View subtags of {{tagName}}",
   "toggleOptions": "Toggle options",
   "filterAndSortOptions": "Filter and sort options",
   "clear": "Clear",
@@ -320,9 +318,5 @@
   "loginSuccessWithName": "Welcome, {{name}}!",
   "signupSuccess": "Registration successful!",
   "authError": "Authentication error",
-  "networkError": "Network error",
-  "organizationCard": {
-    "card_aria": "Organization card"
-  },
-  "oauthSectionAriaLabel": "OAuth login options"
+  "networkError": "Network error"
 }

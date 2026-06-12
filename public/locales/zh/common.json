@@ -22,7 +22,6 @@
   "login": "登录",
   "register": "注册",
   "menu": "菜单",
-  "notifications": "通知",
   "settings": "设置",
   "gender": "性别",
   "users": "用户",
@@ -51,7 +50,6 @@
   "desc": "描述",
   "enterPassword": "输入密码",
   "password": "密码",
-  "security": "安全",
   "confirmPassword": "确认密码",
   "forgotPassword": "忘记密码？",
   "talawaAdminPortal": "Talawa 管理门户",
@@ -132,6 +130,7 @@
   "userProfileMenu": "用户资料菜单",
   "breadcrumbs": "面包屑导航",
   "loadingOrganizations": "正在加载组织...",
+  "errorLoadingOrganizations": "加载组织时出错。请重试。",
   "noOrganizationsFound": "未找到组织",
   "title": "标题",
   "assignedTo": "分配给",
@@ -228,8 +227,8 @@
   "imageUploadSuccess": "图片上传成功",
   "postalCode": "邮政编码",
   "state": "省/州",
-  "paginationPrev": "上一页 ‹",
-  "paginationNext": "下一页 ›",
+  "paginationPrev": "上一页 \u2039",
+  "paginationNext": "下一页 \u203a",
   "tablePagination": "表格分页",
   "paginationPrevLabel": "上一页",
   "paginationNextLabel": "下一页",
@@ -245,7 +244,6 @@
   "nextPage": "下一页",
   "pageNumber": "第 {{page}} 页",
   "tags": "标签",
-  "viewSubTagsOf": "查看 {{tagName}} 的子标签",
   "loadMoreItems": "加载更多项目",
   "loadMore": "加载更多",
   "loadOlderMessages": "加载历史消息",
@@ -320,9 +318,5 @@
   "loginSuccessWithName": "欢迎，{{name}}！",
   "signupSuccess": "注册成功！",
   "authError": "认证错误",
-  "networkError": "网络错误",
-  "organizationCard": {
-    "card_aria": "机构卡片"
-  },
-  "oauthSectionAriaLabel": "OAuth 登录选项"
+  "networkError": "网络错误"
 }
