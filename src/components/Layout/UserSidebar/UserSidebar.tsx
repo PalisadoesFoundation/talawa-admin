@@ -17,6 +17,7 @@ interface UserSidebarProps {
   mobileOpen: boolean;
   onCloseMobile: () => void;
   orgName?: string;
+  avatarURL?: string;
 }
 
 export default function UserSidebarComponent({
@@ -25,6 +26,7 @@ export default function UserSidebarComponent({
   mobileOpen,
   onCloseMobile,
   orgName,
+  avatarURL
 }: UserSidebarProps): React.ReactElement {
   const location = useLocation();
   const navigate = useNavigate();
@@ -133,9 +135,19 @@ export default function UserSidebarComponent({
               if (e.key === 'Enter') navigate('/user/organizations');
             }}
           >
-            <div className="sidebar-org-avatar">
-              {(orgName || 'Org').substring(0, 2).toUpperCase()}
-            </div>
+
+            {avatarURL ? (
+              <img
+                src={avatarURL}
+                alt=""
+                className="sidebar-org-avatar"
+                crossOrigin="anonymous"
+              />
+            ) : (
+              <div className="sidebar-org-avatar">
+                {orgName?.slice(0, 2).toUpperCase() || 'O'}
+              </div>
+            )}
             <div className="sidebar-org-info">
               <div className="sidebar-org-name">
                 {orgName || t('organization')}

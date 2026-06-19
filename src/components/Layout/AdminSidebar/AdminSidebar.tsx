@@ -30,6 +30,7 @@ interface AdminSidebarProps {
   variant: 'super' | 'org';
   /** Organization name (for org variant) */
   orgName?: string;
+  avatarURL?: string;
 }
 
 export default function AdminSidebar({
@@ -39,6 +40,7 @@ export default function AdminSidebar({
   onCloseMobile,
   variant,
   orgName,
+  avatarURL
 }: AdminSidebarProps): React.ReactElement {
   const location = useLocation();
   const navigate = useNavigate();
@@ -160,9 +162,20 @@ export default function AdminSidebar({
               if (e.key === 'Enter') navigate('/admin/orglist');
             }}
           >
-            <div className="sidebar-org-avatar">
-              {(orgName || 'Org').substring(0, 2).toUpperCase()}
-            </div>
+
+            {avatarURL ? (
+              <img
+                src={avatarURL}
+                alt=""
+                className="sidebar-org-avatar"
+                crossOrigin="anonymous"
+              />
+            ) : (
+              <div className="sidebar-org-avatar">
+                {orgName?.slice(0, 2).toUpperCase() || 'O'}
+              </div>
+            )}
+
             <div className="sidebar-org-info">
               <div className="sidebar-org-name">
                 {orgName || t('organization')}

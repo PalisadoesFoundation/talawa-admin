@@ -22,11 +22,14 @@ import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import type { InterfaceMapType } from 'utils/interfaces';
 import { useQuery } from '@apollo/client';
-import { GET_ORGANIZATION_EVENTS_PG } from 'GraphQl/Queries/Queries';
+import { GET_ORGANIZATION_BASIC_DATA, GET_ORGANIZATION_EVENTS_PG } from 'GraphQl/Queries/Queries';
 import useLocalStorage from 'utils/useLocalstorage';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import AdminSidebar from 'components/Layout/AdminSidebar/AdminSidebar';
 import Topbar from 'components/Layout/Topbar/Topbar';
+import type {
+  IOrganizationData,
+} from 'types/shared-components/SidebarOrgSection/interface';
 
 const OrganizationScreen = (): JSX.Element => {
   const { getItem, setItem } = useLocalStorage();
@@ -85,6 +88,12 @@ const OrganizationScreen = (): JSX.Element => {
     skip: !shouldFetchEventName,
   });
 
+  const { data: orgData } = useQuery<{
+    organization: IOrganizationData;
+  }>(GET_ORGANIZATION_BASIC_DATA, {
+    variables: { id: orgId },
+  });
+
   // Update Redux targets when org changes
   useEffect(() => {
     if (orgId) {
@@ -141,6 +150,8 @@ const OrganizationScreen = (): JSX.Element => {
         onToggleCollapse={handleToggleCollapse}
         mobileOpen={mobileOpen}
         onCloseMobile={handleCloseMobile}
+        orgName={orgData?.organization?.name ?? ''}
+        avatarURL={orgData?.organization?.avatarURL ?? ''}
       />
 
       <Topbar title={pageTitle} onHamburgerClick={handleOpenMobile} />
