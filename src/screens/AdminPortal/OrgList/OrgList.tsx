@@ -552,6 +552,7 @@ function OrgList(): JSX.Element {
                 'en-US',
                 { month: 'short', year: 'numeric' },
               );
+              const avatarUrl = item.avatarURL || null;
               return (
                 <Link
                   key={item.id}
@@ -563,7 +564,11 @@ function OrgList(): JSX.Element {
                       className={styles.orgCardAvatar}
                       style={{ background: avatarGradient }}
                     >
-                      {initials}
+                      {avatarUrl ? (
+                        <img src={avatarUrl} alt={initials} crossOrigin="anonymous" className={styles.orgCardAvatar}/>
+                      ) : (
+                        initials
+                      )}
                     </div>
                     <div className={styles.orgCardName}>{item.name}</div>
                   </div>

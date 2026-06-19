@@ -450,7 +450,11 @@ export default function Organizations(): React.JSX.Element {
                           className={styles.srOnly}
                         ></div>
                         <div className={styles.orgAvatar}>
-                          {getInitials(organization.name)}
+                          {organization.avatarURL ? (
+                            <img src={organization.avatarURL} alt={getInitials(organization.name)} crossOrigin="anonymous" className={styles.orgAvatarImg}/>
+                          ) : (
+                            getInitials(organization.name)
+                          )}
                         </div>
                         <div className={styles.orgName}>{organization.name}</div>
                         <div className={styles.orgMembers}>

@@ -186,7 +186,7 @@ export const ProfileAvatarDisplay = ({
             className={imageClasses}
             onError={() => (onError ? onError() : setImgError(true))}
             onLoad={() => (onLoad ? onLoad() : null)}
-            crossOrigin={crossOrigin}
+            crossOrigin="anonymous"
             decoding={decoding}
             loading={loading}
             data-testid={dataTestId ? `${dataTestId}-img` : undefined}
