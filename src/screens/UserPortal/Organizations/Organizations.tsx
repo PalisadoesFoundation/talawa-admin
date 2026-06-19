@@ -480,28 +480,12 @@ export default function Organizations(): React.JSX.Element {
                     <div className={styles.orgGrid}>
                       {browseOrgs.map((organization: IOrganization, index) => (
                         <div
-                          className={styles.orgCard}
                           key={`browse-${index}`}
                           data-testid="organization-card"
                           data-organization-name={organization.name}
                           data-membership-status={organization.membershipRequestStatus}
                           data-cy="orgCard"
                         >
-                          <div
-                            data-testid={`membership-status-${organization.name}`}
-                            data-status={organization.membershipRequestStatus}
-                            className={styles.srOnly}
-                          ></div>
-                          <div className={styles.orgAvatar}>
-                            {getInitials(organization.name)}
-                          </div>
-                          <div className={styles.orgName}>{organization.name}</div>
-                          <div className={styles.orgMembers}>
-                            {organization.membersCount || 0} members
-                          </div>
-                          <div className={styles.orgRole}>
-                            <span className="badge badge-gray">Open</span>
-                          </div>
                           <OrganizationCard
                             data={{
                               name: organization.name,
