@@ -363,7 +363,7 @@ const Requests = (): JSX.Element => {
                                 await handleRejectUser(req.membershipRequestId);
                               }}
                             >
-                              {t('requests.decline')}
+                              {t('requests.reject')}
                             </button>
                           </div>
                         </td>

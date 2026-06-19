@@ -351,6 +351,7 @@
     "sl_no": "Sl. ",
     "accept": "Accepter",
     "reject": "Rejeter",
+    "pending": "En attente",
     "searchRequests": "Rechercher des demandes d'adhésion",
     "noOrgError": "Organisations introuvables, veuillez créer une organisation via le tableau de bord",
     "noRequestsFound": "Aucune demande d'adhésion trouvée",

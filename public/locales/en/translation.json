@@ -344,6 +344,7 @@
     "sl_no": "Sl. No.",
     "accept": "Accept",
     "reject": "Reject",
+    "pending": "Pending",
     "searchRequests": "Search membership requests",
     "noOrgError": "Organizations not found, please create an organization through dashboard",
     "noRequestsFound": "No Membership Requests Found",

@@ -350,6 +350,7 @@
     "newMembersWillAppearHere": "Los nuevos miembros aparecerán aquí",
     "errorLoadingRequests": "Error al cargar las solicitudes",
     "reject": "Rechazar",
+    "pending": "Pendiente",
     "searchRequests": "Buscar solicitudes",
     "noOrgError": "Organizaciones no encontradas, por favor crea una organización a través del panel",
     "noRequestsFound": "No se encontraron solicitudes",

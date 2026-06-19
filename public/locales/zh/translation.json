@@ -347,6 +347,7 @@
     "accept": "接受",
     "newMembersWillAppearHere": "新成员会显示在这里",
     "reject": "拒绝",
+    "pending": "待处理",
     "searchRequests": "搜索会员请求",
     "noOrgError": "未找到组织，请通过仪表板创建组织",
     "noRequestsFound": "未找到会员申请",
