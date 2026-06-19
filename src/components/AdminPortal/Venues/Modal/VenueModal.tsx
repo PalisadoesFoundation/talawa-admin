@@ -360,7 +360,6 @@ const VenueModal = ({
   return (
     <CRUDModalTemplate open={show} onClose={onHide} title={t('venueDetails')}>
       <form data-testid="venueForm">
-        <label htmlFor="venuetitle">{t('venueName')}</label>
         <FormTextField
           name="venueTitle"
           label={t('venueName')}
@@ -372,7 +371,6 @@ const VenueModal = ({
           data-testid="venueTitleInput"
         />
 
-        <label htmlFor="venuedescrip">{tCommon('description')}</label>
         <FormTextField
           name="venueDescription"
           label={tCommon('description')}
@@ -386,7 +384,6 @@ const VenueModal = ({
           className={styles.inputField}
         />
 
-        <label htmlFor="venuecapacity">{t('capacity')}</label>
         <FormTextField
           name="venueCapacity"
           label={t('capacity')}
@@ -396,7 +393,9 @@ const VenueModal = ({
           onChange={(v) => setFormState((prev) => ({ ...prev, capacity: v }))}
           className={styles.inputField}
         />
-        <label htmlFor="venueImgUrl">{t('image')}</label>
+        <label htmlFor="venueImgUrl" className={styles.label}>
+          {t('image')}
+        </label>
         <input
           accept="image/*"
           id="venueImgUrl"
