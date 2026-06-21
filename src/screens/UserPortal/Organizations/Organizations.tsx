@@ -442,7 +442,6 @@ export default function Organizations(): React.JSX.Element {
                         data-organization-name={organization.name}
                         data-membership-status={organization.membershipRequestStatus}
                         data-cy="orgCard"
-                        style={{ textDecoration: 'none', color: 'inherit' }}
                       >
                         <div
                           data-testid={`membership-status-${organization.name}`}
@@ -521,7 +520,7 @@ export default function Organizations(): React.JSX.Element {
               </>
             ) : (
               <div className="empty-state">
-                <div className="empty-state-icon">&#128269;</div>
+                <div className="empty-state-icon">{'\u{1F50D}'}</div>
                 <div className="empty-state-title" data-testid="no-organizations-message">
                   {t('nothingToShow')}
                 </div>

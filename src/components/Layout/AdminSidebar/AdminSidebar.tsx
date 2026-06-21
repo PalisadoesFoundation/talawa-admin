@@ -20,6 +20,7 @@ import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
 import { sanitizeAvatarURL } from 'utils/sanitizeAvatar';
 import SignOut from 'components/SignOut/SignOut';
+import styles from './AdminSidebar.module.css';
 
 interface AdminSidebarProps {
   collapsed: boolean;
@@ -343,12 +344,7 @@ export default function AdminSidebar({
               <img
                 src={userImage}
                 alt=""
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  borderRadius: '50%',
-                  objectFit: 'cover',
-                }}
+                className="sidebar-user-profile-avatar"
               />
             ) : (
               initials

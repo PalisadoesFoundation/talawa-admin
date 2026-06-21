@@ -225,6 +225,8 @@
   align-items: center;
   text-align: center;
   transition: box-shadow 0.2s, transform 0.15s;
+  text-decoration: none;
+  color: inherit;
 }
 
 .orgCard:hover {

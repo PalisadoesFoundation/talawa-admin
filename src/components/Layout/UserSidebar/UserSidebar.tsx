@@ -251,12 +251,7 @@ export default function UserSidebarComponent({
               <img
                 src={userImage}
                 alt=""
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  borderRadius: '50%',
-                  objectFit: 'cover',
-                }}
+                className="sidebar-user-profile-avatar"
               />
             ) : (
               initials

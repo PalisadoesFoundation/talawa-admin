@@ -391,8 +391,8 @@ export default function PostsPage() {
         </div>
       </div>
 
-      <div className="toolbar" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-        <div style={{ flex: 1 }}>
+      <div className="toolbar">
+        <div className="topbar-spacer">
           <Toolbar
             search={{
               placeholder: t('searchTitle'),
