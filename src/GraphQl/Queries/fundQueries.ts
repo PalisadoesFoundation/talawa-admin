@@ -21,6 +21,7 @@ export const FUND_LIST = gql`
             }
             id
             isTaxDeductible
+            isDefault
             name
             organization {
               name

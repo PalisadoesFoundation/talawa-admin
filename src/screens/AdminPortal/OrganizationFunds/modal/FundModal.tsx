@@ -66,10 +66,6 @@ const FundModal: React.FC<InterfaceFundModal> = ({
     touched.fundName && !formState.fundName.trim()
       ? tCommon('required')
       : undefined;
-  const fundRefError =
-    touched.fundRef && !formState.fundRef.trim()
-      ? tCommon('required')
-      : undefined;
 
   useEffect(() => {
     setFormState({
@@ -141,7 +137,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
     e.preventDefault();
     if (isSubmitting) return;
 
-    const { fundName, isTaxDeductible } = formState;
+    const { fundName, isTaxDeductible, isDefault } = formState;
 
     setIsSubmitting(true);
     try {
@@ -152,6 +148,9 @@ const FundModal: React.FC<InterfaceFundModal> = ({
       }
       if (isTaxDeductible !== fund?.isTaxDeductible) {
         updatedFields.isTaxDeductible = isTaxDeductible;
+      }
+      if (isDefault !== fund?.isDefault) {
+        updatedFields.isDefault = isDefault;
       }
 
       if (Object.keys(updatedFields).length === 0) {
@@ -237,9 +236,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
   };
 
   const modalTitle = t(mode === 'create' ? 'fundCreate' : 'fundUpdate');
-  const isCreateMode = mode === 'create';
-  const isEditMode = mode === 'edit';
-  const isFormValid = !fundNameError && !fundRefError;
+  const isFormValid = !fundNameError;
   const modalClassName = styles.fundModal;
 
   const formContent = (
@@ -257,22 +254,6 @@ const FundModal: React.FC<InterfaceFundModal> = ({
             setFormState((prev) => ({ ...prev, fundName: value }))
           }
           onBlur={() => setTouched((prev) => ({ ...prev, fundName: true }))}
-        />
-      </div>
-
-      <div className={styles.fieldRow}>
-        <FormTextField
-          name="fundId"
-          label={t('fundId')}
-          required
-          placeholder={t('enterFundId')}
-          value={formState.fundRef}
-          touched={touched.fundRef}
-          error={fundRefError}
-          onChange={(value) =>
-            setFormState((prev) => ({ ...prev, fundRef: value }))
-          }
-          onBlur={() => setTouched((prev) => ({ ...prev, fundRef: true }))}
         />
       </div>
 
