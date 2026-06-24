@@ -149,7 +149,6 @@
   "breadcrumbs": "Breadcrumbs",
   "loadingAdminPlugin": "Loading admin plugin...",
   "loadingUserPlugin": "Loading user plugin...",
-  "organization": "Organization",
   "event": "Event",
   "groups": "Groups",
   "Volunteers": "Volunteers",
@@ -335,13 +334,8 @@
   "venues": "Venues",
   "blockedUsers": "Blocked Users",
   "general": "General",
-  "plugins": "Plugins",
   "home": "Home",
   "people": "People",
   "donate": "Donate",
-  "volunteer": "Volunteer",
-  "organizations": "Organizations",
-  "organization": "Organization",
-  "funds": "Funds",
-  "events": "Events"
+  "organization": "Organization"
 }

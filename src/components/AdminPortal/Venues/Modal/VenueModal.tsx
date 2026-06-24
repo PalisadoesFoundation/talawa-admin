@@ -64,10 +64,20 @@ interface InterfaceVenueFormState {
   attachments?: {
     objectName: string;
     fileHash: string;
-    mimetype: string;
+    mimeType: string;
     name: string;
   }[];
 }
+
+const mimeTypeMap: Record<string, string> = {
+  'image/png': 'IMAGE_PNG',
+  'image/jpeg': 'IMAGE_JPEG',
+  'image/webp': 'IMAGE_WEBP',
+  'image/avif': 'IMAGE_AVIF',
+  'video/mp4': 'VIDEO_MP4',
+  'video/quicktime': 'VIDEO_QUICKTIME',
+  'video/webm': 'VIDEO_WEBM',
+};
 
 const VenueModal = ({
   show,
@@ -340,7 +350,7 @@ const VenueModal = ({
         const fileMetadata = {
           objectName,
           fileHash,
-          mimetype: file.type,
+          mimeType: mimeTypeMap[file.type],
           name: file.name,
         };
 
