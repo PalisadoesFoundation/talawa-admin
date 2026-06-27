@@ -30,6 +30,7 @@ import type { InterfaceMemberNode } from 'types/PeopleTab/interface';
 import type { DefaultConnectionPageInfo } from 'types/AdminPortal/pagination';
 import SafeBreadcrumbs from 'shared-components/BreadcrumbsComponent/SafeBreadcrumbs';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
+import useLocalStorage from 'utils/useLocalstorage';
 
 const STATE_TO_OPTION: Record<number, string> = {
   0: 'members',
@@ -112,9 +113,10 @@ function OrganizationPeople(): JSX.Element {
   const { t, i18n } = useTranslation('translation', {
     keyPrefix: 'organizationPeople',
   });
+  const { getItem } = useLocalStorage();
   const { t: tCommon } = useTranslation('common');
   const location = useLocation();
-  const role = location?.state;
+  const role = location?.state||getItem('role'); // Get role from location state or localStorage
   const { orgId: currentUrl } = useParams();
 
   const [state, setState] = useState(() => {
@@ -174,21 +176,32 @@ function OrganizationPeople(): JSX.Element {
   );
 
   // Query for members/admins
-  const query = state !== 2 ? ORGANIZATIONS_MEMBER_CONNECTION_LIST : USER_LIST_FOR_TABLE;
+  const query =
+    state !== 2 ? ORGANIZATIONS_MEMBER_CONNECTION_LIST : USER_LIST_FOR_TABLE;
   const dataPath = state !== 2 ? 'organization.members' : 'allUsers';
-  const queryVariables = state !== 2
-    ? { orgId: currentUrl, where: whereFilter, first: ITEMS_PER_PAGE, after: null }
-    : { first: ITEMS_PER_PAGE, after: null };
+  const queryVariables =
+    state !== 2
+      ? {
+          orgId: currentUrl,
+          where: whereFilter,
+          first: ITEMS_PER_PAGE,
+          after: null,
+        }
+      : { first: ITEMS_PER_PAGE, after: null };
 
   const { data, loading, error, fetchMore } = useQuery(query, {
     variables: queryVariables,
     notifyOnNetworkStatusChange: true,
+    errorPolicy: 'all',
   });
 
   // Sync data from query results
   useEffect(() => {
     if (!data) return;
-    const connectionData = extractConnectionData<InterfaceMemberNode>(data, dataPath);
+    const connectionData = extractConnectionData<InterfaceMemberNode>(
+      data,
+      dataPath,
+    );
     if (connectionData) {
       const nodes = connectionData.edges.map((edge) => edge.node);
       setItems(nodes);
@@ -208,11 +221,19 @@ function OrganizationPeople(): JSX.Element {
 
     setIsLoadingMore(true);
     try {
-      const vars: Record<string, unknown> = state !== 2
-        ? { orgId: currentUrl, where: whereFilter, first: ITEMS_PER_PAGE, after: pageInfo.endCursor }
-        : { first: ITEMS_PER_PAGE, after: pageInfo.endCursor };
+      const vars: Record<string, unknown> =
+        state !== 2
+          ? {
+              orgId: currentUrl,
+              where: whereFilter,
+              first: ITEMS_PER_PAGE,
+              after: pageInfo.endCursor,
+            }
+          : { first: ITEMS_PER_PAGE, after: pageInfo.endCursor };
 
-      const result = await fetchMore({ variables: vars });
+      const result = await fetchMore({
+        variables: vars,
+      });
       const connectionData = extractConnectionData<InterfaceMemberNode>(
         result.data,
         dataPath,
@@ -227,7 +248,16 @@ function OrganizationPeople(): JSX.Element {
     } finally {
       setIsLoadingMore(false);
     }
-  }, [pageInfo, isLoadingMore, loading, fetchMore, currentUrl, whereFilter, state, dataPath]);
+  }, [
+    pageInfo,
+    isLoadingMore,
+    loading,
+    fetchMore,
+    currentUrl,
+    whereFilter,
+    state,
+    dataPath,
+  ]);
 
   // Filter items by search
   const filteredItems = useMemo(() => {
@@ -444,9 +474,9 @@ function OrganizationPeople(): JSX.Element {
                           <button
                             className={styles.actionsBtn}
                             aria-label={tCommon('removeMember')}
-                            disabled={state === 2}
                             onClick={() => toggleRemoveMemberModal(node.id)}
                             data-testid="removeMemberModalBtn"
+                            disabled={role !== 'administrator'}
                           >
                             &#8943;
                           </button>
