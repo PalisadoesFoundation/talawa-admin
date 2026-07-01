@@ -99,6 +99,12 @@ const group1 = {
   description: 'Volunteer Group Description',
   volunteersRequired: null,
   createdAt: dayjs().toISOString(),
+  creator: {
+    __typename: 'User',
+    id: 'creatorId1',
+    name: 'Creator One',
+    avatarURL: null,
+  },
   leader: {
     __typename: 'User',
     id: 'userId',
@@ -140,6 +146,12 @@ const group2 = {
   description: 'Volunteer Group Description',
   volunteersRequired: null,
   createdAt: dayjs().toISOString(),
+  creator: {
+    __typename: 'User',
+    id: 'creatorId2',
+    name: 'Creator Two',
+    avatarURL: null,
+  },
   leader: {
     __typename: 'User',
     id: 'differentUserId',
@@ -211,7 +223,6 @@ const CUSTOM_MOCKS = [
         getEventVolunteerGroups: [group1],
       },
     },
-    maxUsageCount: 2,
   },
   {
     request: {
@@ -234,21 +245,42 @@ const CUSTOM_MOCKS = [
   {
     request: {
       query: EVENT_VOLUNTEER_GROUP_LIST,
-      variables: {
-        where: {
-          orgId: 'orgId',
-          userId: 'userId',
-          leaderName: 'Teresa',
-        },
-        orderBy: 'volunteers_DESC',
-      },
+      variables: {},
     },
     result: {
       data: {
-        getEventVolunteerGroups: [group1],
+        getEventVolunteerGroups: [group1, group2],
       },
     },
-    maxUsageCount: 2,
+    variableMatcher: (variables: Record<string, unknown>) => {
+      const where = (variables.where ?? {}) as Record<string, unknown>;
+      return (
+        where.orgId === 'orgId' &&
+        where.userId === 'userId' &&
+        typeof where.name_contains === 'string' &&
+        where.name_contains !== 'Group 1'
+      );
+    },
+  },
+  {
+    request: {
+      query: EVENT_VOLUNTEER_GROUP_LIST,
+      variables: {},
+    },
+    result: {
+      data: {
+        getEventVolunteerGroups: [group1, group2],
+      },
+    },
+    variableMatcher: (variables: Record<string, unknown>) => {
+      const where = (variables.where ?? {}) as Record<string, unknown>;
+      return (
+        where.orgId === 'orgId' &&
+        where.userId === 'userId' &&
+        typeof where.leaderName === 'string' &&
+        where.leaderName !== 'Teresa'
+      );
+    },
   },
 ];
 
