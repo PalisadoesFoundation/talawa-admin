@@ -119,7 +119,6 @@ const OAuthCallbackPage = lazy(
   () => import('components/Auth/OAuthCallback/OAuthCallback'),
 );
 
-const { setItem } = useLocalStorage();
 const PUBLIC_ROUTES = new Set([
   '/',
   '/register',
@@ -163,6 +162,7 @@ function App(): React.ReactElement {
   });
   const { t } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
+  const { setItem } = useLocalStorage();
 
   const apolloClient = useApolloClient();
 
@@ -208,7 +208,7 @@ function App(): React.ReactElement {
       // setItem('UserImage', auth.avatarURL|| "");
       initializeSubscriptions();
     }
-  }, [data, loading, setItem, isPublic]);
+  }, [data, loading, isPublic]);
 
   return (
     <ErrorBoundaryWrapper
