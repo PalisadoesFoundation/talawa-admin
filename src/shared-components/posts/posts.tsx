@@ -45,7 +45,7 @@ import {
   ORGANIZATION_POST_BY_ID,
 } from 'GraphQl/Queries/OrganizationQueries';
 import { ORGANIZATION_POST_LIST_WITH_VOTES } from 'GraphQl/Queries/Queries';
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react';
 import { useParams, useSearchParams } from 'react-router';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
@@ -88,6 +88,8 @@ export default function PostsPage() {
     useState<InterfacePost | null>(null);
   const [hasMore, setHasMore] = useState(true);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
+  const afterRef = useRef<string | null>(null);
+  const isFetchingMoreRef = useRef(false);
   const { getItem } = useLocalStorage();
   // i18n-ignore-next-line
   const userId = getItem<string>('userId') ?? getItem<string>('id') ?? null;
@@ -169,7 +171,9 @@ export default function PostsPage() {
       setHasMore(
         orgPostListData.organization.posts.pageInfo?.hasNextPage ?? false,
       );
-      setAfter(orgPostListData.organization.posts.pageInfo?.endCursor ?? null);
+      const newAfter = orgPostListData.organization.posts.pageInfo?.endCursor ?? null;
+      setAfter(newAfter);
+      afterRef.current = newAfter;
     }
   }, [orgPostListData]);
 
@@ -203,15 +207,16 @@ export default function PostsPage() {
   const loadMorePosts = useCallback((): void => {
     if (!currentUrl || !userId) return;
     if (!hasMore || sortingOption !== 'None') return;
-    if (isFetchingMore) return; // Guard against concurrent requests
+    if (isFetchingMoreRef.current) return; // Guard against concurrent requests
 
+    isFetchingMoreRef.current = true;
     setIsFetchingMore(true);
 
     fetchMore({
       variables: {
         input: { id: currentUrl as string },
         userId: userId,
-        after: after,
+        after: afterRef.current,
         before: null,
         first: first,
         last: null,
@@ -248,24 +253,18 @@ export default function PostsPage() {
       .then((res) => {
         const pageInfo = res.data?.organization?.posts?.pageInfo;
         setHasMore(pageInfo?.hasNextPage ?? false);
-        setAfter(pageInfo?.endCursor ?? null);
+        const newAfter = pageInfo?.endCursor ?? null;
+        setAfter(newAfter);
+        afterRef.current = newAfter;
+        isFetchingMoreRef.current = false;
         setIsFetchingMore(false);
       })
       .catch(() => {
         NotificationToast.error(t('loadMorePostsError'));
+        isFetchingMoreRef.current = false;
         setIsFetchingMore(false);
       });
-  }, [
-    hasMore,
-    sortingOption,
-    fetchMore,
-    currentUrl,
-    userId,
-    after,
-    first,
-    isFetchingMore,
-    setIsFetchingMore,
-  ]);
+  }, [hasMore, sortingOption, fetchMore, currentUrl, userId, first]);
 
   const handleSearch = (term: string): void => {
     setSearchTerm(term);
