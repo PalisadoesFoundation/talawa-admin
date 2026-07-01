@@ -1632,9 +1632,8 @@ describe('Testing Advertisement Register Component', () => {
 
     await waitFor(() => {
       expect(createMock).toHaveBeenCalled();
+      expect(toastErrorSpy).not.toHaveBeenCalled();
     });
-
-    expect(toastErrorSpy).not.toHaveBeenCalled();
   });
 
   it('Handles updateAdvertisement returning no data', async () => {
