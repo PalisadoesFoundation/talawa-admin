@@ -250,6 +250,8 @@
   },
   "notification": {
     "title": "通知",
+    "notification": "通知",
+    "notifications": "通知",
     "allCaughtUp": "全部已读！",
     "prev": "上一页",
     "next": "下一页",
@@ -1818,6 +1820,7 @@
     "name": "活动",
     "nothingToShow": "这里没有什么可显示的。",
     "createEvent": "创建事件",
+    "createEventTitle": "创建事件",
     "recurring": "重复事件",
     "startTime": "开始时间",
     "endTime": "时间结束",
@@ -2349,6 +2352,7 @@
   },
   "userVolunteer": {
     "title": "志愿服务",
+    "volunteerManagement": "志愿者管理",
     "name": "标题",
     "upcomingEvents": "即将举行的活动",
     "requests": "请求",

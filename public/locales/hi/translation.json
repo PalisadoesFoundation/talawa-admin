@@ -250,6 +250,8 @@
   },
   "notification": {
     "title": "सूचनाएं",
+    "notification": "सूचना",
+    "notifications": "सूचनाएं",
     "allCaughtUp": "आप सभी अपडेट के साथ हैं!",
     "prev": "पिछला",
     "next": "अगला",
@@ -1813,6 +1815,7 @@
     "name": "ईवेंट",
     "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
     "createEvent": "कार्यक्रम बनाएँ",
+    "createEventTitle": "कार्यक्रम बनाएँ",
     "recurring": "पुनरावर्ती ईवेंट",
     "startTime": "समय शुरू",
     "endTime": "अंत समय",
@@ -2344,6 +2347,7 @@
   },
   "userVolunteer": {
     "title": "स्वयंसेवकता",
+    "volunteerManagement": "स्वयंसेवक प्रबंधन",
     "name": "शीर्षक",
     "upcomingEvents": "आगामी कार्यक्रम",
     "requests": "अनुरोध",

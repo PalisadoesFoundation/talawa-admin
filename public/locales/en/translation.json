@@ -255,6 +255,8 @@
   },
   "notification": {
     "title": "Notifications",
+    "notification": "Notification",
+    "notifications": "Notifications",
     "allCaughtUp": "You're all caught up!",
     "prev": "Prev",
     "next": "Next",
@@ -1809,6 +1811,7 @@
     "name": "Events",
     "nothingToShow": "Nothing to show here.",
     "createEvent": "Create Event",
+    "createEventTitle": "Create Event",
     "recurring": "Recurring Event",
     "listView": "List View",
     "calendarView": "Calendar View",
@@ -2342,6 +2345,7 @@
   },
   "userVolunteer": {
     "title": "Volunteership",
+    "volunteerManagement": "Volunteer Management",
     "name": "Title",
     "upcomingEvents": "Upcoming Events",
     "requests": "Requests",

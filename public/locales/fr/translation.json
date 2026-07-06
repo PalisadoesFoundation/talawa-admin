@@ -255,6 +255,8 @@
   },
   "notification": {
     "title": "Notifications",
+    "notification": "Notification",
+    "notifications": "Notifications",
     "allCaughtUp": "Vous êtes à jour !",
     "prev": "Précédent",
     "next": "Suivant",
@@ -1818,6 +1820,7 @@
     "name": "Événements",
     "nothingToShow": "Rien à montrer ici.",
     "createEvent": "Créer un évènement",
+    "createEventTitle": "Créer un évènement",
     "recurring": "Événement récurrent",
     "startTime": "Heure de début",
     "endTime": "Heure de fin",
@@ -2349,6 +2352,7 @@
   },
   "userVolunteer": {
     "title": "Volontariat",
+    "volunteerManagement": "Gestion des bénévoles",
     "name": "Titre",
     "upcomingEvents": "Événements à Venir",
     "requests": "Demandes",

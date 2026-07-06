@@ -250,6 +250,8 @@
   },
   "notification": {
     "title": "Notificaciones",
+    "notification": "Notificación",
+    "notifications": "Notificaciones",
     "allCaughtUp": "¡Estás al día!",
     "prev": "Anterior",
     "next": "Siguiente",
@@ -1802,6 +1804,7 @@
     "nothingToShow": "No hay nada que mostrar aquí.",
     "search": "Buscar",
     "createEvent": "Crear evento",
+    "createEventTitle": "Crear evento",
     "recurring": "Periódica",
     "startTime": "Hora de inicio",
     "endTime": "Hora de finalización",
@@ -2332,6 +2335,7 @@
   },
   "userVolunteer": {
     "title": "Voluntariado",
+    "volunteerManagement": "Gestión de voluntarios",
     "name": "Título",
     "upcomingEvents": "Próximos Eventos",
     "requests": "Solicitudes",

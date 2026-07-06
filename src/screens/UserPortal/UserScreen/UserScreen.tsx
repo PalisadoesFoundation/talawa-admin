@@ -6,12 +6,9 @@
  * on whether orgId is in the URL.
  */
 import React, { useEffect, useState, useCallback } from 'react';
-import { useSelector } from 'react-redux';
 import { Outlet, useLocation, useParams } from 'react-router';
 import { updateTargets } from 'state/action-creators';
 import { useAppDispatch } from 'state/hooks';
-import type { RootState } from 'state/reducers';
-import type { TargetsType } from 'state/reducers/routesReducer';
 import type { InterfaceMapType } from 'utils/interfaces';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -47,11 +44,8 @@ const UserScreen = (): React.JSX.Element => {
   const { t: tScoped } = useTranslation('translation', {
     keyPrefix: titleKey,
   });
-
-  const userRoutes: { targets: TargetsType[] } = useSelector(
-    (state: RootState) => state.userRoutes,
-  );
-  const { targets } = userRoutes;
+  const pageTitleKey =
+    titleKey === 'userVolunteer' ? 'volunteerManagement' : 'title';
 
   const { data: orgData } = useQuery<{
     organization: IOrganizationData;
@@ -111,7 +105,10 @@ const UserScreen = (): React.JSX.Element => {
         avatarURL={orgData?.organization?.avatarURL ?? ''}
       />
 
-      <Topbar title={tScoped('title')} onHamburgerClick={handleOpenMobile} />
+      <Topbar
+        title={tScoped(pageTitleKey)}
+        onHamburgerClick={handleOpenMobile}
+      />
 
       <main id="main-content" className="main" data-testid="mainpageright">
         <Outlet />
