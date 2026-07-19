@@ -1280,7 +1280,7 @@ describe('useEffect loadMoreUsers trigger', () => {
                     name: 'Seed User',
                     emailAddress: 'seed@test.com',
                     role: 'regular',
-                    createdAt: dayjs.utc().toISOString(),
+                    createdAt: dayjs.utc('2025-01-01T10:00:00Z').toISOString(),
                     city: '',
                     state: '',
                     countryCode: '',
@@ -2615,7 +2615,7 @@ describe('Users wiring coverage (mocked presentation layer)', () => {
     name: 'John Doe',
     emailAddress: 'john@example.com',
     role: 'regular',
-    createdAt: dayjs.utc().toISOString(),
+    createdAt: dayjs.utc('2025-01-01T10:00:00Z').toISOString(),
     city: '',
     state: '',
     countryCode: '',
@@ -2794,7 +2794,9 @@ describe('Users wiring coverage (mocked presentation layer)', () => {
     await waitFor(() => {
       expect(fetchMore).toHaveBeenCalledTimes(1);
     });
-    expect(refetch).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(refetch).toHaveBeenCalled();
+    });
     expect(screen.getByTestId('has-more')).toHaveTextContent('true');
   });
 
