@@ -100,4 +100,26 @@
   --leftDrawer-bg: var(--sidebar-bg);
   --sidebar-collapsed-width: 64px;
   --sidebar-expanded-width: 260px;
+
+  /* ── Avatar gradient colors ─── */
+  --color-avatar-1: #3ecf8e;
+  --color-avatar-2: #15803d;
+  --color-avatar-3: #3b82f6;
+  --color-avatar-4: #2563eb;
+  --color-avatar-5: #f97316;
+  --color-avatar-6: #ea580c;
+  --color-avatar-7: #a855f7;
+  --color-avatar-8: #7c3aed;
+  --color-avatar-9: #ef4444;
+  --color-avatar-10: #dc2626;
+  --color-avatar-11: #eab308;
+  --color-avatar-12: #ca8a04;
+  --color-avatar-13: #06b6d4;
+  --color-avatar-14: #0891b2;
+  --color-avatar-15: #ec4899;
+  --color-avatar-16: #db2777;
+  --color-avatar-17: #14b8a6;
+  --color-avatar-18: #0d9488;
+  --color-avatar-19: #8b5cf6;
+  --color-avatar-20: #6d28d9;
 }

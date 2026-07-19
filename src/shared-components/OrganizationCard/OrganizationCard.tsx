@@ -179,7 +179,7 @@ function OrganizationCard({
             />
           </div>
           <div className={styles.content}>
-            <div>
+            <div className={styles.header}>
               {/* Tooltip for the organization name */}
               <Tooltip title={name} placement="top-end">
                 <h4 className={[styles.orgName, 'fw-semibold'].join(' ')}>
@@ -218,18 +218,7 @@ function OrganizationCard({
                     ? t('users.pending')
                     : t('users.notMember')}
               </span>
-              {/* Description of the organization */}
-              <div className={[styles.orgdesc, 'fw-semibold'].join(' ')}>
-                <TruncatedText text={description} />
-              </div>
-              {/* Display the organization address if available */}
-              {addressLine1 && (
-                <div className={styles.address}>
-                  <TruncatedText text={`${addressLine1}`} />
-                </div>
-              )}
-              {/* Display the number of admins and members */}
-              <h6>
+              <h5>
                 {role === 'admin' ? (
                   <div>
                     <div>
@@ -246,7 +235,18 @@ function OrganizationCard({
                     <span>{membersCount ?? members?.edges?.length ?? 0}</span>
                   </div>
                 )}
-              </h6>
+              </h5>
+              {/* Display the organization address if available */}
+              {addressLine1 && (
+                <div className={styles.address}>
+                  <TruncatedText text={`${addressLine1}`} />
+                </div>
+              )}
+              {/* Description of the organization */}
+              <div className={[styles.orgdesc, 'fw-semibold'].join(' ')}>
+                <TruncatedText text={description} />
+              </div>
+              {/* Display the number of admins and members */}
             </div>
             {/* Button to manage the organization */}
             {role === 'admin' ? (

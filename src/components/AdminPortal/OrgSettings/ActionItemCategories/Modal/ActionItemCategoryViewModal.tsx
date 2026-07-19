@@ -4,14 +4,10 @@
  */
 import type { FC } from 'react';
 import Button from 'shared-components/Button';
-import {
-  FormFieldGroup,
-  FormTextField,
-} from 'shared-components/FormFieldGroup/FormFieldGroup';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { CRUDModalTemplate as BaseModal } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import type { IActionItemCategoryInfo } from 'types/shared-components/ActionItems/interface';
 import { useTranslation } from 'react-i18next';
-import Circle from '@mui/icons-material/Circle';
 
 export interface ICategoryViewModalProps {
   isOpen: boolean;
@@ -49,62 +45,40 @@ const CategoryViewModal: FC<ICategoryViewModalProps> = ({
       customFooter={modalFooter}
       data-testId="categoryViewModal"
     >
-      <form style={{ padding: 12 }}>
+      <form
+        style={{
+          padding: 12,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 16,
+        }}
+      >
         {/* Category Name */}
-
-        {/* Category Name */}
-        <FormFieldGroup
-          name="categoryName"
+        <FormTextField
+          name="categoryNameField"
           label={t('actionItemCategoryName')}
+          value={category.name}
           disabled
-        >
-          <FormTextField
-            name="categoryNameField"
-            label={t('actionItemCategoryName')}
-            value={category.name}
-            disabled
-            data-testid="categoryNameView"
-          />
-        </FormFieldGroup>
+          data-testid="categoryNameView"
+        />
 
         {/* Category Description */}
-        <FormFieldGroup
-          name="categoryDescription"
+        <FormTextField
+          name="categoryDescriptionField"
           label={t('actionItemCategoryDescription')}
+          value={category.description || t('noDescriptionProvided')}
           disabled
-        >
-          <FormTextField
-            name="categoryDescriptionField"
-            label={t('actionItemCategoryDescription')}
-            value={category.description || t('noDescriptionProvided')}
-            disabled
-            data-testid="categoryDescriptionView"
-          />
-        </FormFieldGroup>
+          data-testid="categoryDescriptionView"
+        />
 
         {/* Status */}
-        <FormFieldGroup name="status" label={t('status')} disabled>
-          <FormTextField
-            name="statusField"
-            label={t('status')}
-            value={
-              category.isDisabled ? tCommon('disabled') : tCommon('active')
-            }
-            startAdornment={
-              <Circle
-                sx={{
-                  fontSize: 'var(--font-size-sm)',
-                  color: category.isDisabled
-                    ? 'var(--errorIcon-color)'
-                    : 'var(--green-500, #3ecf8e)',
-                }}
-                style={{ marginRight: 8 }}
-              />
-            }
-            disabled
-            data-testid="categoryStatusView"
-          />
-        </FormFieldGroup>
+        <FormTextField
+          name="statusField"
+          label={t('status')}
+          value={category.isDisabled ? tCommon('disabled') : tCommon('active')}
+          disabled
+          data-testid="categoryStatusView"
+        />
       </form>
     </BaseModal>
   );

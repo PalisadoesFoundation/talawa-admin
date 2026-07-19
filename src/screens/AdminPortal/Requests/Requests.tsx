@@ -244,8 +244,7 @@ const Requests = (): JSX.Element => {
           <h1 className="page-title">
             {t('requests.title')}{' '}
             <span
-              className="badge badge-orange"
-              style={{ fontSize: '13px', verticalAlign: 'middle', marginLeft: '8px' }}
+              className="badge badge-orange request-badge"
             >
               {displayedRequests.length} {t('requests.pending')}
             </span>
@@ -256,15 +255,14 @@ const Requests = (): JSX.Element => {
         </div>
       </div>
 
-      <div className="toolbar" style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '20px' }}>
+      <div className="toolbar">
         <input
           type="text"
-          className="search-input"
+          className="search-bar"
           placeholder={t('requests.searchRequests')}
           value={searchByName}
           onChange={(e) => handleSearch(e.target.value)}
           data-testid="searchByName"
-          style={{ flex: 1, padding: '8px 12px', border: '1px solid var(--gray-200)', borderRadius: 'var(--radius-md)', fontSize: '13px' }}
         />
       </div>
 
@@ -363,7 +361,7 @@ const Requests = (): JSX.Element => {
                                 await handleRejectUser(req.membershipRequestId);
                               }}
                             >
-                              {t('requests.decline')}
+                              {t('requests.reject')}
                             </button>
                           </div>
                         </td>

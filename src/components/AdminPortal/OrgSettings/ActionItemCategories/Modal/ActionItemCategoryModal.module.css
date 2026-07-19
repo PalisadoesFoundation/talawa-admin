@@ -1,9 +1,3 @@
-.createModal {
-  margin-top: 20vh;
-  margin-left: 13vw;
-  max-width: 80vw;
-}
-
 .titlemodal {
   color: var(--titlemodal-color);
   font-weight: var(--font-weight-semibold);
@@ -21,4 +15,16 @@
 .editButton:is(:hover, :active) {
   background-color: var(--green-500, #3ecf8e);
   border-color: var(--gray-700, #374151);
+}
+
+.actionButtons {
+  display: flex;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.createModal {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }

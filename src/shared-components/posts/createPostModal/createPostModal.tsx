@@ -3,13 +3,46 @@
  *
  * This component renders a modal dialog that allows users to create a new post
  * within an organization. Users can add a title, optional body text, attach an
- * image or video, and optionally pin the post.
+ * image or video, and optionally pin the post. The component handles file preview,
+ * file hashing, GraphQL mutation submission, and UI state reset on success.
  *
+ * @component
+ * @param {ICreatePostModalProps} props - The props for the CreatePostModal component.
+ * @param {boolean} props.show - Controls the visibility of the modal.
+ * @param {() => void} props.onHide - Callback invoked to close the modal.
+ * @param {() => Promise<unknown>} props.refetch - Function to refetch posts after a successful creation.
+ * @param {string | undefined} props.orgId - The organization ID where the post will be created.
+ *
+ * @returns {JSX.Element} A JSX element representing the create post modal.
+ *
+ * @remarks
+ * - Uses `@apollo/client` for executing the `CREATE_POST_MUTATION`.
+ * - Supports image and video uploads with MIME type validation.
+ * - File integrity is ensured by generating a SHA-256 hash using the Web Crypto API.
+ * - Displays media previews using `URL.createObjectURL`.
+ * - Uses `react-i18next` for localization and `react-toastify` for user feedback.
+ * - Automatically resets form state and clears file inputs after successful submission.
+ * - The modal can be dismissed by clicking the backdrop or pressing the `Escape` key.
+ *
+ * @example
+ * ```tsx
+ * <CreatePostModal
+ *   show={true}
+ *   onHide={() => setShowModal(false)}
+ *   refetch={refetchPosts}
+ *   orgId="org_123"
+ * />
+ * ```
  */
 
-import React, { FormEvent, useEffect, useRef, useState } from 'react';
-import InsertPhotoOutlined from '@mui/icons-material/InsertPhotoOutlined';
-import PushPin from '@mui/icons-material/PushPin';
+import React, {
+  FormEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import { Close, InsertPhotoOutlined, PushPin } from '@mui/icons-material';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from './createPostModal.module.css';
 import { useMutation } from '@apollo/client';
@@ -17,26 +50,12 @@ import {
   CREATE_POST_MUTATION,
   UPDATE_POST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
+import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import { useTranslation } from 'react-i18next';
 import { ICreatePostData, ICreatePostInput } from 'types/Post/type';
-
 import { ICreatePostModalProps } from 'types/Post/interface';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
-import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
-import Button from 'shared-components/Button';
-
-function sanitizeBlobUrl(url: string | null): string | null {
-  if (!url || typeof url !== 'string') return null;
-  try {
-    const parsed = new URL(url);
-    if (parsed.protocol !== 'blob:') return null;
-    return parsed.href;
-  } catch {
-    return null;
-  }
-}
 
 function CreatePostModal({
   show,
@@ -60,7 +79,6 @@ function CreatePostModal({
   const [previewType, setPreviewType] = useState<'image' | 'video' | null>(
     null,
   );
-  const safeBlobUrl = sanitizeBlobUrl(preview);
   const [editPost, { loading: isEditing }] = useMutation(UPDATE_POST_MUTATION);
   const [create, { loading: isCreating }] = useMutation<
     ICreatePostData,
@@ -70,25 +88,28 @@ function CreatePostModal({
     (type === 'create' && isCreating) || (type !== 'create' && isEditing);
   const isPostDisabled = postTitle.trim().length === 0;
 
-  const handleClose = (): void => {
-    if (isLoading) return;
+  const handleClose = useCallback((): void => {
     setPostTitle('');
     setPostBody('');
     setIspinned(false);
     setFile(null);
     setPreview(null);
-    setPreviewType(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
     onHide();
-  };
+  }, [onHide]);
 
   useEffect(() => {
     return () => {
       if (preview?.startsWith('blob:')) URL.revokeObjectURL(preview);
     };
   }, [preview]);
+
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && show) handleClose();
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [show, handleClose]);
 
   function getMimeTypeEnum(mime: string): string {
     switch (mime) {
@@ -111,17 +132,13 @@ function CreatePostModal({
     }
   }
 
-  /**
-   * Handles file selection from the input.
-   * Validates the mime type against allowed types and generates a blob URL for previewing the selected image or video.
-   */
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     if (getMimeTypeEnum(file.type) === '0') {
       setFile(null);
       setPreview(null);
-      NotificationToast.error(t('createPostModal.unsupportedFileType'));
+      toast.error(t('createPostModal.unsupportedFileType'));
       return;
     }
     if (file.type.startsWith('image/')) {
@@ -137,7 +154,7 @@ function CreatePostModal({
   };
 
   const onSuccess = async (type: 'edited' | 'created') => {
-    NotificationToast.success(
+    toast.success(
       type === 'created'
         ? (t('createPostModal.postCreatedSuccess') as string)
         : (t('createPostModal.postUpdatedSuccess') as string),
@@ -157,10 +174,6 @@ function CreatePostModal({
     onHide();
   };
 
-  /**
-   * Submits the post data to the server.
-   * Validates required fields, executes the create or update mutation, handles success, and catches errors.
-   */
   const createPostHandler = async (
     e: FormEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -168,7 +181,7 @@ function CreatePostModal({
 
     try {
       if (!orgId) {
-        NotificationToast.error(t('createPostModal.organizationIdMissing'));
+        toast.error(t('createPostModal.organizationIdMissing'));
         return;
       }
       if (type === 'create') {
@@ -207,155 +220,179 @@ function CreatePostModal({
     }
   };
 
-  const customFooter = (
-    <div className={styles.modalFooter}>
-      <div className={styles.mediaActions}>
-        <Button
-          type="button"
-          className={styles.mediaButton}
-          aria-label={t('createPostModal.addAttachment')}
-          data-testid="addPhotoBtn"
-          onClick={() => fileInputRef.current?.click()}
-          title={t('createPostModal.addAttachment')}
-        >
-          <InsertPhotoOutlined />
-
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*, video/*"
-            id="addMedia"
-            data-testid="addMedia"
-            data-cy="addMediaField"
-            hidden
-            onChange={handleImageSelect}
-          />
-        </Button>
-        <Button
-          type="button"
-          className={styles.mediaButton}
-          aria-label={
-            isPinned
-              ? t('createPostModal.unpinPost')
-              : t('createPostModal.pinPost')
-          }
-          data-cy="pinPost"
-          data-testid="pinPostButton"
-          onClick={() => setIspinned(!isPinned)}
-          title={
-            isPinned
-              ? t('createPostModal.unpinPost')
-              : t('createPostModal.pinPost')
-          }
-        >
-          <PushPin
-            className={isPinned ? styles.pinIconActive : styles.pinIcon}
-          />
-        </Button>
-      </div>
-
-      <div className={styles.postActions}>
-        <form onSubmit={createPostHandler}>
-          <Button
-            className={`${styles.postButton} ${
-              isPostDisabled || isLoading ? styles.postButtonDisabled : ''
-            }`}
-            type="submit"
-            disabled={isPostDisabled || isLoading}
-            data-testid="createPostBtn"
-          >
-            {isLoading ? (
-              <span className={styles.loader}></span>
-            ) : type === 'create' ? (
-              t('createPostModal.post')
-            ) : (
-              t('createPostModal.saveChanges')
-            )}
-          </Button>
-        </form>
-      </div>
-    </div>
-  );
-
   return (
-    <CRUDModalTemplate
-      open={show}
-      title={
-        type === 'create'
-          ? t('createPostModal.createPost')
-          : t('createPostModal.editPost')
-      }
-      onClose={handleClose}
-      loading={isLoading}
-      customFooter={customFooter}
-      data-testid="create-post-modal"
-      className={styles.createPostModal}
-    >
-      {/* User info section - moved from header to body */}
-      <div className={styles.userHeader}>
-        <ProfileAvatarDisplay
-          fallbackName={name}
-          size="small"
-          dataTestId="user-avatar"
-          enableEnlarge={true}
-        />
-        <div className={styles.userInfo}>
-          <span className={styles.userName}>{name}</span>
-          <span className={styles.postVisibility}>
-            {type === 'create'
-              ? t('createPostModal.postToAnyone')
-              : t('createPostModal.editPost')}
-          </span>
+    <>
+      {/* Backdrop overlay */}
+      <button
+        className={`${styles.backdrop} ${show ? styles.backdropShow : ''}`}
+        onClick={!isLoading ? handleClose : undefined}
+        data-testid="modalBackdrop"
+        type="button"
+        aria-label={t('createPostModal.closeCreatePost')}
+      />
+      <div
+        className={`${styles.modalDialog} ${show ? styles.modalShow : ''}`}
+        data-testid="create-post-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-label={t('createPostModal.createPost')}
+      >
+        {/* Header */}
+        <div className={styles.modalHeader}>
+          <div className={styles.headerLeft}>
+            <ProfileAvatarDisplay
+              fallbackName={name}
+              size="small"
+              dataTestId="user-avatar"
+              enableEnlarge={true}
+            />
+            <div className={styles.userInfo}>
+              <span className={styles.userName}>{name}</span>
+              <span className={styles.postVisibility}>
+                {type === 'create'
+                  ? t('createPostModal.postToAnyone')
+                  : t('createPostModal.editPost')}
+              </span>
+            </div>
+          </div>
+          <button
+            className={styles.closeButton}
+            onClick={!isLoading ? handleClose : undefined}
+            aria-label={t('createPostModal.close')}
+            data-testid="closeBtn"
+            type="button"
+          >
+            <Close />
+          </button>
+        </div>
+
+        {/* Content Area */}
+        <div className={styles.modalBody}>
+          <textarea
+            className={styles.postTextarea}
+            placeholder={t('createPostModal.titleOfPost')}
+            data-cy="modalTitle"
+            value={postTitle}
+            onChange={(e) => {
+              setPostTitle((e.target as HTMLTextAreaElement).value);
+            }}
+            data-testid="postTitleInput"
+          />
+          <textarea
+            className={styles.postBodyTextarea}
+            placeholder={t('createPostModal.bodyOfPost')}
+            data-cy="create-post-description"
+            value={postBody}
+            onChange={(e) => {
+              setPostBody((e.target as HTMLTextAreaElement).value);
+            }}
+            data-testid="postBodyInput"
+          />
+          {(() => {
+            const isSafePreviewUrl =
+              typeof preview === 'string' && preview.startsWith('blob:');
+            return (
+              preview &&
+              previewType &&
+              isSafePreviewUrl && (
+                <div className={styles.imagePreviewContainer}>
+                  {previewType === 'image' && (
+                    <img
+                      src={preview}
+                      alt={t('createPostModal.selectedImage')}
+                      className={styles.imagePreview}
+                      data-testid="imagePreview"
+                    />
+                  )}
+
+                  {previewType === 'video' && (
+                    <video
+                      src={preview}
+                      controls
+                      className={styles.videoPreview}
+                      data-testid="videoPreview"
+                    >
+                      <track kind="captions" />
+                    </video>
+                  )}
+                </div>
+              )
+            );
+          })()}
+        </div>
+
+        {/* Footer */}
+        <div className={styles.modalFooter}>
+          <div className={styles.mediaActions}>
+            <button
+              type="button"
+              className={styles.mediaButton}
+              aria-label={t('createPostModal.addAttachment')}
+              data-testid="addPhotoBtn"
+              onClick={() => fileInputRef.current?.click()}
+              title={t('createPostModal.addAttachment')}
+            >
+              <InsertPhotoOutlined />
+
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*, video/*"
+                data-testid="addMedia"
+                data-cy="addMediaField"
+                hidden
+                onChange={handleImageSelect}
+              />
+            </button>
+            <button
+              type="button"
+              className={styles.mediaButton}
+              aria-label={
+                isPinned
+                  ? t('createPostModal.unpinPost')
+                  : t('createPostModal.pinPost')
+              }
+              data-cy="pinPost"
+              data-testid="pinPostButton"
+              onClick={() => setIspinned(!isPinned)}
+              title={
+                isPinned
+                  ? t('createPostModal.unpinPost')
+                  : t('createPostModal.pinPost')
+              }
+            >
+              <PushPin
+                sx={{
+                  transform: 'rotate(45deg)',
+                  color: isPinned ? '#0a66c2' : '',
+                }}
+              />
+            </button>
+          </div>
+
+          <div className={styles.postActions}>
+            <form onSubmit={createPostHandler}>
+              <button
+                className={`${styles.postButton} ${
+                  isPostDisabled || isLoading ? styles.postButtonDisabled : ''
+                }`}
+                type="submit"
+                disabled={isPostDisabled || isLoading}
+                data-testid="createPostBtn"
+              >
+                {isLoading ? (
+                  <span className={styles.loader}></span>
+                ) : type === 'create' ? (
+                  t('createPostModal.post')
+                ) : (
+                  t('createPostModal.saveChanges')
+                )}
+              </button>
+            </form>
+          </div>
         </div>
       </div>
-
-      {/* Content Area */}
-      <div className={styles.modalBody}>
-        <textarea
-          className={styles.postTextarea}
-          placeholder={t('createPostModal.titleOfPost')}
-          data-cy="modalTitle"
-          value={postTitle}
-          onChange={(e) => {
-            setPostTitle((e.target as HTMLTextAreaElement).value);
-          }}
-          data-testid="postTitleInput"
-        />
-        <textarea
-          className={styles.postBodyTextarea}
-          placeholder={t('createPostModal.bodyOfPost')}
-          data-cy="create-post-description"
-          value={postBody}
-          onChange={(e) => {
-            setPostBody((e.target as HTMLTextAreaElement).value);
-          }}
-          data-testid="postBodyInput"
-        />
-        {safeBlobUrl && previewType && (
-          <div className={styles.imagePreviewContainer}>
-            {previewType === 'image' && (
-              <img
-                src={safeBlobUrl}
-                alt={t('createPostModal.selectedImage')}
-                className={styles.imagePreview}
-                data-testid="imagePreview"
-              />
-            )}
-
-            {previewType === 'video' && (
-              <video
-                src={safeBlobUrl}
-                controls
-                className={styles.videoPreview}
-                data-testid="videoPreview"
-              >
-                <track kind="captions" />
-              </video>
-            )}
-          </div>
-        )}
-      </div>
-    </CRUDModalTemplate>
+    </>
   );
 }
 

@@ -17,6 +17,9 @@ import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
 import UserSidebarComponent from 'components/Layout/UserSidebar/UserSidebar';
 import Topbar from 'components/Layout/Topbar/Topbar';
+import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
+import { IOrganizationData } from 'types/shared-components/SidebarOrgSection/interface';
+import { useQuery } from '@apollo/client';
 
 const map: InterfaceMapType = {
   organization: 'home',
@@ -49,6 +52,12 @@ const UserScreen = (): React.JSX.Element => {
     (state: RootState) => state.userRoutes,
   );
   const { targets } = userRoutes;
+
+  const { data: orgData } = useQuery<{
+    organization: IOrganizationData;
+  }>(GET_ORGANIZATION_BASIC_DATA, {
+    variables: { id: orgId },
+  });
 
   // Sidebar state
   const [collapsed, setCollapsed] = useState<boolean>(() => {
@@ -98,6 +107,8 @@ const UserScreen = (): React.JSX.Element => {
         onToggleCollapse={handleToggleCollapse}
         mobileOpen={mobileOpen}
         onCloseMobile={handleCloseMobile}
+        orgName={orgData?.organization?.name ?? ''}
+        avatarURL={orgData?.organization?.avatarURL ?? ''}
       />
 
       <Topbar title={tScoped('title')} onHamburgerClick={handleOpenMobile} />

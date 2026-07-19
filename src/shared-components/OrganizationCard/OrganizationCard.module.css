@@ -30,6 +30,12 @@
   gap: 16px;
 }
 
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
 .orgImgContainer {
   display: flex;
   justify-content: center;
@@ -40,7 +46,6 @@
   width: 48px;
   height: 48px;
   object-fit: contain;
-  background: linear-gradient(135deg, var(--green-500), var(--green-700));
   color: #000;
   font-weight: 700;
   font-size: 14px;
@@ -57,7 +62,6 @@
   width: 48px;
   height: 48px;
   object-fit: contain;
-  background: linear-gradient(135deg, var(--green-500), var(--green-700));
   color: #000;
   font-weight: 700;
   font-size: 14px;
@@ -148,7 +152,7 @@
 .statusChip {
   display: inline-flex;
   align-items: center;
-  margin-top: 6px;
+  margin-bottom: 6px;
   padding: 2px 8px;
   font-size: 11px;
   font-weight: 600;

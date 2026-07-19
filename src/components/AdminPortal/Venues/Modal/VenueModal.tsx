@@ -64,10 +64,20 @@ interface InterfaceVenueFormState {
   attachments?: {
     objectName: string;
     fileHash: string;
-    mimetype: string;
+    mimeType: string;
     name: string;
   }[];
 }
+
+const mimeTypeMap: Record<string, string> = {
+  'image/png': 'IMAGE_PNG',
+  'image/jpeg': 'IMAGE_JPEG',
+  'image/webp': 'IMAGE_WEBP',
+  'image/avif': 'IMAGE_AVIF',
+  'video/mp4': 'VIDEO_MP4',
+  'video/quicktime': 'VIDEO_QUICKTIME',
+  'video/webm': 'VIDEO_WEBM',
+};
 
 const VenueModal = ({
   show,
@@ -340,7 +350,7 @@ const VenueModal = ({
         const fileMetadata = {
           objectName,
           fileHash,
-          mimetype: file.type,
+          mimeType: mimeTypeMap[file.type],
           name: file.name,
         };
 
@@ -360,7 +370,6 @@ const VenueModal = ({
   return (
     <CRUDModalTemplate open={show} onClose={onHide} title={t('venueDetails')}>
       <form data-testid="venueForm">
-        <label htmlFor="venuetitle">{t('venueName')}</label>
         <FormTextField
           name="venueTitle"
           label={t('venueName')}
@@ -372,7 +381,6 @@ const VenueModal = ({
           data-testid="venueTitleInput"
         />
 
-        <label htmlFor="venuedescrip">{tCommon('description')}</label>
         <FormTextField
           name="venueDescription"
           label={tCommon('description')}
@@ -386,7 +394,6 @@ const VenueModal = ({
           className={styles.inputField}
         />
 
-        <label htmlFor="venuecapacity">{t('capacity')}</label>
         <FormTextField
           name="venueCapacity"
           label={t('capacity')}
@@ -396,7 +403,9 @@ const VenueModal = ({
           onChange={(v) => setFormState((prev) => ({ ...prev, capacity: v }))}
           className={styles.inputField}
         />
-        <label htmlFor="venueImgUrl">{t('image')}</label>
+        <label htmlFor="venueImgUrl" className={styles.label}>
+          {t('image')}
+        </label>
         <input
           accept="image/*"
           id="venueImgUrl"

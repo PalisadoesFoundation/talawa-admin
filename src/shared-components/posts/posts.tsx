@@ -391,8 +391,8 @@ export default function PostsPage() {
         </div>
       </div>
 
-      <div className="toolbar" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-        <div style={{ flex: 1 }}>
+      <div className="toolbar">
+        <div className="topbar-spacer">
           <Toolbar
             search={{
               placeholder: t('searchTitle'),
@@ -477,7 +477,14 @@ export default function PostsPage() {
                   </div>
                   <div className="post-content">{post.caption ?? ''}</div>
                   {hasImage && (
-                    <div className="post-image-placeholder">{'\uD83D\uDCF7'} Photo</div>
+                    <div className="post-image-container">
+                      <img
+                        src={post.attachmentURL}
+                        alt="Post attachment"
+                        className="post-image"
+                        crossOrigin="anonymous"
+                      />
+                    </div>
                   )}
                   <div className="post-footer">
                     <div className="post-action">
@@ -528,7 +535,14 @@ export default function PostsPage() {
                     </div>
                     <div className="post-content">{post.caption ?? ''}</div>
                     {hasImage && (
-                      <div className="post-image-placeholder">{'\uD83D\uDCF7'} Photo</div>
+                      <div className="post-image-container">
+                        <img
+                          src={post.attachmentURL}
+                          alt="Post attachment"
+                          className="post-image"
+                          crossOrigin="anonymous"
+                        />
+                      </div>
                     )}
                     <div className="post-footer">
                       <div className="post-action">

@@ -225,6 +225,8 @@
   align-items: center;
   text-align: center;
   transition: box-shadow 0.2s, transform 0.15s;
+  text-decoration: none;
+  color: inherit;
 }
 
 .orgCard:hover {
@@ -275,4 +277,10 @@
   font-size: 13px;
   color: var(--gray-500);
   margin-bottom: 20px;
+}
+
+.orgAvatarImg{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }

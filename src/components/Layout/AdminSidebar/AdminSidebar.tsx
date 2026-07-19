@@ -20,6 +20,7 @@ import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
 import { sanitizeAvatarURL } from 'utils/sanitizeAvatar';
 import SignOut from 'components/SignOut/SignOut';
+import styles from './AdminSidebar.module.css';
 
 interface AdminSidebarProps {
   collapsed: boolean;
@@ -30,6 +31,7 @@ interface AdminSidebarProps {
   variant: 'super' | 'org';
   /** Organization name (for org variant) */
   orgName?: string;
+  avatarURL?: string;
 }
 
 export default function AdminSidebar({
@@ -39,6 +41,7 @@ export default function AdminSidebar({
   onCloseMobile,
   variant,
   orgName,
+  avatarURL
 }: AdminSidebarProps): React.ReactElement {
   const location = useLocation();
   const navigate = useNavigate();
@@ -160,9 +163,20 @@ export default function AdminSidebar({
               if (e.key === 'Enter') navigate('/admin/orglist');
             }}
           >
-            <div className="sidebar-org-avatar">
-              {(orgName || 'Org').substring(0, 2).toUpperCase()}
-            </div>
+
+            {avatarURL ? (
+              <img
+                src={avatarURL}
+                alt=""
+                className="sidebar-org-avatar"
+                crossOrigin="anonymous"
+              />
+            ) : (
+              <div className="sidebar-org-avatar">
+                {orgName?.slice(0, 2).toUpperCase() || 'O'}
+              </div>
+            )}
+
             <div className="sidebar-org-info">
               <div className="sidebar-org-name">
                 {orgName || t('organization')}
@@ -330,12 +344,7 @@ export default function AdminSidebar({
               <img
                 src={userImage}
                 alt=""
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  borderRadius: '50%',
-                  objectFit: 'cover',
-                }}
+                className="sidebar-user-profile-avatar"
               />
             ) : (
               initials
