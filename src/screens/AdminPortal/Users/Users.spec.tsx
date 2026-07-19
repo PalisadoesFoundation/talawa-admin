@@ -82,6 +82,23 @@ afterEach(() => {
   vi.resetModules();
 });
 
+/**
+ * Sets the (live) search field to a value in a single input event so search
+ * issues exactly one refetch. Uses paste rather than per-character typing to
+ * avoid intermediate refetches, then clears when the value is empty.
+ */
+async function setSearchValue(
+  input: HTMLElement,
+  value: string,
+): Promise<void> {
+  const user = userEvent.setup();
+  await user.clear(input);
+  if (value) {
+    await user.click(input);
+    await user.paste(value);
+  }
+}
+
 describe('Testing Users screen', () => {
   it('Component should be rendered properly', async () => {
     render(
@@ -352,29 +369,18 @@ describe('Testing Users screen', () => {
       </MockedProvider>,
     );
 
-    const searchBtn = await screen.findByTestId('searchButton');
-    const search1 = 'John';
-    await userEvent.type(screen.getByTestId(/searchByName/i), search1);
-    await userEvent.click(searchBtn);
+    const searchInput = await screen.findByTestId('searchByName');
+
+    // Search now runs live on input change (the redesigned toolbar has no
+    // separate search button). A single change event issues one refetch.
+    await setSearchValue(searchInput, 'John');
 
     await waitFor(() => {
       expect(screen.queryByText(/not found/i)).not.toBeInTheDocument();
     });
 
-    const search2 = 'Pete{backspace}{backspace}{backspace}{backspace}';
-    await userEvent.type(screen.getByTestId(/searchByName/i), search2);
-
-    const search3 =
-      'John{backspace}{backspace}{backspace}{backspace}Sam{backspace}{backspace}{backspace}';
-    await userEvent.type(screen.getByTestId(/searchByName/i), search3);
-
-    const search4 = 'Sam{backspace}{backspace}P{backspace}';
-    await userEvent.type(screen.getByTestId(/searchByName/i), search4);
-
-    const search5 = 'Xe';
-    await userEvent.type(screen.getByTestId(/searchByName/i), search5);
-    await userEvent.clear(screen.getByTestId(/searchByName/i));
-    await userEvent.click(searchBtn);
+    // Clearing the field refetches the unfiltered list.
+    await setSearchValue(searchInput, '');
 
     await waitFor(() => {
       expect(screen.getByTestId('testcomp')).toBeInTheDocument();
@@ -396,17 +402,10 @@ describe('Testing Users screen', () => {
       );
     });
 
-    const searchBtn = await screen.findByTestId('searchButton');
-    const searchInput = screen.getByTestId(/searchByName/i);
+    const searchInput = await screen.findByTestId('searchByName');
 
-    await act(async () => {
-      await userEvent.clear(searchInput);
-      await userEvent.type(searchInput, 'NonexistentName');
-    });
-
-    await act(async () => {
-      await userEvent.click(searchBtn);
-    });
+    // Live search: a change event drives the query for "NonexistentName".
+    await setSearchValue(searchInput, 'NonexistentName');
 
     // Wait for the "no results" message
     expect(await screen.findByTestId('users-empty-state')).toBeInTheDocument();
@@ -674,16 +673,14 @@ describe('Testing Users screen', () => {
       );
 
       const searchInput = await screen.findByTestId('searchByName');
-      await userEvent.type(searchInput, 'John');
-      await userEvent.click(screen.getByTestId('searchButton'));
+      await setSearchValue(searchInput, 'John');
 
       await waitFor(() => {
         expect(screen.getByTestId('testcomp')).toBeInTheDocument();
       });
 
-      // Clear search
-      await userEvent.clear(searchInput);
-      await userEvent.click(screen.getByTestId('searchButton'));
+      // Clearing the search refetches the unfiltered list.
+      await setSearchValue(searchInput, '');
 
       await waitFor(() => {
         expect(screen.queryByText(/no results found/i)).not.toBeInTheDocument();
@@ -821,7 +818,6 @@ describe('Testing Users screen', () => {
     });
 
     it('should handle search with same value without refetch', async () => {
-      vi.spyOn(console, 'log').mockImplementation(() => {});
       render(
         <MockedProvider link={link}>
           <BrowserRouter>
@@ -835,15 +831,14 @@ describe('Testing Users screen', () => {
       );
 
       const searchInput = await screen.findByTestId('searchByName');
-      await userEvent.type(searchInput, 'John');
-      await userEvent.click(screen.getByTestId('searchButton'));
+      await setSearchValue(searchInput, 'John');
 
       await waitFor(() => {
         expect(screen.getByTestId('testcomp')).toBeInTheDocument();
       });
 
-      // Same search again
-      await userEvent.click(screen.getByTestId('searchButton'));
+      // Re-submitting the same value keeps the component stable.
+      await setSearchValue(searchInput, 'John');
 
       await waitFor(() => {
         expect(screen.getByTestId('testcomp')).toBeInTheDocument();
@@ -1271,6 +1266,43 @@ describe('useEffect loadMoreUsers trigger', () => {
             first: 12,
             after: null,
             orgFirst: 32,
+            where: undefined,
+          },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [
+                {
+                  cursor: '1',
+                  node: {
+                    id: '1',
+                    name: 'Seed User',
+                    emailAddress: 'seed@test.com',
+                    role: 'regular',
+                    createdAt: dayjs.utc().toISOString(),
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+              ],
+              pageInfo: { hasNextPage: false, endCursor: null },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: {
+            first: 12,
+            after: null,
+            orgFirst: 32,
             where: { name: 'zzzz' },
           },
         },
@@ -1304,16 +1336,15 @@ describe('useEffect loadMoreUsers trigger', () => {
     );
 
     const input = await screen.findByTestId('searchByName');
-    await userEvent.type(input, 'zzzz');
-    const searchButton = await screen.findByTestId('searchButton');
-    await userEvent.click(searchButton);
+    // Live search: typing "zzzz" issues one refetch that returns no matches.
+    await setSearchValue(input, 'zzzz');
 
     expect(await screen.findByText(/no results found/i)).toBeInTheDocument();
   });
 
   it('should return early when search value is empty and already empty', async () => {
     render(
-      <MockedProvider mocks={MOCKS_NEW}>
+      <MockedProvider link={createLink(MOCKS_NEW)}>
         <BrowserRouter>
           <Provider store={store}>
             <Users />
@@ -1324,9 +1355,9 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     const input = await screen.findByTestId('searchByName');
 
-    await userEvent.clear(input);
-    const searchButton = await screen.findByTestId('searchButton');
-    await userEvent.click(searchButton);
+    // Submitting an empty search refetches the unfiltered list; the field
+    // stays empty.
+    await setSearchValue(input, '');
 
     await waitFor(() => {
       expect(input).toHaveValue('');
@@ -1438,7 +1469,7 @@ describe('useEffect loadMoreUsers trigger', () => {
 
   it('should reset and refetch when clearing search after entering value', async () => {
     render(
-      <MockedProvider mocks={MOCKS_NEW}>
+      <MockedProvider link={createLink(MOCKS)}>
         <BrowserRouter>
           <Provider store={store}>
             <Users />
@@ -1449,10 +1480,9 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     const input = await screen.findByTestId('searchByName');
 
-    await userEvent.type(input, 'John');
-    await userEvent.clear(input);
-    const searchButton = await screen.findByTestId('searchButton');
-    await userEvent.click(searchButton);
+    // Enter a value (live search) then clear it; the field ends up empty.
+    await setSearchValue(input, 'John');
+    await setSearchValue(input, '');
 
     await waitFor(() => {
       expect(input).toHaveValue('');
@@ -2576,5 +2606,242 @@ describe('Additional uncovered lines coverage', () => {
     await waitFor(() => {
       expect(screen.getByTestId('users-empty-state')).toBeInTheDocument();
     });
+  });
+});
+
+describe('Users wiring coverage (mocked presentation layer)', () => {
+  const sampleRow = {
+    id: 'user1',
+    name: 'John Doe',
+    emailAddress: 'john@example.com',
+    role: 'regular',
+    createdAt: dayjs.utc().toISOString(),
+    city: '',
+    state: '',
+    countryCode: '',
+    postalCode: '',
+    avatarURL: '',
+    orgsWhereUserIsBlocked: { edges: [] },
+    organizationsWhereMember: { edges: [] },
+  };
+
+  const orgOnlyMocks = [
+    {
+      request: { query: ORGANIZATION_LIST },
+      result: { data: { organizations: [{ id: 'org1', name: 'Org' }] } },
+    },
+  ];
+
+  /**
+   * Replaces the presentational children of the Users screen with light test
+   * doubles that surface the callbacks/accessors the real components do not
+   * invoke under jsdom (row reset, infinite-scroll `next`/`hasMore`, sort and
+   * filter option handlers, and the DataTable column accessors).
+   */
+  const mockPresentationLayer = (): void => {
+    vi.doMock('components/UsersTableItem/UsersTableItem', () => ({
+      default: ({ resetAndRefetch }: { resetAndRefetch: () => void }) => (
+        <button data-testid="reset-btn" onClick={() => resetAndRefetch()} />
+      ),
+    }));
+
+    vi.doMock('shared-components/DataTable/DataTable', () => ({
+      // eslint-disable-next-line react/no-multi-comp
+      DataTable: ({
+        columns,
+        data,
+        renderRow,
+      }: {
+        columns: Array<{ accessor: unknown }>;
+        data: Array<Record<string, unknown>>;
+        renderRow: (
+          row: Record<string, unknown>,
+          index: number,
+        ) => React.ReactElement;
+      }) => {
+        const sample = data[0] ?? { id: 'seed' };
+        columns.forEach((column) => {
+          if (typeof column.accessor === 'function') {
+            const accessor = column.accessor as (
+              row: Record<string, unknown>,
+            ) => unknown;
+            // Exercise a mapped id and the "id missing from index map" fallback.
+            accessor(sample);
+            accessor({ ...sample, id: 'unmapped-id' });
+          }
+        });
+        return (
+          <div data-testid="datatable-mock">
+            {data.map((row, index) => renderRow(row, index))}
+          </div>
+        );
+      },
+    }));
+
+    vi.doMock('shared-components/SearchFilterBar/SearchFilterBar', () => ({
+      default: ({
+        dropdowns,
+      }: {
+        dropdowns: Array<{ onOptionChange: (value: string) => void }>;
+      }) => (
+        <div>
+          <button
+            data-testid="sort-invalid"
+            onClick={() => dropdowns[0].onOptionChange('invalid')}
+          />
+          <button
+            data-testid="sort-valid"
+            onClick={() => dropdowns[0].onOptionChange('oldest')}
+          />
+          <button
+            data-testid="filter-invalid"
+            onClick={() => dropdowns[1].onOptionChange('invalid')}
+          />
+          <button
+            data-testid="filter-valid"
+            onClick={() => dropdowns[1].onOptionChange('admin')}
+          />
+        </div>
+      ),
+    }));
+
+    vi.doMock('react-infinite-scroll-component', () => ({
+      default: ({
+        children,
+        next,
+        hasMore,
+      }: {
+        children: React.ReactNode;
+        next: () => void;
+        hasMore: boolean;
+      }) => (
+        <div>
+          <button data-testid="load-more" onClick={() => next()} />
+          <span data-testid="has-more">{String(hasMore)}</span>
+          {children}
+        </div>
+      ),
+    }));
+  };
+
+  interface InterfaceTableDataOverrides {
+    pageInfo: unknown;
+    fetchMore?: ReturnType<typeof vi.fn>;
+    refetch?: ReturnType<typeof vi.fn>;
+  }
+
+  const mockTableData = ({
+    pageInfo,
+    fetchMore = vi.fn().mockResolvedValue(undefined),
+    refetch = vi.fn(),
+  }: InterfaceTableDataOverrides): void => {
+    vi.doMock('shared-components/DataTable/hooks/useTableData', () => ({
+      useTableData: vi.fn(() => ({
+        rows: [sampleRow],
+        loading: false,
+        pageInfo,
+        error: undefined,
+        fetchMore,
+        refetch,
+      })),
+    }));
+  };
+
+  const renderUsers = async (): Promise<void> => {
+    const { default: UsersMocked } = await import('./Users');
+    render(
+      <MockedProvider mocks={orgOnlyMocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UsersMocked />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+  };
+
+  it('covers reset, load-more, table accessors, and option validation', async () => {
+    vi.resetModules();
+    mockPresentationLayer();
+    const refetch = vi.fn();
+    const fetchMore = vi.fn().mockResolvedValue(undefined);
+    mockTableData({
+      pageInfo: { hasNextPage: true, endCursor: 'c1' },
+      fetchMore,
+      refetch,
+    });
+
+    await renderUsers();
+
+    await screen.findByTestId('datatable-mock');
+
+    // Invalid options are rejected by the type guards (no state change).
+    await userEvent.click(screen.getByTestId('sort-invalid'));
+    await userEvent.click(screen.getByTestId('sort-valid'));
+    await userEvent.click(screen.getByTestId('filter-invalid'));
+
+    // A valid filter option updates state and refetches server-side.
+    await userEvent.click(screen.getByTestId('filter-valid'));
+
+    // resetAndRefetch (invoked from a table row) clears search and refetches.
+    await userEvent.click(screen.getAllByTestId('reset-btn')[0]);
+
+    // load-more passes both guards and fetches the next page.
+    await userEvent.click(screen.getByTestId('load-more'));
+
+    await waitFor(() => {
+      expect(fetchMore).toHaveBeenCalledTimes(1);
+    });
+    expect(refetch).toHaveBeenCalled();
+    expect(screen.getByTestId('has-more')).toHaveTextContent('true');
+  });
+
+  it('returns early from load-more when hasNextPage is false', async () => {
+    vi.resetModules();
+    mockPresentationLayer();
+    const fetchMore = vi.fn().mockResolvedValue(undefined);
+    mockTableData({
+      pageInfo: { hasNextPage: false, endCursor: null },
+      fetchMore,
+    });
+
+    await renderUsers();
+
+    await screen.findByTestId('datatable-mock');
+    await userEvent.click(screen.getByTestId('load-more'));
+
+    // hasNextPage is false → the guard returns before fetchMore.
+    expect(fetchMore).not.toHaveBeenCalled();
+  });
+
+  it('returns early from load-more when endCursor is null', async () => {
+    vi.resetModules();
+    mockPresentationLayer();
+    const fetchMore = vi.fn().mockResolvedValue(undefined);
+    mockTableData({
+      pageInfo: { hasNextPage: true, endCursor: null },
+      fetchMore,
+    });
+
+    await renderUsers();
+
+    await screen.findByTestId('datatable-mock');
+    await userEvent.click(screen.getByTestId('load-more'));
+
+    // hasNextPage is true but endCursor is null → the guard returns.
+    expect(fetchMore).not.toHaveBeenCalled();
+  });
+
+  it('defaults hasMore to false when pageInfo is undefined', async () => {
+    vi.resetModules();
+    mockPresentationLayer();
+    mockTableData({ pageInfo: undefined });
+
+    await renderUsers();
+
+    const hasMore = await screen.findByTestId('has-more');
+    expect(hasMore).toHaveTextContent('false');
   });
 });
