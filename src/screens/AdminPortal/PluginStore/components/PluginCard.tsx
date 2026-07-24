@@ -32,9 +32,7 @@ function getPluginEmoji(name: string): string {
 function isImageUrl(icon: string | undefined): boolean {
   if (!icon) return false;
   return (
-    icon.startsWith('http') ||
-    icon.startsWith('/') ||
-    icon.startsWith('data:')
+    icon.startsWith('http') || icon.startsWith('/') || icon.startsWith('data:')
   );
 }
 
@@ -55,7 +53,10 @@ export default function PluginCard({ plugin, onManage }: IPluginCardProps) {
 
   return (
     <div className={styles.card} data-testid={`plugin-list-item-${plugin.id}`}>
-      <div className={styles.iconWrapper} data-testid={`plugin-icon-${plugin.id}`}>
+      <div
+        className={styles.iconWrapper}
+        data-testid={`plugin-icon-${plugin.id}`}
+      >
         {iconContent}
       </div>
       <div className={styles.name} data-testid={`plugin-name-${plugin.id}`}>

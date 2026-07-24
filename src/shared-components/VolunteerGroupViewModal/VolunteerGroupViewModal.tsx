@@ -181,7 +181,9 @@ const VolunteerGroupViewModal: React.FC<
                     <TableCell style={{ fontWeight: 600 }}>
                       {tCommon('serialNumber')}
                     </TableCell>
-                    <TableCell style={{ fontWeight: 600 }}>{tCommon('name')}</TableCell>
+                    <TableCell style={{ fontWeight: 600 }}>
+                      {tCommon('name')}
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>

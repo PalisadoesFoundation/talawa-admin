@@ -4,7 +4,13 @@
  * A reusable dropdown button component built with React.
  * It supports various styles, icons, and accessibility features.
  */
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import type { InterfaceDropDownButtonProps } from 'types/shared-components/DropDownButton/interface';
 import styles from './DropDownButton.module.css';
 import { useTranslation } from 'react-i18next';
@@ -158,7 +164,13 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
                 </div>
               ))
             ) : (
-              <div style={{ padding: '0.5rem 1rem', textAlign: 'center', color: 'var(--gray-500)' }}>
+              <div
+                style={{
+                  padding: '0.5rem 1rem',
+                  textAlign: 'center',
+                  color: 'var(--gray-500)',
+                }}
+              >
                 {tCommon('noOptionsFound')}
               </div>
             )}

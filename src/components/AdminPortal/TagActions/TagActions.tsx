@@ -257,7 +257,13 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
               className={`border border-2 border-dark-subtle-subtle rounded-3 ${styles.scrollContainer}`}
             >
               {selectedTags.length === 0 ? (
-                <div style={{ color: "var(--gray-400, #9ca3af)", margin: "0 auto", textAlign: "center" }}>
+                <div
+                  style={{
+                    color: 'var(--gray-400, #9ca3af)',
+                    margin: '0 auto',
+                    textAlign: 'center',
+                  }}
+                >
                   {t('noTagSelected')}
                 </div>
               ) : (
@@ -294,9 +300,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
               />
             </div>
 
-            <div className="fs-5 text-dark-emphasis">
-              {t('allTags')}
-            </div>
+            <div className="fs-5 text-dark-emphasis">{t('allTags')}</div>
             <ul
               id="scrollableDiv"
               data-testid="scrollableDiv"
@@ -314,10 +318,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                   itemsPerPage={TAGS_QUERY_DATA_CHUNK_SIZE}
                   renderItem={(tag: InterfaceTagData) => (
                     <li key={tag._id} className="position-relative">
-                      <div
-                        className="d-inline-block"
-                        data-testid="orgUserTag"
-                      >
+                      <div className="d-inline-block" data-testid="orgUserTag">
                         <TagNode
                           tag={tag}
                           checkedTags={checkedTags}
@@ -331,11 +332,10 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                           {tag.ancestorTags?.map((ancestorTag) => (
                             <span
                               key={ancestorTag._id}
-                              style={{ margin: "0" }}
+                              style={{ margin: '0' }}
                               data-testid="ancestorTagsBreadCrumbs"
                             >
-                              {ancestorTag.name}
-                              ▸
+                              {ancestorTag.name}▸
                             </span>
                           ))}
                           <>{')'}</>
@@ -351,7 +351,11 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                   }
                   emptyStateComponent={
                     <div
-                      style={{ color: "var(--gray-400, #9ca3af)", margin: "0 auto", textAlign: "center" }}
+                      style={{
+                        color: 'var(--gray-400, #9ca3af)',
+                        margin: '0 auto',
+                        textAlign: 'center',
+                      }}
                       data-testid="noTagsFoundMessage"
                     >
                       {t('noTagsFound')}

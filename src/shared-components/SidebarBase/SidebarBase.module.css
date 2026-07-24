@@ -318,8 +318,7 @@
   align-items: center;
   justify-content: center;
   padding: var(--space-0) !important;
-  box-shadow: var(--space-0) var(--space-0-5) var(--space-3)
-    #0000000a;
+  box-shadow: var(--space-0) var(--space-0-5) var(--space-3) #0000000a;
   text-decoration: none !important;
   pointer-events: all;
   cursor: pointer;

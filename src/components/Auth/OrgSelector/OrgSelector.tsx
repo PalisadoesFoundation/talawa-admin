@@ -216,7 +216,12 @@ export const OrgSelector: React.FC<InterfaceOrgSelectorProps> = ({
       {hasError && (
         <div
           id={errorId}
-          style={{ display: 'block', color: 'var(--red-500)', fontSize: '0.875em', marginTop: '0.25rem' }}
+          style={{
+            display: 'block',
+            color: 'var(--red-500)',
+            fontSize: '0.875em',
+            marginTop: '0.25rem',
+          }}
           role="status"
           aria-live="polite"
         >

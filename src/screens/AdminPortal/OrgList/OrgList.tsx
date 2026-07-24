@@ -547,7 +547,9 @@ function OrgList(): JSX.Element {
                 .join('')
                 .slice(0, 2)
                 .toUpperCase();
-              const avatarGradient = {background:getAvatarGradient(item.name)};
+              const avatarGradient = {
+                background: getAvatarGradient(item.name),
+              };
               const createdDate = new Date(item.createdAt).toLocaleDateString(
                 'en-US',
                 { month: 'short', year: 'numeric' },
@@ -565,7 +567,12 @@ function OrgList(): JSX.Element {
                       style={avatarGradient}
                     >
                       {avatarUrl ? (
-                        <img src={avatarUrl} alt={initials} crossOrigin="anonymous" className={styles.orgCardAvatar}/>
+                        <img
+                          src={avatarUrl}
+                          alt={initials}
+                          crossOrigin="anonymous"
+                          className={styles.orgCardAvatar}
+                        />
                       ) : (
                         initials
                       )}

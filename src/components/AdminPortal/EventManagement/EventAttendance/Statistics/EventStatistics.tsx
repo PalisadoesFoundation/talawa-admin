@@ -562,7 +562,10 @@ export const AttendanceStatisticsModal: React.FC<
                 width: '50%',
               }}
             >
-              <h1 className={styles.largeBoldText} style={{ fontWeight: 'bold' }}>
+              <h1
+                className={styles.largeBoldText}
+                style={{ fontWeight: 'bold' }}
+              >
                 {statistics.totalMembers}
               </h1>
               <div
@@ -587,7 +590,14 @@ export const AttendanceStatisticsModal: React.FC<
               width: '50%',
             }}
           >
-            <div style={{ marginTop: '0.5rem', paddingBottom: '0.5rem', padding: '0.5rem', display: 'flex' }}>
+            <div
+              style={{
+                marginTop: '0.5rem',
+                paddingBottom: '0.5rem',
+                padding: '0.5rem',
+                display: 'flex',
+              }}
+            >
               <Button
                 data-testid="gender-button"
                 variant={selectedCategory === 'Gender' ? 'success' : 'light'}

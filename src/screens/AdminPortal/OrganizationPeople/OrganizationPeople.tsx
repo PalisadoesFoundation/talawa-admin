@@ -116,7 +116,7 @@ function OrganizationPeople(): JSX.Element {
   const { getItem } = useLocalStorage();
   const { t: tCommon } = useTranslation('common');
   const location = useLocation();
-  const role = location?.state||getItem('role'); // Get role from location state or localStorage
+  const role = location?.state || getItem('role'); // Get role from location state or localStorage
   const { orgId: currentUrl } = useParams();
 
   const [state, setState] = useState(() => {

@@ -357,10 +357,7 @@
 
 @media (max-width: 991px) {
   .campaignModalDialog {
-    max-width: min(
-      calc(100vw - var(--space-8)),
-      var(--campaign-modal-width)
-    );
+    max-width: min(calc(100vw - var(--space-8)), var(--campaign-modal-width));
   }
 
   .campaignModalHeader,

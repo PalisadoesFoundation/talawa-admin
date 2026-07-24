@@ -74,8 +74,8 @@ function VolunteerContainer(): JSX.Element {
               : []),
         ]}
       />
-      <div style={{ justifyContent: "space-between" }}>
-        <div style={{ marginLeft: "auto" }}>
+      <div style={{ justifyContent: 'space-between' }}>
+        <div style={{ marginLeft: 'auto' }}>
           <div
             className={`btn-group ${styles.toggleGroup}`}
             role="group"

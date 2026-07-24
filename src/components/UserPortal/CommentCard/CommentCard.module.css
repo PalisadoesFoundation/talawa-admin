@@ -86,7 +86,8 @@
   overflow: hidden;
   border-radius: var(--radius-full);
   position: relative;
-  border: var(--border-2) solid var(--userImage-border, var(--gray-200, #e5e7eb));
+  border: var(--border-2) solid
+    var(--userImage-border, var(--gray-200, #e5e7eb));
 }
 
 .userImageUserComment img {

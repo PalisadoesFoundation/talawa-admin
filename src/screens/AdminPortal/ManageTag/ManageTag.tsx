@@ -283,7 +283,7 @@ function ManageTag(): JSX.Element {
       <div className={`${styles.errorContainer} rounded-4 my-3`}>
         <div className={styles.errorMessage}>
           <WarningAmberRounded className={styles.errorIcon} />
-          <h6 style={{ textAlign: "center" }}>
+          <h6 style={{ textAlign: 'center' }}>
             {t('errorLoadingAssignedMembers')}
           </h6>
         </div>
@@ -364,9 +364,7 @@ function ManageTag(): JSX.Element {
               state={{ id: params.row?._id }}
               data-testid="viewProfileBtn"
             >
-              <div
-                className={`btn btn-sm btn-primary ${styles.editButton}`}
-              >
+              <div className={`btn btn-sm btn-primary ${styles.editButton}`}>
                 {t('viewProfile')}
               </div>
             </Link>
@@ -401,7 +399,10 @@ function ManageTag(): JSX.Element {
     { bg: '#fef3c7', color: '#b45309' },
   ];
 
-  const getInitials = (firstName?: string | null, lastName?: string | null): string => {
+  const getInitials = (
+    firstName?: string | null,
+    lastName?: string | null,
+  ): string => {
     const f = firstName?.charAt(0)?.toUpperCase() ?? '';
     const l = lastName?.charAt(0)?.toUpperCase() ?? '';
     return f + l || '?';
@@ -412,11 +413,18 @@ function ManageTag(): JSX.Element {
       <nav
         className="breadcrumb"
         aria-label="Breadcrumb"
-        style={{ fontSize: '13px', color: 'var(--gray-400)', marginBottom: '8px' }}
+        style={{
+          fontSize: '13px',
+          color: 'var(--gray-400)',
+          marginBottom: '8px',
+        }}
       >
         <a
           href="#"
-          onClick={(e) => { e.preventDefault(); navigate(`/admin/orgtags/${orgId}`); }}
+          onClick={(e) => {
+            e.preventDefault();
+            navigate(`/admin/orgtags/${orgId}`);
+          }}
           data-testid="allTagsBtn"
           style={{ color: 'var(--gray-400)' }}
         >
@@ -426,13 +434,20 @@ function ManageTag(): JSX.Element {
           <span key={index}>
             {' \u203A '}
             {tag._id === currentTagId ? (
-              <span style={{ color: 'var(--gray-700)' }} data-testid="redirectToManageTag" data-text={tag.name}>
+              <span
+                style={{ color: 'var(--gray-700)' }}
+                data-testid="redirectToManageTag"
+                data-text={tag.name}
+              >
                 {tag.name}
               </span>
             ) : (
               <a
                 href="#"
-                onClick={(e) => { e.preventDefault(); redirectToManageTag(tag._id as string); }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  redirectToManageTag(tag._id as string);
+                }}
                 data-testid="redirectToManageTag"
                 data-text={tag.name}
                 style={{ color: 'var(--gray-400)' }}
@@ -450,12 +465,28 @@ function ManageTag(): JSX.Element {
             {currentTagName || t('manageTag')}
             <button
               className="btn-icon"
-              style={{ display: 'inline-flex', verticalAlign: 'middle', marginLeft: '8px' }}
+              style={{
+                display: 'inline-flex',
+                verticalAlign: 'middle',
+                marginLeft: '8px',
+              }}
               title={tCommon('edit')}
               onClick={editUserTagModal.open}
               data-testid="editUserTag"
             >
-              <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+              <svg
+                aria-hidden="true"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+              </svg>
             </button>
           </h1>
           <p className="page-subtitle">{t('assignedMembersOf')}</p>
@@ -463,11 +494,17 @@ function ManageTag(): JSX.Element {
         <div className="page-header-actions">
           <a
             href="#"
-            onClick={(e) => { e.preventDefault(); redirectToSubTags(currentTagId as string); }}
+            onClick={(e) => {
+              e.preventDefault();
+              redirectToSubTags(currentTagId as string);
+            }}
             className="btn btn-secondary"
             data-testid="subTagsBtn"
           >
-            {t('subTags')} ({userTagAssignedMembersData?.getAssignedUsers?.childTags?.totalCount ?? 0})
+            {t('subTags')} (
+            {userTagAssignedMembersData?.getAssignedUsers?.childTags
+              ?.totalCount ?? 0}
+            )
           </a>
         </div>
       </div>
@@ -480,7 +517,9 @@ function ManageTag(): JSX.Element {
           </div>
           <div className="card-body">
             <div className="form-group">
-              <label className="field-label" htmlFor="tag-name">{t('tagName') || 'Tag Name'}</label>
+              <label className="field-label" htmlFor="tag-name">
+                {t('tagName') || 'Tag Name'}
+              </label>
               <input
                 type="text"
                 id="tag-name"
@@ -495,8 +534,13 @@ function ManageTag(): JSX.Element {
                 className="btn btn-primary"
                 onClick={(e) => {
                   const form = document.createElement('form');
-                  const event = new Event('submit', { bubbles: true, cancelable: true }) as unknown as React.FormEvent<HTMLFormElement>;
-                  Object.defineProperty(event, 'preventDefault', { value: () => {} });
+                  const event = new Event('submit', {
+                    bubbles: true,
+                    cancelable: true,
+                  }) as unknown as React.FormEvent<HTMLFormElement>;
+                  Object.defineProperty(event, 'preventDefault', {
+                    value: () => {},
+                  });
                   handleEditUserTag(event);
                 }}
                 data-testid="saveTagBtn"
@@ -527,12 +571,33 @@ function ManageTag(): JSX.Element {
               </button>
             </div>
 
-            <div className="danger-zone" style={{ marginTop: '24px', paddingTop: '20px', borderTop: '1px solid var(--red-50)' }}>
-              <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--red-600)', marginBottom: '8px' }}>
+            <div
+              className="danger-zone"
+              style={{
+                marginTop: '24px',
+                paddingTop: '20px',
+                borderTop: '1px solid var(--red-50)',
+              }}
+            >
+              <p
+                style={{
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  color: 'var(--red-600)',
+                  marginBottom: '8px',
+                }}
+              >
                 Danger Zone
               </p>
-              <p style={{ fontSize: '12px', color: 'var(--gray-500)', marginBottom: '12px' }}>
-                Deleting this tag will remove it from all assigned members. This action cannot be undone.
+              <p
+                style={{
+                  fontSize: '12px',
+                  color: 'var(--gray-500)',
+                  marginBottom: '12px',
+                }}
+              >
+                Deleting this tag will remove it from all assigned members. This
+                action cannot be undone.
               </p>
               <button
                 className="btn btn-danger"
@@ -562,13 +627,29 @@ function ManageTag(): JSX.Element {
           <div className="card-body">
             <div style={{ marginBottom: '14px' }}>
               <div className="search-bar" style={{ width: '100%' }}>
-                <svg aria-hidden="true" className="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <svg
+                  aria-hidden="true"
+                  className="search-icon"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
                 <input
                   type="text"
                   placeholder={tCommon('searchByName')}
                   aria-label={tCommon('searchByName')}
                   value={assignedMemberSearchInput}
-                  onChange={(e) => setAssignedMemberSearchInput(e.target.value.trim())}
+                  onChange={(e) =>
+                    setAssignedMemberSearchInput(e.target.value.trim())
+                  }
                   data-testid="searchInput"
                 />
               </div>
@@ -591,14 +672,28 @@ function ManageTag(): JSX.Element {
                   scrollableTarget="manageTagScrollableDiv"
                 >
                   {userTagAssignedMembers.length === 0 ? (
-                    <div style={{ padding: '20px', textAlign: 'center', color: 'var(--gray-400)', fontSize: '13px' }}>
+                    <div
+                      style={{
+                        padding: '20px',
+                        textAlign: 'center',
+                        color: 'var(--gray-400)',
+                        fontSize: '13px',
+                      }}
+                    >
                       {t('noAssignedMembersFound')}
                     </div>
                   ) : (
                     userTagAssignedMembers.map((member, index) => {
-                      const colorSet = avatarColors[index % avatarColors.length];
-                      const initials = getInitials(member.firstName, member.lastName);
-                      const fullName = getFullName(member.firstName, member.lastName);
+                      const colorSet =
+                        avatarColors[index % avatarColors.length];
+                      const initials = getInitials(
+                        member.firstName,
+                        member.lastName,
+                      );
+                      const fullName = getFullName(
+                        member.firstName,
+                        member.lastName,
+                      );
                       return (
                         <div
                           key={member._id || index}
@@ -608,7 +703,10 @@ function ManageTag(): JSX.Element {
                             alignItems: 'center',
                             gap: '12px',
                             padding: '10px 0',
-                            borderBottom: index < userTagAssignedMembers.length - 1 ? '1px solid var(--gray-100)' : 'none',
+                            borderBottom:
+                              index < userTagAssignedMembers.length - 1
+                                ? '1px solid var(--gray-100)'
+                                : 'none',
                           }}
                         >
                           <div
@@ -631,7 +729,12 @@ function ManageTag(): JSX.Element {
                           </div>
                           <span
                             className="member-name"
-                            style={{ flex: 1, fontSize: '13px', fontWeight: 500, color: 'var(--gray-900)' }}
+                            style={{
+                              flex: 1,
+                              fontSize: '13px',
+                              fontWeight: 500,
+                              color: 'var(--gray-900)',
+                            }}
                             data-testid="memberName"
                           >
                             {fullName}

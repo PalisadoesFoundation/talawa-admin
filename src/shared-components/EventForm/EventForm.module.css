@@ -19,7 +19,6 @@
   flex: 1;
 }
 
-
 .datediv {
   display: flex;
   flex-direction: column;
@@ -79,7 +78,9 @@
   border-radius: 10px;
   font-size: 14px;
   font-family: var(--font, 'Inter', sans-serif);
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
   outline: none;
   margin-bottom: 16px;
 }

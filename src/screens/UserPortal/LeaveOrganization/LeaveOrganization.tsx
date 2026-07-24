@@ -184,8 +184,8 @@ const LeaveOrganization = (): JSX.Element => {
         </div>
 
         <h1 className={styles.leaveTitle}>
-          {t('leaveOrganization.confirmLeaveOrganization')}{' '}
-          {organization?.name}?
+          {t('leaveOrganization.confirmLeaveOrganization')} {organization?.name}
+          ?
         </h1>
         <p className={styles.leaveDesc}>
           {t('leaveOrganization.leaveOrganizationConfirmation', {
@@ -194,11 +194,7 @@ const LeaveOrganization = (): JSX.Element => {
         </p>
 
         <div className={styles.leaveActions}>
-          <button
-            className={styles.btnLeave}
-            type="button"
-            onClick={openModal}
-          >
+          <button className={styles.btnLeave} type="button" onClick={openModal}>
             {t('leaveOrganization.leaveOrganization')}
           </button>
           <button

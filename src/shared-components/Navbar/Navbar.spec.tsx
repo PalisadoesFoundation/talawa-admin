@@ -74,10 +74,7 @@ vi.mock('shared-components/DropDownButton/DropDownButton', () => ({
         <button type="button" data-testid={`${dataTestIdPrefix}-toggle`}>
           {label}
         </button>
-        <div
-          data-testid={`${dataTestIdPrefix}-icon`}
-          data-icon-type={type}
-        >
+        <div data-testid={`${dataTestIdPrefix}-icon`} data-icon-type={type}>
           {icon}
         </div>
         {options.map((opt) => (

@@ -76,9 +76,7 @@ const MemberDetail: React.FC = (): JSX.Element => {
           </div>
         )}
         {activeTab === 'organizations' && <UserOrganizations />}
-        {activeTab === 'events' && (
-          <UserEvents orgId={orgId} userId={userId} />
-        )}
+        {activeTab === 'events' && <UserEvents orgId={orgId} userId={userId} />}
         {activeTab === 'tags' && <UserTags id={userId} />}
       </div>
     </LocalizationProvider>

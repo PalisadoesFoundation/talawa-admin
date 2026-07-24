@@ -287,7 +287,14 @@ const AgendaItemsUpdateModal: React.FC<
         </div>
       </FormFieldGroup>
 
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', marginBottom: '1rem' }}>
+      <div
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: '16px',
+          marginBottom: '1rem',
+        }}
+      >
         <div style={{ flex: '1 1 0' }}>
           <FormTextField
             name="title"
@@ -341,7 +348,12 @@ const AgendaItemsUpdateModal: React.FC<
       <FormFieldGroup name="url" label={t('url')}>
         <div style={{ display: 'flex', gap: '0.5rem' }}>
           <input
-            style={{ width: '100%', padding: '0.375rem 0.75rem', border: '1px solid #ced4da', borderRadius: '0.375rem' }}
+            style={{
+              width: '100%',
+              padding: '0.375rem 0.75rem',
+              border: '1px solid #ced4da',
+              borderRadius: '0.375rem',
+            }}
             placeholder={t('enterUrl')}
             value={newUrl}
             onChange={(e) => setNewUrl(e.target.value)}
@@ -376,7 +388,12 @@ const AgendaItemsUpdateModal: React.FC<
           type="file"
           multiple
           accept="image/*,video/*"
-          style={{ width: '100%', padding: '0.375rem 0.75rem', border: '1px solid #ced4da', borderRadius: '0.375rem' }}
+          style={{
+            width: '100%',
+            padding: '0.375rem 0.75rem',
+            border: '1px solid #ced4da',
+            borderRadius: '0.375rem',
+          }}
           onChange={handleFileChange}
         />
       </FormFieldGroup>

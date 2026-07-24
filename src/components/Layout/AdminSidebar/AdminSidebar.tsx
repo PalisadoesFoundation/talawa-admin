@@ -41,7 +41,7 @@ export default function AdminSidebar({
   onCloseMobile,
   variant,
   orgName,
-  avatarURL
+  avatarURL,
 }: AdminSidebarProps): React.ReactElement {
   const location = useLocation();
   const navigate = useNavigate();
@@ -163,7 +163,6 @@ export default function AdminSidebar({
               if (e.key === 'Enter') navigate('/admin/orglist');
             }}
           >
-
             {avatarURL ? (
               <img
                 src={avatarURL}

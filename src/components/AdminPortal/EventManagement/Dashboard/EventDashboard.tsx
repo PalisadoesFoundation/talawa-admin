@@ -151,7 +151,10 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
           eventModalIsOpen={eventModalIsOpen}
           hideViewModal={hideViewModal}
         />
-        <div style={{ display: 'flex', padding: '0 1.5rem' }} data-testid="event-stats">
+        <div
+          style={{ display: 'flex', padding: '0 1.5rem' }}
+          data-testid="event-stats"
+        >
           {/* Attendees data not available in new query; adjust or remove */}
           <div
             className={`${styles.ctacards}`}

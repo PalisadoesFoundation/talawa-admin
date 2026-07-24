@@ -148,7 +148,7 @@ const Invitations = (): JSX.Element => {
       <div className={`${styles.container} rounded-4 my-3`}>
         <div className={styles.message} data-testid="errorMsg">
           <WarningAmberRounded className={styles.errorIcon} />
-          <h6 style={{ textAlign: "center" }}>
+          <h6 style={{ textAlign: 'center' }}>
             {tErrors('errorLoading', { entity: 'Volunteership Invitations' })}
           </h6>
         </div>
@@ -208,10 +208,7 @@ const Invitations = (): JSX.Element => {
         </Stack>
       ) : (
         invitations.map((invite: InterfaceVolunteerMembership) => (
-          <div
-            className="p-4  rounded shadow-sm"
-            key={invite.id}
-          >
+          <div className="p-4  rounded shadow-sm" key={invite.id}>
             <div style={{ gap: 8 }}>
               <div style={{ fontWeight: 600 }} data-testid="inviteSubject">
                 {invite.group && invite.group.id ? (
@@ -239,24 +236,27 @@ const Invitations = (): JSX.Element => {
                   <>
                     <div>
                       <FaUserGroup className="text-secondary" />
-                      <span style={{ color: "var(--gray-500, #6b7280)" }}>{t('group')}:</span>{' '}
+                      <span style={{ color: 'var(--gray-500, #6b7280)' }}>
+                        {t('group')}:
+                      </span>{' '}
                       <span>{invite.group.name} </span>
                     </div>
                     |
                   </>
                 )}
                 <div>
-                  <TbCalendarEvent
-                    className="text-secondary"
-                    size={20}
-                  />
-                  <span style={{ color: "var(--gray-500, #6b7280)" }}>{t('event')}:</span>{' '}
+                  <TbCalendarEvent className="text-secondary" size={20} />
+                  <span style={{ color: 'var(--gray-500, #6b7280)' }}>
+                    {t('event')}:
+                  </span>{' '}
                   <span>{invite.event.name}</span>
                 </div>
                 |
                 <div>
                   <FaRegClock className="text-secondary" />
-                  <span style={{ color: "var(--gray-500, #6b7280)" }}>{t('received')}:</span>{' '}
+                  <span style={{ color: 'var(--gray-500, #6b7280)' }}>
+                    {t('received')}:
+                  </span>{' '}
                   {new Date(invite.createdAt).toLocaleString()}
                 </div>
               </div>

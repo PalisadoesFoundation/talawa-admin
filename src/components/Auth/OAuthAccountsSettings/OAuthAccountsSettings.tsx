@@ -151,12 +151,8 @@ const OAuthAccountsSettings: React.FC<OAuthAccountsSettingsProps> = ({
           </div>
           <div className={styles.cardBody}>
             <div className={styles.buttons}>
-              {hasMissingGoogle && (
-                <GoogleOAuthButton mode="link" size="sm" />
-              )}
-              {hasMissingGitHub && (
-                <GitHubOAuthButton mode="link" size="sm" />
-              )}
+              {hasMissingGoogle && <GoogleOAuthButton mode="link" size="sm" />}
+              {hasMissingGitHub && <GitHubOAuthButton mode="link" size="sm" />}
             </div>
           </div>
         </div>

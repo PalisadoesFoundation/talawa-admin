@@ -26,13 +26,11 @@ export const RecurrenceYearlySection: React.FC<
     <div style={{ marginBottom: 16 }}>
       <span className="text-secondary">{t('yearlyOn')}</span>
       <br />
-      <div style={{ margin: "0 8px" }}>
-        <span style={{ color: "var(--gray-500, #6b7280)" }}>
+      <div style={{ margin: '0 8px' }}>
+        <span style={{ color: 'var(--gray-500, #6b7280)' }}>
           {monthNames[startDate.getMonth()]} {startDate.getDate()}
         </span>
-        <p className="small">
-          {t('yearlyRecurrenceDesc')}
-        </p>
+        <p className="small">{t('yearlyRecurrenceDesc')}</p>
       </div>
     </div>
   );

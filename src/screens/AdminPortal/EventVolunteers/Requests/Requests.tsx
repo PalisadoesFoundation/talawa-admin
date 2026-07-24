@@ -144,7 +144,7 @@ function Requests(): JSX.Element {
           <WarningAmberRounded
             className={`${styles.errorIcon} ${styles.iconLg}`}
           />
-          <h6 style={{ textAlign: "center" }}>
+          <h6 style={{ textAlign: 'center' }}>
             {tErrors('errorLoading', {
               entity: t('eventVolunteers.volunteershipRequests'),
             })}
@@ -180,10 +180,7 @@ function Requests(): JSX.Element {
       renderCell: (params: GridCellParams) => {
         const { name, avatarURL } = params.row.volunteer.user;
         return (
-          <div
-            style={{ alignItems: "center" }}
-            data-testid="volunteerName"
-          >
+          <div style={{ alignItems: 'center' }} data-testid="volunteerName">
             {avatarURL ? (
               <img
                 src={avatarURL}
@@ -219,13 +216,17 @@ function Requests(): JSX.Element {
       renderCell: (params: GridCellParams) => {
         const { group } = params.row;
         return (
-          <div style={{ flexDirection: "column" }}>
+          <div style={{ flexDirection: 'column' }}>
             <span style={{ fontWeight: 600 }}>
               {group
                 ? t('eventVolunteers.groups')
                 : t('eventVolunteers.individuals')}
             </span>
-            {group && <small style={{ color: "var(--gray-500, #6b7280)" }}>{group.name}</small>}
+            {group && (
+              <small style={{ color: 'var(--gray-500, #6b7280)' }}>
+                {group.name}
+              </small>
+            )}
           </div>
         );
       },

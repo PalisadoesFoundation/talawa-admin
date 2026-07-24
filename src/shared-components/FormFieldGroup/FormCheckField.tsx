@@ -29,7 +29,10 @@ export const FormCheckField: React.FC<InterfaceFormCheckFieldProps> = ({
   const isInvalid = touched && !!error;
 
   const checkComponent = (
-    <div className={className} style={inline ? { display: 'inline-block' } : undefined}>
+    <div
+      className={className}
+      style={inline ? { display: 'inline-block' } : undefined}
+    >
       <input
         type={type === 'switch' ? 'checkbox' : type}
         role={type === 'switch' ? 'switch' : undefined}
@@ -39,7 +42,9 @@ export const FormCheckField: React.FC<InterfaceFormCheckFieldProps> = ({
         onChange={onChange}
         disabled={disabled}
         data-testid={dataTestId}
-        style={isInvalid ? { borderColor: 'var(--red-500, #ef4444)' } : undefined}
+        style={
+          isInvalid ? { borderColor: 'var(--red-500, #ef4444)' } : undefined
+        }
         {...props}
       />
       {label && (

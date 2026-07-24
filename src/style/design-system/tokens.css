@@ -12,18 +12,18 @@
 
   /* ── Dark sidebar ────────────────────────────────────────────────────────── */
   --sidebar-bg: #1c1c1e;
-  --sidebar-hover: rgba(255,255,255,0.06);
-  --sidebar-active: rgba(255,255,255,0.10);
-  --sidebar-text: rgba(255,255,255,0.72);
+  --sidebar-hover: rgba(255, 255, 255, 0.06);
+  --sidebar-active: rgba(255, 255, 255, 0.1);
+  --sidebar-text: rgba(255, 255, 255, 0.72);
   --sidebar-text-active: #ffffff;
-  --sidebar-border: rgba(255,255,255,0.08);
+  --sidebar-border: rgba(255, 255, 255, 0.08);
 
   /* ── Light content surfaces ──────────────────────────────────────────────── */
   --bg: #f5f5f7;
   --surface: #ffffff;
-  --border: rgba(0,0,0,0.06);
-  --border-input: rgba(0,0,0,0.12);
-  --border-strong: rgba(0,0,0,0.15);
+  --border: rgba(0, 0, 0, 0.06);
+  --border-input: rgba(0, 0, 0, 0.12);
+  --border-strong: rgba(0, 0, 0, 0.15);
 
   /* ── Neutrals ────────────────────────────────────────────────────────────── */
   --gray-50: #fafafa;
@@ -72,8 +72,9 @@
   --radius-xl: 18px;
 
   /* ── Shadows ─────────────────────────────────────────────────────────────── */
-  --shadow-card: 0 0 0 1px var(--border), 0 2px 8px rgba(0,0,0,0.02);
-  --shadow-card-hover: 0 0 0 1px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.06);
+  --shadow-card: 0 0 0 1px var(--border), 0 2px 8px rgba(0, 0, 0, 0.02);
+  --shadow-card-hover:
+    0 0 0 1px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.06);
 
   /* ── Backward compat — map old token names used by existing components ─── */
   --primary-theme-color: var(--green-500);

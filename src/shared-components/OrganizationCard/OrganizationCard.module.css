@@ -10,7 +10,9 @@
   box-shadow: var(--shadow-card);
   padding: 22px 24px;
   position: relative;
-  transition: box-shadow 0.2s ease, transform 0.15s ease;
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
 }
 
 .orgCard:hover {
@@ -209,7 +211,9 @@
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s ease, box-shadow 0.15s ease;
+  transition:
+    background 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .manageBtn:hover {

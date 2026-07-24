@@ -146,7 +146,7 @@ function OrganizationTags(): JSX.Element {
       <div className={styles.errorContainer + ' rounded-4 my-3'}>
         <div className={styles.errorMessage}>
           <WarningAmberRounded fontSize="large" className={styles.errorIcon} />
-          <h6 style={{ textAlign: "center" }}>
+          <h6 style={{ textAlign: 'center' }}>
             {t('errorLoadingTagsData')}
             <br />
             {message}
@@ -175,7 +175,14 @@ function OrganizationTags(): JSX.Element {
         <div className="page-header-left">
           <h1 className="page-title">
             {t('tags')}{' '}
-            <span style={{ fontSize: '16px', fontWeight: 500, color: 'var(--gray-400)', marginLeft: '8px' }}>
+            <span
+              style={{
+                fontSize: '16px',
+                fontWeight: 500,
+                color: 'var(--gray-400)',
+                marginLeft: '8px',
+              }}
+            >
               {userTagsList?.length ?? 0}
             </span>
           </h1>
@@ -191,7 +198,20 @@ function OrganizationTags(): JSX.Element {
             className="btn btn-primary"
             aria-label={t('createTag')}
           >
-            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <svg
+              aria-hidden="true"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
             {t('createTag')}
           </button>
         </div>
@@ -200,7 +220,21 @@ function OrganizationTags(): JSX.Element {
       {/* Toolbar */}
       <div className="toolbar" data-testid="organizationTags-header">
         <div className="search-bar">
-          <svg aria-hidden="true" className="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <svg
+            aria-hidden="true"
+            className="search-icon"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
           <input
             type="text"
             placeholder={tCommon('searchByName')}
@@ -215,7 +249,12 @@ function OrganizationTags(): JSX.Element {
       {orgUserTagsError ? (
         showErrorMessage(orgUserTagsError.message)
       ) : orgUserTagsLoading ? (
-        <LoadingState isLoading={true} variant="spinner" size="lg" data-testid="loadingState">
+        <LoadingState
+          isLoading={true}
+          variant="spinner"
+          size="lg"
+          data-testid="loadingState"
+        >
           {null}
         </LoadingState>
       ) : (
@@ -230,8 +269,8 @@ function OrganizationTags(): JSX.Element {
                 dataLength={userTagsList?.length ?? 0}
                 next={loadMoreTags}
                 hasMore={
-                  orgUserTagsData?.organization?.tags?.pageInfo
-                    ?.hasNextPage ?? false
+                  orgUserTagsData?.organization?.tags?.pageInfo?.hasNextPage ??
+                  false
                 }
                 loader={
                   <LoadingState
@@ -259,7 +298,14 @@ function OrganizationTags(): JSX.Element {
                     <tbody>
                       {userTagsList.length === 0 ? (
                         <tr>
-                          <td colSpan={5} style={{ textAlign: 'center', padding: '40px', color: 'var(--gray-400)' }}>
+                          <td
+                            colSpan={5}
+                            style={{
+                              textAlign: 'center',
+                              padding: '40px',
+                              color: 'var(--gray-400)',
+                            }}
+                          >
                             {t('noTagsFound')}
                           </td>
                         </tr>
@@ -281,7 +327,18 @@ function OrganizationTags(): JSX.Element {
                             </td>
                             <td>{tag.usersAssignedTo?.totalCount ?? 0}</td>
                             <td>{tag.childTags?.totalCount ?? 0}</td>
-                            <td>{tag.createdAt ? new Date(tag.createdAt).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) : ''}</td>
+                            <td>
+                              {tag.createdAt
+                                ? new Date(tag.createdAt).toLocaleDateString(
+                                    'en-US',
+                                    {
+                                      month: 'short',
+                                      day: '2-digit',
+                                      year: 'numeric',
+                                    },
+                                  )
+                                : ''}
+                            </td>
                             <td>
                               <div style={{ display: 'flex', gap: '6px' }}>
                                 <button

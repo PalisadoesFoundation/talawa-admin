@@ -48,7 +48,9 @@ export const FormField: React.FC<InterfaceFormFieldProps> = ({
       {label && (
         <label htmlFor={name}>
           {label}
-          {required && <span style={{ color: 'var(--red-500, #ef4444)' }}> *</span>}
+          {required && (
+            <span style={{ color: 'var(--red-500, #ef4444)' }}> *</span>
+          )}
         </label>
       )}
 
@@ -66,14 +68,21 @@ export const FormField: React.FC<InterfaceFormFieldProps> = ({
         data-testid={testId}
         data-cy={dataCy}
         className="form-input"
-        style={hasError ? { borderColor: 'var(--red-500, #ef4444)' } : undefined}
+        style={
+          hasError ? { borderColor: 'var(--red-500, #ef4444)' } : undefined
+        }
       />
 
       {/* Error message with aria-live for screen reader announcements */}
       {hasError && (
         <div
           id={errorId}
-          style={{ display: 'block', color: 'var(--red-500, #ef4444)', fontSize: '0.875em', marginTop: '0.25rem' }}
+          style={{
+            display: 'block',
+            color: 'var(--red-500, #ef4444)',
+            fontSize: '0.875em',
+            marginTop: '0.25rem',
+          }}
           role={ariaLive ? 'status' : undefined}
           aria-live={ariaLive ? 'polite' : undefined}
         >

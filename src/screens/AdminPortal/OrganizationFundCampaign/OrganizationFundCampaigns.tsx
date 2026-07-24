@@ -106,10 +106,14 @@ const OrganizationFundCampaign = (): JSX.Element => {
   if (campaignError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
-        <WarningAmberRounded style={{ fontSize: 32, color: 'var(--red-500, #ef4444)', marginBottom: 12 }} />
-        <div className={styles.errorText}>
-          {campaignError.message}
-        </div>
+        <WarningAmberRounded
+          style={{
+            fontSize: 32,
+            color: 'var(--red-500, #ef4444)',
+            marginBottom: 12,
+          }}
+        />
+        <div className={styles.errorText}>{campaignError.message}</div>
       </div>
     );
   }
@@ -163,10 +167,15 @@ const OrganizationFundCampaign = (): JSX.Element => {
       </div>
 
       {/* Content */}
-      {!campaignLoading && campaignData && filteredCampaigns.length === 0 && searchText ? (
+      {!campaignLoading &&
+      campaignData &&
+      filteredCampaigns.length === 0 &&
+      searchText ? (
         <EmptyState
           message="noResultsFound"
-          description={tCommon('noResultsFoundFor', { query: `"${searchText}"` })}
+          description={tCommon('noResultsFoundFor', {
+            query: `"${searchText}"`,
+          })}
           dataTestId="campaigns-search-empty"
         />
       ) : !campaignLoading && campaignData && filteredCampaigns.length === 0 ? (
@@ -194,8 +203,16 @@ const OrganizationFundCampaign = (): JSX.Element => {
                 const raised = c.amountRaised ?? 0;
                 const goal = c.goalAmount;
                 const pct = goal > 0 ? Math.round((raised / goal) * 100) : 0;
-                const symbol = currencySymbols[c.currencyCode as keyof typeof currencySymbols] || '$';
-                const fillClass = pct >= 100 ? styles.progressGreen : pct >= 50 ? styles.progressYellow : styles.progressBlue;
+                const symbol =
+                  currencySymbols[
+                    c.currencyCode as keyof typeof currencySymbols
+                  ] || '$';
+                const fillClass =
+                  pct >= 100
+                    ? styles.progressGreen
+                    : pct >= 50
+                      ? styles.progressYellow
+                      : styles.progressBlue;
 
                 return (
                   <tr key={c.id}>
@@ -209,9 +226,14 @@ const OrganizationFundCampaign = (): JSX.Element => {
                       </button>
                     </td>
                     <td>{dayjs(c.startAt).format('MMM D, YYYY')}</td>
-                    <td data-testid="endDateCell">{dayjs(c.endAt).format('MMM D, YYYY')}</td>
+                    <td data-testid="endDateCell">
+                      {dayjs(c.endAt).format('MMM D, YYYY')}
+                    </td>
                     <td data-testid="goalCell">
-                      <span style={{ fontWeight: 600 }}>{symbol}{goal.toLocaleString()}</span>
+                      <span style={{ fontWeight: 600 }}>
+                        {symbol}
+                        {goal.toLocaleString()}
+                      </span>
                     </td>
                     <td data-testid="progressCell" style={{ minWidth: 120 }}>
                       <div className={styles.progressBarBg}>
@@ -221,7 +243,8 @@ const OrganizationFundCampaign = (): JSX.Element => {
                         />
                       </div>
                       <span className={styles.progressText}>
-                        {symbol}{raised.toLocaleString()} ({pct}%)
+                        {symbol}
+                        {raised.toLocaleString()} ({pct}%)
                       </span>
                     </td>
                     <td>

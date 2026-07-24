@@ -68,7 +68,9 @@ const resolvePendingRequests = (): void => {
 const authLink = setContext((_, { headers }) => {
   const lng = i18n.language;
   const token = getItem('token');
-  const authHeaders = token ? { authorization: BEARER_PREFIX + String(token) } : {};
+  const authHeaders = token
+    ? { authorization: BEARER_PREFIX + String(token) }
+    : {};
 
   return {
     headers: {

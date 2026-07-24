@@ -379,7 +379,7 @@ export default function GroupChatDetails({
                 variant="outline-danger"
                 size="sm"
                 aria-label={t('deleteChat')}
-                style={{ margin: "0 24px" }}
+                style={{ margin: '0 24px' }}
                 onClick={async () => {
                   if (window.confirm(t('deleteChatConfirmation'))) {
                     try {
@@ -491,7 +491,10 @@ export default function GroupChatDetails({
           <h5>
             {chat.members?.edges?.length || 0} {t('members')}
           </h5>
-          <div className={styles.memberList} style={{ listStyle: 'none', padding: 0 }}>
+          <div
+            className={styles.memberList}
+            style={{ listStyle: 'none', padding: 0 }}
+          >
             <div
               data-testid="addMembers"
               className={styles.listItem}
@@ -500,7 +503,12 @@ export default function GroupChatDetails({
               }}
               role="button"
               tabIndex={0}
-              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openAddUserModal(); } }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  openAddUserModal();
+                }
+              }}
             >
               <Add /> {t('addMembers')}
             </div>
@@ -512,10 +520,7 @@ export default function GroupChatDetails({
                 currentUserRole === 'administrator' && !isCurrentUser;
               const canRemove = canManage && role === 'regular';
               return (
-                <div
-                  className={styles.groupMembersList}
-                  key={user.id}
-                >
+                <div className={styles.groupMembersList} key={user.id}>
                   <div className={styles.chatUserDetails}>
                     <div className={styles.profileAvatarContainer}>
                       <ProfileAvatarDisplay

@@ -185,12 +185,9 @@ export default function Advertisements(): JSX.Element {
     'archivedAds',
   );
 
-  const handleTabClick = useCallback(
-    (tab: 'activeAds' | 'archivedAds') => {
-      setActiveTab(tab);
-    },
-    [],
-  );
+  const handleTabClick = useCallback((tab: 'activeAds' | 'archivedAds') => {
+    setActiveTab(tab);
+  }, []);
 
   return (
     <ErrorBoundaryWrapper
@@ -254,7 +251,9 @@ export default function Advertisements(): JSX.Element {
                   padding: '8px 16px',
                   fontWeight: activeTab === 'activeAds' ? 'bold' : 'normal',
                   borderBottom:
-                    activeTab === 'activeAds' ? '2px solid currentColor' : 'none',
+                    activeTab === 'activeAds'
+                      ? '2px solid currentColor'
+                      : 'none',
                   background: 'none',
                   border: 'none',
                   borderBottomWidth: activeTab === 'activeAds' ? '2px' : '0',

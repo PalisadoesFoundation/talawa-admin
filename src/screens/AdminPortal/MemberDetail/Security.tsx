@@ -130,7 +130,13 @@ const Security = (): JSX.Element => {
       <div className={styles.securityCard}>
         <div className={styles.securityCardHeader}>{t('password')}</div>
         <div className={styles.securityCardBody}>
-          <p style={{ fontSize: 14, color: 'var(--gray-600, #4b5563)', margin: 0 }}>
+          <p
+            style={{
+              fontSize: 14,
+              color: 'var(--gray-600, #4b5563)',
+              margin: 0,
+            }}
+          >
             {t('changePassword')}
           </p>
           <Button

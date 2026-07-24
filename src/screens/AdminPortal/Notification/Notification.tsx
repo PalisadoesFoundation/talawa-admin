@@ -85,12 +85,22 @@ const Notification: React.FC = () => {
   // Assign icon colors in a rotating pattern matching the prototype
   const iconColors = ['green', 'blue', 'orange', 'purple', 'red'];
   // Assign icon symbols in a rotating pattern matching the prototype
-  const iconSymbols = ['\u2721', '\u2605', '\u2709', '\u2665', '\u{1F4B0}', '\u270D', '\u26D4', '\u2605'];
+  const iconSymbols = [
+    '\u2721',
+    '\u2605',
+    '\u2709',
+    '\u2665',
+    '\u{1F4B0}',
+    '\u270D',
+    '\u26D4',
+    '\u2605',
+  ];
 
   // Filter for the active tab
-  const displayNotifications = activeTab === 'unread'
-    ? notifications.filter((n) => !n.isRead)
-    : notifications;
+  const displayNotifications =
+    activeTab === 'unread'
+      ? notifications.filter((n) => !n.isRead)
+      : notifications;
 
   return (
     <>
@@ -123,10 +133,7 @@ const Notification: React.FC = () => {
       <div className="card">
         {isLoading ? (
           Array.from({ length: pageSize }).map((_, idx) => (
-            <div
-              key={`skeleton-${idx}`}
-              className={styles.notificationItem}
-            >
+            <div key={`skeleton-${idx}`} className={styles.notificationItem}>
               <div className={styles.profileSection} />
               <div className={styles.notificationContent}>
                 <div className={styles.skeletonTitle} />
@@ -148,7 +155,9 @@ const Notification: React.FC = () => {
                 key={notification.id}
                 className={`notif-item${!notification.isRead ? ' unread' : ''}`}
               >
-                <div className={`notif-icon ${iconColors[idx % iconColors.length]}`}>
+                <div
+                  className={`notif-icon ${iconColors[idx % iconColors.length]}`}
+                >
                   {iconSymbols[idx % iconSymbols.length]}
                 </div>
                 <Link
@@ -156,12 +165,8 @@ const Notification: React.FC = () => {
                   className="notif-content"
                   style={{ textDecoration: 'none' }}
                 >
-                  <div className="notif-title">
-                    {notification.title}
-                  </div>
-                  <div className="notif-desc">
-                    {notification.body}
-                  </div>
+                  <div className="notif-title">{notification.title}</div>
+                  <div className="notif-desc">{notification.body}</div>
                 </Link>
                 {!notification.isRead ? (
                   <Button
@@ -178,7 +183,9 @@ const Notification: React.FC = () => {
                 ) : (
                   <span className="notif-time" />
                 )}
-                <div className={!notification.isRead ? 'unread-dot' : 'read-dot'} />
+                <div
+                  className={!notification.isRead ? 'unread-dot' : 'read-dot'}
+                />
               </li>
             ))}
           </ul>

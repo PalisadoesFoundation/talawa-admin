@@ -51,7 +51,11 @@ export default function UninstallConfirmationModal({
       <div>
         <div
           data-testid="uninstall-modal-title"
-          style={{ marginBottom: 12, fontSize: 14, color: 'var(--gray-900, #111827)' }}
+          style={{
+            marginBottom: 12,
+            fontSize: 14,
+            color: 'var(--gray-900, #111827)',
+          }}
         >
           {t('uninstallPluginMsg', {
             pluginName: plugin?.name || '',

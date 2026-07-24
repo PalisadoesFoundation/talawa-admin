@@ -26,7 +26,7 @@ export default function UserSidebarComponent({
   mobileOpen,
   onCloseMobile,
   orgName,
-  avatarURL
+  avatarURL,
 }: UserSidebarProps): React.ReactElement {
   const location = useLocation();
   const navigate = useNavigate();
@@ -135,7 +135,6 @@ export default function UserSidebarComponent({
               if (e.key === 'Enter') navigate('/user/organizations');
             }}
           >
-
             {avatarURL ? (
               <img
                 src={avatarURL}

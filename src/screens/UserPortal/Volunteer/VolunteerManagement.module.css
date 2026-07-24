@@ -160,7 +160,9 @@
   border-radius: var(--radius-xl);
   padding: 24px;
   box-shadow: var(--shadow-card);
-  transition: box-shadow 0.2s, transform 0.15s;
+  transition:
+    box-shadow 0.2s,
+    transform 0.15s;
 }
 
 .oppCard:hover {

@@ -243,15 +243,11 @@ const Requests = (): JSX.Element => {
         <div className="page-header-left">
           <h1 className="page-title">
             {t('requests.title')}{' '}
-            <span
-              className="badge badge-orange request-badge"
-            >
+            <span className="badge badge-orange request-badge">
               {displayedRequests.length} {t('requests.pending')}
             </span>
           </h1>
-          <p className="page-subtitle">
-            {t('requests.reviewAndManage')}
-          </p>
+          <p className="page-subtitle">{t('requests.reviewAndManage')}</p>
         </div>
       </div>
 
@@ -315,15 +311,19 @@ const Requests = (): JSX.Element => {
                 </thead>
                 <tbody>
                   {displayedRequests.map((req) => {
-                    const user = req.user || ({} as InterfaceRequestsListItem['user']);
+                    const user =
+                      req.user || ({} as InterfaceRequestsListItem['user']);
                     const initials = getInitials(user.name || '');
                     const requestedDate = (() => {
                       try {
-                        return new Date(req.createdAt).toLocaleDateString('en-US', {
-                          month: 'short',
-                          day: 'numeric',
-                          year: 'numeric',
-                        });
+                        return new Date(req.createdAt).toLocaleDateString(
+                          'en-US',
+                          {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric',
+                          },
+                        );
                       } catch {
                         return '';
                       }
@@ -335,7 +335,9 @@ const Requests = (): JSX.Element => {
                             <div className="user-cell-avatar">{initials}</div>
                             <div>
                               <div className="user-cell-name">{user.name}</div>
-                              <div className="user-cell-email">{user.emailAddress}</div>
+                              <div className="user-cell-email">
+                                {user.emailAddress}
+                              </div>
                             </div>
                           </div>
                         </td>
