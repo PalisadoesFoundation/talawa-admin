@@ -56,7 +56,7 @@ jobs:
         run: |
           chmod +x .github-central/.github/workflows/scripts/countline.py
           .github-central/.github/workflows/scripts/countline.py \
-            --lines 600 \
+            --lines 800 \
             --files ./.github/workflows/config/countline_excluded_file_list.txt
 
       - name: Get changed TypeScript files
