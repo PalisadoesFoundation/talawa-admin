@@ -99,7 +99,7 @@ vi.mock('lodash', async () => {
   const actual = await vi.importActual('lodash');
   return {
     ...actual,
-    debounce: (...args: unknown[]) => mockLodashDebounce(...args),
+    debounce: (fn: (...args: unknown[]) => unknown) => mockLodashDebounce(fn),
   };
 });
 

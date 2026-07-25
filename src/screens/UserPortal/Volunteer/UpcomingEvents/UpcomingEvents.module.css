@@ -40,3 +40,7 @@
   flex-wrap: wrap;
   min-height: var(--space-10);
 }
+
+.volunteerIcon {
+  margin-right: 4px;
+}

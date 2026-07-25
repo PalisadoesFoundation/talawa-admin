@@ -206,7 +206,9 @@ export const UserPortalNavigationBar = (
                 padding: '0.5rem 1rem',
               }}
             >
-              {link.icon && <link.icon style={{ marginRight: '0.5rem' }} />}
+              // Thiis file is not being used anywhere and will be deleted in
+              upcomming PR.
+              {/* {link.icon && <link.icon style={{ marginRight: '0.5rem' }} />} */}
               {linkLabel}
             </button>
           );

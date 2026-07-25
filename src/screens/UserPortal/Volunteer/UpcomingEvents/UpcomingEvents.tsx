@@ -368,7 +368,7 @@ const UpcomingEvents = (): JSX.Element => {
                       )
                     }
                   >
-                    <Icon style={{ marginRight: 4 }} />
+                    <Icon className={styles.volunteerIcon} />
                     {status.buttonText}
                   </Button>
                 </div>
@@ -425,7 +425,7 @@ const UpcomingEvents = (): JSX.Element => {
                               )
                             }
                           >
-                            <GroupIcon style={{ marginRight: 4 }} />
+                            <GroupIcon className={styles.volunteerIcon} />
                             {groupStatus.buttonText}
                           </Button>
                         </div>

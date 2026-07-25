@@ -16,7 +16,7 @@ import { GraphQLError } from 'graphql';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import Events, { computeCalendarFromStartDate } from './Events';
+import Events from './Events';
 dayjs.extend(utc);
 dayjs.extend(customParseFormat);
 
@@ -252,6 +252,18 @@ const isExclusiveEndDate = (
 
   // For all-day events, endDate should be the exclusive next day.
   return endDate.diff(startDate, 'day') === 1;
+};
+
+const computeCalendarFromStartDate = (
+  startDate: Date | null,
+  refDate: Date = new Date(),
+): { month: number; year: number } => {
+  const date = startDate ?? refDate;
+
+  return {
+    month: date.getMonth(),
+    year: date.getFullYear(),
+  };
 };
 
 const MOCKS = [

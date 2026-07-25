@@ -14,6 +14,7 @@ import i18n from 'utils/i18nForTest';
 const mockTag: InterfaceTagData = {
   _id: '1',
   name: 'Parent Tag',
+  createdAt: '2023-01-01T00:00:00Z',
   childTags: { totalCount: 2 },
   parentTag: { _id: '0' },
   usersAssignedTo: { totalCount: 0 },
@@ -297,6 +298,7 @@ describe('Edge Cases and Coverage Improvements', () => {
   it('handles tag without childTags (leaf tag)', () => {
     const leafTag: InterfaceTagData = {
       _id: 'leaf-tag',
+      createdAt: '2023-01-01T00:00:00Z',
       name: 'Leaf Tag',
       childTags: { totalCount: 0 }, // No child tags
       parentTag: { _id: 'parent' },

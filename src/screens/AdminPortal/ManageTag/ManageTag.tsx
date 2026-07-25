@@ -116,7 +116,7 @@ function ManageTag(): JSX.Element {
   const editUserTagModal = useModalState();
   const removeUserTagModal = useModalState();
 
-  const [unassignUserId, setUnassignUserId] = useState(null);
+  const [unassignUserId, setUnassignUserId] = useState<string | null>(null);
   const [assignedMemberSearchInput, setAssignedMemberSearchInput] =
     useState('');
   const [assignedMemberSearchFirstName, setAssignedMemberSearchFirstName] =
