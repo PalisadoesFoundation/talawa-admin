@@ -54,7 +54,7 @@ function OrganizationTags(): JSX.Element {
   } = useModalState();
 
   const [tagSearchName, setTagSearchName] = useState('');
-  const [tagSortOrder, setTagSortOrder] = useState<SortedByType>('DESCENDING');
+  const [tagSortOrder] = useState<SortedByType>('DESCENDING');
 
   const { orgId } = useParams();
   const navigate = useNavigate();

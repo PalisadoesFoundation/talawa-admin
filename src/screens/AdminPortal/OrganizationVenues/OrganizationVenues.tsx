@@ -116,7 +116,6 @@ function organizationVenues(props?: {
   );
 
   const {
-    open: handleDelete,
     close: handleCloseDeleteVenueModal,
     confirmDelete,
     isOpen: deleteVenueModalOpenHook,
@@ -130,12 +129,6 @@ function organizationVenues(props?: {
     id: string;
     name: string;
   } | null>(null);
-
-  const openDeleteModal = (venueId: string): void => {
-    const venueName = getVenueNameById(venues, venueId);
-    setSelectedVenue({ id: venueId, name: venueName });
-    handleDelete(venueId);
-  };
 
   const handleCloseAndClear = (): void => {
     setSelectedVenue(null);

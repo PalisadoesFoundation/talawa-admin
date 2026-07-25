@@ -5,7 +5,6 @@
  */
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import LoadingState from 'shared-components/LoadingState/LoadingState';
 
 interface InterfaceDashboardStatsProps {
   memberCount: number;

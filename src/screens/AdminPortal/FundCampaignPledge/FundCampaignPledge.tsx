@@ -23,7 +23,6 @@ import type {
 } from 'utils/interfaces';
 import { getPledgeColumns } from './PledgeColumns';
 import type { InterfacePledgeTableRow } from './PledgeColumns';
-import Button from 'shared-components/Button';
 import { useModalState } from 'shared-components/CRUDModalTemplate';
 
 /**
@@ -57,9 +56,6 @@ const fundCampaignPledge = (): JSX.Element => {
   const pledgeModal = useModalState();
 
   const [extraUsers, setExtraUsers] = useState<InterfaceUserInfoPG[]>([]);
-  const [progressIndicator, setProgressIndicator] = useState<
-    'raised' | 'pledged'
-  >('pledged');
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popup' : undefined;

@@ -56,12 +56,9 @@ import {
 } from 'types/Post/interface';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useTranslation } from 'react-i18next';
-import Add from '@mui/icons-material/Add';
 import Button from 'shared-components/Button';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import Toolbar from 'shared-components/Toolbar/Toolbar';
-import PinnedPostsLayout from 'shared-components/pinnedPosts/pinnedPostsLayout';
-import PostCard from 'shared-components/postCard/PostCard';
 import styles from './posts.module.css';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -69,7 +66,6 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/InfiniteScrollLoader';
 import CreatePostModal from 'shared-components/posts/createPostModal/createPostModal';
 import PostViewModal from 'shared-components/PostViewModal/PostViewModal';
-import { formatPostForCard } from './helperFunctions';
 
 export default function PostsPage() {
   const { t } = useTranslation('translation', { keyPrefix: 'posts' });
@@ -92,11 +88,6 @@ export default function PostsPage() {
   // i18n-ignore-next-line
   const userId = getItem<string>('userId') ?? getItem<string>('id') ?? null;
   const [searchParams] = useSearchParams();
-
-  const handleStoryClick = (post: InterfacePost) => {
-    setSelectedViewPost(post);
-    postViewModal.open();
-  };
 
   const handleClosePostViewModal = () => {
     postViewModal.close();
@@ -130,13 +121,8 @@ export default function PostsPage() {
     },
   );
 
-  const {
-    data: orgPinnedPostListData,
-    loading: orgPinnedPostListLoading,
-    error: orgPinnedPostListError,
-  } = useQuery<InterfaceOrganizationPostListData>(
-    ORGANIZATION_PINNED_POST_LIST,
-    {
+  const { loading: orgPinnedPostListLoading, error: orgPinnedPostListError } =
+    useQuery<InterfaceOrganizationPostListData>(ORGANIZATION_PINNED_POST_LIST, {
       skip: !currentUrl || !userId,
       variables: {
         input: { id: currentUrl as string },
@@ -144,8 +130,7 @@ export default function PostsPage() {
         last: null,
         userId: userId,
       },
-    },
-  );
+    });
 
   const {
     data: previewPostData,
@@ -331,9 +316,6 @@ export default function PostsPage() {
       </LoadingState>
     );
   }
-
-  const pinnedPosts =
-    orgPinnedPostListData?.organization?.pinnedPosts?.edges ?? [];
 
   /**
    * Helper: get author initials from name string.

@@ -50,7 +50,7 @@ function SubTags(): JSX.Element {
   const [tagNameTouched, setTagNameTouched] = useState(false);
 
   const [tagSearchName, setTagSearchName] = useState('');
-  const [tagSortOrder, setTagSortOrder] = useState<SortedByType>('DESCENDING');
+  const [tagSortOrder] = useState<SortedByType>('DESCENDING');
 
   const showAddSubTagModal = (): void => {
     addSubTagModal.open();

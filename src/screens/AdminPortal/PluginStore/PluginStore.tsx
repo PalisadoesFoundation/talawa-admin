@@ -66,7 +66,7 @@ export default function PluginStore() {
     null,
   );
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(12);
+  const [rowsPerPage] = useState(12);
 
   // Upload state
   const [selectedFile, setSelectedFile] = useState<File | null>(null);

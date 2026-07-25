@@ -101,16 +101,15 @@ function OrganizationDashboard(): JSX.Element {
     fetchPolicy: 'cache-and-network',
   });
 
-  const {
-    data: orgPostsData,
-    loading: orgPostsLoading,
-    error: orgPostsError,
-  } = useQuery(GET_ORGANIZATION_POSTS_COUNT_PG, {
-    variables: { id: orgId ?? '' },
-    skip: !orgId,
-    fetchPolicy: 'cache-and-network',
-    notifyOnNetworkStatusChange: true,
-  });
+  const { data: orgPostsData, loading: orgPostsLoading } = useQuery(
+    GET_ORGANIZATION_POSTS_COUNT_PG,
+    {
+      variables: { id: orgId ?? '' },
+      skip: !orgId,
+      fetchPolicy: 'cache-and-network',
+      notifyOnNetworkStatusChange: true,
+    },
+  );
 
   const {
     data: orgEventsData,
@@ -123,27 +122,23 @@ function OrganizationDashboard(): JSX.Element {
     notifyOnNetworkStatusChange: true,
   });
 
-  const {
-    data: orgBlockedUsersData,
-    loading: orgBlockedUsersLoading,
-    error: orgBlockedUsersError,
-  } = useQuery(GET_ORGANIZATION_BLOCKED_USERS_COUNT, {
-    variables: { id: orgId ?? '' },
-    skip: !orgId,
-    fetchPolicy: 'cache-and-network',
-    notifyOnNetworkStatusChange: true,
-  });
+  const { data: orgBlockedUsersData, loading: orgBlockedUsersLoading } =
+    useQuery(GET_ORGANIZATION_BLOCKED_USERS_COUNT, {
+      variables: { id: orgId ?? '' },
+      skip: !orgId,
+      fetchPolicy: 'cache-and-network',
+      notifyOnNetworkStatusChange: true,
+    });
 
-  const {
-    data: orgVenuesData,
-    loading: orgVenuesLoading,
-    error: orgVenuesError,
-  } = useQuery(GET_ORGANIZATION_VENUES_COUNT, {
-    variables: { id: orgId ?? '' },
-    skip: !orgId,
-    notifyOnNetworkStatusChange: true,
-    fetchPolicy: 'cache-and-network',
-  });
+  const { data: orgVenuesData, loading: orgVenuesLoading } = useQuery(
+    GET_ORGANIZATION_VENUES_COUNT,
+    {
+      variables: { id: orgId ?? '' },
+      skip: !orgId,
+      notifyOnNetworkStatusChange: true,
+      fetchPolicy: 'cache-and-network',
+    },
+  );
 
   // Effect hooks - must be called before conditional return
   useEffect(() => {
@@ -233,15 +228,14 @@ function OrganizationDashboard(): JSX.Element {
   /**
    * Query to fetch posts for the organization.
    */
-  const {
-    data: postData,
-    loading: loadingPost,
-    error: errorPost,
-  } = useQuery(GET_ORGANIZATION_POSTS_PG, {
-    variables: { id: orgId, first: 5 },
-    notifyOnNetworkStatusChange: true,
-    fetchPolicy: 'cache-and-network',
-  });
+  const { data: postData, loading: loadingPost } = useQuery(
+    GET_ORGANIZATION_POSTS_PG,
+    {
+      variables: { id: orgId, first: 5 },
+      notifyOnNetworkStatusChange: true,
+      fetchPolicy: 'cache-and-network',
+    },
+  );
 
   /**
    * UseEffect to handle errors and navigate if necessary.

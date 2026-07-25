@@ -115,7 +115,7 @@ function organizationEvents(): JSX.Element {
     document.title = t('title');
   }, [t]);
   const createEventModal = useModalState();
-  const [viewType, setViewType] = useState<ViewType>(ViewType.MONTH);
+  const [viewType] = useState<ViewType>(ViewType.MONTH);
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [currentDateOfMonth, setCurrentDateOfMonth] = useState(
@@ -144,10 +144,6 @@ function organizationEvents(): JSX.Element {
       window.clearTimeout(timeoutId);
     };
   }, [currentMonth, currentYear, currentDateOfMonth]);
-
-  const handleChangeView = (item: string | number): void => {
-    setViewType(item as ViewType);
-  };
 
   const handleMonthChange = (month: number, year: number): void => {
     if (month === currentMonth && year === currentYear) {

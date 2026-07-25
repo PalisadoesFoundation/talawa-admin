@@ -25,11 +25,9 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
   onSelect,
   ariaLabel,
   dataTestIdPrefix = 'dropdown',
-  variant = 'outline-success',
   buttonLabel,
   icon,
   disabled = false,
-  drop,
   // i18n-ignore-next-line
   placeholder = 'Select an option',
   parentContainerStyle,

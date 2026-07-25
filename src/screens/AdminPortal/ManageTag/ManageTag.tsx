@@ -56,28 +56,17 @@ import { useMutation, useQuery } from '@apollo/client';
 import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 
-import { useNavigate, useParams, Link } from 'react-router';
-import Button from 'shared-components/Button/Button';
+import { useNavigate, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfaceQueryUserTagsAssignedMembers } from 'utils/interfaces';
 import styles from './ManageTag.module.css';
-import {
-  DataGrid,
-  type GridCellParams,
-  type TokenAwareGridColDef,
-  convertTokenColumns,
-} from 'shared-components/DataGridWrapper';
 import type {
   InterfaceTagAssignedMembersQuery,
   SortedByType,
   TagActionType,
 } from 'utils/organizationTagsUtils';
-import {
-  TAGS_QUERY_DATA_CHUNK_SIZE,
-  dataGridStyle,
-} from 'utils/organizationTagsUtils';
-import Stack from '@mui/material/Stack';
+import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import {
   REMOVE_USER_TAG,
   UNASSIGN_USER_TAG,
@@ -91,7 +80,6 @@ import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/Infinit
 import EditUserTagModal from './editModal/EditUserTagModal';
 import RemoveUserTagModal from './removeModal/RemoveUserTagModal';
 import UnassignUserTagModal from './unassignModal/UnassignUserTagModal';
-import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { useModalState } from 'shared-components/CRUDModalTemplate';
 
 export const getManageTagErrorMessage = (error: unknown): string => {
@@ -123,8 +111,7 @@ function ManageTag(): JSX.Element {
     useState('');
   const [assignedMemberSearchLastName, setAssignedMemberSearchLastName] =
     useState('');
-  const [assignedMemberSortOrder, setAssignedMemberSortOrder] =
-    useState<SortedByType>('DESCENDING');
+  const [assignedMemberSortOrder] = useState<SortedByType>('DESCENDING');
   // a state to specify whether we're assigning to tags or removing from tags
   const [tagActionType, setTagActionType] =
     useState<TagActionType>('assignToTags');
@@ -319,73 +306,6 @@ function ManageTag(): JSX.Element {
       .join(' ');
   };
 
-  const columns: TokenAwareGridColDef[] = [
-    {
-      field: 'id',
-      headerName: '#',
-      minWidth: 'space-13',
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return <div>{params.row?.id}</div>;
-      },
-    },
-    {
-      field: 'userName',
-      headerName: tCommon('userName'),
-      flex: 2,
-      minWidth: 'space-13',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div data-testid="memberName">
-            {getFullName(params.row?.firstName, params.row?.lastName)}
-          </div>
-        );
-      },
-    },
-    {
-      field: 'actions',
-      headerName: tCommon('actions'),
-      flex: 1,
-      align: 'center',
-      minWidth: 'space-13',
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div>
-            <Link
-              to={`/admin/member/${orgId}/${params.row?._id}`}
-              state={{ id: params.row?._id }}
-              data-testid="viewProfileBtn"
-            >
-              <div className={`btn btn-sm btn-primary ${styles.editButton}`}>
-                {t('viewProfile')}
-              </div>
-            </Link>
-
-            <Button
-              size="sm"
-              variant="danger"
-              onClick={() => {
-                setUnassignUserId(params.row?._id);
-                toggleUnassignUserTagModal();
-              }}
-              data-testid="unassignTagBtn"
-            >
-              {tCommon('unassign')}
-            </Button>
-          </div>
-        );
-      },
-    },
-  ];
-
   const hasMoreAssignedMembers = Boolean(
     userTagAssignedMembersData?.getAssignedUsers.usersAssignedTo?.pageInfo
       ?.hasNextPage,
@@ -532,8 +452,7 @@ function ManageTag(): JSX.Element {
             <div style={{ marginTop: '8px', display: 'flex', gap: '8px' }}>
               <button
                 className="btn btn-primary"
-                onClick={(e) => {
-                  const form = document.createElement('form');
+                onClick={() => {
                   const event = new Event('submit', {
                     bubbles: true,
                     cancelable: true,

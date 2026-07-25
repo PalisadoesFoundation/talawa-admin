@@ -11,7 +11,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 import SignOut from 'components/SignOut/SignOut';
 import { sanitizeAvatarURL } from 'utils/sanitizeAvatar';
 
-interface UserSidebarProps {
+interface InterfaceUserSidebarProps {
   collapsed: boolean;
   onToggleCollapse: () => void;
   mobileOpen: boolean;
@@ -27,7 +27,7 @@ export default function UserSidebarComponent({
   onCloseMobile,
   orgName,
   avatarURL,
-}: UserSidebarProps): React.ReactElement {
+}: InterfaceUserSidebarProps): React.ReactElement {
   const location = useLocation();
   const navigate = useNavigate();
   const { orgId } = useParams();

@@ -31,7 +31,6 @@ import {
 } from 'utils/formEnumFields';
 import dayjs from 'dayjs';
 import DropDownButton from 'shared-components/DropDownButton/DropDownButton';
-import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { InterfaceMemberDetailProps } from 'types/AdminPortal/MemberDetail/interface';
 import { resolveAvatarFile } from './resolveAvatarFile';
 import { phoneFieldConfigs, addressFieldConfigs } from './fieldConfigs';

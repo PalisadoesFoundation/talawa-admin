@@ -21,7 +21,7 @@ import { useParams } from 'react-router';
 import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
-import type { InterfaceEvent } from 'types/Event/interface';
+import type { InterfaceEvent, IEventFormInput } from 'types/Event/interface';
 import { mapCreateEventInputToMutationInput } from 'types/Event/createEventInput';
 import styles from './Events.module.css';
 import EventForm, {
@@ -31,7 +31,6 @@ import type {
   IEventFormSubmitPayload,
   IEventFormValues,
 } from 'types/EventForm/interface';
-import type { IEventFormInput } from 'types/Event/interface';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { Button } from 'shared-components/Button';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';

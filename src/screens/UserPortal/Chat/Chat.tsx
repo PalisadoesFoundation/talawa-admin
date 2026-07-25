@@ -31,19 +31,14 @@ import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import DropDownButton from 'shared-components/DropDownButton';
-import Button from 'shared-components/Button';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
-import ContactCard from 'components/UserPortal/ContactCard/ContactCard';
 import ChatRoom from 'components/UserPortal/ChatRoom/ChatRoom';
 import AddIcon from '@mui/icons-material/Add';
 import styles from './Chat.module.css';
 import { CHATS_LIST, UNREAD_CHATS } from 'GraphQl/Queries/PlugInQueries';
 import CreateGroupChat from '../../../components/UserPortal/CreateGroupChat/CreateGroupChat';
 import CreateDirectChat from 'components/UserPortal/CreateDirectChat/CreateDirectChat';
-import type {
-  Chat as ChatType,
-  InterfaceContactCardProps,
-} from 'types/UserPortal/Chat/interface';
+import type { Chat as ChatType } from 'types/UserPortal/Chat/interface';
 
 export default function Chat(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userChat' });

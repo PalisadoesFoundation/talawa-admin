@@ -55,8 +55,6 @@ export const UserPortalNavigationBar = (
     showNotifications = defaults.showNotifications ?? true,
     showLanguageSelector = defaults.showLanguageSelector ?? true,
     showUserProfile = defaults.showUserProfile ?? true,
-    variant = defaults.variant ?? 'dark',
-    expandBreakpoint = defaults.expandBreakpoint ?? 'md',
     mobileLayout = defaults.mobileLayout ?? 'collapse',
     onLogout,
     onLanguageChange,
@@ -246,40 +244,6 @@ export const UserPortalNavigationBar = (
           styles={styles}
           PermIdentityIcon={PermIdentityIcon}
           testIdPrefix=""
-        />
-      </div>
-    </>
-  );
-
-  // Render mobile content
-  const renderMobileContent = (): JSX.Element => (
-    <>
-      {renderNavigationLinks()}
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'flex-end',
-        }}
-      >
-        <LanguageSelector
-          showLanguageSelector={showLanguageSelector}
-          testIdPrefix={'mobile'}
-          dropDirection={dropDirection}
-          handleLanguageChange={handleLanguageChange}
-          currentLanguageCode={currentLanguageCode}
-        />
-        {showNotifications && mode === 'user' && <NotificationIcon />}
-        <UserProfileDropdown
-          showUserProfile={showUserProfile}
-          dropDirection={dropDirection}
-          handleLogout={handleLogout}
-          finalUserName={finalUserName}
-          navigate={navigate}
-          tCommon={tCommon}
-          styles={styles}
-          PermIdentityIcon={PermIdentityIcon}
-          testIdPrefix={'mobile'}
         />
       </div>
     </>

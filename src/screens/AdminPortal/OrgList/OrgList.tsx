@@ -167,7 +167,7 @@ function OrgList(): JSX.Element {
   const [isLoading, setIsLoading] = useState(true);
   const [typedValue, setTypedValue] = useState('');
   const [filterName, setFilterName] = useState('');
-  const [sortingState, setSortingState] = useState({
+  const [sortingState] = useState({
     option: 'Latest',
     selectedOption: 'Latest',
   });
@@ -361,14 +361,6 @@ function OrgList(): JSX.Element {
     setSearchByName(val);
     setFilterName(val);
     refetchOrgs({ filter: val });
-  };
-
-  const handleSortChange = (value: string | number): void => {
-    const option = String(value);
-    setSortingState({
-      option,
-      selectedOption: option,
-    });
   };
 
   const handleChangePage = (

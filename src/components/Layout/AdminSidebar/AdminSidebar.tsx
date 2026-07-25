@@ -20,9 +20,8 @@ import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
 import { sanitizeAvatarURL } from 'utils/sanitizeAvatar';
 import SignOut from 'components/SignOut/SignOut';
-import styles from './AdminSidebar.module.css';
 
-interface AdminSidebarProps {
+interface InterfaceAdminSidebarProps {
   collapsed: boolean;
   onToggleCollapse: () => void;
   mobileOpen: boolean;
@@ -42,7 +41,7 @@ export default function AdminSidebar({
   variant,
   orgName,
   avatarURL,
-}: AdminSidebarProps): React.ReactElement {
+}: InterfaceAdminSidebarProps): React.ReactElement {
   const location = useLocation();
   const navigate = useNavigate();
   const { orgId } = useParams();
