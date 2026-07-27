@@ -106,13 +106,7 @@ const OrganizationFundCampaign = (): JSX.Element => {
   if (campaignError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
-        <WarningAmberRounded
-          style={{
-            fontSize: 32,
-            color: 'var(--red-500, #ef4444)',
-            marginBottom: 12,
-          }}
-        />
+        <WarningAmberRounded className={styles.errorIcon} />
         <div className={styles.errorText}>{campaignError.message}</div>
       </div>
     );
@@ -230,15 +224,19 @@ const OrganizationFundCampaign = (): JSX.Element => {
                       {dayjs(c.endAt).format('MMM D, YYYY')}
                     </td>
                     <td data-testid="goalCell">
-                      <span style={{ fontWeight: 600 }}>
+                      <span className={styles.goalAmount}>
                         {symbol}
                         {goal.toLocaleString()}
                       </span>
                     </td>
-                    <td data-testid="progressCell" style={{ minWidth: 120 }}>
+                    <td
+                      data-testid="progressCell"
+                      className={styles.progressCell}
+                    >
                       <div className={styles.progressBarBg}>
                         <div
                           className={`${styles.progressBarFill} ${fillClass}`}
+                          //css-check-ignore-next-line
                           style={{ width: `${Math.min(pct, 100)}%` }}
                         />
                       </div>

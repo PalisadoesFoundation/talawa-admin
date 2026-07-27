@@ -147,7 +147,7 @@ const EventDashboardScreen = (): React.JSX.Element => {
         } `}
         data-testid="mainpageright"
       >
-        <div style={{ alignItems: 'center' }}>
+        <div className={styles.headerWrapper}>
           <div className={styles.flexOne}>
             <h1>{t('title')}</h1>
           </div>

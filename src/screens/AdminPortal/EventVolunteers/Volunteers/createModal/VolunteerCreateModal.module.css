@@ -78,3 +78,11 @@
   align-items: center;
   gap: var(--space-2);
 }
+
+.fullWidth {
+  width: 100%;
+}
+
+.inputWrapper {
+  width: 100%;
+}

@@ -25,3 +25,15 @@
   color: var(--gray-700, #374151);
   border: var(--border-1) solid var(--gray-100, #f3f4f6);
 }
+
+.volunteerContainerHeader {
+  justify-content: space-between;
+}
+
+.volunteerContainerRight {
+  margin-left: auto;
+}
+
+.iconMargin {
+  margin-right: 4px;
+}

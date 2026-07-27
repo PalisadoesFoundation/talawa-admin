@@ -508,7 +508,7 @@ const ItemModal: FC<IItemModalProps> = ({
         !actionItem.isInstanceException && (
           <ApplyToSelector applyTo={applyTo} onChange={setApplyTo} />
         )}
-      <div style={{ gap: 12 }}>
+      <div className={styles.gapContainer}>
         <Autocomplete
           className={`${styles.noOutline}`}
           data-testid="categorySelect"
@@ -570,7 +570,7 @@ const ItemModal: FC<IItemModalProps> = ({
           />
 
           {assignmentType === 'volunteer' && (
-            <div style={{ width: '100%' }}>
+            <div className={styles.fullWidth}>
               <Autocomplete
                 className={`${styles.noOutline}`}
                 data-testid="volunteerSelect"
@@ -631,7 +631,7 @@ const ItemModal: FC<IItemModalProps> = ({
           )}
 
           {assignmentType === 'volunteerGroup' && (
-            <div style={{ width: '100%' }}>
+            <div className={styles.fullWidth}>
               <Autocomplete
                 className={`${styles.noOutline}`}
                 data-testid="volunteerGroupSelect"

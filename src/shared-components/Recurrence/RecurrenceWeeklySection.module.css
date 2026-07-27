@@ -41,3 +41,12 @@
 .recurrenceDayButton.selected span {
   color: var(--surface, #fff);
 }
+
+.sectionContainer {
+  margin-bottom: 16px;
+}
+
+.daysGroup {
+  display: flex;
+  gap: 4px;
+}

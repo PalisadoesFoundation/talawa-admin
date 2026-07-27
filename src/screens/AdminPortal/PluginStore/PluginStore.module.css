@@ -333,3 +333,7 @@
   margin: 0;
   white-space: pre;
 }
+
+.fileRefInput {
+  display: none;
+}

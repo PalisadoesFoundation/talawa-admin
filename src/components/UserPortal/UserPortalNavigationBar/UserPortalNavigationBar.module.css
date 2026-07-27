@@ -30,3 +30,54 @@
 .testCustomPadding {
   padding: 10px;
 }
+
+.navLinksRow {
+  display: flex;
+  flex-grow: 1;
+  padding-right: 1rem;
+  padding-top: 0.25rem;
+  margin-right: auto;
+}
+
+.navLinkBtn {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+}
+
+.actionsRow {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.navBar {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+}
+
+.navInner {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.brandLink {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  margin-right: auto;
+}
+
+/* Used to spread custom styles onto the <nav> element */
+.navCustomStyles {
+  /* Custom styles passed via props are applied inline */
+}
+
+.linkIcon {
+  margin-right: 0.5 rem;
+}

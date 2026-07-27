@@ -38,6 +38,8 @@
   grid-template-rows: auto;
   grid-gap: var(--space-4) var(--space-3-5);
   overflow: hidden;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
 .colAdvertisements {
@@ -45,6 +47,38 @@
   align-items: center;
   justify-content: space-between;
   padding: var(--space-3-75);
+}
+
+.contentWrapperAdvertisements {
+  margin-top: 1.5rem;
+}
+
+.tabsContainerAdvertisements {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.tabButtonAdvertisements {
+  padding: 8px 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.tabButtonActiveAdvertisements {
+  font-weight: bold;
+  border-bottom: 2px solid currentColor;
+}
+
+.tabButtonInactiveAdvertisements {
+  font-weight: normal;
+  border-bottom: none;
+}
+
+.tabPanelAdvertisements {
+  padding-top: 16px;
+  margin: 8px;
 }
 
 .listBoxAdvertisements {

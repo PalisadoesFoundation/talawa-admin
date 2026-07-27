@@ -22,6 +22,8 @@ import type { InterfaceFormFieldProps } from '../../../types/shared-components/A
  * />
  * ```
  */
+import styles from './FormField.module.css';
+
 export const FormField: React.FC<InterfaceFormFieldProps> = ({
   label,
   name,
@@ -44,13 +46,11 @@ export const FormField: React.FC<InterfaceFormFieldProps> = ({
   const describedBy = errorId || helperId || undefined;
 
   return (
-    <div style={{ marginBottom: '1rem' }}>
+    <div className={styles.formFieldGroup}>
       {label && (
         <label htmlFor={name}>
           {label}
-          {required && (
-            <span style={{ color: 'var(--red-500, #ef4444)' }}> *</span>
-          )}
+          {required && <span className={styles.requiredAsterisk}> *</span>}
         </label>
       )}
 
@@ -67,22 +67,14 @@ export const FormField: React.FC<InterfaceFormFieldProps> = ({
         aria-describedby={describedBy}
         data-testid={testId}
         data-cy={dataCy}
-        className="form-input"
-        style={
-          hasError ? { borderColor: 'var(--red-500, #ef4444)' } : undefined
-        }
+        className={`form-input ${hasError ? styles.inputError : ''}`.trim()}
       />
 
       {/* Error message with aria-live for screen reader announcements */}
       {hasError && (
         <div
           id={errorId}
-          style={{
-            display: 'block',
-            color: 'var(--red-500, #ef4444)',
-            fontSize: '0.875em',
-            marginTop: '0.25rem',
-          }}
+          className={styles.errorMessage}
           role={ariaLive ? 'status' : undefined}
           aria-live={ariaLive ? 'polite' : undefined}
         >
@@ -92,7 +84,7 @@ export const FormField: React.FC<InterfaceFormFieldProps> = ({
 
       {/* Helper text displayed when no error */}
       {helperText && !hasError && (
-        <small id={helperId} style={{ color: 'var(--gray-500, #6b7280)' }}>
+        <small id={helperId} className={styles.helperText}>
           {helperText}
         </small>
       )}

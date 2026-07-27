@@ -379,7 +379,7 @@ export default function GroupChatDetails({
                 variant="outline-danger"
                 size="sm"
                 aria-label={t('deleteChat')}
-                style={{ margin: '0 24px' }}
+                className={styles.deleteChatBtn}
                 onClick={async () => {
                   if (window.confirm(t('deleteChatConfirmation'))) {
                     try {
@@ -491,10 +491,7 @@ export default function GroupChatDetails({
           <h5>
             {chat.members?.edges?.length || 0} {t('members')}
           </h5>
-          <div
-            className={styles.memberList}
-            style={{ listStyle: 'none', padding: 0 }}
-          >
+          <div className={styles.memberList}>
             <div
               data-testid="addMembers"
               className={styles.listItem}

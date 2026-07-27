@@ -1,0 +1,24 @@
+.pageContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.buttonRow {
+  gap: 8px;
+}
+
+.flexRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.checkboxLabel {
+  margin-left: 6px;
+  cursor: pointer;
+}
+
+.marginBottom12 {
+  margin-bottom: 12px;
+}

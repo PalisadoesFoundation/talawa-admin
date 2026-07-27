@@ -37,26 +37,20 @@ import styles from './DashboardCardLoading.module.css';
 
 const DashBoardCardLoading = (): JSX.Element => {
   return (
-    <div style={{ borderRadius: '1rem', border: 'none' }} data-testid="Card">
+    <div className={styles.cardShell} data-testid="Card">
       <div className={styles.cardBody}>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <div style={{ flex: '0 0 33.33%' }}>
+        <div className={styles.cardContentRow}>
+          <div className={styles.iconColumn}>
             <div className={styles.iconWrapper}>
               <div className={styles.themeOverlay} />
             </div>
           </div>
-          <div style={{ flex: '0 0 66.67%' }} className={styles.textWrapper}>
+          <div className={`${styles.textWrapper} ${styles.textColumn}`}>
             <span
-              className={`${styles.primaryText} ${styles.shimmer1} shimmer`}
-              style={{
-                borderRadius: '0.25rem',
-                width: '75%',
-                marginBottom: '0.5rem',
-              }}
+              className={`${styles.primaryText} ${styles.shimmer1} ${styles.primaryShimmerOverride} shimmer`}
             />
             <span
-              className={`${styles.secondaryText} ${styles.shimmer2} shimmer`}
-              style={{ borderRadius: '0.25rem' }}
+              className={`${styles.secondaryText} ${styles.shimmer2} ${styles.secondaryShimmerOverride} shimmer`}
             />
           </div>
         </div>

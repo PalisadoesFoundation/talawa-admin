@@ -134,7 +134,7 @@ export const getPledgeColumns = ({
     header: labels.pledged,
     accessor: 'amount',
     render: (value, row) => (
-      <div style={{ justifyContent: 'center' }} data-testid="amountCell">
+      <div className={styles.centeredCell} data-testid="amountCell">
         {currencySymbols[row.currency as keyof typeof currencySymbols] || ''}
         {((value as number) ?? 0).toLocaleString('en-US')}
       </div>
@@ -149,7 +149,7 @@ export const getPledgeColumns = ({
     header: labels.donated,
     accessor: 'amount',
     render: (_value, row) => (
-      <div style={{ justifyContent: 'center' }} data-testid="paidCell">
+      <div className={styles.centeredCell} data-testid="paidCell">
         {currencySymbols[row.currency as keyof typeof currencySymbols]}0
       </div>
     ),

@@ -90,3 +90,23 @@
   overflow-y: auto;
   /* Handle content overflow */
 }
+
+.volunteerName {
+  align-items: center;
+}
+
+.requestTypeColumn {
+  flex-direction: column;
+}
+
+.requestTypeLabel {
+  font-weight: 600;
+}
+
+.requestTypeGroup {
+  color: var(--gray-500, #6b7280);
+}
+
+.errorHeading {
+  text-align: center;
+}

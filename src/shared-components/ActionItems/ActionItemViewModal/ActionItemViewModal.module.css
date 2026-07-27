@@ -28,3 +28,26 @@
 .noOutline:is(:hover, :active, .show):not(:focus-within) {
   outline: none;
 }
+
+.modalBody {
+  padding: 12px;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.gapContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.statusEventWrapper {
+  margin-left: auto;
+  align-items: flex-start;
+}
+
+.statusWrapper {
+  margin-bottom: 12px;
+}

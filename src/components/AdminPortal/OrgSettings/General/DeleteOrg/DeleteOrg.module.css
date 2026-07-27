@@ -77,3 +77,14 @@
 .btnConfirmDelete:hover {
   background: var(--red-600, #dc2626);
 }
+
+.deleteOrganization {
+  margin: 0px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--red-700, #b91c1c);
+}
+
+.longDelOrgMsg {
+  padding: 24px;
+}

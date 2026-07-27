@@ -162,8 +162,7 @@ const Notification: React.FC = () => {
                 </div>
                 <Link
                   to={notification.navigation || '#'}
-                  className="notif-content"
-                  style={{ textDecoration: 'none' }}
+                  className={`notif-content ${styles.notificationLinkInline}`}
                 >
                   <div className="notif-title">{notification.title}</div>
                   <div className="notif-desc">{notification.body}</div>

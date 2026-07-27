@@ -65,3 +65,11 @@
 .maxHeight120 {
   max-height: var(--space-14);
 }
+
+.centerText {
+  text-align: center;
+}
+
+.centeredCell {
+  justify-content: center;
+}

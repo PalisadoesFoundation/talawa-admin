@@ -143,10 +143,10 @@ function OrganizationTags(): JSX.Element {
 
   const showErrorMessage = (message: string): JSX.Element => {
     return (
-      <div className={styles.errorContainer + ' rounded-4 my-3'}>
+      <div className={`${styles.errorContainer} rounded-4 my-3`}>
         <div className={styles.errorMessage}>
           <WarningAmberRounded fontSize="large" className={styles.errorIcon} />
-          <h6 style={{ textAlign: 'center' }}>
+          <h6 className={styles.errorTitle}>
             {t('errorLoadingTagsData')}
             <br />
             {message}
@@ -175,14 +175,7 @@ function OrganizationTags(): JSX.Element {
         <div className="page-header-left">
           <h1 className="page-title">
             {t('tags')}{' '}
-            <span
-              style={{
-                fontSize: '16px',
-                fontWeight: 500,
-                color: 'var(--gray-400)',
-                marginLeft: '8px',
-              }}
-            >
+            <span className={styles.titleCount}>
               {userTagsList?.length ?? 0}
             </span>
           </h1>
@@ -298,14 +291,7 @@ function OrganizationTags(): JSX.Element {
                     <tbody>
                       {userTagsList.length === 0 ? (
                         <tr>
-                          <td
-                            colSpan={5}
-                            style={{
-                              textAlign: 'center',
-                              padding: '40px',
-                              color: 'var(--gray-400)',
-                            }}
-                          >
+                          <td colSpan={5} className={styles.emptyCell}>
                             {t('noTagsFound')}
                           </td>
                         </tr>
@@ -319,7 +305,7 @@ function OrganizationTags(): JSX.Element {
                                   e.preventDefault();
                                   redirectToManageTag(tag.id);
                                 }}
-                                style={{ color: 'var(--green-600)' }}
+                                className={styles.cellPrimaryLink}
                                 data-testid="tagName"
                               >
                                 {tag.name}
@@ -340,7 +326,7 @@ function OrganizationTags(): JSX.Element {
                                 : ''}
                             </td>
                             <td>
-                              <div style={{ display: 'flex', gap: '6px' }}>
+                              <div className={styles.actionBtns}>
                                 <button
                                   className="btn btn-sm btn-secondary"
                                   onClick={() => redirectToManageTag(tag.id)}

@@ -109,6 +109,8 @@
   overflow-y: auto;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE/Edge legacy */
+  list-style: none;
+  padding: 0;
 }
 
 .memberList::-webkit-scrollbar {
@@ -167,6 +169,10 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
+}
+
+.deleteChatBtn {
+  margin: 0 24px;
 }
 
 .headerGroupInfo {

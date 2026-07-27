@@ -175,12 +175,11 @@ export default function Donate(): JSX.Element {
               <input
                 id="donationAmountInput"
                 type="text"
-                className="form-input"
+                className={`form-input ${styles.fullWidthInput}`}
                 data-testid="donationAmount"
                 placeholder={t('amount')}
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                style={{ width: '100%' }}
               />
             </div>
           </div>
@@ -197,13 +196,7 @@ export default function Donate(): JSX.Element {
         {/* Right: Donation history */}
         <div className={styles.historyPanel}>
           {loading ? (
-            <div
-              style={{
-                textAlign: 'center',
-                padding: 32,
-                color: 'var(--gray-400)',
-              }}
-            >
+            <div className={styles.loading}>
               <HourglassBottomIcon /> {t('loading')}
             </div>
           ) : donations.length === 0 ? (
@@ -237,7 +230,7 @@ export default function Donate(): JSX.Element {
                   <tbody>
                     {donations.map((d) => (
                       <tr key={d._id} data-testid="donationCard">
-                        <td style={{ fontWeight: 500 }}>{d.nameOfUser}</td>
+                        <td className={styles.donationCard}>{d.nameOfUser}</td>
                         <td>${Number(d.amount).toLocaleString()}</td>
                         <td>{dayjs(d.updatedAt).format('MMM D, YYYY')}</td>
                       </tr>

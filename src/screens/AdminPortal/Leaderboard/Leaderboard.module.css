@@ -54,3 +54,7 @@
   margin-left: var(--space-6);
   cursor: pointer;
 }
+
+.errorHeading {
+  text-align: center;
+}

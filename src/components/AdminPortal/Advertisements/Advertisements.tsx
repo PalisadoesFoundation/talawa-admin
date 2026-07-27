@@ -196,11 +196,7 @@ export default function Advertisements(): JSX.Element {
       resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
       resetButtonText={tErrors('resetButton')}
     >
-      <div
-        data-testid="advertisements"
-        className={styles.rowAdvertisements}
-        style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}
-      >
+      <div data-testid="advertisements" className={styles.rowAdvertisements}>
         <div className={styles.containerAdvertisements}>
           {loading && (
             <LoadingState variant="spinner" isLoading={loading}>
@@ -242,46 +238,34 @@ export default function Advertisements(): JSX.Element {
               }
             />
           </div>
-          <div style={{ marginTop: '1.5rem' }}>
-            <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+          <div className={styles.contentWrapperAdvertisements}>
+            <div className={styles.tabsContainerAdvertisements}>
               <button
                 type="button"
                 onClick={() => handleTabClick('activeAds')}
-                style={{
-                  padding: '8px 16px',
-                  fontWeight: activeTab === 'activeAds' ? 'bold' : 'normal',
-                  borderBottom:
-                    activeTab === 'activeAds'
-                      ? '2px solid currentColor'
-                      : 'none',
-                  background: 'none',
-                  border: 'none',
-                  borderBottomWidth: activeTab === 'activeAds' ? '2px' : '0',
-                  borderBottomStyle: 'solid',
-                  cursor: 'pointer',
-                }}
+                className={`${styles.tabButtonAdvertisements} ${
+                  activeTab === 'activeAds'
+                    ? styles.tabButtonActiveAdvertisements
+                    : styles.tabButtonInactiveAdvertisements
+                }`}
               >
                 {t('activeAds')}
               </button>
               <button
                 type="button"
                 onClick={() => handleTabClick('archivedAds')}
-                style={{
-                  padding: '8px 16px',
-                  fontWeight: activeTab === 'archivedAds' ? 'bold' : 'normal',
-                  background: 'none',
-                  border: 'none',
-                  borderBottomWidth: activeTab === 'archivedAds' ? '2px' : '0',
-                  borderBottomStyle: 'solid',
-                  cursor: 'pointer',
-                }}
+                className={`${styles.tabButtonAdvertisements} ${
+                  activeTab === 'archivedAds'
+                    ? styles.tabButtonActiveAdvertisements
+                    : styles.tabButtonInactiveAdvertisements
+                }`}
               >
                 {t('archivedAds')}
               </button>
             </div>
 
             {activeTab === 'activeAds' && (
-              <div style={{ paddingTop: '16px', margin: '8px' }}>
+              <div className={styles.tabPanelAdvertisements}>
                 {activeAdvertisements.length === 0 ? (
                   <div className={styles.pMessageAdvertisement}>
                     {t('pMessage')}
@@ -315,7 +299,7 @@ export default function Advertisements(): JSX.Element {
             )}
 
             {activeTab === 'archivedAds' && (
-              <div style={{ paddingTop: '16px', margin: '8px' }}>
+              <div className={styles.tabPanelAdvertisements}>
                 {completedAdvertisements.length === 0 ? (
                   <div className={styles.pMessageAdvertisement}>
                     {t('pMessage')}

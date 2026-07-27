@@ -218,7 +218,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
     return (
       <div className={styles.message} data-testid="errorMsg">
         <WarningAmberRounded className={`${styles.icon} ${styles.iconLarge}`} />
-        <h6 style={{ textAlign: 'center' }}>
+        <h6 className={styles.centeredText}>
           {tErrors('errorLoading', { entity: 'Action Items' })}
         </h6>
       </div>
@@ -285,7 +285,10 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <div style={{ justifyContent: 'center' }} data-testid="categoryName">
+          <div
+            className={styles.centeredCellContent}
+            data-testid="categoryName"
+          >
             {params.row.category?.name || t('noCategory')}
           </div>
         );
@@ -378,7 +381,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <div style={{ alignItems: 'center' }}>
+          <div className={styles.checkboxCellContent}>
             <input
               type="checkbox"
               data-testid={`statusCheckbox${params.row.id}`}
@@ -413,7 +416,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
           inputTestId="searchBy"
           buttonTestId="searchBtn"
         />
-        <div style={{ gap: 12 }}>
+        <div className={styles.controlsGroup}>
           <SortingButton
             title={tCommon('searchBy')}
             sortingOptions={[

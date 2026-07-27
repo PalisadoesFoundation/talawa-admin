@@ -42,3 +42,28 @@
   background-color: var(--green-400, #4ade80);
   color: #000;
 }
+
+.dateStrip0 {
+  background: linear-gradient(135deg, #3ecf8e, #15803d);
+}
+
+.dateStrip1 {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+.dateStrip2 {
+  background: linear-gradient(135deg, #a855f7, #7c3aed);
+}
+
+.dateStrip3 {
+  background: linear-gradient(135deg, #f97316, #ea580c);
+}
+
+.dateStrip4 {
+  background: linear-gradient(135deg, #6b7280, #4b5563);
+}
+
+.attendeeIcon {
+  vertical-align: -2px;
+  margin-right: 2px;
+}

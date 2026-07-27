@@ -166,7 +166,7 @@ function EventAttendance(): JSX.Element {
         sortable: false,
         filterable: false,
         renderCell: (params) => (
-          <div style={{ alignItems: 'center' }}>
+          <div className={styles.membernameContainer}>
             <ProfileAvatarDisplay
               imageUrl={params.row.avatarURL}
               fallbackName={params.row.name || t('unknownMember')}
@@ -206,17 +206,7 @@ function EventAttendance(): JSX.Element {
           <Tooltip
             componentsProps={{
               tooltip: {
-                sx: {
-                  backgroundColor: 'var(--surface, #fff)',
-                  fontSize: 'var(--font-size-3xl)',
-                  maxHeight: 'var(--space-16)',
-                  overflowY: 'scroll',
-                  scrollbarColor: 'white',
-                  border: 'var(--primary-border-solid)',
-                  borderRadius: 'var(--radius-md)',
-                  boxShadow:
-                    'var(--shadow-offset-sm) var(--shadow-blur-md) var(--shadow-spread-xs) rgba(var(--color-black), 0.1)',
-                },
+                className: styles.tooltip,
               },
             }}
             title={
@@ -282,7 +272,7 @@ function EventAttendance(): JSX.Element {
         memberData={filteredAttendees}
         t={t}
       />
-      <div style={{ alignItems: 'center' }}>
+      <div className={styles.topControlsWrapper}>
         <Button
           className={`border-1 text-success ${styles.createButton}`}
           onClick={showModal}
@@ -290,7 +280,7 @@ function EventAttendance(): JSX.Element {
         >
           {t('historical_statistics')}
         </Button>
-        <div style={{ alignItems: 'center' }}>
+        <div className={styles.searchAndFilterWrapper}>
           <div className={`${styles.input}`}>
             <SearchBar
               placeholder={t('Search member')}

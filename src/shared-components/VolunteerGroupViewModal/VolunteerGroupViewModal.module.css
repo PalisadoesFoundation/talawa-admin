@@ -87,3 +87,11 @@
   gap: var(--space-3);
   margin-bottom: var(--space-3);
 }
+
+.descMargin {
+  margin-bottom: 12px;
+}
+
+.tableHeaderCell {
+  font-weight: 600;
+}

@@ -11,3 +11,16 @@
 .paddedInput {
   padding-right: calc(40px + 0.75rem);
 }
+
+.inputWrapper {
+  display: flex;
+  position: relative;
+}
+
+.endAdornmentWrapper {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  padding-right: 0.5rem;
+}

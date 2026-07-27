@@ -92,3 +92,17 @@
   overflow-y: auto;
   /* Handle content overflow */
 }
+
+.centerText {
+  text-align: center;
+}
+
+.flexCenter {
+  display: flex;
+  justify-content: center;
+}
+
+.alignCenter {
+  display: flex;
+  align-items: center;
+}

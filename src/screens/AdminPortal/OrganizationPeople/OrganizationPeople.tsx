@@ -91,22 +91,12 @@ function getInitials(name: string): string {
 /**
  * Deterministic avatar color based on name string.
  */
-function getAvatarColor(name: string): {
-  background: string;
-  color: string;
-} {
-  const palette = [
-    { background: 'var(--green-50)', color: 'var(--green-700)' },
-    { background: 'var(--blue-50)', color: 'var(--blue-600)' },
-    { background: 'var(--orange-50)', color: 'var(--orange-500)' },
-    { background: 'var(--purple-50)', color: 'var(--purple-500)' },
-    { background: 'var(--red-50)', color: 'var(--red-600)' },
-  ];
+function getAvatarColorIndex(name: string): number {
   let hash = 0;
   for (let i = 0; i < name.length; i++) {
     hash = name.charCodeAt(i) + ((hash << 5) - hash);
   }
-  return palette[Math.abs(hash) % palette.length]!;
+  return Math.abs(hash) % 5;
 }
 
 function OrganizationPeople(): JSX.Element {
@@ -346,12 +336,11 @@ function OrganizationPeople(): JSX.Element {
           />
         </div>
         <select
-          className="form-input"
+          className={`form-input ${styles.sortSelect}`}
           aria-label={tCommon('sort')}
           value={STATE_TO_OPTION[state] ?? 'members'}
           onChange={handleSortChange}
           data-testid="sort-select"
-          style={{ width: 'auto', minWidth: '140px' }}
         >
           <option value="members">{tCommon('members')}</option>
           <option value="admin">{tCommon('admin')}</option>
@@ -397,7 +386,7 @@ function OrganizationPeople(): JSX.Element {
                     <th scope="col">Role</th>
                     <th scope="col">{tCommon('joinedOn')}</th>
                     <th scope="col">Status</th>
-                    <th scope="col" style={{ width: '60px' }}>
+                    <th scope="col" className={styles.actionCell}>
                       {tCommon('action')}
                     </th>
                   </tr>
@@ -407,7 +396,7 @@ function OrganizationPeople(): JSX.Element {
                     const formattedDate = node.createdAt
                       ? dateFormatter.format(new Date(node.createdAt))
                       : '-';
-                    const avatarColors = getAvatarColor(node.name);
+                    const colorIdx = getAvatarColorIndex(node.name);
 
                     return (
                       <tr
@@ -420,19 +409,16 @@ function OrganizationPeople(): JSX.Element {
                               <img
                                 src={node.avatarURL}
                                 alt={node.name}
-                                className={styles.memberAvatar}
+                                className={`${styles.memberAvatar} ${
+                                  styles[`avatarPalette${colorIdx}`]
+                                }`}
                                 crossOrigin="anonymous"
-                                style={{
-                                  background: avatarColors.background,
-                                }}
                               />
                             ) : (
                               <div
-                                className={styles.memberAvatar}
-                                style={{
-                                  background: avatarColors.background,
-                                  color: avatarColors.color,
-                                }}
+                                className={`${styles.memberAvatar} ${
+                                  styles[`avatarPalette${colorIdx}`]
+                                }`}
                               >
                                 {getInitials(node.name)}
                               </div>

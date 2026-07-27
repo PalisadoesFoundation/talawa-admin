@@ -592,10 +592,9 @@ function organizationEvents(): JSX.Element {
                 return (
                   <div className="event-card" key={event.id}>
                     <div
-                      className="event-date-strip"
-                      style={{
-                        background: dateStripColors[colorIndex],
-                      }}
+                      className={`event-date-strip ${styles.eventDateStrip} ${
+                        styles[`dateStrip${colorIndex}`]
+                      }`}
                     >
                       <div className="month">{monthLabel}</div>
                       <div className="day">{dayLabel}</div>
@@ -654,10 +653,7 @@ function organizationEvents(): JSX.Element {
                             strokeWidth="2"
                             strokeLinecap="round"
                             strokeLinejoin="round"
-                            style={{
-                              verticalAlign: '-2px',
-                              marginRight: '2px',
-                            }}
+                            className={styles.attendeeIcon}
                           >
                             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                             <circle cx="9" cy="7" r="4" />

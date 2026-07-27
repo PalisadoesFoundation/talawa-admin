@@ -192,13 +192,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     return (
       <div className={styles.message}>
         <WarningAmberRounded fontSize="large" className={styles.icon} />
-        <h6
-          style={{
-            fontWeight: 600,
-            color: 'var(--red-500, #ef4444)',
-            textAlign: 'center',
-          }}
-        >
+        <h6 className={styles.errorMessage}>
           {t('errorLoadingOrganizationData')}
           <br />
           {`${error.message}`}
@@ -297,13 +291,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             </div>
           </div>
 
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-              marginTop: 8,
-            }}
-          >
+          <div className={styles.saveChangesBtnWrapper}>
             <Button
               className={styles.saveChangesBtn}
               value="savechanges"
@@ -311,7 +299,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               onClick={onSaveChangesClicked}
               disabled={isSaving}
             >
-              <SaveIcon style={{ width: 16, height: 16 }} />
+              <SaveIcon className={styles.saveIcon} />
               {isSaving ? tCommon('saving') : tCommon('saveChanges')}
             </Button>
           </div>

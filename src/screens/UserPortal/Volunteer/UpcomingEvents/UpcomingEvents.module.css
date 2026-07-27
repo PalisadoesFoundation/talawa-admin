@@ -44,3 +44,39 @@
 .volunteerIcon {
   margin-right: 4px;
 }
+
+.errorHeading {
+  text-align: center;
+}
+
+.flexGap4 {
+  gap: 4px;
+}
+
+.flexGap8 {
+  gap: 8px;
+}
+
+.flexGap12 {
+  gap: 12px;
+}
+
+.alignItemsCenter {
+  align-items: center;
+}
+
+.locationIcon {
+  margin-right: 4px;
+}
+
+.marginTop12 {
+  margin-top: 12px;
+}
+
+.fontWeight600 {
+  font-weight: 600;
+}
+
+.mutedText {
+  color: var(--gray-500, #6b7280);
+}

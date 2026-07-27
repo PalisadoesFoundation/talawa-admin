@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormFieldGroup } from './FormFieldGroup';
 import type { IFormTextFieldProps } from '../../types/FormFieldGroup/interface';
+import styles from './FormFieldGroup.module.css';
 
 /**
  * Renders a text input field within a FormFieldGroup for consistent styling and validation.
@@ -41,10 +42,7 @@ export const FormTextField: React.FC<IFormTextFieldProps> = ({
           }}
           disabled={disabled}
           data-testid={dataTestId}
-          className="form-input"
-          style={
-            isInvalid ? { borderColor: 'var(--red-500, #ef4444)' } : undefined
-          }
+          className={`form-input ${isInvalid ? styles.inputError : ''}`.trim()}
         />
       );
     }
@@ -59,10 +57,7 @@ export const FormTextField: React.FC<IFormTextFieldProps> = ({
         }}
         disabled={disabled}
         data-testid={dataTestId}
-        className="form-input"
-        style={
-          isInvalid ? { borderColor: 'var(--red-500, #ef4444)' } : undefined
-        }
+        className={`form-input ${isInvalid ? styles.inputError : ''}`.trim()}
         {...(props as React.InputHTMLAttributes<HTMLInputElement>)}
       />
     );
@@ -80,7 +75,7 @@ export const FormTextField: React.FC<IFormTextFieldProps> = ({
       className={className}
     >
       {startAdornment || endAdornment ? (
-        <div style={{ display: 'flex', alignItems: 'stretch' }}>
+        <div className={styles.adornmentGroup}>
           {startAdornment}
           {renderControl()}
           {endAdornment}

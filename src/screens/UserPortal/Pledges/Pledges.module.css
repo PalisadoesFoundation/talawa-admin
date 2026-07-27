@@ -137,3 +137,11 @@
 .uniformTableLayout tbody td:nth-child(5) {
   width: 14%;
 }
+
+.errorHeading {
+  text-align: center;
+}
+
+.searchBarContainer {
+  margin-bottom: 16px;
+}

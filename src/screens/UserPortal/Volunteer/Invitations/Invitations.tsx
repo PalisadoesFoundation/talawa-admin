@@ -148,7 +148,7 @@ const Invitations = (): JSX.Element => {
       <div className={`${styles.container} rounded-4 my-3`}>
         <div className={styles.message} data-testid="errorMsg">
           <WarningAmberRounded className={styles.errorIcon} />
-          <h6 style={{ textAlign: 'center' }}>
+          <h6 className={styles.errorHeading}>
             {tErrors('errorLoading', { entity: 'Volunteership Invitations' })}
           </h6>
         </div>
@@ -209,8 +209,8 @@ const Invitations = (): JSX.Element => {
       ) : (
         invitations.map((invite: InterfaceVolunteerMembership) => (
           <div className="p-4  rounded shadow-sm" key={invite.id}>
-            <div style={{ gap: 8 }}>
-              <div style={{ fontWeight: 600 }} data-testid="inviteSubject">
+            <div className={styles.flexGap8}>
+              <div className={styles.fontWeight600} data-testid="inviteSubject">
                 {invite.group && invite.group.id ? (
                   // Group invitation
                   <>
@@ -231,12 +231,12 @@ const Invitations = (): JSX.Element => {
                   </>
                 )}
               </div>
-              <div style={{ gap: 12 }}>
+              <div className={styles.flexGap12}>
                 {invite.group && invite.group.id && (
                   <>
                     <div>
                       <FaUserGroup className="text-secondary" />
-                      <span style={{ color: 'var(--gray-500, #6b7280)' }}>
+                      <span className={styles.mutedText}>
                         {t('group')}:
                       </span>{' '}
                       <span>{invite.group.name} </span>
@@ -246,15 +246,13 @@ const Invitations = (): JSX.Element => {
                 )}
                 <div>
                   <TbCalendarEvent className="text-secondary" size={20} />
-                  <span style={{ color: 'var(--gray-500, #6b7280)' }}>
-                    {t('event')}:
-                  </span>{' '}
+                  <span className={styles.mutedText}>{t('event')}:</span>{' '}
                   <span>{invite.event.name}</span>
                 </div>
                 |
                 <div>
                   <FaRegClock className="text-secondary" />
-                  <span style={{ color: 'var(--gray-500, #6b7280)' }}>
+                  <span className={styles.mutedText}>
                     {t('received')}:
                   </span>{' '}
                   {new Date(invite.createdAt).toLocaleString()}

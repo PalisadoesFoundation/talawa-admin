@@ -270,7 +270,7 @@ function ManageTag(): JSX.Element {
       <div className={`${styles.errorContainer} rounded-4 my-3`}>
         <div className={styles.errorMessage}>
           <WarningAmberRounded className={styles.errorIcon} />
-          <h6 style={{ textAlign: 'center' }}>
+          <h6 className={styles.errorHeading}>
             {t('errorLoadingAssignedMembers')}
           </h6>
         </div>
@@ -331,13 +331,8 @@ function ManageTag(): JSX.Element {
   return (
     <>
       <nav
-        className="breadcrumb"
+        className={`breadcrumb ${styles.breadcrumbNav}`}
         aria-label="Breadcrumb"
-        style={{
-          fontSize: '13px',
-          color: 'var(--gray-400)',
-          marginBottom: '8px',
-        }}
       >
         <a
           href="#"
@@ -346,7 +341,7 @@ function ManageTag(): JSX.Element {
             navigate(`/admin/orgtags/${orgId}`);
           }}
           data-testid="allTagsBtn"
-          style={{ color: 'var(--gray-400)' }}
+          className={styles.breadcrumbLink}
         >
           {t('tags')}
         </a>
@@ -355,7 +350,7 @@ function ManageTag(): JSX.Element {
             {' \u203A '}
             {tag._id === currentTagId ? (
               <span
-                style={{ color: 'var(--gray-700)' }}
+                className={styles.breadcrumbCurrent}
                 data-testid="redirectToManageTag"
                 data-text={tag.name}
               >
@@ -370,7 +365,7 @@ function ManageTag(): JSX.Element {
                 }}
                 data-testid="redirectToManageTag"
                 data-text={tag.name}
-                style={{ color: 'var(--gray-400)' }}
+                className={styles.breadcrumbLink}
               >
                 {tag.name}
               </a>
@@ -384,12 +379,7 @@ function ManageTag(): JSX.Element {
           <h1 className="page-title">
             {currentTagName || t('manageTag')}
             <button
-              className="btn-icon"
-              style={{
-                display: 'inline-flex',
-                verticalAlign: 'middle',
-                marginLeft: '8px',
-              }}
+              className={`btn-icon ${styles.editIconBtn}`}
               title={tCommon('edit')}
               onClick={editUserTagModal.open}
               data-testid="editUserTag"
@@ -449,7 +439,7 @@ function ManageTag(): JSX.Element {
                 aria-label={t('tagName') || 'Tag name'}
               />
             </div>
-            <div style={{ marginTop: '8px', display: 'flex', gap: '8px' }}>
+            <div className={styles.saveBtnWrapper}>
               <button
                 className="btn btn-primary"
                 onClick={() => {
@@ -467,7 +457,7 @@ function ManageTag(): JSX.Element {
                 {tCommon('save') || 'Save'}
               </button>
             </div>
-            <div style={{ marginTop: '8px', display: 'flex', gap: '8px' }}>
+            <div className={styles.assignBtnsWrapper}>
               <button
                 className="btn btn-primary btn-sm"
                 onClick={() => {
@@ -490,31 +480,9 @@ function ManageTag(): JSX.Element {
               </button>
             </div>
 
-            <div
-              className="danger-zone"
-              style={{
-                marginTop: '24px',
-                paddingTop: '20px',
-                borderTop: '1px solid var(--red-50)',
-              }}
-            >
-              <p
-                style={{
-                  fontSize: '13px',
-                  fontWeight: 600,
-                  color: 'var(--red-600)',
-                  marginBottom: '8px',
-                }}
-              >
-                Danger Zone
-              </p>
-              <p
-                style={{
-                  fontSize: '12px',
-                  color: 'var(--gray-500)',
-                  marginBottom: '12px',
-                }}
-              >
+            <div className={styles.dangerZone}>
+              <p className={styles.dangerZoneTitle}>Danger Zone</p>
+              <p className={styles.dangerZoneDesc}>
                 Deleting this tag will remove it from all assigned members. This
                 action cannot be undone.
               </p>
@@ -544,8 +512,8 @@ function ManageTag(): JSX.Element {
             </button>
           </div>
           <div className="card-body">
-            <div style={{ marginBottom: '14px' }}>
-              <div className="search-bar" style={{ width: '100%' }}>
+            <div className={styles.searchBarWrapper}>
+              <div className={`search-bar ${styles.searchBarFullWidth}`}>
                 <svg
                   aria-hidden="true"
                   className="search-icon"
@@ -591,14 +559,7 @@ function ManageTag(): JSX.Element {
                   scrollableTarget="manageTagScrollableDiv"
                 >
                   {userTagAssignedMembers.length === 0 ? (
-                    <div
-                      style={{
-                        padding: '20px',
-                        textAlign: 'center',
-                        color: 'var(--gray-400)',
-                        fontSize: '13px',
-                      }}
-                    >
+                    <div className={styles.emptyMembers}>
                       {t('noAssignedMembersFound')}
                     </div>
                   ) : (
@@ -616,44 +577,21 @@ function ManageTag(): JSX.Element {
                       return (
                         <div
                           key={member._id || index}
-                          className="member-row"
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '12px',
-                            padding: '10px 0',
-                            borderBottom:
-                              index < userTagAssignedMembers.length - 1
-                                ? '1px solid var(--gray-100)'
-                                : 'none',
-                          }}
+                          className={`member-row ${styles.memberRow} ${
+                            index < userTagAssignedMembers.length - 1
+                              ? styles.memberRowBorder
+                              : ''
+                          }`}
                         >
                           <div
-                            className="member-avatar"
-                            style={{
-                              width: '36px',
-                              height: '36px',
-                              borderRadius: '50%',
-                              background: colorSet.bg,
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              fontSize: '12px',
-                              fontWeight: 600,
-                              color: colorSet.color,
-                              flexShrink: 0,
-                            }}
+                            className={`${styles.memberAvatar} ${
+                              styles[`avatarColor${index % 5}`]
+                            }`}
                           >
                             {initials}
                           </div>
                           <span
-                            className="member-name"
-                            style={{
-                              flex: 1,
-                              fontSize: '13px',
-                              fontWeight: 500,
-                              color: 'var(--gray-900)',
-                            }}
+                            className={styles.memberNameText}
                             data-testid="memberName"
                           >
                             {fullName}

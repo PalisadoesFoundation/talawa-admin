@@ -140,18 +140,7 @@ export const CRUDModalTemplate: React.FC<InterfaceCRUDModalTemplateProps> = ({
       bodyClassName={styles.modalBody}
     >
       {error && (
-        <div
-          role="alert"
-          className={styles.errorAlert}
-          style={{
-            color: 'var(--red-500-text-emphasis)',
-            backgroundColor: 'var(--red-500-bg-subtle)',
-            borderColor: 'var(--red-500-border-subtle)',
-            padding: '0.75rem 1.25rem',
-            borderRadius: '0.375rem',
-            marginBottom: '1rem',
-          }}
-        >
+        <div role="alert" className={styles.errorAlert}>
           {error}
         </div>
       )}

@@ -129,6 +129,10 @@
   color: var(--red-500, #ef4444);
 }
 
+.errorIconWrapper {
+  padding: 0 12px;
+}
+
 /* Responsive styles */
 @media (max-height: 900px) {
   .profileContainer {

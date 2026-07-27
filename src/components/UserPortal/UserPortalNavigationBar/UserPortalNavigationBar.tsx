@@ -60,7 +60,6 @@ export const UserPortalNavigationBar = (
     onLanguageChange,
     onNavigation,
     className,
-    customStyles,
     userName,
   } = props;
 
@@ -171,15 +170,7 @@ export const UserPortalNavigationBar = (
     if (!navigationLinks || navigationLinks.length === 0) return null;
 
     return (
-      <nav
-        style={{
-          display: 'flex',
-          flexGrow: 1,
-          paddingRight: '1rem',
-          paddingTop: '0.25rem',
-          marginRight: 'auto',
-        }}
-      >
+      <nav className={styles.navLinksRow}>
         {navigationLinks.map((link: NavigationLink) => {
           const linkLabel = link.translationKey
             ? t(link.translationKey.split(':').pop() || link.translationKey)
@@ -189,24 +180,13 @@ export const UserPortalNavigationBar = (
             <button
               key={link.id}
               type="button"
-              className={
-                isLinkActive(link) ? styles.navLinkActive : styles.navLink
-              }
+              className={`${isLinkActive(link) ? styles.navLinkActive : styles.navLink} ${styles.navLinkBtn}`}
               onClick={async (): Promise<void> => {
                 await handleNavigation(link);
               }}
               data-testid={link.testId || `navigationLink-${link.id}`}
-              style={{
-                background: 'none',
-                border: 'none',
-                color: 'inherit',
-                cursor: 'pointer',
-                padding: '0.5rem 1rem',
-              }}
             >
-              // Thiis file is not being used anywhere and will be deleted in
-              upcomming PR.
-              {/* {link.icon && <link.icon style={{ marginRight: '0.5rem' }} />} */}
+              {link.icon && <link.icon className={styles.linkIcon} />}
               {linkLabel}
             </button>
           );
@@ -219,13 +199,7 @@ export const UserPortalNavigationBar = (
   const renderDesktopContent = (): JSX.Element => (
     <>
       {renderNavigationLinks()}
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'flex-end',
-        }}
-      >
+      <div className={styles.actionsRow}>
         <LanguageSelector
           showLanguageSelector={showLanguageSelector}
           testIdPrefix={''}
@@ -255,29 +229,15 @@ export const UserPortalNavigationBar = (
   // Render based on mobile layout
   if (mobileLayout === 'offcanvas') {
     return (
-      <nav
-        className={navbarClassName}
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          padding: '0.5rem 1rem',
-          ...customStyles,
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+      <nav className={`${navbarClassName} ${styles.navBar}`}>
+        <div className={styles.navInner}>
           <a
             href={homeLink}
             onClick={(e) => {
               e.preventDefault();
               handleBrandClick();
             }}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              textDecoration: 'none',
-              color: 'inherit',
-              marginRight: 'auto',
-            }}
+            className={styles.brandLink}
           >
             <img
               className={styles.talawaImage}
@@ -295,29 +255,15 @@ export const UserPortalNavigationBar = (
 
   // Collapse layout (default for user mode)
   return (
-    <nav
-      className={navbarClassName}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        padding: '0.5rem 1rem',
-        ...customStyles,
-      }}
-    >
-      <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+    <nav className={`${navbarClassName} ${styles.navBar}`}>
+      <div className={styles.navInner}>
         <a
           href={homeLink}
           onClick={(e) => {
             e.preventDefault();
             handleBrandClick();
           }}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            textDecoration: 'none',
-            color: 'inherit',
-            marginRight: 'auto',
-          }}
+          className={styles.brandLink}
         >
           <img
             className={styles.talawaImage}

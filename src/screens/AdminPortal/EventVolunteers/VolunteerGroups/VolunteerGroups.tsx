@@ -180,7 +180,7 @@ function VolunteerGroups(): JSX.Element {
           className={`${styles.icon} ${styles.iconLg}`}
           aria-hidden="true"
         />
-        <h6 style={{ textAlign: 'center' }}>
+        <h6 className={styles.centerText}>
           {tErrors('errorLoading', { entity: 'Volunteer Groups' })}
         </h6>
       </div>
@@ -199,7 +199,7 @@ function VolunteerGroups(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <div style={{ justifyContent: 'center' }} data-testid="groupName">
+          <div className={styles.flexCenter} data-testid="groupName">
             {params.row.name}
           </div>
         );
@@ -217,7 +217,7 @@ function VolunteerGroups(): JSX.Element {
       renderCell: (params: GridCellParams) => {
         const { id, name, avatarURL } = params.row.leader;
         return (
-          <div style={{ alignItems: 'center' }} data-testid="assigneeName">
+          <div className={styles.alignCenter} data-testid="assigneeName">
             {avatarURL ? (
               <img
                 src={avatarURL}
@@ -251,7 +251,7 @@ function VolunteerGroups(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <div style={{ justifyContent: 'center' }}>
+          <div className={styles.flexCenter}>
             {params.row.volunteers.length}{' '}
           </div>
         );

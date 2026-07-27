@@ -142,7 +142,7 @@ function SubTags(): JSX.Element {
       <div className={`${styles.errorContainer} rounded-4 my-3`}>
         <div className={styles.errorMessage}>
           <WarningAmberRounded className={styles.errorIcon} />
-          <h6 style={{ textAlign: 'center' }}>{tCommon('errorOccured')}</h6>
+          <h6 className={styles.errorHeading}>{tCommon('errorOccured')}</h6>
         </div>
       </div>
     );
@@ -219,14 +219,7 @@ function SubTags(): JSX.Element {
         <div className="page-header-left">
           <h1 className="page-title">
             {parentTagName} &mdash; {t('subTags')}{' '}
-            <span
-              style={{
-                fontSize: '16px',
-                fontWeight: 500,
-                color: 'var(--gray-400)',
-                marginLeft: '8px',
-              }}
-            >
+            <span className={styles.titleCount}>
               {subTagsList?.length ?? 0}
             </span>
           </h1>
@@ -343,14 +336,7 @@ function SubTags(): JSX.Element {
                   <tbody>
                     {subTagsList.length === 0 ? (
                       <tr>
-                        <td
-                          colSpan={5}
-                          style={{
-                            textAlign: 'center',
-                            padding: '40px',
-                            color: 'var(--gray-400)',
-                          }}
-                        >
+                        <td colSpan={5} className={styles.emptyCell}>
                           {t('noTagsFound')}
                         </td>
                       </tr>
@@ -367,7 +353,7 @@ function SubTags(): JSX.Element {
                                   e.preventDefault();
                                   redirectToManageTag(subTag._id);
                                 }}
-                                style={{ color: 'var(--green-600)' }}
+                                className={styles.cellPrimaryLink}
                                 data-testid="tagName"
                               >
                                 {subTag.name}
@@ -388,7 +374,7 @@ function SubTags(): JSX.Element {
                                 : ''}
                             </td>
                             <td>
-                              <div style={{ display: 'flex', gap: '6px' }}>
+                              <div className={styles.actionBtns}>
                                 <button
                                   className="btn btn-sm btn-secondary"
                                   onClick={() =>

@@ -24,3 +24,29 @@
   text-decoration: none !important;
   color: inherit;
 }
+
+.navContainer {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+}
+
+.navInner {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.brandLink {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  margin-right: auto;
+}
+
+.navActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}

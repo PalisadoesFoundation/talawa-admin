@@ -191,11 +191,11 @@ export default function Chat(): JSX.Element {
     { bg: 'var(--red-50)', color: 'var(--red-500)' },
   ];
 
-  const getAvatarColor = (id: string) => {
+  const getAvatarColorIndex = (id: string) => {
     let hash = 0;
     for (let i = 0; i < id.length; i++)
       hash = id.charCodeAt(i) + ((hash << 5) - hash);
-    return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
+    return Math.abs(hash) % 5;
   };
 
   return (
@@ -216,7 +216,7 @@ export default function Chat(): JSX.Element {
                 icon={
                   <AddIcon
                     data-testid="new-chat-icon"
-                    style={{ fontSize: 18 }}
+                    className={styles.iconSm}
                   />
                 }
                 buttonLabel=" "
@@ -226,7 +226,7 @@ export default function Chat(): JSX.Element {
               />
             </div>
             <div className={styles.chatSearch}>
-              <span style={{ color: 'var(--gray-400)', fontSize: 14 }}>
+              <span className={styles.searchIconWrapper}>
                 <svg
                   viewBox="0 0 24 24"
                   width="16"
@@ -273,7 +273,7 @@ export default function Chat(): JSX.Element {
           <div className={styles.chatList} data-testid="contactCardContainer">
             {chatsListLoading ? (
               <div className={styles.loadingContainer}>
-                <HourglassBottomIcon style={{ fontSize: 18 }} />
+                <HourglassBottomIcon className={styles.iconSm} />
                 <span>{tCommon('loading')}</span>
               </div>
             ) : chats.length === 0 ? (
@@ -286,7 +286,7 @@ export default function Chat(): JSX.Element {
                 const isUnread = (chat.unreadMessagesCount ?? 0) > 0;
                 const chatName = chat.name || 'Chat';
                 const initials = getInitials(chatName);
-                const avatarColor = getAvatarColor(chat.id);
+                const colorIdx = getAvatarColorIndex(chat.id);
 
                 return (
                   <button
@@ -296,22 +296,15 @@ export default function Chat(): JSX.Element {
                     data-testid={`chat-item-${chat.id}`}
                   >
                     <div
-                      className={styles.chatItemAvatar}
-                      style={{
-                        background: avatarColor.bg,
-                        color: avatarColor.color,
-                      }}
+                      className={`${styles.chatItemAvatar} ${
+                        styles[`avatarBg${colorIdx}`]
+                      }`}
                     >
                       {chat.avatarURL ? (
                         <img
                           src={chat.avatarURL}
                           alt=""
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                            borderRadius: '50%',
-                            objectFit: 'cover',
-                          }}
+                          className={styles.avatarImage}
                         />
                       ) : (
                         initials

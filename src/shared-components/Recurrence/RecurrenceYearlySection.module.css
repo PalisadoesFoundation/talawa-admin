@@ -1,0 +1,11 @@
+.sectionContainer {
+  margin-bottom: 16px;
+}
+
+.optionsMargin {
+  margin: 0 8px;
+}
+
+.yearlyDate {
+  color: var(--gray-500, #6b7280);
+}

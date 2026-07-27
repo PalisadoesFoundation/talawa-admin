@@ -45,3 +45,30 @@
   font-size: 1.75rem;
   color: var(--primaryText-color, #000000);
 }
+
+.profileCard {
+  border: none;
+  border-radius: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.profileRow {
+  display: flex;
+  margin-bottom: 0.5rem;
+}
+
+.flexRow {
+  display: flex;
+}
+
+.flexRowAlignEnd {
+  display: flex;
+  align-items: flex-end;
+}
+
+.copyLinkContainer {
+  margin-top: 1.5rem;
+  margin-bottom: 0.25rem;
+  display: flex;
+  justify-content: center;
+}

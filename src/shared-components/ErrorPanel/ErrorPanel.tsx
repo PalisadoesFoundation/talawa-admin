@@ -161,7 +161,7 @@ const ErrorPanel: React.FC<InterfaceErrorPanelProps> = ({
     <div className={containerClassName} role={role} {...ariaLiveProps}>
       <div className={styles.message} data-testid={testId}>
         <WarningAmberRounded className={styles.errorIcon} />
-        <h6 style={{ textAlign: 'center' }}>
+        <h6 className={styles.messageText}>
           {message}
           {displayErrorMessage && (
             <>
@@ -170,7 +170,7 @@ const ErrorPanel: React.FC<InterfaceErrorPanelProps> = ({
             </>
           )}
         </h6>
-        <div style={{ textAlign: 'center' }}>
+        <div className={styles.retryWrapper}>
           <Button
             variant="outline-danger"
             size="sm"

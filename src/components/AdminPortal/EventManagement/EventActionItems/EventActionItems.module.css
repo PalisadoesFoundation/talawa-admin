@@ -91,6 +91,25 @@
   flex-wrap: wrap;
 }
 
+.controlsGroup {
+  display: flex;
+  gap: 12px;
+}
+
+.centeredText {
+  text-align: center;
+}
+
+.centeredCellContent {
+  display: flex;
+  justify-content: center;
+}
+
+.checkboxCellContent {
+  display: flex;
+  align-items: center;
+}
+
 .createButton {
   display: inline-flex;
   align-items: center;

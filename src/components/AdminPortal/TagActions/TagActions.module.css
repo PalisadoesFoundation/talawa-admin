@@ -95,6 +95,26 @@
   cursor: pointer;
 }
 
+.noTagSelected {
+  color: var(--gray-400, #9ca3af);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.searchWrapper {
+  margin-top: 12px;
+}
+
+.ancestorTagBreadcrumb {
+  margin: 0;
+}
+
+.noTagsFound {
+  color: var(--gray-400, #9ca3af);
+  margin: 0 auto;
+  text-align: center;
+}
+
 .subtagsScrollableDiv {
   max-height: var(--space-20);
   overflow: auto;

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import type { InterfaceFormFieldGroupProps } from '../../types/FormFieldGroup/interface';
+import styles from './FormFieldGroup.module.css';
 
 /**
  * Renders a grouped form field with label, help text, error, and children elements.
@@ -33,37 +34,13 @@ export const FormFieldGroup: React.FC<
     return (
       <>
         {label && !hideLabel && (
-          <label
-            htmlFor={effectiveInputId}
-            style={{
-              position: 'absolute',
-              width: '1px',
-              height: '1px',
-              padding: 0,
-              margin: '-1px',
-              overflow: 'hidden',
-              clip: 'rect(0,0,0,0)',
-              whiteSpace: 'nowrap',
-              borderWidth: 0,
-            }}
-          >
+          <label htmlFor={effectiveInputId} className={styles.srOnly}>
             {label}
             {required && <span aria-label={tCommon('required')}>*</span>}
           </label>
         )}
         {children}
-        {showError && (
-          <div
-            style={{
-              display: 'block',
-              color: 'var(--red-500, #ef4444)',
-              fontSize: '0.875em',
-              marginTop: '0.25rem',
-            }}
-          >
-            {error}
-          </div>
-        )}
+        {showError && <div className={styles.errorText}>{error}</div>}
       </>
     );
   }
@@ -72,23 +49,10 @@ export const FormFieldGroup: React.FC<
     <div className={className}>
       <label
         htmlFor={effectiveInputId}
-        className={labelClassName || undefined}
-        style={
-          hideLabel
-            ? {
-                position: 'absolute',
-                width: '1px',
-                height: '1px',
-                padding: 0,
-                margin: '-1px',
-                overflow: 'hidden',
-                clip: 'rect(0,0,0,0)',
-                whiteSpace: 'nowrap',
-                borderWidth: 0,
-              }
-            : disabled
-              ? { opacity: 0.5 }
-              : undefined
+        className={
+          `${labelClassName || ''} ${
+            hideLabel ? styles.srOnly : disabled ? styles.disabledLabel : ''
+          }`.trim() || undefined
         }
       >
         {label}
@@ -98,24 +62,13 @@ export const FormFieldGroup: React.FC<
       {children}
 
       {helpText && !showError && (
-        <small
-          id={`${effectiveInputId}-help`}
-          style={{ color: 'var(--gray-500, #6b7280)' }}
-        >
+        <small id={`${effectiveInputId}-help`} className={styles.helpText}>
           {helpText}
         </small>
       )}
 
       {showError && (
-        <div
-          id={`${effectiveInputId}-error`}
-          style={{
-            display: 'block',
-            color: 'var(--red-500, #ef4444)',
-            fontSize: '0.875em',
-            marginTop: '0.25rem',
-          }}
-        >
+        <div id={`${effectiveInputId}-error`} className={styles.errorText}>
           {error}
         </div>
       )}

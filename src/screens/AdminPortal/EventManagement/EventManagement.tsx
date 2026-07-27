@@ -11,6 +11,7 @@ import EventAgenda from 'components/AdminPortal/EventManagement/EventAgenda/Even
 import useLocalStorage from 'utils/useLocalstorage';
 import EventAttendance from 'components/AdminPortal/EventManagement/EventAttendance/Attendance/EventAttendance';
 import EventRegistrants from 'components/AdminPortal/EventManagement/EventRegistrant/EventRegistrants';
+import styles from './EventManagement.module.css';
 
 type TabOptions =
   | 'dashboard'
@@ -139,7 +140,7 @@ const EventManagement = (): JSX.Element => {
       </div>
 
       {/* Tab content */}
-      <div style={{ marginTop: 4 }}>{currentTab?.component}</div>
+      <div className={styles.tabContent}>{currentTab?.component}</div>
     </div>
   );
 };

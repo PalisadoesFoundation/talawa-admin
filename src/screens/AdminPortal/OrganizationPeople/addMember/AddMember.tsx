@@ -452,7 +452,7 @@ function AddMember({
         }
         data-testid="addNewUserModal"
       >
-        <div style={{ margin: '12px 0' }}>
+        <div className={styles.createModalBody}>
           <div>
             <div>
               <h6>{translateAddMember('addMember.enterName')}</h6>

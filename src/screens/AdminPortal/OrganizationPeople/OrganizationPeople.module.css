@@ -129,3 +129,37 @@
   text-align: center;
   color: var(--red-500);
 }
+
+.sortSelect {
+  width: auto;
+  min-width: 140px;
+}
+
+.actionCell {
+  width: 60px;
+}
+
+.avatarPalette0 {
+  background: var(--green-50);
+  color: var(--green-700);
+}
+
+.avatarPalette1 {
+  background: var(--blue-50);
+  color: var(--blue-600);
+}
+
+.avatarPalette2 {
+  background: var(--orange-50);
+  color: var(--orange-500);
+}
+
+.avatarPalette3 {
+  background: var(--purple-50);
+  color: var(--purple-500);
+}
+
+.avatarPalette4 {
+  background: var(--red-50);
+  color: var(--red-600);
+}

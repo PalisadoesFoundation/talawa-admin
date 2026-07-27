@@ -129,6 +129,34 @@
   border-radius: var(--radius-full);
 }
 
+.iconMarginRight {
+  margin-right: 8px;
+}
+
+.formPadding {
+  padding: 12px;
+}
+
+.requestsPadding {
+  padding: 0 12px;
+}
+
+.headerCell {
+  font-weight: 600;
+}
+
+.flexGap4 {
+  gap: 4px;
+}
+
+.flexGap8 {
+  gap: 8px;
+}
+
+.boldIcon {
+  font-weight: 600;
+}
+
 .avatarContainer {
   width: var(--space-7);
   height: var(--space-7);

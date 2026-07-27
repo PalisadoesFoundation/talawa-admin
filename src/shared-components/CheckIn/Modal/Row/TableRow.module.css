@@ -4,3 +4,8 @@
   margin: var(--space-3);
   padding: var(--space-3);
 }
+
+.actionButton {
+  margin: 8px;
+  padding: 8px;
+}

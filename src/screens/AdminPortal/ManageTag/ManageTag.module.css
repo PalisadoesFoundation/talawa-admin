@@ -204,3 +204,128 @@
   border-width: 2px;
   width: 85%;
 }
+
+.breadcrumbNav {
+  font-size: 13px;
+  color: var(--gray-400);
+  margin-bottom: 8px;
+}
+
+.breadcrumbLink {
+  color: var(--gray-400);
+}
+
+.breadcrumbCurrent {
+  color: var(--gray-700);
+}
+
+.editIconBtn {
+  display: inline-flex;
+  vertical-align: middle;
+  margin-left: 8px;
+}
+
+.saveBtnWrapper {
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+}
+
+.assignBtnsWrapper {
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+}
+
+.dangerZone {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--red-50);
+}
+
+.dangerZoneTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--red-600);
+  margin-bottom: 8px;
+}
+
+.dangerZoneDesc {
+  font-size: 12px;
+  color: var(--gray-500);
+  margin-bottom: 12px;
+}
+
+.searchBarWrapper {
+  margin-bottom: 14px;
+}
+
+.searchBarFullWidth {
+  width: 100%;
+}
+
+.memberRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+}
+
+.memberRowBorder {
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.memberAvatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.memberNameText {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--gray-900);
+}
+
+.emptyMembers {
+  padding: 20px;
+  text-align: center;
+  color: var(--gray-400);
+  font-size: 13px;
+}
+
+.errorHeading {
+  text-align: center;
+}
+
+.avatarColor0 {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.avatarColor1 {
+  background: #fce7f3;
+  color: #db2777;
+}
+
+.avatarColor2 {
+  background: #d1fae5;
+  color: #15803d;
+}
+
+.avatarColor3 {
+  background: #ede9fe;
+  color: #7c3aed;
+}
+
+.avatarColor4 {
+  background: #fef3c7;
+  color: #b45309;
+}

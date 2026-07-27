@@ -108,3 +108,17 @@
   text-align: center;
   font-size: 14px;
 }
+
+.errorIcon {
+  font-size: 32px;
+  color: var(--red-500, #ef4444);
+  margin-bottom: 12px;
+}
+
+.goalAmount {
+  font-weight: 600;
+}
+
+.progressCell {
+  min-width: 120px;
+}

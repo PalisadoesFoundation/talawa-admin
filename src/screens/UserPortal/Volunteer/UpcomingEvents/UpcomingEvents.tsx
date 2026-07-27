@@ -238,7 +238,7 @@ const UpcomingEvents = (): JSX.Element => {
           <span className={styles.errorIcon} aria-hidden="true">
             <WarningAmberRounded />
           </span>
-          <h6 style={{ textAlign: 'center' }}>
+          <h6 className={styles.errorHeading}>
             {tErrors('errorLoading', { entity: 'Events' })}
           </h6>
         </div>
@@ -290,7 +290,7 @@ const UpcomingEvents = (): JSX.Element => {
                   className={styles.titleContainerVolunteer}
                   data-testid={`detailContainer${index + 1}`}
                 >
-                  <div style={{ gap: 8 }}>
+                  <div className={styles.flexGap8}>
                     <h3 data-testid="eventTitle">{event.title}</h3>
                     {status.status !== 'none' && (
                       <StatusBadge
@@ -303,36 +303,36 @@ const UpcomingEvents = (): JSX.Element => {
                 </div>
               </AccordionSummary>
               <AccordionDetails className="gaflex-column">
-                <div style={{ alignItems: 'center' }}>
+                <div className={styles.alignItemsCenter}>
                   <div className="gaflex-column">
                     {event.description && (
-                      <div style={{ gap: 12 }}>
+                      <div className={styles.flexGap12}>
                         <span>{t('description')}: </span>
                         <span>{event.description}</span>
                       </div>
                     )}
-                    <div style={{ gap: 12 }}>
+                    <div className={styles.flexGap12}>
                       <span>
-                        <IoLocationOutline style={{ marginRight: 4 }} />
+                        <IoLocationOutline className={styles.locationIcon} />
                         {tCommon('location')}:{' '}
                         {event.location || t('notSpecified')}
                       </span>
                     </div>
                     {event.recurring ? (
-                      <div style={{ gap: 12 }}>
+                      <div className={styles.flexGap12}>
                         <span>
                           {t('recurrence')}: {event.recurrenceRule?.frequency}
                         </span>
                       </div>
                     ) : (
                       <>
-                        <div style={{ gap: 12 }}>
+                        <div className={styles.flexGap12}>
                           <span>
                             {t('startDate')}:{' '}
                             {new Date(event.startDate).toLocaleDateString()}
                           </span>
                         </div>
-                        <div style={{ gap: 12 }}>
+                        <div className={styles.flexGap12}>
                           <span>
                             {t('endDate')}:{' '}
                             {new Date(event.endDate).toLocaleDateString()}
@@ -342,7 +342,7 @@ const UpcomingEvents = (): JSX.Element => {
                     )}
                     {event.volunteerGroups &&
                       event.volunteerGroups.length > 0 && (
-                        <div style={{ gap: 12 }}>
+                        <div className={styles.flexGap12}>
                           <span>
                             {t('volunteerGroups')}:{' '}
                             {t('groupsAvailable', {
@@ -373,8 +373,10 @@ const UpcomingEvents = (): JSX.Element => {
                   </Button>
                 </div>
                 {event.volunteerGroups?.length > 0 && (
-                  <div style={{ marginTop: 12 }}>
-                    <h6 style={{ fontWeight: 600 }}>{t('volunteerGroups')}</h6>
+                  <div className={styles.marginTop12}>
+                    <h6 className={styles.fontWeight600}>
+                      {t('volunteerGroups')}
+                    </h6>
                     {event.volunteerGroups.map((group) => {
                       const groupStatus = getVolunteerStatus(
                         event._id,
@@ -383,9 +385,9 @@ const UpcomingEvents = (): JSX.Element => {
                       const GroupIcon = groupStatus.icon;
                       return (
                         <div key={group._id} className="border rounded">
-                          <div style={{ gap: 4 }}>
-                            <div style={{ gap: 8 }}>
-                              <span style={{ fontWeight: 600 }}>
+                          <div className={styles.flexGap4}>
+                            <div className={styles.flexGap8}>
+                              <span className={styles.fontWeight600}>
                                 {group.name}
                               </span>
                               {groupStatus.status !== 'none' && (
@@ -397,13 +399,11 @@ const UpcomingEvents = (): JSX.Element => {
                               )}
                             </div>
                             {group.description && (
-                              <span
-                                style={{ color: 'var(--gray-500, #6b7280)' }}
-                              >
+                              <span className={styles.mutedText}>
                                 {group.description}
                               </span>
                             )}
-                            <span style={{ color: 'var(--gray-500, #6b7280)' }}>
+                            <span className={styles.mutedText}>
                               {t('volunteersRequired')}:{' '}
                               {group.volunteersRequired}, {t('signedUp')}:{' '}
                               {group.volunteers.length}

@@ -58,6 +58,7 @@ import useVenueDeletion from '../../../hooks/useVenueDeletion';
 import { DeleteModal } from 'shared-components/CRUDModalTemplate';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 import SafeBreadcrumbs from 'shared-components/BreadcrumbsComponent/SafeBreadcrumbs';
+import styles from './OrganizationVenues.module.css';
 
 export const getVenueNameById = (
   venues: InterfaceQueryVenueListItem[],
@@ -240,14 +241,7 @@ function organizationVenues(props?: {
         <div className="page-header-left">
           <h1 className="page-title">
             {t('title')}{' '}
-            <span
-              className="badge badge-gray"
-              style={{
-                fontSize: '14px',
-                verticalAlign: 'middle',
-                marginLeft: '8px',
-              }}
-            >
+            <span className={`badge badge-gray ${styles.venueName}`}>
               {venues.length}
             </span>
           </h1>
@@ -264,58 +258,29 @@ function organizationVenues(props?: {
         </div>
       </div>
 
-      <div
-        className="toolbar"
-        style={{
-          display: 'flex',
-          gap: '12px',
-          alignItems: 'center',
-          marginBottom: '20px',
-        }}
-      >
+      <div className={`toolbar ${styles.toolbar}`}>
         <input
           type="text"
-          className="search-input"
+          className={`search-input ${styles.searchInput}`}
           placeholder={`${t('searchBy')} ${tCommon(searchBy)}`}
           value={searchTerm}
           onChange={(e) => handleSearch(e.target.value)}
           data-testid="searchInput"
-          style={{
-            flex: 1,
-            padding: '8px 12px',
-            border: '1px solid var(--gray-200)',
-            borderRadius: 'var(--radius-md)',
-            fontSize: '13px',
-          }}
         />
         <select
-          className="filter-dropdown"
+          className={`filter-dropdown ${styles.filterSelect}`}
           value={searchBy}
           onChange={(e) => handleSearchByChange(e.target.value)}
           data-testid="searchByButton-filter"
-          style={{
-            padding: '8px 12px',
-            border: '1px solid var(--gray-200)',
-            borderRadius: 'var(--radius-md)',
-            fontSize: '13px',
-            background: 'var(--surface)',
-          }}
         >
           <option value="name">{tCommon('name')}</option>
           <option value="desc">{tCommon('description')}</option>
         </select>
         <select
-          className="filter-dropdown"
+          className={`filter-dropdown ${styles.filterSelect}`}
           value={sortOrder}
           onChange={(e) => handleSortChange(e.target.value)}
           data-testid="sortVenues-filter"
-          style={{
-            padding: '8px 12px',
-            border: '1px solid var(--gray-200)',
-            borderRadius: 'var(--radius-md)',
-            fontSize: '13px',
-            background: 'var(--surface)',
-          }}
         >
           <option value="highest">{t('highestCapacity')}</option>
           <option value="lowest">{t('lowestCapacity')}</option>
@@ -332,11 +297,7 @@ function organizationVenues(props?: {
                     <img
                       src={venueItem.node.image}
                       alt={venueItem.node.name}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                      }}
+                      className={styles.venueImage}
                     />
                   ) : (
                     'Image Placeholder'

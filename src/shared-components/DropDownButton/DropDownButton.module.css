@@ -118,3 +118,20 @@
   opacity: 0.5;
   pointer-events: none;
 }
+
+.searchMenu {
+  position: absolute;
+  width: 100%;
+  z-index: 1000;
+}
+
+.menuPosition {
+  position: absolute;
+  z-index: 1000;
+}
+
+.emptyOptions {
+  padding: 0.5rem 1rem;
+  text-align: center;
+  color: var(--gray-500);
+}

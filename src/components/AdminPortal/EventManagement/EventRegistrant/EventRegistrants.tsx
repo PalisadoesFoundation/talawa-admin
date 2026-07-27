@@ -52,6 +52,7 @@ import DataTable from 'shared-components/DataTable/DataTable';
 import { IColumnDef } from 'types/shared-components/DataTable/interface';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import Button from 'shared-components/Button/Button';
+import styles from './EventRegistrants.module.css';
 
 function EventRegistrants(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'eventRegistrant' });
@@ -242,7 +243,7 @@ function EventRegistrants(): JSX.Element {
       render: (_value: unknown, row) => {
         const name = row.name || tCommon('unknownMember');
         return (
-          <div style={{ alignItems: 'center' }}>
+          <div className={styles.registrantRow}>
             <ProfileAvatarDisplay
               imageUrl={row.user?.avatarURL ?? undefined}
               fallbackName={row.name || 'N/A'}
@@ -253,7 +254,7 @@ function EventRegistrants(): JSX.Element {
               enableEnlarge={true}
               dataTestId="profile-avatar-display"
             />
-            <span style={{ marginLeft: 8 }}>{name}</span>
+            <span className={styles.registrantName}>{name}</span>
           </div>
         );
       },
@@ -309,7 +310,7 @@ function EventRegistrants(): JSX.Element {
       resetButtonText={tErrors('resetButton')}
     >
       <div>
-        <div style={{ alignItems: 'center' }}>
+        <div className={styles.checkInRow}>
           {eventId ? (
             <CheckInWrapper
               eventId={eventId.toString()}

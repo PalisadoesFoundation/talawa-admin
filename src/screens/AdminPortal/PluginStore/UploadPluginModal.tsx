@@ -258,7 +258,9 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
               </div>
               <pre className={styles.codeBlock}>{EXPECTED_STRUCTURE}</pre>
 
-              <div className={styles.structureLabel} style={{ marginTop: 16 }}>
+              <div
+                className={`${styles.structureLabel} ${styles.structureLabelMargin}`}
+              >
                 {t('requiredManifestFields')}
               </div>
               <pre className={styles.codeBlock}>{MANIFEST_EXAMPLE}</pre>

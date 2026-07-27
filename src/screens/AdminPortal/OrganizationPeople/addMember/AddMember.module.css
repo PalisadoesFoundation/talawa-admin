@@ -199,3 +199,7 @@
   justify-content: center;
   align-items: center;
 }
+
+.createModalBody {
+  margin: 12px 0;
+}

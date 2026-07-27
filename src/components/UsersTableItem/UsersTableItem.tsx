@@ -242,7 +242,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         }
       >
         {memberOrgs.length !== 0 && (
-          <div style={{ marginBottom: 16 }}>
+          <div className={styles.searchContainer}>
             <SearchBar
               placeholder={t('searchByOrgName')}
               value={searchByNameJoinedOrgs}
@@ -277,9 +277,8 @@ const UsersTableItem = (props: Props): JSX.Element => {
                 <div key={`org-joined-${org.id}`} className={styles.orgRow}>
                   <div className={styles.orgRowLeft}>
                     <div
-                      className={styles.orgAvatar}
+                      className={`${styles.orgAvatar} ${styles.clickable}`}
                       onClick={() => goToOrg(org.id)}
-                      style={{ cursor: 'pointer' }}
                     >
                       <ProfileAvatarDisplay
                         fallbackName={org.name}
@@ -291,9 +290,8 @@ const UsersTableItem = (props: Props): JSX.Element => {
                     </div>
                     <div className={styles.orgInfo}>
                       <div
-                        className={styles.orgName}
+                        className={`${styles.orgName} ${styles.clickable}`}
                         onClick={() => goToOrg(org.id)}
-                        style={{ cursor: 'pointer' }}
                         data-testid={`orgName${org.id}`}
                       >
                         {org.name}
@@ -308,12 +306,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                   </div>
                   <div className={styles.orgRowRight}>
                     <select
-                      className="form-input"
-                      style={{
-                        padding: '4px 10px',
-                        fontSize: 13,
-                        width: 'auto',
-                      }}
+                      className={`form-input ${styles.roleSelect}`}
                       onChange={changeRoleInOrg}
                       data-testid={`changeRoleInOrg${org.id}`}
                       disabled={isAdmin}
@@ -409,7 +402,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         }
       >
         {blockedOrgs.length !== 0 && (
-          <div style={{ display: 'flex', gap: 8 }}>
+          <div className={styles.flexRowGap}>
             <SearchBar
               placeholder={t('searchByOrgName')}
               value={searchByNameBlockedOrgs}

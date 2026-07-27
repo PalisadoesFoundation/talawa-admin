@@ -142,6 +142,7 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
   if (catError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
+        // css-check-ignore-next-line
         <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
         <div className={styles.errorText}>
           {tErrors('errorLoading', { entity: 'Action Item Categories' })}

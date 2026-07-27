@@ -1,0 +1,10 @@
+.radioOption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.radioLabel {
+  margin-left: 6px;
+  cursor: pointer;
+}

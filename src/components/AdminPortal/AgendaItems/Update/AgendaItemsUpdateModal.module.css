@@ -56,6 +56,40 @@
   border-bottom: var(--border-3) solid var(--gray-200, #e5e7eb);
 }
 
+.fullWidthFieldWrapper {
+  width: 100%;
+}
+
+.dualFieldRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 1rem;
+}
+
+.dualFieldColumn {
+  flex: 1 1 0;
+}
+
+.urlInputRow {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.urlInputField {
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 0.375rem;
+}
+
+.attachmentInput {
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  border: 1px solid #ced4da;
+  border-radius: 0.375rem;
+}
+
 .noOutline input {
   outline: none;
 }

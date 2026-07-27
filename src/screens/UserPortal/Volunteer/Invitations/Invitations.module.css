@@ -20,3 +20,23 @@
   content: '⚠️';
   margin-right: var(--space-3);
 }
+
+.errorHeading {
+  text-align: center;
+}
+
+.flexGap8 {
+  gap: 8px;
+}
+
+.flexGap12 {
+  gap: 12px;
+}
+
+.fontWeight600 {
+  font-weight: 600;
+}
+
+.mutedText {
+  color: var(--gray-500, #6b7280);
+}

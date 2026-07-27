@@ -80,8 +80,7 @@ const TimePicker: React.FC<InterfaceTimePickerProps> = ({
 
                 return (
                   <div
-                    className={`${styles.fullWidth} ${textFieldClassName || ''}`}
-                    style={{ display: 'flex', position: 'relative' }}
+                    className={`${styles.fullWidth} ${styles.inputWrapper} ${textFieldClassName || ''}`}
                   >
                     <input
                       {...inputProps}
@@ -95,15 +94,7 @@ const TimePicker: React.FC<InterfaceTimePickerProps> = ({
                       }`.trim()}
                     />
                     {InputProps?.endAdornment && (
-                      <div
-                        style={{
-                          position: 'absolute',
-                          right: 0,
-                          top: '50%',
-                          transform: 'translateY(-50%)',
-                          paddingRight: '0.5rem',
-                        }}
-                      >
+                      <div className={styles.endAdornmentWrapper}>
                         {InputProps.endAdornment}
                       </div>
                     )}

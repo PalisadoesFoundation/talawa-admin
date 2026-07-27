@@ -333,7 +333,7 @@ export default function PluginStore() {
               ref={fileRef}
               type="file"
               accept=".zip"
-              style={{ display: 'none' }}
+              className={styles.fileRefInput}
               onChange={handleFileSelect}
             />
 

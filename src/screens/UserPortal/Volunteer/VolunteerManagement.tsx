@@ -43,19 +43,19 @@ import styles from './VolunteerManagement.module.css';
 const volunteerDashboardTabs: { value: TabOptions; icon: JSX.Element }[] = [
   {
     value: 'upcomingEvents',
-    icon: <TbCalendarEvent size={21} style={{ marginRight: '0.5rem' }} />,
+    icon: <TbCalendarEvent size={21} className={styles.tabIcon} />,
   },
   {
     value: 'invitations',
-    icon: <FaRegEnvelopeOpen size={18} style={{ marginRight: '0.5rem' }} />,
+    icon: <FaRegEnvelopeOpen size={18} className={styles.tabIcon} />,
   },
   {
     value: 'actions',
-    icon: <FaTasks size={18} style={{ marginRight: '0.5rem' }} />,
+    icon: <FaTasks size={18} className={styles.tabIcon} />,
   },
   {
     value: 'groups',
-    icon: <FaUserGroup size={18} style={{ marginRight: '0.5rem' }} />,
+    icon: <FaUserGroup size={18} className={styles.tabIcon} />,
   },
 ];
 

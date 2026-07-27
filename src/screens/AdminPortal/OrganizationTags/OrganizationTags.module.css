@@ -122,6 +122,32 @@
   box-shadow: none;
 }
 
+.titleCount {
+  font-size: '16px';
+  font-weight: 500;
+  color: 'var(--gray-400)';
+  margin-left: '8px';
+}
+
+.errorTitle {
+  text-align: center;
+}
+
+.cellPrimaryLink {
+  color: var(--green-600);
+}
+
+.emptyCell {
+  text-align: center;
+  padding: 40px;
+  color: var(--gray-400);
+}
+
+.actionBtns {
+  display: flex;
+  gap: 6px;
+}
+
 .createButton {
   background-color: var(--surface);
   color: var(--gray-900);
