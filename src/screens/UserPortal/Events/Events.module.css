@@ -44,23 +44,23 @@
 }
 
 .dateStrip0 {
-  background: linear-gradient(135deg, #3ecf8e, #15803d);
+  background: linear-gradient(135deg, var(--green-500), var(--green-700));
 }
 
 .dateStrip1 {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  background: linear-gradient(135deg, var(--blue-500), var(--blue-600));
 }
 
 .dateStrip2 {
-  background: linear-gradient(135deg, #a855f7, #7c3aed);
+  background: linear-gradient(135deg, var(--purple-500), var(--purple-600));
 }
 
 .dateStrip3 {
-  background: linear-gradient(135deg, #f97316, #ea580c);
+  background: linear-gradient(135deg, var(--orange-500), var(--orange-600));
 }
 
 .dateStrip4 {
-  background: linear-gradient(135deg, #6b7280, #4b5563);
+  background: linear-gradient(135deg, var(--gray-500), var(--gray-600));
 }
 
 .attendeeIcon {

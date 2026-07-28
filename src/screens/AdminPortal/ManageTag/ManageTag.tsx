@@ -311,14 +311,6 @@ function ManageTag(): JSX.Element {
       ?.hasNextPage,
   );
 
-  const avatarColors = [
-    { bg: '#dbeafe', color: '#2563eb' },
-    { bg: '#fce7f3', color: '#db2777' },
-    { bg: '#d1fae5', color: '#15803d' },
-    { bg: '#ede9fe', color: '#7c3aed' },
-    { bg: '#fef3c7', color: '#b45309' },
-  ];
-
   const getInitials = (
     firstName?: string | null,
     lastName?: string | null,
@@ -564,8 +556,6 @@ function ManageTag(): JSX.Element {
                     </div>
                   ) : (
                     userTagAssignedMembers.map((member, index) => {
-                      const colorSet =
-                        avatarColors[index % avatarColors.length];
                       const initials = getInitials(
                         member.firstName,
                         member.lastName,

@@ -266,15 +266,6 @@ export default function Events(): JSX.Element {
     }
   };
 
-  // Color palette for card date strips
-  const dateStripColors = [
-    'linear-gradient(135deg, #3ecf8e, #15803d)',
-    'linear-gradient(135deg, #3b82f6, #2563eb)',
-    'linear-gradient(135deg, #a855f7, #7c3aed)',
-    'linear-gradient(135deg, #f97316, #ea580c)',
-    'linear-gradient(135deg, #6b7280, #4b5563)',
-  ];
-
   return (
     <>
       <div data-testid="events-screen">
@@ -405,7 +396,7 @@ export default function Events(): JSX.Element {
                 <div className="event-card" key={event.id}>
                   <div
                     className={`event-date-strip ${
-                      styles[`dateStrip${index % dateStripColors.length}`]
+                      styles[`dateStrip${index % 5}`]
                     }`}
                   >
                     <div className="month">{monthLabel}</div>

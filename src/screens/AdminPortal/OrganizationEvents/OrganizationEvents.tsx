@@ -433,15 +433,6 @@ function organizationEvents(): JSX.Element {
     }
   }, [eventDataError, orgDataError]);
 
-  // Color palettes for event date strips
-  const dateStripColors = [
-    'linear-gradient(135deg, #3ecf8e, #15803d)',
-    'linear-gradient(135deg, #3b82f6, #2563eb)',
-    'linear-gradient(135deg, #a855f7, #7c3aed)',
-    'linear-gradient(135deg, #f97316, #ea580c)',
-    'linear-gradient(135deg, #6b7280, #4b5563)',
-  ];
-
   return (
     <LoadingState isLoading={orgLoading} variant="spinner" size="lg">
       <>
@@ -584,7 +575,7 @@ function organizationEvents(): JSX.Element {
                     : start
                       ? start.format('MMM D, YYYY')
                       : '';
-                const colorIndex = index % dateStripColors.length;
+                const colorIndex = index % 5;
                 const attendeeCount = event.attendees?.length ?? 0;
                 const isUpcoming =
                   start && start.isAfter(dayjs()) ? true : false;

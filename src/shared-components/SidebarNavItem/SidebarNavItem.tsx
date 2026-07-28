@@ -70,7 +70,7 @@ const SidebarNavItem = ({
           {
             style: {
               fontSize: resolvedSize,
-              color: isActive ? 'var(--gray-900, #111827)' : 'var(--gray-500)',
+              color: isActive ? 'var(--gray-900)' : 'var(--gray-500)',
             },
           },
         );

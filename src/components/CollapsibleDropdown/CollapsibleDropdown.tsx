@@ -86,7 +86,7 @@ const CollapsibleDropdown = ({
         <div className={styles.collapsibleDropdownIconWrapper}>
           <IconComponent
             name={name}
-            fill={showDropdown ? 'var(--gray-900, #111827)' : 'var(--gray-500)'}
+            fill={showDropdown ? 'var(--gray-900)' : 'var(--gray-500)'}
           />
         </div>
         {tCommon(name)}
