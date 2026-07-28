@@ -318,7 +318,6 @@ function AgendaFolderContainer({
         setFolders={setFolder}
         agendaFolderConnection={agendaFolderConnection}
         refetchAgendaFolder={refetchAgendaFolder}
-        t={t}
         onEditFolder={handleEditFolderClick}
         onDeleteFolder={(f) => {
           setAgendaFolderState(f);

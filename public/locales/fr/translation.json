@@ -254,6 +254,7 @@
     "id": "Plugin : <1>{{pluginId}}</1>"
   },
   "notification": {
+    "notifications": "Notifications",
     "title": "Notifications",
     "allCaughtUp": "Vous êtes à jour !",
     "prev": "Précédent",
@@ -535,6 +536,7 @@
     "card_test_id": "organization-card-{{id}}"
   },
   "organizationTags": {
+    "noChats": "Aucune discussion",
     "title": "Étiquettes d'Organisation",
     "createTag": "Créer une nouvelle étiquette",
     "manageTag": "Gérer",
@@ -563,6 +565,8 @@
     "tags": "Étiquettes"
   },
   "manageTag": {
+    "assignedMembersOf": "Membres assignés de",
+    "manageTag": "Gérer l’étiquette",
     "title": "Détails de l'étiquette",
     "addPeopleToTag": "Ajouter des personnes à l'étiquette",
     "viewProfile": "Voir",
@@ -1193,6 +1197,9 @@
     "talawaApiUnavailable": "API Talawa non disponible"
   },
   "blockUnblockUser": {
+    "actions": "Actions",
+    "reason": "Raison",
+    "blockedDate": "Date de blocage",
     "title": "Bloquer/débloquer un utilisateur",
     "pageName": "Bloquer/Débloquer",
     "listOfUsers": "Liste des utilisateurs qui ont spammé",
@@ -1219,6 +1226,7 @@
     "errorLoadingMembers": "Error loading members"
   },
   "eventManagement": {
+    "events": "Événements",
     "name": "Gestion d'événements",
     "title": "Gestion d'événements",
     "dashboard": "Tableau de bord",
@@ -1814,6 +1822,7 @@
     "tagCreationFailed": "Échec de la création du tag"
   },
   "userEvents": {
+    "createEventTitle": "Créer un événement",
     "title": "Événements",
     "name": "Événements",
     "nothingToShow": "Rien à montrer ici.",
@@ -2348,6 +2357,7 @@
     "volunteerScope": "Portée du bénévole"
   },
   "userVolunteer": {
+    "volunteerManagement": "Gestion des bénévoles",
     "title": "Volontariat",
     "name": "Titre",
     "upcomingEvents": "Événements à Venir",
@@ -2568,6 +2578,8 @@
     "invalidCapacity": "La capacité doit être un nombre positif"
   },
   "manageTags": {
+    "assignedMembersOf": "Membres assignés de",
+    "manageTag": "Gérer l’étiquette",
     "loadAssignedUsersError": "Une erreur s'est produite lors du chargement des utilisateurs assignés",
     "sortPeople": "Trier les personnes",
     "unassign": "Désassigner",

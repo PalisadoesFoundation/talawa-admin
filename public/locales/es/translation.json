@@ -249,6 +249,7 @@
     "close": "Cerrar"
   },
   "notification": {
+    "notifications": "Notificaciones",
     "title": "Notificaciones",
     "allCaughtUp": "¡Estás al día!",
     "prev": "Anterior",
@@ -530,6 +531,7 @@
     "card_test_id": "organization-card-{{id}}"
   },
   "organizationTags": {
+    "subTags": "Subetiquetas",
     "title": "Etiquetas de Organización",
     "createTag": "Crear una nueva etiqueta",
     "manageTag": "Gestionar",
@@ -558,6 +560,8 @@
     "tags": "Etiquetas"
   },
   "manageTag": {
+    "assignedMembersOf": "Miembros asignados de",
+    "manageTag": "Administrar etiqueta",
     "title": "Detalles de la Etiqueta",
     "addPeopleToTag": "Agregar Personas a la etiqueta",
     "viewProfile": "Ver",
@@ -1188,6 +1192,9 @@
     "pin": "Fijar"
   },
   "blockUnblockUser": {
+    "actions": "Acciones",
+    "reason": "Motivo",
+    "blockedDate": "Fecha de bloqueo",
     "title": "Usuario de bloqueo/desbloqueo de Talawa",
     "pageName": "Bloqueo/desbloqueo",
     "searchByName": "Buscar por nombre",
@@ -1214,6 +1221,7 @@
     "errorLoadingMembers": "Error al cargar los datos de los miembros"
   },
   "eventManagement": {
+    "events": "Eventos",
     "name": "Gestión de eventos",
     "title": "Gestión de eventos",
     "dashboard": "Tablero",
@@ -1797,6 +1805,7 @@
     "tagCreationFailed": "Error al crear la etiqueta"
   },
   "userEvents": {
+    "createEventTitle": "Crear evento",
     "title": "Eventos",
     "name": "Eventos",
     "nothingToShow": "No hay nada que mostrar aquí.",
@@ -1918,6 +1927,7 @@
     "advertisementLoading": "Cargando anuncios..."
   },
   "userChat": {
+    "noChats": "No hay chats",
     "starredMessages": "Mensajes destacados",
     "all": "Todos",
     "unread": "No leídos",
@@ -2331,6 +2341,7 @@
     "volunteerScope": "Alcance del voluntario"
   },
   "userVolunteer": {
+    "volunteerManagement": "Gestión de Voluntarios",
     "title": "Voluntariado",
     "name": "Título",
     "upcomingEvents": "Próximos Eventos",
@@ -2568,6 +2579,8 @@
     "invalidCapacity": "La capacidad debe ser un número positivo"
   },
   "manageTags": {
+    "assignedMembersOf": "Miembros asignados de",
+    "manageTag": "Administrar etiqueta",
     "loadAssignedUsersError": "Se produjo un error al cargar los usuarios asignados",
     "sortPeople": "Ordenar personas",
     "unassign": "Desasignar",

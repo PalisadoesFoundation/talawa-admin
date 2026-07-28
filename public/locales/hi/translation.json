@@ -249,6 +249,7 @@
     "close": "बंद करें"
   },
   "notification": {
+    "notifications": "सूचनाएं",
     "title": "सूचनाएं",
     "allCaughtUp": "आप सभी अपडेट के साथ हैं!",
     "prev": "पिछला",
@@ -530,6 +531,7 @@
     "card_test_id": "organization-card-{{id}}"
   },
   "organizationTags": {
+    "subTags": "उप-टैग्स",
     "title": "संस्थान टैग",
     "createTag": "नया टैग बनाएँ",
     "manageTag": "प्रबंधित करें",
@@ -575,6 +577,8 @@
     "neutral": "तटस्थ"
   },
   "manageTag": {
+    "assignedMembersOf": "के असाइन किए गए सदस्य",
+    "manageTag": "टैग प्रबंधित करें",
     "title": "टैग विवरण",
     "addPeopleToTag": "टैग में लोगों को जोड़ें",
     "viewProfile": "देखें",
@@ -1205,6 +1209,10 @@
     "talawaApiUnavailable": "Talawa API अनुपलब्ध"
   },
   "blockUnblockUser": {
+    "events": "इवेंट्स",
+    "actions": "कार्रवाइयाँ",
+    "reason": "कारण",
+    "blockedDate": "अवरुद्ध करने की तिथि",
     "title": "उपयोगकर्ता को ब्लॉक/अनब्लॉक करें",
     "pageName": "ब्लॉक/अनब्लॉक करें",
     "listOfUsers": "स्पैम भेजने वाले उपयोगकर्ताओं की सूची",
@@ -1809,6 +1817,7 @@
     "tagCreationFailed": "टैग निर्माण विफल रहा"
   },
   "userEvents": {
+    "createEventTitle": "कार्यक्रम बनाएँ",
     "title": "कार्यक्रम",
     "name": "ईवेंट",
     "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
@@ -1930,6 +1939,7 @@
     "advertisementLoading": "विज्ञापन लोड हो रहा है..."
   },
   "userChat": {
+    "noChats": "कोई चैट नहीं",
     "starredMessages": "तारांकित संदेश",
     "all": "सब",
     "unread": "अपठित",
@@ -2343,6 +2353,7 @@
     "volunteerScope": "स्वयंसेवक कार्यक्षेत्र"
   },
   "userVolunteer": {
+    "volunteerManagement": "स्वयंसेवक प्रबंधन",
     "title": "स्वयंसेवकता",
     "name": "शीर्षक",
     "upcomingEvents": "आगामी कार्यक्रम",
@@ -2568,6 +2579,8 @@
     "invalidCapacity": "क्षमता एक सकारात्मक संख्या होनी चाहिए"
   },
   "manageTags": {
+    "assignedMembersOf": "के असाइन किए गए सदस्य",
+    "manageTag": "टैग प्रबंधित करें",
     "loadAssignedUsersError": "निर्दिष्ट उपयोगकर्ताओं को लोड करते समय त्रुटि हुई",
     "sortPeople": "लोगों को क्रमबद्ध करें",
     "unassign": "हटाएँ",

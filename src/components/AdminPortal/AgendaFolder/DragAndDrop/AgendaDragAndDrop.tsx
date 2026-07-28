@@ -42,7 +42,6 @@ export default function AgendaDragAndDrop({
   folders,
   setFolders,
   agendaFolderConnection,
-  t,
   onEditFolder,
   onDeleteFolder,
   onPreviewItem,
@@ -54,6 +53,8 @@ export default function AgendaDragAndDrop({
     UPDATE_AGENDA_ITEM_SEQUENCE_MUTATION,
   );
   const { t: tErrors } = useTranslation('errors');
+  const { t } = useTranslation('translation', { keyPrefix: 'agendaSection' });
+
   const [updateAgendaFolder] = useMutation(UPDATE_AGENDA_FOLDER_MUTATION);
   /**
    * Prevent concurrent drag mutations
