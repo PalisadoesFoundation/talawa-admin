@@ -155,7 +155,7 @@ The script will:
 2. Prompt you to install project dependencies (`pnpm install`)
 3. Prompt you to run the environment installer (`pnpm run install-deps`) which checks for typescript and optionally docker
 
-<!-- #### For Windows
+#### For Windows
 
 Open PowerShell in the repository directory and run:
 
@@ -171,7 +171,7 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 
 Then run the installer again.
 
-The PowerShell script follows the same flow as the bash script, automatically installing Node.js and pnpm if needed. -->
+The PowerShell script follows the same flow as the bash script, automatically installing Node.js and pnpm if needed.
 
 ### What gets installed
 

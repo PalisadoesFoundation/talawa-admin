@@ -8,7 +8,11 @@ sidebar_position: 1
 
 Plugin Architecture provides talawa projects an ability to control latent [Talawa Mobile App](https://docs.talawa.io/docs/developers/talawa/talawa-introduction) features from the [Talawa Admin](https://docs.talawa.io/docs/developers/talawa-admin/talawa-admin-introduction) Web Portal.
 
-<!-- The Talawa API detects the existence of the plugin and the Mobile App will display new capabilities. -->
+:::note
+
+The Talawa API detects the existence of the plugin and the Mobile App will display new capabilities.
+
+:::
 
 ## Plugin
 
