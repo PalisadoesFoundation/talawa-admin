@@ -31,6 +31,11 @@ const config: Config = {
     locales: ['en'],
   },
 
+  // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
+  future: {
+    v4: true, // Improve compatibility with the upcoming Docusaurus v4
+  },
+
   // Remote css file fetched from talawa-docs
   stylesheets: ['https://docs.talawa.io/css/styles-latest.css'],
 
