@@ -481,7 +481,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
             data-testid="createActionItemBtn"
             data-cy="createActionItemBtn"
           >
-            +{tCommon('create')}
+            {`+ ${tCommon('create')}`}
           </Button>
         </div>
       </div>

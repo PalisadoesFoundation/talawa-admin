@@ -344,6 +344,7 @@
   "requests": {
     "profile": "प्रोफ़ाइल",
     "title": "सदस्यता अनुरोध",
+    "reviewAndManage": "सदस्यता अनुरोधों की समीक्षा करें और प्रबंधित करें",
     "sl_no": "क्रम संख्या",
     "accept": "स्वीकार करें",
     "reject": "अस्वीकार करें",
@@ -433,6 +434,15 @@
     "logo": "लोगो",
     "social": "सोशल मीडिया लिंक",
     "url": "यूआरएल दर्ज करें",
+    "clickToUpload": "अपलोड करने के लिए क्लिक करें या ड्रैग और ड्रॉप करें",
+    "facebookUrl": "फेसबुक URL",
+    "xUrl": "X (ट्विटर) URL",
+    "githubUrl": "GitHub URL",
+    "linkedInUrl": "LinkedIn URL",
+    "instagramUrl": "इंस्टाग्राम URL",
+    "youtubeUrl": "YouTube URL",
+    "redditUrl": "Reddit URL",
+    "slackUrl": "Slack URL",
     "profileChangedMsg": "प्रोफ़ाइल विवरण सफलतापूर्वक अपडेट किया गया।",
     "resetData": "प्रोफ़ाइल विवरण सफलतापूर्वक रीसेट किया गया।",
     "sessionTimeout": {
@@ -622,6 +632,8 @@
     "tags": "टैग",
     "errorOccurredWhileLoadingAssignedUser": "असाइन किए गए उपयोगकर्ता को लोड करते समय त्रुटि हुई",
     "sortPeople": "लोगों को सॉर्ट करें",
+    "dangerZone": "खतरा क्षेत्र",
+    "dangerZoneDesc": "इस टैग को हटाने से यह सभी असाइन किए गए सदस्यों से हट जाएगा। इस कार्रवाई को पूर्ववत नहीं किया जा सकता।",
     "tagActions": "टैग क्रियाएँ",
     "loadAssignedUsersError": "निर्दिष्ट उपयोगकर्ताओं को लोड करते समय त्रुटि हुई",
     "noTagsFound": "कोई टैग नहीं मिला",
@@ -696,6 +708,9 @@
     "week": "सप्ताह",
     "month": "महीना",
     "year": "वर्ष",
+    "loadingEvents": "कार्यक्रम लोड हो रहे हैं...",
+    "noEventsFound": "कोई कार्यक्रम नहीं मिला",
+    "emptyStateText": "कोई अलग फ़िल्टर आज़माएं या एक नया कार्यक्रम बनाएं।",
     "events": "कार्यक्रम",
     "description": "विवरण",
     "location": "स्थान",
@@ -1027,7 +1042,12 @@
     "associatedCampaigns": "संबद्ध अभियान",
     "errorLoadingFundsData": "फंड डेटा लोड करते समय त्रुटि हुई",
     "editFund": "फंड संपादित करें",
-    "searchFunds": "फंड खोजें"
+    "searchFunds": "फंड खोजें",
+    "manageFundsDescription": "धन संचय अभियान प्रबंधित करें और दान ट्रैक करें",
+    "allCampaigns": "सभी फंड",
+    "goal": "लक्ष्य",
+    "progress": "प्रगति",
+    "endDate": "समाप्ति तिथि"
   },
   "fundCampaign": {
     "title": "फंडरेजिंग कैंपेन",
@@ -1209,11 +1229,11 @@
     "talawaApiUnavailable": "Talawa API अनुपलब्ध"
   },
   "blockUnblockUser": {
-    "events": "इवेंट्स",
     "actions": "कार्रवाइयाँ",
     "reason": "कारण",
     "blockedDate": "अवरुद्ध करने की तिथि",
     "title": "उपयोगकर्ता को ब्लॉक/अनब्लॉक करें",
+    "manageBlockedUsers": "संगठन से ब्लॉक किए गए उपयोगकर्ता",
     "pageName": "ब्लॉक/अनब्लॉक करें",
     "listOfUsers": "स्पैम भेजने वाले उपयोगकर्ताओं की सूची",
     "block_unblock": "ब्लॉक/अनब्लॉक करें",
@@ -1239,6 +1259,7 @@
     "errorLoadingMembers": "सदस्यों को लोड करते समय त्रुटि हुई"
   },
   "eventManagement": {
+    "events": "इवेंट्स",
     "name": "इवेंट मैनेजमेंट",
     "title": "इवेंट मैनेजमेंट",
     "dashboard": "डैशबोर्ड",
@@ -1302,6 +1323,7 @@
   },
   "orgSettings": {
     "title": "सेटिंग्स",
+    "manageOrgPreferences": "अपने संगठन की प्राथमिकताएं प्रबंधित करें",
     "general": "सामान्य",
     "actionItemCategories": "कार्य आइटम श्रेणियाँ",
     "editOrganization": "संस्था संपादित करें",
@@ -1533,7 +1555,8 @@
     "searchByName": "नाम से खोजें",
     "searchOrganizations": "संगठनों खोजें",
     "loading": "लोड हो रहा है...",
-    "title": "संगठनों"
+    "title": "संगठनों",
+    "discoverOrganizations": "नए संगठनों को खोजें और उनसे जुड़ें"
   },
   "userSidebarOrg": {
     "yourOrganizations": "आपके संगठन",
@@ -1821,6 +1844,8 @@
     "title": "कार्यक्रम",
     "name": "ईवेंट",
     "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
+    "noEventsFound": "कोई कार्यक्रम नहीं मिला",
+    "emptyStateText": "कोई अलग फ़िल्टर आज़माएं या एक नया कार्यक्रम बनाएं।",
     "createEvent": "कार्यक्रम बनाएँ",
     "recurring": "पुनरावर्ती ईवेंट",
     "startTime": "समय शुरू",
@@ -1941,6 +1966,7 @@
   "userChat": {
     "noChats": "कोई चैट नहीं",
     "starredMessages": "तारांकित संदेश",
+    "searchContacts": "बातचीत खोजें...",
     "all": "सब",
     "unread": "अपठित",
     "groups": "समूह",
@@ -2071,7 +2097,8 @@
     "desc": "विवरण",
     "venueImagePreview": "स्थान की छवि का पूर्वावलोकन",
     "sortVenues": "स्थानों को क्रमबद्ध करें",
-    "closeImagePreview": "इमेज पूर्वावलोकन बंद करें"
+    "closeImagePreview": "इमेज पूर्वावलोकन बंद करें",
+    "manageVenues": "इवेंट स्थानों और क्षेत्रों का प्रबंधन करें"
   },
   "addMember": {
     "title": "सदस्य जोड़ें",
@@ -2484,7 +2511,11 @@
     "uninstallPluginWarning": "यह क्रिया प्लगइन और उसके सभी डेटा को स्थायी रूप से हटा देगी। इस क्रिया को पूर्ववत नहीं किया जा सकता।",
     "errorInstalling": "प्लगइन विवरण लोड करने में विफल",
     "failedToParsePluginZip": "प्लगइन ZIP फ़ाइल पार्स करने में विफल",
-    "pluginUploadedSuccess": "प्लगइन सफलतापूर्वक अपलोड हो गया! ({{components}} घटक) - अब आप इसे प्लगइन सूची से इंस्टॉल कर सकते हैं।"
+    "pluginUploadedSuccess": "प्लगइन सफलतापूर्वक अपलोड हो गया! ({{components}} घटक) - अब आप इसे प्लगइन सूची से इंस्टॉल कर सकते हैं।",
+    "configure": "कॉन्फ़िगर करें",
+    "enable": "सक्षम करें",
+    "searchPlugins": "प्लगइन खोजें...",
+    "showingPlugins": "{{start}}-{{end}} में से {{total}} प्लगइन दिखाए जा रहे हैं"
   },
   "pluginInjector": {
     "notFoundOrDisabled": "प्लगइन नहीं मिला या अक्षम है",

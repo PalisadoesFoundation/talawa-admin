@@ -370,7 +370,7 @@ const Campaigns = (): JSX.Element => {
               !canCreatePledge && isEnded ? t('campaignEnded') : t('addPledge')
             }
           >
-            +{t('addPledge')}
+            {`+ ${t('addPledge')}`}
           </Button>
         );
       },

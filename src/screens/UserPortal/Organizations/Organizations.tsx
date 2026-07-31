@@ -492,7 +492,7 @@ export default function Organizations(): React.JSX.Element {
                       {t('allOrganizations')}
                     </h2>
                     <div className={styles.sectionSubtitle}>
-                      Discover and join new organizations
+                      {t('discoverOrganizations')}
                     </div>
                     <div className={styles.orgGrid}>
                       {browseOrgs.map((organization: IOrganization, index) => (

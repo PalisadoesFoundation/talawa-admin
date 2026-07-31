@@ -334,9 +334,7 @@ const CommunityProfile = (): JSX.Element => {
                     <line x1="12" y1="3" x2="12" y2="15" />
                   </svg>
                 </div>
-                <div className="upload-area-text">
-                  Click to upload or drag and drop
-                </div>
+                <div className="upload-area-text">{t('clickToUpload')}</div>
                 <div className="upload-area-hint">SVG, PNG or JPG, max 2MB</div>
               </div>
               <input
@@ -407,7 +405,7 @@ const CommunityProfile = (): JSX.Element => {
             <div className="form-grid-2">
               <div className="form-group">
                 <label className="field-label" htmlFor="social-facebook">
-                  Facebook URL
+                  {t('facebookUrl')}
                 </label>
                 <input
                   type="url"
@@ -418,14 +416,14 @@ const CommunityProfile = (): JSX.Element => {
                   placeholder="https://facebook.com/..."
                   value={profileVariable.facebookURL}
                   onChange={handleOnChange}
-                  aria-label="Facebook URL"
+                  aria-label={t('facebookUrl')}
                   autoComplete="off"
                 />
               </div>
 
               <div className="form-group">
                 <label className="field-label" htmlFor="social-twitter">
-                  X (Twitter) URL
+                  {t('xUrl')}
                 </label>
                 <input
                   type="url"
@@ -436,14 +434,14 @@ const CommunityProfile = (): JSX.Element => {
                   placeholder="https://x.com/..."
                   value={profileVariable.xURL}
                   onChange={handleOnChange}
-                  aria-label="X Twitter URL"
+                  aria-label={t('xUrl')}
                   autoComplete="off"
                 />
               </div>
 
               <div className="form-group">
                 <label className="field-label" htmlFor="social-github">
-                  GitHub URL
+                  {t('githubUrl')}
                 </label>
                 <input
                   type="url"
@@ -454,14 +452,14 @@ const CommunityProfile = (): JSX.Element => {
                   placeholder="https://github.com/..."
                   value={profileVariable.githubURL}
                   onChange={handleOnChange}
-                  aria-label="GitHub URL"
+                  aria-label={t('githubUrl')}
                   autoComplete="off"
                 />
               </div>
 
               <div className="form-group">
                 <label className="field-label" htmlFor="social-linkedin">
-                  LinkedIn URL
+                  {t('linkedInUrl')}
                 </label>
                 <input
                   type="url"
@@ -472,14 +470,14 @@ const CommunityProfile = (): JSX.Element => {
                   placeholder="https://linkedin.com/company/..."
                   value={profileVariable.linkedInURL}
                   onChange={handleOnChange}
-                  aria-label="LinkedIn URL"
+                  aria-label={t('linkedInUrl')}
                   autoComplete="off"
                 />
               </div>
 
               <div className="form-group">
                 <label className="field-label" htmlFor="social-instagram">
-                  Instagram URL
+                  {t('instagramUrl')}
                 </label>
                 <input
                   type="url"
@@ -490,14 +488,14 @@ const CommunityProfile = (): JSX.Element => {
                   placeholder="https://instagram.com/..."
                   value={profileVariable.instagramURL}
                   onChange={handleOnChange}
-                  aria-label="Instagram URL"
+                  aria-label={t('instagramUrl')}
                   autoComplete="off"
                 />
               </div>
 
               <div className="form-group">
                 <label className="field-label" htmlFor="social-youtube">
-                  YouTube URL
+                  {t('youtubeUrl')}
                 </label>
                 <input
                   type="url"
@@ -508,14 +506,14 @@ const CommunityProfile = (): JSX.Element => {
                   placeholder="https://youtube.com/@..."
                   value={profileVariable.youtubeURL}
                   onChange={handleOnChange}
-                  aria-label="YouTube URL"
+                  aria-label={t('youtubeUrl')}
                   autoComplete="off"
                 />
               </div>
 
               <div className="form-group">
                 <label className="field-label" htmlFor="social-reddit">
-                  Reddit URL
+                  {t('redditUrl')}
                 </label>
                 <input
                   type="url"
@@ -526,14 +524,14 @@ const CommunityProfile = (): JSX.Element => {
                   placeholder="https://reddit.com/r/..."
                   value={profileVariable.redditURL}
                   onChange={handleOnChange}
-                  aria-label="Reddit URL"
+                  aria-label={t('redditUrl')}
                   autoComplete="off"
                 />
               </div>
 
               <div className="form-group">
                 <label className="field-label" htmlFor="social-slack">
-                  Slack URL
+                  {t('slackUrl')}
                 </label>
                 <input
                   type="url"
@@ -544,7 +542,7 @@ const CommunityProfile = (): JSX.Element => {
                   placeholder="https://your-workspace.slack.com"
                   value={profileVariable.slackURL}
                   onChange={handleOnChange}
-                  aria-label="Slack URL"
+                  aria-label={t('slackUrl')}
                   autoComplete="off"
                 />
               </div>

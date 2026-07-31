@@ -429,7 +429,7 @@ function Volunteers(): JSX.Element {
               className={styles.actionsButton}
               data-testid="addVolunteerBtn"
             >
-              +{t('eventVolunteers.add')}
+              {`+ ${t('eventVolunteers.add')}`}
             </Button>
           }
         />

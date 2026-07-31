@@ -349,6 +349,7 @@
   "requests": {
     "profile": "Profil",
     "title": "Demandes d'adhésion",
+    "reviewAndManage": "Examiner et gérer les demandes d'adhésion",
     "sl_no": "Sl. ",
     "accept": "Accepter",
     "reject": "Rejeter",
@@ -438,6 +439,15 @@
     "logo": "Logo",
     "social": "Liens vers les réseaux sociaux",
     "url": "Entrer l'URL",
+    "clickToUpload": "Cliquez pour télécharger ou glissez-déposez",
+    "facebookUrl": "URL Facebook",
+    "xUrl": "URL X (Twitter)",
+    "githubUrl": "URL GitHub",
+    "linkedInUrl": "URL LinkedIn",
+    "instagramUrl": "URL Instagram",
+    "youtubeUrl": "URL YouTube",
+    "redditUrl": "URL Reddit",
+    "slackUrl": "URL Slack",
     "profileChangedMsg": "Les détails du profil ont été mis à jour avec succès.",
     "resetData": "Réinitialisez avec succès les détails du profil.",
     "sessionTimeout": {
@@ -536,7 +546,7 @@
     "card_test_id": "organization-card-{{id}}"
   },
   "organizationTags": {
-    "noChats": "Aucune discussion",
+    "subTags": "Sous-Étiquettes",
     "title": "Étiquettes d'Organisation",
     "createTag": "Créer une nouvelle étiquette",
     "manageTag": "Gérer",
@@ -612,6 +622,8 @@
     "tagActions": "Actions d'étiquette",
     "loadAssignedUsersError": "Une erreur s'est produite lors du chargement des utilisateurs assignés",
     "sortPeople": "Trier les personnes",
+    "dangerZone": "Zone de danger",
+    "dangerZoneDesc": "La suppression de cette étiquette la retirera de tous les membres assignés. Cette action ne peut pas être annulée.",
     "noTagsFound": "Aucun tag trouvé",
     "addMember": "Ajouter un membre",
     "removeMember": "Supprimer un membre",
@@ -684,6 +696,9 @@
     "week": "Semaine",
     "month": "Mois",
     "year": "Année",
+    "loadingEvents": "Chargement des événements...",
+    "noEventsFound": "Aucun événement trouvé",
+    "emptyStateText": "Essayez un filtre différent ou créez un nouvel événement.",
     "events": "Événements",
     "description": "Description",
     "location": "Emplacement",
@@ -1015,7 +1030,12 @@
     "associatedCampaigns": "Campagnes associées",
     "searchFunds": "Rechercher des fonds",
     "errorLoadingFundsData": "Erreur lors du chargement des données des fonds",
-    "editFund": "Modifier le fonds"
+    "editFund": "Modifier le fonds",
+    "manageFundsDescription": "Gérez les campagnes de collecte de fonds et suivez les dons",
+    "allCampaigns": "Tous les fonds",
+    "goal": "Objectif",
+    "progress": "Progrès",
+    "endDate": "Date de fin"
   },
   "fundCampaign": {
     "title": "Campagnes de collecte de fonds",
@@ -1201,6 +1221,7 @@
     "reason": "Raison",
     "blockedDate": "Date de blocage",
     "title": "Bloquer/débloquer un utilisateur",
+    "manageBlockedUsers": "Utilisateurs bloqués de l'organisation",
     "pageName": "Bloquer/Débloquer",
     "listOfUsers": "Liste des utilisateurs qui ont spammé",
     "block_unblock": "Bloquer/Débloquer",
@@ -1307,6 +1328,7 @@
   },
   "orgSettings": {
     "title": "Paramètres",
+    "manageOrgPreferences": "Gérez les préférences de votre organisation",
     "general": "Général",
     "actionItemCategories": "Catégories d'éléments d'action",
     "editOrganization": "Éditer l'organisation",
@@ -1538,7 +1560,8 @@
     "searchByName": "Rechercher par nom",
     "searchOrganizations": "Rechercher Organisations",
     "loading": "Chargement...",
-    "title": "Organisations"
+    "title": "Organisations",
+    "discoverOrganizations": "Découvrez et rejoignez de nouvelles organisations"
   },
   "userSidebarOrg": {
     "yourOrganizations": "Vos organisations",
@@ -1826,6 +1849,8 @@
     "title": "Événements",
     "name": "Événements",
     "nothingToShow": "Rien à montrer ici.",
+    "noEventsFound": "Aucun événement trouvé",
+    "emptyStateText": "Essayez un filtre différent ou créez un nouvel événement.",
     "createEvent": "Créer un évènement",
     "recurring": "Événement récurrent",
     "startTime": "Heure de début",
@@ -1944,7 +1969,9 @@
     "advertisementLoading": "Chargement des annonces...."
   },
   "userChat": {
+    "noChats": "Aucune discussion",
     "starredMessages": "Messages favoris",
+    "searchContacts": "Rechercher des conversations...",
     "all": "Tous",
     "unread": "Non lus",
     "groups": "Groupes",
@@ -2075,7 +2102,8 @@
     "desc": "Description",
     "venueImagePreview": "Aperçu de l’image du lieu",
     "sortVenues": "Trier les lieux",
-    "closeImagePreview": "Fermer l'aperçu de l'image"
+    "closeImagePreview": "Fermer l'aperçu de l'image",
+    "manageVenues": "Gérer les lieux et espaces d'événements"
   },
   "addMember": {
     "title": "Ajouter un membre",
@@ -2483,7 +2511,11 @@
     "uninstallPluginWarning": "Cette action supprimera définitivement le plugin et toutes ses données. Cette action ne peut pas être annulée.",
     "errorInstalling": "Échec du chargement des détails du plugin",
     "failedToParsePluginZip": "Échec de l'analyse du fichier ZIP du plugin",
-    "pluginUploadedSuccess": "Plugin téléchargé avec succès ! (composants {{components}}) - Vous pouvez maintenant l'installer depuis la liste des plugins."
+    "pluginUploadedSuccess": "Plugin téléchargé avec succès ! (composants {{components}}) - Vous pouvez maintenant l'installer depuis la liste des plugins.",
+    "configure": "Configurer",
+    "enable": "Activer",
+    "searchPlugins": "Rechercher des plugins...",
+    "showingPlugins": "Affichage de {{start}}-{{end}} sur {{total}} plugins"
   },
   "pluginInjector": {
     "notFoundOrDisabled": "Plugin Introuvable ou Désactivé",

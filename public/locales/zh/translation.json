@@ -344,6 +344,7 @@
   "requests": {
     "profile": "个人资料",
     "title": "会员申请",
+    "reviewAndManage": "审核并管理会员申请",
     "sl_no": "SL。",
     "accept": "接受",
     "newMembersWillAppearHere": "新成员会显示在这里",
@@ -433,6 +434,15 @@
     "logo": "标识",
     "social": "社交媒体链接",
     "url": "输入网址",
+    "clickToUpload": "点击上传或拖拽",
+    "facebookUrl": "Facebook 网址",
+    "xUrl": "X (Twitter) 网址",
+    "githubUrl": "GitHub 网址",
+    "linkedInUrl": "LinkedIn 网址",
+    "instagramUrl": "Instagram 网址",
+    "youtubeUrl": "YouTube 网址",
+    "redditUrl": "Reddit 网址",
+    "slackUrl": "Slack 网址",
     "profileChangedMsg": "已成功更新个人资料详细信息。",
     "resetData": "成功重置个人资料详细信息。",
     "sessionTimeout": {
@@ -610,6 +620,8 @@
     "tags": "标签",
     "errorOccurredWhileLoadingAssignedUser": "加载已分配用户时出错",
     "sortPeople": "排序人员",
+    "dangerZone": "危险区域",
+    "dangerZoneDesc": "删除此标签将从所有分配的成员中移除该标签。此操作无法撤销。",
     "tagActions": "标签操作",
     "loadAssignedUsersError": "加载已分配用户时发生错误",
     "noTagsFound": "未找到标签",
@@ -684,6 +696,9 @@
     "week": "周",
     "month": "月",
     "year": "年",
+    "loadingEvents": "正在加载活动...",
+    "noEventsFound": "未找到活动",
+    "emptyStateText": "尝试使用不同的过滤器或创建新活动。",
     "events": "活动",
     "description": "描述",
     "location": "位置",
@@ -1015,7 +1030,12 @@
     "associatedCampaigns": "相关活动",
     "searchFunds": "搜索基金",
     "errorLoadingFundsData": "加载基金数据时出错",
-    "editFund": "编辑基金"
+    "editFund": "编辑基金",
+    "manageFundsDescription": "管理筹款活动并跟踪捐款",
+    "allCampaigns": "所有基金",
+    "goal": "目标",
+    "progress": "进度",
+    "endDate": "结束日期"
   },
   "fundCampaign": {
     "title": "募捐活动",
@@ -1214,11 +1234,11 @@
     "neutral": "中性"
   },
   "blockUnblockUser": {
-    "events": "活动",
     "actions": "操作",
     "reason": "原因",
     "blockedDate": "封锁日期",
     "title": "阻止/取消阻止用户",
+    "manageBlockedUsers": "被组织封禁的用户",
     "pageName": "阻止/解除阻止",
     "listOfUsers": "发送垃圾邮件的用户列表",
     "block_unblock": "阻止/解除阻止",
@@ -1244,6 +1264,7 @@
     "errorLoadingMembers": "加载成员时发生错误"
   },
   "eventManagement": {
+    "events": "活动",
     "name": "事件管理",
     "title": "事件管理",
     "dashboard": "仪表板",
@@ -1307,6 +1328,7 @@
   },
   "orgSettings": {
     "title": "设置",
+    "manageOrgPreferences": "管理您的组织偏好设置",
     "general": "一般的",
     "actionItemCategories": "行动项目类别",
     "editOrganization": "編輯組織",
@@ -1538,7 +1560,8 @@
     "searchByName": "按名称搜索",
     "searchOrganizations": "搜索组织",
     "loading": "加载中...",
-    "title": "组织机构"
+    "title": "组织机构",
+    "discoverOrganizations": "探索并加入新组织"
   },
   "userSidebarOrg": {
     "yourOrganizations": "您的组织",
@@ -1826,6 +1849,8 @@
     "title": "活动",
     "name": "活动",
     "nothingToShow": "这里没有什么可显示的。",
+    "noEventsFound": "未找到活动",
+    "emptyStateText": "尝试使用不同的过滤器或创建新活动。",
     "createEvent": "创建事件",
     "recurring": "重复事件",
     "startTime": "开始时间",
@@ -1946,6 +1971,7 @@
   "userChat": {
     "noChats": "暂无聊天",
     "starredMessages": "星标消息",
+    "searchContacts": "搜索对话...",
     "all": "全部",
     "unread": "未读",
     "groups": "群组",
@@ -2076,7 +2102,8 @@
     "desc": "描述",
     "venueImagePreview": "场地图片预览",
     "sortVenues": "排序场地",
-    "closeImagePreview": "关闭图片预览"
+    "closeImagePreview": "关闭图片预览",
+    "manageVenues": "管理活动场地和空间"
   },
   "addMember": {
     "title": "添加会员",
@@ -2484,7 +2511,11 @@
     "uninstallPluginWarning": "此操作将永久删除该插件及其所有数据。此操作无法撤销。",
     "errorInstalling": "加载插件详情失败",
     "failedToParsePluginZip": "解析插件 ZIP 文件失败",
-    "pluginUploadedSuccess": "插件上传成功！({{components}} 组件) - 您现在可以从插件列表中安装它。"
+    "pluginUploadedSuccess": "插件上传成功！({{components}} 组件) - 您现在可以从插件列表中安装它。",
+    "configure": "配置",
+    "enable": "启用",
+    "searchPlugins": "搜索插件...",
+    "showingPlugins": "显示 {{start}}-{{end}}，共 {{total}} 个插件"
   },
   "pluginInjector": {
     "notFoundOrDisabled": "插件未找到或已禁用",

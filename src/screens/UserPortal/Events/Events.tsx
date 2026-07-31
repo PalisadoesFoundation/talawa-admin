@@ -377,10 +377,8 @@ export default function Events(): JSX.Element {
         (filteredEvents.length === 0 ? (
           <div className="empty-state">
             <div className="empty-state-icon">📅</div>
-            <p className="empty-state-title">No events found</p>
-            <p className="empty-state-text">
-              Try a different filter or create a new event.
-            </p>
+            <p className="empty-state-title">{t('noEventsFound')}</p>
+            <p className="empty-state-text">{t('emptyStateText')}</p>
           </div>
         ) : (
           <div className="grid-3">

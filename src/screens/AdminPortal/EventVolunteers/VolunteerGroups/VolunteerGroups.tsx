@@ -367,7 +367,7 @@ function VolunteerGroups(): JSX.Element {
               data-testid="createGroupBtn"
               aria-label={tCommon('createNew', { item: 'Volunteer Group' })}
             >
-              +{tCommon('create')}
+              {`+ ${tCommon('create')}`}
             </Button>
           }
         />

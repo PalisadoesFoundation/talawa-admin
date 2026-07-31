@@ -478,18 +478,15 @@ function ManageTag(): JSX.Element {
             </div>
 
             <div className={styles.dangerZone}>
-              <p className={styles.dangerZoneTitle}>Danger Zone</p>
-              <p className={styles.dangerZoneDesc}>
-                Deleting this tag will remove it from all assigned members. This
-                action cannot be undone.
-              </p>
+              <p className={styles.dangerZoneTitle}>{t('dangerZone')}</p>
+              <p className={styles.dangerZoneDesc}>{t('dangerZoneDesc')}</p>
               <Button
                 variant="plain"
                 className="btn btn-danger"
                 onClick={removeUserTagModal.open}
                 data-testid="removeTag"
               >
-                Delete Tag
+                {t('removeUserTag')}
               </Button>
             </div>
           </div>

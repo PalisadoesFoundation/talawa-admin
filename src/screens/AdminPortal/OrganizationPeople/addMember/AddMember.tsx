@@ -367,7 +367,7 @@ function AddMember({
               data-testid="addBtn"
               className={styles.addButton}
             >
-              +{translateAddMember('addMember.add')}
+              {`+ ${translateAddMember('addMember.add')}`}
             </Button>
           ),
         },
