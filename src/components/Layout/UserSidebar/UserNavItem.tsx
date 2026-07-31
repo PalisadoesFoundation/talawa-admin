@@ -1,5 +1,14 @@
-import { useNavigate } from 'react-router';
+/**
+ * `UserNavItem` renders a single navigation item for the user sidebar.
+ *
+ * @param href - The route path the item navigates to when clicked.
+ * @param label - The display label shown next to the icon.
+ * @param icon - The icon component rendered inside the navigation item.
+ * @param active - Whether the item represents the currently active page.
+ * @param tooltip - The tooltip text displayed on hover.
+ */
 
+import { useNavigate } from 'react-router';
 export function UserNavItem({
   href,
   label,

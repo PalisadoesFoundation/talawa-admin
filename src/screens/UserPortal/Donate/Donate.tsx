@@ -25,6 +25,11 @@ const currencies = ['USD', 'INR', 'EUR'];
 const currencyOptions = currencies.map((c) => ({ value: c, label: c }));
 const presetAmounts = [10, 25, 50, 100];
 
+/**
+ * `Donate` renders the user portal donation screen for an organization.
+ * It provides a donation form with preset amounts and currency selection,
+ * along with a history of the user's previous donations.
+ */
 export default function Donate(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'donate' });
   const { getItem } = useLocalStorage();
@@ -66,6 +71,14 @@ export default function Donate(): JSX.Element {
     }
   }, [donationData]);
 
+  /**
+   * Determines whether an error from the currency-based donation mutation indicates
+   * that the backend does not support the currency fields, in which case the legacy
+   * donation mutation should be used as a fallback.
+   *
+   * @param error - The error thrown by the donation mutation.
+   * @returns True if the legacy mutation should be used as a fallback.
+   */
   const shouldFallbackToLegacyDonationMutation = (error: unknown): boolean => {
     const apolloError = error as ApolloError;
     const combinedMessage = [
@@ -84,6 +97,11 @@ export default function Donate(): JSX.Element {
     );
   };
 
+  /**
+   * Submits a donation for the current user to the organization.
+   * Validates the amount, attempts the currency-based mutation first,
+   * and falls back to the legacy mutation if the server does not support currency codes.
+   */
   const donateToOrg = async (): Promise<void> => {
     if (!userId || !organizationId || !userName) return;
     if (amount === '' || Number.isNaN(Number(amount))) {

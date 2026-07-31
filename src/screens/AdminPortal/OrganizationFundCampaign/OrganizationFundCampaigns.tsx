@@ -21,8 +21,13 @@ import SearchBar from 'shared-components/SearchBar/SearchBar';
 import styles from './OrganizationFundCampaigns.module.css';
 import Button from 'shared-components/Button/Button';
 
+/** Number of rows displayed per page in the campaigns table. */
 const PAGE_SIZE = 10;
 
+/**
+ * `OrganizationFundCampaign` renders the list of fund campaigns for an organization.
+ * It provides search, progress tracking, and the ability to create or edit campaigns.
+ */
 const OrganizationFundCampaign = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'fundCampaign' });
   const { t: tCommon } = useTranslation('common');
@@ -71,6 +76,12 @@ const OrganizationFundCampaign = (): JSX.Element => {
     }),
   });
 
+  /**
+   * Opens the campaign modal in either 'create' or 'edit' mode with the selected campaign.
+   *
+   * @param selectedCampaign - The campaign to edit, or null when creating a new campaign.
+   * @param mode - Whether the modal should create a new campaign or edit an existing one.
+   */
   const handleOpenModal = useCallback(
     (
       selectedCampaign: InterfaceCampaignInfo | null,
@@ -89,6 +100,11 @@ const OrganizationFundCampaign = (): JSX.Element => {
     );
   }, [campaignsData, searchText]);
 
+  /**
+   * Navigates to the pledge management screen for the given campaign.
+   *
+   * @param campaignId - The ID of the campaign whose pledges should be managed.
+   */
   const handleClick = (campaignId: string): void => {
     navigate(`/admin/fundCampaignPledge/${orgId}/${campaignId}`);
   };
