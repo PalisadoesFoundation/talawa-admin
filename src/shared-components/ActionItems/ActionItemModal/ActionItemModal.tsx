@@ -64,7 +64,7 @@ import {
 import type { InterfaceEventVolunteerInfo } from 'types/Volunteer/interface';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
-import Autocomplete from '@mui/material/Autocomplete';
+import { Autocomplete } from 'shared-components/Autocomplete/Autocomplete';
 
 const initializeFormState = (
   actionItem: IActionItemInfo | null,
@@ -510,15 +510,16 @@ const ItemModal: FC<IItemModalProps> = ({
         )}
       <div className={styles.gapContainer}>
         <Autocomplete
+          id="categorySelect"
           className={`${styles.noOutline}`}
-          data-testid="categorySelect"
+          dataTestId="categorySelect"
           data-cy="categorySelect"
           options={actionItemCategories}
           value={actionItemCategory}
           isOptionEqualToValue={(option, value) => option.id === value.id}
           filterSelectedOptions={true}
           getOptionLabel={(item: IActionItemCategoryInfo): string => item.name}
-          onChange={(_, newCategory): void => {
+          onChange={(newCategory): void => {
             handleFormChange('categoryId', newCategory?.id ?? '');
             setActionItemCategory(newCategory);
           }}
@@ -572,8 +573,9 @@ const ItemModal: FC<IItemModalProps> = ({
           {assignmentType === 'volunteer' && (
             <div className={styles.fullWidth}>
               <Autocomplete
+                id="volunteerSelect"
                 className={`${styles.noOutline}`}
-                data-testid="volunteerSelect"
+                dataTestId="volunteerSelect"
                 data-cy="volunteerSelect"
                 options={volunteers}
                 value={selectedVolunteer}
@@ -586,7 +588,7 @@ const ItemModal: FC<IItemModalProps> = ({
                 ): string => {
                   return volunteer.user?.name || t('unknownVolunteer');
                 }}
-                onChange={(_, newVolunteer): void => {
+                onChange={(newVolunteer): void => {
                   const volunteerId = newVolunteer?.id;
                   handleFormChange('volunteerId', volunteerId);
                   handleFormChange('volunteerGroupId', '');
@@ -633,8 +635,9 @@ const ItemModal: FC<IItemModalProps> = ({
           {assignmentType === 'volunteerGroup' && (
             <div className={styles.fullWidth}>
               <Autocomplete
+                id="volunteerGroupSelect"
                 className={`${styles.noOutline}`}
-                data-testid="volunteerGroupSelect"
+                dataTestId="volunteerGroupSelect"
                 data-cy="volunteerGroupSelect"
                 options={volunteerGroups}
                 value={selectedVolunteerGroup}
@@ -645,7 +648,7 @@ const ItemModal: FC<IItemModalProps> = ({
                 getOptionLabel={(group: IEventVolunteerGroup): string => {
                   return group.name;
                 }}
-                onChange={(_, newGroup): void => {
+                onChange={(newGroup): void => {
                   const groupId = newGroup?.id;
                   handleFormChange('volunteerGroupId', groupId);
                   handleFormChange('volunteerId', '');
