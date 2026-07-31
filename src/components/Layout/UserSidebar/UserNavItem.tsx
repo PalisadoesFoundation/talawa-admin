@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 export function UserNavItem({
   href,
   label,
-  icon: Icon,
+  icon: icon,
   active,
   tooltip,
 }: {
@@ -14,6 +14,7 @@ export function UserNavItem({
   tooltip: string;
 }) {
   const navigate = useNavigate();
+  const Icon = icon;
   return (
     <li>
       <a
