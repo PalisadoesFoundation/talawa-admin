@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/AdminPortal/MemberDetail/Security.tsx:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/MemberDetail/Security.tsx#L29)
+Defined in: [src/screens/AdminPortal/MemberDetail/Security.tsx:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/MemberDetail/Security.tsx#L28)
 
 Security component.
 

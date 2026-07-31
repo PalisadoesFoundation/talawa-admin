@@ -6,7 +6,7 @@
 
 > `const` **RecurrenceYearlySection**: `React.FC`\<[`InterfaceRecurrenceYearlySectionProps`](../../../../types/shared-components/Recurrence/interface/interfaces/InterfaceRecurrenceYearlySectionProps.md)\>
 
-Defined in: [src/shared-components/Recurrence/RecurrenceYearlySection.tsx:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Recurrence/RecurrenceYearlySection.tsx#L15)
+Defined in: [src/shared-components/Recurrence/RecurrenceYearlySection.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Recurrence/RecurrenceYearlySection.tsx#L16)
 
 Yearly recurrence options section.
 

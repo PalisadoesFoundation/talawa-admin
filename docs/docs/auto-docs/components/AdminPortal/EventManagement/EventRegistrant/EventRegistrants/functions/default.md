@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/components/AdminPortal/EventManagement/EventRegistrant/EventRegistrants.tsx:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/EventManagement/EventRegistrant/EventRegistrants.tsx#L56)
+Defined in: [src/components/AdminPortal/EventManagement/EventRegistrant/EventRegistrants.tsx:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/EventManagement/EventRegistrant/EventRegistrants.tsx#L57)
 
 ## Returns
 

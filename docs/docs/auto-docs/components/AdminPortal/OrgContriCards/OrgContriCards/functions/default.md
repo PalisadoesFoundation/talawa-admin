@@ -6,7 +6,7 @@
 
 > **default**(`props`): `Element`
 
-Defined in: [src/components/AdminPortal/OrgContriCards/OrgContriCards.tsx:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrgContriCards/OrgContriCards.tsx#L37)
+Defined in: [src/components/AdminPortal/OrgContriCards/OrgContriCards.tsx:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrgContriCards/OrgContriCards.tsx#L35)
 
 ## Parameters
 

@@ -8,12 +8,6 @@
 
 Defined in: [src/components/AdminPortal/OrgSettings/General/GeneralSettings.tsx:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrgSettings/General/GeneralSettings.tsx#L23)
 
-A component for displaying general settings for an organization.
-
-## Param
-
-The properties passed to the component.
-
-## Returns
-
-The `GeneralSettings` component.
+`GeneralSettings` component provides the general settings page for an organization.
+It renders cards for editing organization details, deleting the organization,
+and changing the application language.

@@ -6,15 +6,11 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/AdminPortal/OrganizationFundCampaign/OrganizationFundCampaigns.tsx:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFundCampaign/OrganizationFundCampaigns.tsx#L41)
+Defined in: [src/screens/AdminPortal/OrganizationFundCampaign/OrganizationFundCampaigns.tsx:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFundCampaign/OrganizationFundCampaigns.tsx#L31)
 
-Renders the organization fund campaigns listing screen.
-
-Displays campaign data for a selected fund with search, sorting, edit/create
-actions, and loading/error/empty states.
+`OrganizationFundCampaign` renders the list of fund campaigns for an organization.
+It provides search, progress tracking, and the ability to create or edit campaigns.
 
 ## Returns
 
 `Element`
-
-Fund campaign management screen for an organization fund.

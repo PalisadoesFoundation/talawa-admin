@@ -4,7 +4,7 @@
 
 # Interface: InterfaceUseAgendaMutationsProps
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:313](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L313)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:312](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L312)
 
 Props for the useAgendaMutations hook.
 
@@ -14,7 +14,7 @@ Props for the useAgendaMutations hook.
 
 > **refetchAgendaFolder**: () => `void`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:314](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L314)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:313](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L313)
 
 #### Returns
 
@@ -26,7 +26,7 @@ Defined in: [src/types/AdminPortal/Agenda/interface.ts:314](https://github.com/P
 
 > **t**: (`key`) => `string`
 
-Defined in: [src/types/AdminPortal/Agenda/interface.ts:315](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L315)
+Defined in: [src/types/AdminPortal/Agenda/interface.ts:314](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Agenda/interface.ts#L314)
 
 #### Parameters
 

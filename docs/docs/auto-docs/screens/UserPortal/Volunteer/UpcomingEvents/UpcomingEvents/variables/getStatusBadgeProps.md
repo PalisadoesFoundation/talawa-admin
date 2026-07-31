@@ -6,7 +6,7 @@
 
 > `const` **getStatusBadgeProps**: (`status`) => `object` = `mapVolunteerStatusToVariant`
 
-Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.tsx:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.tsx#L40)
+Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.tsx#L45)
 
 Maps membership status to StatusBadge variant.
 

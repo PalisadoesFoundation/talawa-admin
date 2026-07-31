@@ -6,7 +6,7 @@
 
 > **default**(`props?`): `Element`
 
-Defined in: [src/screens/AdminPortal/OrganizationVenues/OrganizationVenues.tsx:81](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationVenues/OrganizationVenues.tsx#L81)
+Defined in: [src/screens/AdminPortal/OrganizationVenues/OrganizationVenues.tsx:78](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationVenues/OrganizationVenues.tsx#L78)
 
 OrganizationVenues component
 
