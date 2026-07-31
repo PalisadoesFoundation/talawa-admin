@@ -46,7 +46,7 @@ import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModa
 import { useTranslation } from 'react-i18next';
 import { Button } from 'shared-components/Button';
 import { Navigate, useParams } from 'react-router';
-import { WarningAmberRounded } from '@mui/icons-material';
+import WarningAmberRoundedIcon from '@mui/icons-material/WarningAmberRounded';
 import { useQuery } from '@apollo/client';
 import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
 import {
@@ -162,7 +162,7 @@ function Groups(): JSX.Element {
   if (groupsError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
-        <WarningAmberRounded className={styles.icon} />
+        <WarningAmberRoundedIcon className={styles.icon} />
         <h6 className={styles.errorHeading}>
           {tErrors('errorLoading', { entity: t('volunteerGroups') })}
         </h6>

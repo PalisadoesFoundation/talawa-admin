@@ -12,7 +12,7 @@
  * @returns JSX.Element - The rendered error panel
  */
 import React, { useMemo } from 'react';
-import { WarningAmberRounded } from '@mui/icons-material';
+import WarningAmberRoundedIcon from '@mui/icons-material/WarningAmberRounded';
 import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
 import styles from './ErrorPanel.module.css';
@@ -160,7 +160,7 @@ const ErrorPanel: React.FC<InterfaceErrorPanelProps> = ({
   return (
     <div className={containerClassName} role={role} {...ariaLiveProps}>
       <div className={styles.message} data-testid={testId}>
-        <WarningAmberRounded className={styles.errorIcon} />
+        <WarningAmberRoundedIcon className={styles.errorIcon} />
         <h6 className={styles.messageText}>
           {message}
           {displayErrorMessage && (

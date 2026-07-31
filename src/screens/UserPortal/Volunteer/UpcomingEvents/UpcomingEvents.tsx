@@ -4,8 +4,13 @@ import Button from 'shared-components/Button/Button';
 import styles from './UpcomingEvents.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router';
-import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
-import { WarningAmberRounded, ExpandMore, Event } from '@mui/icons-material';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+
+import WarningAmberRoundedIcon from '@mui/icons-material/WarningAmberRounded';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import EventIcon from '@mui/icons-material/Event';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useQuery } from '@apollo/client';
 import {
@@ -236,7 +241,7 @@ const UpcomingEvents = (): JSX.Element => {
       <div className={`${styles.container} rounded-4 my-3`}>
         <div className={styles.message} data-testid="errorMsg">
           <span className={styles.errorIcon} aria-hidden="true">
-            <WarningAmberRounded />
+            <WarningAmberRoundedIcon />
           </span>
           <h6 className={styles.errorHeading}>
             {tErrors('errorLoading', { entity: 'Events' })}
@@ -275,7 +280,7 @@ const UpcomingEvents = (): JSX.Element => {
       />
       {events.length === 0 ? (
         <EmptyState
-          icon={<Event />}
+          icon={<EventIcon />}
           message={t('noEvents')}
           dataTestId="events-empty-state"
         />
@@ -285,7 +290,7 @@ const UpcomingEvents = (): JSX.Element => {
           const Icon = status.icon;
           return (
             <Accordion key={event._id} className="rounded">
-              <AccordionSummary expandIcon={<ExpandMore />}>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                 <div
                   className={styles.titleContainerVolunteer}
                   data-testid={`detailContainer${index + 1}`}
