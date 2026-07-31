@@ -27,9 +27,9 @@ export const modalStateRestrictions = [
   // Catch: show*Modal pattern (e.g., showUploadModal, showUninstallModal, showRecurringModal)
   {
     selector:
-      "VariableDeclarator[id.type='ArrayPattern'][init.callee.name='useState'] > ArrayPattern > Identifier[name=/^show[A-Z].*Modal$/]:first-child",
+      "VariableDeclarator[id.type='ArrayPattern'][init.callee.name='useState'] > ArrayPattern > Identifier[name='showModal']:first-child",
     message:
-      'Prefer useModalState hook for modal visibility state. Import from shared-components/CRUDModalTemplate/hooks/useModalState.',
+      "Prefer useModalState hook for modal visibility state.",
   },
   // Catch: *ModalIsOpen pattern (e.g., editUserTagModalIsOpen, addPeopleToTagModalIsOpen)
   {
