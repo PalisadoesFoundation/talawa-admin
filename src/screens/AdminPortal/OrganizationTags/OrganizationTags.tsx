@@ -40,6 +40,7 @@ import { ORGANIZATION_USER_TAGS_LIST_PG } from 'GraphQl/Queries/OrganizationQuer
 import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import { PAGE_SIZE } from 'types/ReportingTable/utils';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
+import Button from 'shared-components/Button';
 
 function OrganizationTags(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -182,7 +183,8 @@ function OrganizationTags(): JSX.Element {
           <p className="page-subtitle">{t('tagName')}</p>
         </div>
         <div className="page-header-actions">
-          <button
+          <Button
+            variant="plain"
             onClick={() => {
               setTagName('');
               showCreateTagModal();
@@ -206,7 +208,7 @@ function OrganizationTags(): JSX.Element {
               <line x1="5" y1="12" x2="19" y2="12" />
             </svg>
             {t('createTag')}
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -327,20 +329,22 @@ function OrganizationTags(): JSX.Element {
                             </td>
                             <td>
                               <div className={styles.actionBtns}>
-                                <button
+                                <Button
+                                  variant="plain"
                                   className="btn btn-sm btn-secondary"
                                   onClick={() => redirectToManageTag(tag.id)}
                                   data-testid="manageTagBtn"
                                 >
                                   {tCommon('edit')}
-                                </button>
-                                <button
+                                </Button>
+                                <Button
+                                  variant="plain"
                                   className="btn btn-sm btn-danger"
                                   onClick={() => redirectToSubTags(tag.id)}
                                   data-testid="subTagsBtn"
                                 >
                                   {tCommon('delete')}
-                                </button>
+                                </Button>
                               </div>
                             </td>
                           </tr>

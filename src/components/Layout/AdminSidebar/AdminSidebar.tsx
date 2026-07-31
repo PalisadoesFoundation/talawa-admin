@@ -20,6 +20,7 @@ import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
 import { sanitizeAvatarURL } from 'utils/sanitizeAvatar';
 import SignOut from 'components/SignOut/SignOut';
+import Button from 'shared-components/Button/Button';
 
 interface InterfaceAdminSidebarProps {
   collapsed: boolean;
@@ -100,7 +101,8 @@ export default function AdminSidebar({
         </div>
 
         {/* Collapse toggle */}
-        <button
+        <Button
+          variant="plain"
           className="sidebar-collapse-btn"
           title="Toggle sidebar"
           onClick={onToggleCollapse}
@@ -114,11 +116,12 @@ export default function AdminSidebar({
             <path d="M11 17l-5-5 5-5" />
             <path d="M18 17l-5-5 5-5" />
           </svg>
-        </button>
+        </Button>
 
         {/* Context Switcher */}
         <div className="context-switcher">
-          <button
+          <Button
+            variant="plain"
             className="context-btn active"
             data-context="admin"
             onClick={() => {
@@ -135,8 +138,9 @@ export default function AdminSidebar({
               </svg>
             </span>
             <span className="ctx-label">Admin</span>
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="plain"
             className="context-btn"
             data-context="user"
             onClick={() => navigate('/user/organizations')}
@@ -148,7 +152,7 @@ export default function AdminSidebar({
               </svg>
             </span>
             <span className="ctx-label">User</span>
-          </button>
+          </Button>
         </div>
 
         {/* Org selector (org variant only) */}

@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
 import SignOut from 'components/SignOut/SignOut';
 import { sanitizeAvatarURL } from 'utils/sanitizeAvatar';
+import Button from 'shared-components/Button/Button';
 
 interface InterfaceUserSidebarProps {
   collapsed: boolean;
@@ -81,7 +82,8 @@ export default function UserSidebarComponent({
           <span className="sidebar-brand-text">Talawa</span>
         </div>
 
-        <button
+        <Button
+          variant="plain"
           className="sidebar-collapse-btn"
           title="Toggle sidebar"
           onClick={onToggleCollapse}
@@ -95,10 +97,11 @@ export default function UserSidebarComponent({
             <path d="M11 17l-5-5 5-5" />
             <path d="M18 17l-5-5 5-5" />
           </svg>
-        </button>
+        </Button>
 
         <div className="context-switcher">
-          <button
+          <Button
+            variant="plain"
             className="context-btn"
             data-context="admin"
             onClick={() => navigate('/admin/orglist')}
@@ -109,8 +112,9 @@ export default function UserSidebarComponent({
               </svg>
             </span>
             <span className="ctx-label">Admin</span>
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="plain"
             className="context-btn active"
             data-context="user"
             onClick={() => navigate('/user/organizations')}
@@ -122,7 +126,7 @@ export default function UserSidebarComponent({
               </svg>
             </span>
             <span className="ctx-label">User</span>
-          </button>
+          </Button>
         </div>
 
         {orgId && (

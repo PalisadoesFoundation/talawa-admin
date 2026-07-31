@@ -81,6 +81,7 @@ import EditUserTagModal from './editModal/EditUserTagModal';
 import RemoveUserTagModal from './removeModal/RemoveUserTagModal';
 import UnassignUserTagModal from './unassignModal/UnassignUserTagModal';
 import { useModalState } from 'shared-components/CRUDModalTemplate';
+import Button from 'shared-components/Button/Button';
 
 export const getManageTagErrorMessage = (error: unknown): string => {
   if (error instanceof Error) {
@@ -370,7 +371,8 @@ function ManageTag(): JSX.Element {
         <div className="page-header-left">
           <h1 className="page-title">
             {currentTagName || t('manageTag')}
-            <button
+            <Button
+              variant="plain"
               className={`btn-icon ${styles.editIconBtn}`}
               title={tCommon('edit')}
               onClick={editUserTagModal.open}
@@ -389,7 +391,7 @@ function ManageTag(): JSX.Element {
               >
                 <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
               </svg>
-            </button>
+            </Button>
           </h1>
           <p className="page-subtitle">{t('assignedMembersOf')}</p>
         </div>
@@ -432,7 +434,8 @@ function ManageTag(): JSX.Element {
               />
             </div>
             <div className={styles.saveBtnWrapper}>
-              <button
+              <Button
+                variant="plain"
                 className="btn btn-primary"
                 onClick={() => {
                   const event = new Event('submit', {
@@ -447,10 +450,11 @@ function ManageTag(): JSX.Element {
                 data-testid="saveTagBtn"
               >
                 {tCommon('save') || 'Save'}
-              </button>
+              </Button>
             </div>
             <div className={styles.assignBtnsWrapper}>
-              <button
+              <Button
+                variant="plain"
                 className="btn btn-primary btn-sm"
                 onClick={() => {
                   setTagActionType('assignToTags');
@@ -459,8 +463,9 @@ function ManageTag(): JSX.Element {
                 data-testid="assignToTags"
               >
                 {t('assignToTags')}
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="plain"
                 className="btn btn-danger btn-sm"
                 onClick={() => {
                   setTagActionType('removeFromTags');
@@ -469,7 +474,7 @@ function ManageTag(): JSX.Element {
                 data-testid="removeFromTags"
               >
                 {t('removeFromTags')}
-              </button>
+              </Button>
             </div>
 
             <div className={styles.dangerZone}>
@@ -478,13 +483,14 @@ function ManageTag(): JSX.Element {
                 Deleting this tag will remove it from all assigned members. This
                 action cannot be undone.
               </p>
-              <button
+              <Button
+                variant="plain"
                 className="btn btn-danger"
                 onClick={removeUserTagModal.open}
                 data-testid="removeTag"
               >
                 Delete Tag
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -495,13 +501,14 @@ function ManageTag(): JSX.Element {
             <span className="card-title">
               {t('assignedMembersOf')} ({userTagAssignedMembers.length})
             </span>
-            <button
+            <Button
+              variant="plain"
               className="btn btn-sm btn-primary"
               onClick={addPeopleToTagModal.open}
               data-testid="addPeopleToTagBtn"
             >
               {t('addPeopleToTag')}
-            </button>
+            </Button>
           </div>
           <div className="card-body">
             <div className={styles.searchBarWrapper}>
@@ -586,7 +593,8 @@ function ManageTag(): JSX.Element {
                           >
                             {fullName}
                           </span>
-                          <button
+                          <Button
+                            variant="plain"
                             className="btn btn-sm btn-danger"
                             onClick={() => {
                               setUnassignUserId(member._id);
@@ -595,7 +603,7 @@ function ManageTag(): JSX.Element {
                             data-testid="unassignTagBtn"
                           >
                             Remove
-                          </button>
+                          </Button>
                         </div>
                       );
                     })

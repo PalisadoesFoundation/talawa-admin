@@ -6,6 +6,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './DashboardStats.module.css';
+import Button from 'shared-components/Button/Button';
 
 interface InterfaceDashboardStatsProps {
   memberCount: number;
@@ -202,7 +203,8 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
   return (
     <div className="stats-grid">
       {stats.map((stat) => (
-        <button
+        <Button
+          variant="plain"
           key={stat.testId}
           className={`${styles.statCard} stat-card`}
           data-testid={stat.testId}
@@ -214,7 +216,7 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
             <div className={`stat-card-icon ${stat.icon}`}>{stat.iconSvg}</div>
           </div>
           <div className="stat-card-value">{stat.count}</div>
-        </button>
+        </Button>
       ))}
     </div>
   );

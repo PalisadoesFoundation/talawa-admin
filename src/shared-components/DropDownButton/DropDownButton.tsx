@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 import SearchToggle from './SearchToggle';
 import SortIcon from '@mui/icons-material/Sort';
 import FilterAltOutlined from '@mui/icons-material/FilterAltOutlined';
+import Button from 'shared-components/Button/Button';
 
 const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
   id,
@@ -182,7 +183,8 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
         .join(' ')}
       data-testid={`${dataTestIdPrefix}-container`}
     >
-      <button
+      <Button
+        variant="plain"
         type="button"
         id={id}
         disabled={disabled}
@@ -216,7 +218,7 @@ const DropDownButton: React.FC<InterfaceDropDownButtonProps> = ({
         )}
         <span className={styles.buttonLabel}>{displayLabel}</span>
         {showCaret && <span className={styles.dropdownCaret}>&#9660;</span>}
-      </button>
+      </Button>
       {isOpen && (
         <div
           role="listbox"

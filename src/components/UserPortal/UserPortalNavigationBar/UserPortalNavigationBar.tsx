@@ -32,6 +32,7 @@ import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
 import LanguageSelector from './LanguageSelector';
 import UserProfileDropdown from './UserDropdown';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import Button from 'shared-components/Button';
 
 export const UserPortalNavigationBar = (
   props: InterfaceUserPortalNavbarProps,
@@ -177,7 +178,8 @@ export const UserPortalNavigationBar = (
             : link.label;
 
           return (
-            <button
+            <Button
+              variant="plain"
               key={link.id}
               type="button"
               className={`${isLinkActive(link) ? styles.navLinkActive : styles.navLink} ${styles.navLinkBtn}`}
@@ -188,7 +190,7 @@ export const UserPortalNavigationBar = (
             >
               {link.icon && <link.icon className={styles.linkIcon} />}
               {linkLabel}
-            </button>
+            </Button>
           );
         })}
       </nav>

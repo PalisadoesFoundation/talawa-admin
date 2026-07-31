@@ -62,6 +62,7 @@ import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { useTableData } from 'shared-components/DataTable/hooks/useTableData';
 import ErrorPanel from 'shared-components/ErrorPanel';
 import { OrganizationMembershipRole } from 'types/AdminPortal/OrganizationMembershipRole/interface';
+import Button from 'shared-components/Button/Button';
 
 // BlockUserRow type removed - no longer needed with inline table rendering
 
@@ -351,7 +352,8 @@ const BlockUser = (): JSX.Element => {
                           <td>{''}</td>
                           <td>
                             {showBlockedMembers ? (
-                              <button
+                              <Button
+                                variant="plain"
                                 className="btn btn-secondary btn-sm"
                                 data-testid={`unblockUserBtn-${user.id}`}
                                 aria-label={t('unblock') + ': ' + user.name}
@@ -360,9 +362,10 @@ const BlockUser = (): JSX.Element => {
                                 }}
                               >
                                 {t('unblock')}
-                              </button>
+                              </Button>
                             ) : (
-                              <button
+                              <Button
+                                variant="plain"
                                 className="btn btn-secondary btn-sm"
                                 data-testid={`blockUserBtn-${user.id}`}
                                 aria-label={t('block') + ': ' + user.name}
@@ -371,7 +374,7 @@ const BlockUser = (): JSX.Element => {
                                 }}
                               >
                                 {t('block')}
-                              </button>
+                              </Button>
                             )}
                           </td>
                         </tr>

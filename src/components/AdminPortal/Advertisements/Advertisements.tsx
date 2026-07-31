@@ -46,6 +46,7 @@ import { AdvertisementSkeleton } from './skeleton/AdvertisementSkeleton';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import Toolbar from 'shared-components/Toolbar/Toolbar';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import Button from 'shared-components/Button/Button';
 
 export default function Advertisements(): JSX.Element {
   const { orgId: currentOrgId } = useParams<{ orgId: string }>();
@@ -240,7 +241,8 @@ export default function Advertisements(): JSX.Element {
           </div>
           <div className={styles.contentWrapperAdvertisements}>
             <div className={styles.tabsContainerAdvertisements}>
-              <button
+              <Button
+                variant="plain"
                 type="button"
                 onClick={() => handleTabClick('activeAds')}
                 className={`${styles.tabButtonAdvertisements} ${
@@ -250,8 +252,9 @@ export default function Advertisements(): JSX.Element {
                 }`}
               >
                 {t('activeAds')}
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="plain"
                 type="button"
                 onClick={() => handleTabClick('archivedAds')}
                 className={`${styles.tabButtonAdvertisements} ${
@@ -261,7 +264,7 @@ export default function Advertisements(): JSX.Element {
                 }`}
               >
                 {t('archivedAds')}
-              </button>
+              </Button>
             </div>
 
             {activeTab === 'activeAds' && (

@@ -19,6 +19,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceDonation } from 'types/UserPortal/Donation/interface';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import Button from 'shared-components/Button';
 
 const currencies = ['USD', 'INR', 'EUR'];
 const currencyOptions = currencies.map((c) => ({ value: c, label: c }));
@@ -145,13 +146,14 @@ export default function Donate(): JSX.Element {
           {/* Quick presets */}
           <div className={styles.presets}>
             {presetAmounts.map((preset) => (
-              <button
+              <Button
+                variant="plain"
                 key={preset}
                 className={`${styles.presetBtn} ${amount === String(preset) ? styles.presetBtnActive : ''}`}
                 onClick={() => setAmount(String(preset))}
               >
                 ${preset}
-              </button>
+              </Button>
             ))}
           </div>
 
@@ -184,13 +186,14 @@ export default function Donate(): JSX.Element {
             </div>
           </div>
 
-          <button
+          <Button
+            variant="plain"
             className={styles.donateBtn}
             data-testid="donateBtn"
             onClick={donateToOrg}
           >
             {t('donate')}
-          </button>
+          </Button>
         </div>
 
         {/* Right: Donation history */}

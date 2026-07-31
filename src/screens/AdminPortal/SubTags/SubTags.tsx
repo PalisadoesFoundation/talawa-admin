@@ -233,7 +233,8 @@ function SubTags(): JSX.Element {
           >
             {`${t('manageTag')} ${subTagsData?.getChildTags.name}`}
           </Button>
-          <button
+          <Button
+            variant="plain"
             className="btn btn-primary"
             onClick={showAddSubTagModal}
             data-testid="addSubTagBtn"
@@ -253,7 +254,7 @@ function SubTags(): JSX.Element {
               <line x1="5" y1="12" x2="19" y2="12" />
             </svg>{' '}
             {t('addChildTag')}
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -375,7 +376,8 @@ function SubTags(): JSX.Element {
                             </td>
                             <td>
                               <div className={styles.actionBtns}>
-                                <button
+                                <Button
+                                  variant="plain"
                                   className="btn btn-sm btn-secondary"
                                   onClick={() =>
                                     redirectToManageTag(subTag._id)
@@ -383,14 +385,15 @@ function SubTags(): JSX.Element {
                                   data-testid="manageTagBtn"
                                 >
                                   {tCommon('edit')}
-                                </button>
-                                <button
+                                </Button>
+                                <Button
+                                  variant="plain"
                                   className="btn btn-sm btn-danger"
                                   onClick={() => redirectToSubTags(subTag._id)}
                                   data-testid="subTagsBtn"
                                 >
                                   {tCommon('delete')}
-                                </button>
+                                </Button>
                               </div>
                             </td>
                           </tr>

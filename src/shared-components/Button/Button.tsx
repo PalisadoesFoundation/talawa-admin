@@ -4,12 +4,14 @@
  * Replaces react-bootstrap Button. Same props interface, no Bootstrap dependency.
  * Uses the `.btn` / `.btn-primary` / etc. classes from the design system.
  */
+/* eslint-disable no-restricted-syntax */
 import { forwardRef } from 'react';
 import type { ForwardedRef } from 'react';
 import styles from './Button.module.css';
-import type { ButtonProps, ButtonSize, ButtonVariant } from './Button.types';
+import type { ButtonProps, ButtonVariant } from './Button.types';
 
 const VARIANT_CLASS: Record<string, string> = {
+  plain: 'plain',
   primary: 'btn-primary',
   secondary: 'btn-secondary',
   success: 'btn-primary', // map to green primary
@@ -70,8 +72,8 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
     const hasHref = 'href' in restProps && restProps.href !== undefined;
 
     const classes = [
-      'btn',
-      resolveVariantClass(variant),
+      variant !== 'plain' && 'btn',
+      variant !== 'plain' && resolveVariantClass(variant),
       SIZE_CLASS[size] || '',
       fullWidth ? styles.fullWidth : '',
       isLoading ? styles.isLoading : '',

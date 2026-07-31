@@ -365,14 +365,15 @@ export default function Organizations(): React.JSX.Element {
                     ? tCommon('loading')
                     : tLogin('resendVerification')}
                 </Button>
-                <button
+                <Button
+                  variant="plain"
                   type="button"
                   className={styles.alertDismiss}
                   onClick={handleDismissWarning}
                   aria-label="Close"
                 >
                   &times;
-                </button>
+                </Button>
               </div>
             </div>
           </div>

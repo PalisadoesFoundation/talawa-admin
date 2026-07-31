@@ -40,9 +40,9 @@ import EmptyState from 'shared-components/EmptyState/EmptyState';
 import Group from '@mui/icons-material/Group';
 import Search from '@mui/icons-material/Search';
 /* Alert replaced with plain div for Talawa design */
-import RBButton from 'shared-components/Button';
 import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
+import Button from 'shared-components/Button';
 
 interface InterfaceOrgFormState {
   addressLine1: string;
@@ -396,7 +396,7 @@ function OrgList(): JSX.Element {
               <strong>{tLogin('emailNotVerified')}</strong>
             </div>
             <div className={styles.warningActions}>
-              <RBButton
+              <Button
                 variant="outline-primary"
                 size="sm"
                 onClick={handleResendVerification}
@@ -406,15 +406,16 @@ function OrgList(): JSX.Element {
                 {resendLoading
                   ? tCommon('loading')
                   : tLogin('resendVerification')}
-              </RBButton>
-              <button
+              </Button>
+              <Button
+                variant="plain"
                 type="button"
                 className={styles.warningDismiss}
                 onClick={handleDismissWarning}
                 aria-label="Dismiss"
               >
                 &times;
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -457,14 +458,15 @@ function OrgList(): JSX.Element {
           />
         </div>
         {role === 'administrator' && (
-          <button
+          <Button
+            variant="plain"
             type="button"
             className="btn btn-primary"
             onClick={open}
             data-testid="createOrganizationBtn"
           >
             + {t('createOrganization')}
-          </button>
+          </Button>
         )}
       </div>
 
@@ -635,7 +637,7 @@ function OrgList(): JSX.Element {
               >
                 {t('goToStore')}
               </Link>
-              <RBButton
+              <Button
                 type="submit"
                 className={styles.enableEverythingBtn}
                 onClick={closeDialogModal}
@@ -643,7 +645,7 @@ function OrgList(): JSX.Element {
                 data-testid="enableEverythingForm"
               >
                 {t('enableEverything')}
-              </RBButton>
+              </Button>
             </div>
           </div>
         </section>

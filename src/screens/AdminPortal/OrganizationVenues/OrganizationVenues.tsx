@@ -59,6 +59,7 @@ import { DeleteModal } from 'shared-components/CRUDModalTemplate';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 import SafeBreadcrumbs from 'shared-components/BreadcrumbsComponent/SafeBreadcrumbs';
 import styles from './OrganizationVenues.module.css';
+import Button from 'shared-components/Button/Button';
 
 export const getVenueNameById = (
   venues: InterfaceQueryVenueListItem[],
@@ -248,13 +249,14 @@ function organizationVenues(props?: {
           <p className="page-subtitle">{t('manageVenues')}</p>
         </div>
         <div className="page-header-actions">
-          <button
+          <Button
+            variant="plain"
             className="btn btn-primary"
             onClick={showCreateVenueModal}
             data-testid="createVenueBtn"
           >
             + {t('addVenue')}
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -313,13 +315,14 @@ function organizationVenues(props?: {
                       {t('capacity')}:{' '}
                       <strong>{venueItem.node.capacity ?? 0}</strong>
                     </span>
-                    <button
+                    <Button
+                      variant="plain"
                       className="btn btn-secondary btn-sm"
                       data-testid={`editVenueBtn-${venueItem.node.id}`}
                       onClick={() => showEditVenueModal(venueItem)}
                     >
                       {tCommon('edit')}
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </div>

@@ -19,6 +19,7 @@ import { useTableData } from 'shared-components/DataTable/hooks/useTableData';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import styles from './OrganizationFundCampaigns.module.css';
+import Button from 'shared-components/Button/Button';
 
 const PAGE_SIZE = 10;
 
@@ -129,12 +130,13 @@ const OrganizationFundCampaign = (): JSX.Element => {
           <p className="page-subtitle">{t('title')}</p>
         </div>
         <div className="page-header-actions">
-          <button
+          <Button
+            variant="plain"
             className="btn btn-secondary"
             onClick={() => navigate(`/admin/orgfunds/${orgId}`)}
           >
             &larr; {tCommon('back')}
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -150,14 +152,15 @@ const OrganizationFundCampaign = (): JSX.Element => {
           showClearButton
         />
         <div className={styles.toolbarSpacer} />
-        <button
+        <Button
+          variant="plain"
           className={styles.createBtn}
           onClick={() => handleOpenModal(null, 'create')}
           data-testid="addCampaignBtn"
           disabled={isArchived}
         >
           + {t('addCampaign')}
-        </button>
+        </Button>
       </div>
 
       {/* Content */}
@@ -211,13 +214,14 @@ const OrganizationFundCampaign = (): JSX.Element => {
                 return (
                   <tr key={c.id}>
                     <td>
-                      <button
+                      <Button
+                        variant="plain"
                         className={styles.campaignLink}
                         onClick={() => handleClick(c.id)}
                         data-testid="campaignName"
                       >
                         {c.name}
-                      </button>
+                      </Button>
                     </td>
                     <td>{dayjs(c.startAt).format('MMM D, YYYY')}</td>
                     <td data-testid="endDateCell">
@@ -246,7 +250,8 @@ const OrganizationFundCampaign = (): JSX.Element => {
                       </span>
                     </td>
                     <td>
-                      <button
+                      <Button
+                        variant="plain"
                         className="btn btn-secondary btn-sm"
                         data-testid="editCampaignBtn"
                         onClick={(e) => {
@@ -255,7 +260,7 @@ const OrganizationFundCampaign = (): JSX.Element => {
                         }}
                       >
                         {tCommon('edit')}
-                      </button>
+                      </Button>
                     </td>
                   </tr>
                 );

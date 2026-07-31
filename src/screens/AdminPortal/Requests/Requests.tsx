@@ -41,6 +41,7 @@ import EmptyState from 'shared-components/EmptyState/EmptyState';
 import Group from '@mui/icons-material/Group';
 import Search from '@mui/icons-material/Search';
 import ErrorPanel from 'shared-components/ErrorPanel';
+import Button from 'shared-components/Button/Button';
 
 interface InterfaceRequestsListItem {
   membershipRequestId: string;
@@ -347,7 +348,8 @@ const Requests = (): JSX.Element => {
                         </td>
                         <td>
                           <div className="request-actions">
-                            <button
+                            <Button
+                              variant="plain"
                               className="btn btn-primary btn-sm"
                               data-testid={`acceptMembershipRequestBtn${req.membershipRequestId}`}
                               onClick={async () => {
@@ -355,8 +357,9 @@ const Requests = (): JSX.Element => {
                               }}
                             >
                               {t('requests.accept')}
-                            </button>
-                            <button
+                            </Button>
+                            <Button
+                              variant="plain"
                               className="btn btn-secondary btn-sm"
                               data-testid={`rejectMembershipRequestBtn${req.membershipRequestId}`}
                               onClick={async () => {
@@ -364,7 +367,7 @@ const Requests = (): JSX.Element => {
                               }}
                             >
                               {t('requests.reject')}
-                            </button>
+                            </Button>
                           </div>
                         </td>
                       </tr>

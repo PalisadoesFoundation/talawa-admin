@@ -24,6 +24,7 @@ import type {
 import { getPledgeColumns } from './PledgeColumns';
 import type { InterfacePledgeTableRow } from './PledgeColumns';
 import { useModalState } from 'shared-components/CRUDModalTemplate';
+import Button from 'shared-components/Button/Button';
 
 /**
  * Renders the Fund Campaign Pledges screen with pledge management, search/sort, and progress tracking.
@@ -258,7 +259,8 @@ const fundCampaignPledge = (): JSX.Element => {
             </p>
           </div>
           <div className="page-header-actions">
-            <button
+            <Button
+              variant="plain"
               className="btn btn-primary"
               disabled={!isWithinCampaignDates}
               onClick={() => handleOpenModal(null, 'create')}
@@ -282,7 +284,7 @@ const fundCampaignPledge = (): JSX.Element => {
                 <line x1="5" y1="12" x2="19" y2="12" />
               </svg>{' '}
               {t('pledges.addPledge')}
-            </button>
+            </Button>
           </div>
         </div>
 

@@ -31,6 +31,7 @@ import type { DefaultConnectionPageInfo } from 'types/AdminPortal/pagination';
 import SafeBreadcrumbs from 'shared-components/BreadcrumbsComponent/SafeBreadcrumbs';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import useLocalStorage from 'utils/useLocalstorage';
+import Button from 'shared-components/Button/Button';
 
 const STATE_TO_OPTION: Record<number, string> = {
   0: 'members',
@@ -457,7 +458,8 @@ function OrganizationPeople(): JSX.Element {
                           </div>
                         </td>
                         <td>
-                          <button
+                          <Button
+                            variant="plain"
                             className={styles.actionsBtn}
                             aria-label={tCommon('removeMember')}
                             onClick={() => toggleRemoveMemberModal(node.id)}
@@ -465,7 +467,7 @@ function OrganizationPeople(): JSX.Element {
                             disabled={role !== 'administrator'}
                           >
                             &#8943;
-                          </button>
+                          </Button>
                         </td>
                       </tr>
                     );
@@ -480,14 +482,15 @@ function OrganizationPeople(): JSX.Element {
                 </span>
                 <div className="pagination">
                   {pageInfo?.hasNextPage && (
-                    <button
+                    <Button
+                      variant="plain"
                       className="pagination-btn"
                       onClick={handleLoadMore}
                       disabled={isLoadingMore}
                       data-testid="load-more-button"
                     >
                       {isLoadingMore ? tCommon('loading') : tCommon('loadMore')}
-                    </button>
+                    </Button>
                   )}
                 </div>
               </div>

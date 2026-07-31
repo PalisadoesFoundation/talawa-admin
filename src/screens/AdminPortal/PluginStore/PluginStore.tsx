@@ -13,7 +13,6 @@ import { PluginList, UninstallConfirmationModal } from './components';
 import { usePluginActions, usePluginFilters } from './hooks';
 import { useGetAllPlugins } from 'plugin/graphql-service';
 import type { IPluginMeta } from 'plugin';
-import { Button } from 'shared-components/Button';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import {
   useApolloClient,
@@ -28,6 +27,7 @@ import {
 } from 'utils/adminPluginInstaller';
 import PluginDetailView from './PluginDetailView';
 import styles from './PluginStore.module.css';
+import Button from 'shared-components/Button/Button';
 
 const STRUCTURE = `plugin.zip
 ├── admin/              (optional)
@@ -280,23 +280,25 @@ export default function PluginStore() {
             })}
           </span>
           <div className={styles.paginationControls}>
-            <button
+            <Button
+              variant="plain"
               className={styles.paginationBtn}
               onClick={() => setPage((p) => p - 1)}
               disabled={page === 0}
             >
               &lsaquo;
-            </button>
+            </Button>
             <span>
               {page + 1} / {totalPages}
             </span>
-            <button
+            <Button
+              variant="plain"
               className={styles.paginationBtn}
               onClick={() => setPage((p) => p + 1)}
               disabled={page >= totalPages - 1}
             >
               &rsaquo;
-            </button>
+            </Button>
           </div>
         </div>
       )}
@@ -315,7 +317,8 @@ export default function PluginStore() {
         <div className={styles.uploadColumns}>
           {/* Left: dropzone + parsed info */}
           <div className={styles.uploadLeft}>
-            <button
+            <Button
+              variant="plain"
               type="button"
               className={styles.dropzone}
               onClick={() => fileRef.current?.click()}
@@ -327,7 +330,7 @@ export default function PluginStore() {
               <div className={styles.dropzoneHint}>
                 {tCommon('clickToBrowseFile')}
               </div>
-            </button>
+            </Button>
 
             <input
               ref={fileRef}

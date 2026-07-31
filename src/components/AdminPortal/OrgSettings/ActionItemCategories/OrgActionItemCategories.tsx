@@ -17,6 +17,7 @@ import SearchBar from 'shared-components/SearchBar/SearchBar';
 import SortingButton from 'shared-components/SortingButton/SortingButton';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 import { useModalState } from 'shared-components/CRUDModalTemplate';
+import Button from 'shared-components/Button/Button';
 
 enum CategoryStatus {
   Active = 'active',
@@ -206,14 +207,15 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
           type="filter"
         />
         <div className={styles.toolbarSpacer} />
-        <button
+        <Button
+          variant="plain"
           className={styles.createBtn}
           onClick={() => handleOpenModal(null, 'create')}
           data-testid="createActionItemCategoryBtn"
         >
           <PlusIcon />
           {tCommon('create')}
-        </button>
+        </Button>
       </div>
 
       {/* Table */}
@@ -252,7 +254,8 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
                   <td>{dayjs(cat.createdAt).format('DD/MM/YYYY')}</td>
                   <td>
                     <div className={styles.actionBtns}>
-                      <button
+                      <Button
+                        variant="plain"
                         className={styles.iconBtn}
                         data-testid={`viewCategoryBtn${i + 1}`}
                         onClick={() => {
@@ -262,15 +265,16 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
                         title={tCommon('view')}
                       >
                         <EyeIcon />
-                      </button>
-                      <button
+                      </Button>
+                      <Button
+                        variant="plain"
                         className={styles.iconBtn}
                         data-testid={`editCategoryBtn${i + 1}`}
                         onClick={() => handleOpenModal(cat, 'edit')}
                         title={tCommon('edit')}
                       >
                         <PencilIcon />
-                      </button>
+                      </Button>
                     </div>
                   </td>
                 </tr>

@@ -6,7 +6,6 @@
  */
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
-import { Button } from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useParams } from 'react-router';
 import styles from './UserContactDetails.module.css';
@@ -34,6 +33,7 @@ import DropDownButton from 'shared-components/DropDownButton/DropDownButton';
 import { InterfaceMemberDetailProps } from 'types/AdminPortal/MemberDetail/interface';
 import { resolveAvatarFile } from './resolveAvatarFile';
 import { phoneFieldConfigs, addressFieldConfigs } from './fieldConfigs';
+import Button from 'shared-components/Button/Button';
 
 /** Pencil edit icon SVG */
 const PencilIcon = () => (
@@ -267,7 +267,8 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
                     className={styles.avatarImage}
                     enableEnlarge={true}
                   />
-                  <button
+                  <Button
+                    variant="plain"
                     type="button"
                     className={styles.avatarEditBtn}
                     onClick={() => fileInputRef.current?.click()}
@@ -276,7 +277,7 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
                     aria-label={tCommon('userEditProfilePicture')}
                   >
                     <PencilIcon />
-                  </button>
+                  </Button>
                 </div>
                 <input
                   accept="image/*"

@@ -39,6 +39,7 @@ import { CHATS_LIST, UNREAD_CHATS } from 'GraphQl/Queries/PlugInQueries';
 import CreateGroupChat from '../../../components/UserPortal/CreateGroupChat/CreateGroupChat';
 import CreateDirectChat from 'components/UserPortal/CreateDirectChat/CreateDirectChat';
 import type { Chat as ChatType } from 'types/UserPortal/Chat/interface';
+import Button from 'shared-components/Button/Button';
 
 export default function Chat(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
@@ -182,15 +183,6 @@ export default function Chat(): JSX.Element {
       .slice(0, 2);
   };
 
-  // Avatar color palette
-  const AVATAR_COLORS = [
-    { bg: 'var(--blue-50)', color: 'var(--blue-600)' },
-    { bg: 'var(--purple-50)', color: 'var(--purple-500)' },
-    { bg: 'var(--green-50)', color: 'var(--green-700)' },
-    { bg: 'var(--orange-50)', color: 'var(--orange-500)' },
-    { bg: 'var(--red-50)', color: 'var(--red-500)' },
-  ];
-
   const getAvatarColorIndex = (id: string) => {
     let hash = 0;
     for (let i = 0; i < id.length; i++)
@@ -249,7 +241,8 @@ export default function Chat(): JSX.Element {
               />
             </div>
             <div className={styles.chatTabs} role="tablist">
-              <button
+              <Button
+                variant="plain"
                 className={`${styles.chatTab} ${filterType === 'all' ? styles.chatTabActive : ''}`}
                 role="tab"
                 aria-selected={filterType === 'all'}
@@ -257,8 +250,9 @@ export default function Chat(): JSX.Element {
                 data-testid="allChat"
               >
                 Direct
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="plain"
                 className={`${styles.chatTab} ${filterType === 'group' ? styles.chatTabActive : ''}`}
                 role="tab"
                 aria-selected={filterType === 'group'}
@@ -266,7 +260,7 @@ export default function Chat(): JSX.Element {
                 data-testid="groupChat"
               >
                 Groups
-              </button>
+              </Button>
             </div>
           </div>
 
@@ -289,7 +283,8 @@ export default function Chat(): JSX.Element {
                 const colorIdx = getAvatarColorIndex(chat.id);
 
                 return (
-                  <button
+                  <Button
+                    variant="plain"
                     key={chat.id}
                     className={`${styles.chatItem} ${isActive ? styles.chatItemActive : ''} ${isUnread ? styles.chatItemUnread : ''}`}
                     onClick={() => setSelectedContact(chat.id)}
@@ -333,7 +328,7 @@ export default function Chat(): JSX.Element {
                         {chat.unreadMessagesCount}
                       </div>
                     )}
-                  </button>
+                  </Button>
                 );
               })
             )}

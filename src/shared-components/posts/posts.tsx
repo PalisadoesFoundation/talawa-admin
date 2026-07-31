@@ -399,7 +399,8 @@ export default function PostsPage() {
           />
         </div>
         <div className={styles.layoutToggle}>
-          <button
+          <Button
+            variant="plain"
             className={`${styles.layoutBtn} ${layout === 'feed' ? styles.layoutBtnActive : ''}`}
             onClick={() => setLayout('feed')}
             title="Feed view"
@@ -419,8 +420,9 @@ export default function PostsPage() {
               <line x1="3" y1="12" x2="21" y2="12" />
               <line x1="3" y1="18" x2="21" y2="18" />
             </svg>
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="plain"
             className={`${styles.layoutBtn} ${layout === 'grid' ? styles.layoutBtnActive : ''}`}
             onClick={() => setLayout('grid')}
             title="Grid view"
@@ -441,7 +443,7 @@ export default function PostsPage() {
               <rect x="3" y="14" width="7" height="7" rx="1" />
               <rect x="14" y="14" width="7" height="7" rx="1" />
             </svg>
-          </button>
+          </Button>
         </div>
       </div>
 

@@ -215,13 +215,14 @@ const UsersTableItem = (props: Props): JSX.Element => {
         <td>{memberOrgs.length}</td>
         <td>{dayjs(user.createdAt).format('MMM D, YYYY')}</td>
         <td>
-          <button
+          <Button
+            variant="plain"
             className={styles.manageBtn}
             onClick={() => setShowJoinedOrganizations(true)}
             data-testid={`showJoinedOrgsBtn${user.id}`}
           >
             {tCommon('manage')}
-          </button>
+          </Button>
         </td>
       </tr>
       <BaseModal
@@ -321,7 +322,8 @@ const UsersTableItem = (props: Props): JSX.Element => {
                         {tCommon('admin')}
                       </option>
                     </select>
-                    <button
+                    <Button
+                      variant="plain"
                       className={styles.removeButton}
                       data-testid={`removeUserFromOrgBtn${org.id}`}
                       onClick={() => {
@@ -335,7 +337,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                       }}
                     >
                       {tCommon('remove')}
-                    </button>
+                    </Button>
                   </div>
                 </div>
               ))}

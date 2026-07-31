@@ -39,6 +39,7 @@ import Invitations from './Invitations/Invitations';
 import Actions from './Actions/Actions';
 import Groups from './Groups/Groups';
 import styles from './VolunteerManagement.module.css';
+import Button from 'shared-components/Button/Button';
 
 const volunteerDashboardTabs: { value: TabOptions; icon: JSX.Element }[] = [
   {
@@ -149,7 +150,8 @@ const VolunteerManagement = (): JSX.Element => {
       {/* Tabs */}
       <div className="tabs" role="tablist">
         {volunteerDashboardTabs.map(({ value, icon }) => (
-          <button
+          <Button
+            variant="plain"
             key={value}
             className={`tab${tab === value ? ' active' : ''}`}
             role="tab"
@@ -159,7 +161,7 @@ const VolunteerManagement = (): JSX.Element => {
           >
             {icon}
             {t(value)}
-          </button>
+          </Button>
         ))}
       </div>
 

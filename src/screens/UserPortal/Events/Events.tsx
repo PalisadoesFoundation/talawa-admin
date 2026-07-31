@@ -32,7 +32,7 @@ import type {
   IEventFormValues,
 } from 'types/EventForm/interface';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
-import { Button } from 'shared-components/Button';
+import Button from 'shared-components/Button/Button';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';
 
 dayjs.extend(utc);
@@ -279,6 +279,7 @@ export default function Events(): JSX.Element {
           </div>
           <div className="page-header-actions">
             <Button
+              variant="plain"
               onClick={() => {
                 setDefaultEventValues(buildDefaultEventValues());
                 createEventModal.open();
@@ -293,46 +294,51 @@ export default function Events(): JSX.Element {
 
         {/* Tabs: Upcoming / Past / Recurring */}
         <div className="tabs" role="tablist">
-          <button
+          <Button
+            variant="plain"
             className={`tab ${eventFilter === 'upcoming' ? 'active' : ''}`}
             role="tab"
             aria-selected={eventFilter === 'upcoming'}
             onClick={() => setEventFilter('upcoming')}
           >
             Upcoming
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="plain"
             className={`tab ${eventFilter === 'past' ? 'active' : ''}`}
             role="tab"
             aria-selected={eventFilter === 'past'}
             onClick={() => setEventFilter('past')}
           >
             Past
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="plain"
             className={`tab ${eventFilter === 'recurring' ? 'active' : ''}`}
             role="tab"
             aria-selected={eventFilter === 'recurring'}
             onClick={() => setEventFilter('recurring')}
           >
             Recurring
-          </button>
+          </Button>
         </div>
 
         {/* View toggle */}
         <div className={styles.viewToggle}>
-          <button
+          <Button
+            variant="plain"
             className={`${styles.viewToggleBtn} ${viewMode === 'calendar' ? styles.viewToggleBtnActive : ''}`}
             onClick={() => setViewMode('calendar')}
           >
             Calendar View
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="plain"
             className={`${styles.viewToggleBtn} ${viewMode === 'cards' ? styles.viewToggleBtnActive : ''}`}
             onClick={() => setViewMode('cards')}
           >
             Card View
-          </button>
+          </Button>
         </div>
 
         {/* Search */}

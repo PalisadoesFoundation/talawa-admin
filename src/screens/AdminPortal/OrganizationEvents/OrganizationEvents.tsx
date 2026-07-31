@@ -36,9 +36,9 @@ import type { InterfaceEvent } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';
 import CreateEventModal from './CreateEventModal';
-import { Button } from 'shared-components/Button';
 import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
 import SafeBreadcrumbs from 'shared-components/BreadcrumbsComponent/SafeBreadcrumbs';
+import Button from 'shared-components/Button/Button';
 
 // Define the type for an event edge
 interface IEventEdge {
@@ -469,47 +469,52 @@ function organizationEvents(): JSX.Element {
         </div>
 
         <div className="tabs" role="tablist">
-          <button
+          <Button
+            variant="plain"
             className={`tab ${eventFilter === 'upcoming' ? 'active' : ''}`}
             role="tab"
             aria-selected={eventFilter === 'upcoming'}
             onClick={() => setEventFilter('upcoming')}
           >
             Upcoming
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="plain"
             className={`tab ${eventFilter === 'past' ? 'active' : ''}`}
             role="tab"
             aria-selected={eventFilter === 'past'}
             onClick={() => setEventFilter('past')}
           >
             Past
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="plain"
             className={`tab ${eventFilter === 'recurring' ? 'active' : ''}`}
             role="tab"
             aria-selected={eventFilter === 'recurring'}
             onClick={() => setEventFilter('recurring')}
           >
             Recurring
-          </button>
+          </Button>
         </div>
 
         <div className={styles.viewToggle}>
-          <button
+          <Button
+            variant="plain"
             className={`${styles.viewToggleBtn} ${viewMode === 'calendar' ? styles.viewToggleBtnActive : ''}`}
             onClick={() => setViewMode('calendar')}
             data-testid="viewToggleCalendar"
           >
             Calendar View
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="plain"
             className={`${styles.viewToggleBtn} ${viewMode === 'cards' ? styles.viewToggleBtnActive : ''}`}
             onClick={() => setViewMode('cards')}
             data-testid="viewToggleCards"
           >
             Card View
-          </button>
+          </Button>
         </div>
 
         <div className="toolbar">

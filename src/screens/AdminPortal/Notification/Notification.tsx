@@ -14,7 +14,7 @@ import {
 } from 'GraphQl/Queries/NotificationQueries';
 import useLocalStorage from 'utils/useLocalstorage';
 import { Link } from 'react-router-dom';
-import { Button } from 'shared-components/Button';
+import Button from 'shared-components/Button';
 import NotificationsNone from '@mui/icons-material/NotificationsNone';
 import styles from './Notification.module.css';
 import { useTranslation } from 'react-i18next';
@@ -112,22 +112,24 @@ const Notification: React.FC = () => {
       </div>
 
       <div className="tabs" role="tablist">
-        <button
+        <Button
+          variant="plain"
           className={`tab ${activeTab === 'all' ? 'active' : ''}`}
           role="tab"
           aria-selected={activeTab === 'all'}
           onClick={() => setActiveTab('all')}
         >
           All
-        </button>
-        <button
+        </Button>
+        <Button
+          variant="plain"
           className={`tab ${activeTab === 'unread' ? 'active' : ''}`}
           role="tab"
           aria-selected={activeTab === 'unread'}
           onClick={() => setActiveTab('unread')}
         >
           Unread
-        </button>
+        </Button>
       </div>
 
       <div className="card">
@@ -193,25 +195,27 @@ const Notification: React.FC = () => {
 
       {(page > 0 || notifications.length > 1) && (
         <div className="pagination">
-          <button
+          <Button
+            variant="plain"
             className="pagination-btn"
             onClick={handlePrev}
             disabled={page === 0}
-            data-testid="prev-button"
+            data-testid="prev-Button"
           >
             &laquo;
-          </button>
+          </Button>
           <span className="pagination-info">
             {t('prev')} / {t('next')}
           </span>
-          <button
+          <Button
+            variant="plain"
             className="pagination-btn"
             onClick={handleNext}
             disabled={notifications.length < pageSize}
-            data-testid="next-button"
+            data-testid="next-Button"
           >
             &raquo;
-          </button>
+          </Button>
         </div>
       )}
     </>

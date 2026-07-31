@@ -10,11 +10,12 @@ import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'utils/i18nForTest';
+import dayjs from 'dayjs';
 
 const mockTag: InterfaceTagData = {
   _id: '1',
   name: 'Parent Tag',
-  createdAt: '2023-01-01T00:00:00Z',
+  createdAt: dayjs().add(30, 'days').format('YYYY-MM-DD'),
   childTags: { totalCount: 2 },
   parentTag: { _id: '0' },
   usersAssignedTo: { totalCount: 0 },
@@ -298,7 +299,7 @@ describe('Edge Cases and Coverage Improvements', () => {
   it('handles tag without childTags (leaf tag)', () => {
     const leafTag: InterfaceTagData = {
       _id: 'leaf-tag',
-      createdAt: '2023-01-01T00:00:00Z',
+      createdAt: dayjs().add(30, 'days').format('YYYY-MM-DD'),
       name: 'Leaf Tag',
       childTags: { totalCount: 0 }, // No child tags
       parentTag: { _id: 'parent' },
