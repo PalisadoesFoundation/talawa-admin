@@ -131,23 +131,43 @@ const collectCssImports = (filePath, content) => {
 };
 
 const validateTsFile = (filePath, content) => {
-  const fileName = path.basename(filePath);
-  const baseName = fileName
-    .replace(TS_EXTENSION_REGEX, '')
-    .replace(/(\.spec|\.test)$/, '');
-  // i18n-ignore-next-line: technical file path pattern, not user-facing text
-  const expectedPath = `./${baseName}.module.css`;
-
   const violations = [];
   const cssImports = collectCssImports(filePath, content);
 
+  const baseDir = path.dirname(filePath);
+
   for (const cssImport of cssImports) {
-    if (cssImport.importPath !== expectedPath) {
+    // Must be a CSS module
+    if (!CSS_MODULE_REGEX.test(cssImport.importPath)) {
       violations.push({
         filePath,
         line: cssImport.line,
         importedPath: cssImport.importPath,
-        expectedPath,
+        reason: 'Only CSS modules may be imported.',
+      });
+      continue;
+    }
+
+    // Must be relative
+    if (!cssImport.importPath.startsWith('.')) {
+      violations.push({
+        filePath,
+        line: cssImport.line,
+        importedPath: cssImport.importPath,
+        reason: 'CSS imports must be relative.',
+      });
+      continue;
+    }
+
+    // Must resolve inside the same directory
+    const resolved = path.resolve(baseDir, cssImport.importPath);
+
+    if (!isLocalCssModule(baseDir, resolved)) {
+      violations.push({
+        filePath,
+        line: cssImport.line,
+        importedPath: cssImport.importPath,
+        reason: 'CSS module must be in the same component directory.',
       });
     }
   }
@@ -208,7 +228,7 @@ const main = () => {
       console.error(
         `- ${bold(relPath)}:${violation.line} imported ${red(
           `"${violation.importedPath}"`,
-        )} expected ${bold(`"${violation.expectedPath}"`)}`,
+        )}: ${violation.reason}`,
       );
     }
   }

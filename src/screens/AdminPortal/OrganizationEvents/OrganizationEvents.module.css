@@ -159,7 +159,24 @@
 }
 
 .eventDateStrip {
-  composes: event-date-strip from global;
+  padding: 14px 20px;
+  text-align: center;
+  color: #fff;
+}
+
+.eventDateStrip .month {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.85;
+}
+
+.eventDateStrip .day {
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
 }
 
 .attendeeIcon {
