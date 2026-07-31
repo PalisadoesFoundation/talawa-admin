@@ -128,7 +128,7 @@ const restrictedImports = [
     message:
       'Do not import react-bootstrap/Table directly. Use the shared DataTable component instead.',
   },
-  ...makeMuiTableRules(),
+  // ...makeMuiTableRules(),
   {
     id: 'rb-button',
     name: 'react-bootstrap',

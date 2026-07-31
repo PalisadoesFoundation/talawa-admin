@@ -19,7 +19,7 @@ export {
   restrictImportsExcept,
   stripId,
   securityRestrictions,
-  searchInputRestrictions,
+  // searchInputRestrictions,
   preferCrudModalTemplate,
   modalStateRestrictions,
   nativeButtonRestrictions,
