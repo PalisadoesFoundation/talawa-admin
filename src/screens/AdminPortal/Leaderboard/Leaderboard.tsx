@@ -146,7 +146,7 @@ function Leaderboard(): JSX.Element {
     return (
       <div className={styles.message} data-testid="errorMsg">
         <WarningAmberRounded className={styles.icon} />
-        <h6 style={{ textAlign: "center" }}>
+        <h6 className={styles.errorHeading}>
           {tErrors('errorLoading', { entity: t('volunteerRankings') })}
         </h6>
       </div>

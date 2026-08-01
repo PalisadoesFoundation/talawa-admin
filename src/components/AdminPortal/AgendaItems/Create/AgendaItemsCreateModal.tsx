@@ -302,7 +302,7 @@ const AgendaItemsCreateModal: React.FC<
     >
       {/* Folder */}
       <FormFieldGroup name="folder" label={t('folder')}>
-        <div style={{ width: '100%' }}>
+        <div className={styles.fullWidthFieldWrapper}>
           <DropDownButton
             id="create-agenda-folder-dropdown"
             options={(agendaFolderData ?? []).map((f) => ({
@@ -328,7 +328,7 @@ const AgendaItemsCreateModal: React.FC<
 
       {/* Category */}
       <FormFieldGroup name="category" label={t('category')}>
-        <div style={{ width: '100%' }}>
+        <div className={styles.fullWidthFieldWrapper}>
           <DropDownButton
             id="create-agenda-category-dropdown"
             options={(agendaItemCategories ?? []).map((c) => ({
@@ -352,8 +352,8 @@ const AgendaItemsCreateModal: React.FC<
         </div>
       </FormFieldGroup>
 
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', marginBottom: '1rem' }}>
-        <div style={{ flex: '1 1 0' }}>
+      <div className={styles.dualFieldRow}>
+        <div className={styles.dualFieldColumn}>
           <FormTextField
             name="title"
             label={t('title')}
@@ -365,7 +365,7 @@ const AgendaItemsCreateModal: React.FC<
             }
           />
         </div>
-        <div style={{ flex: '1 1 0' }}>
+        <div className={styles.dualFieldColumn}>
           <FormTextField
             name="duration"
             label={t('duration')}
@@ -402,9 +402,9 @@ const AgendaItemsCreateModal: React.FC<
 
       {/* URLs */}
       <FormFieldGroup name="url" label={t('url')}>
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <div className={styles.urlInputRow}>
           <input
-            style={{ width: '100%', padding: '0.375rem 0.75rem', border: '1px solid #ced4da', borderRadius: '0.375rem' }}
+            className={styles.urlInputField}
             placeholder={t('enterUrl')}
             data-testid="urlInput"
             value={newUrl}
@@ -438,11 +438,13 @@ const AgendaItemsCreateModal: React.FC<
         <input
           type="file"
           multiple
-          style={{ width: '100%', padding: '0.375rem 0.75rem', border: '1px solid #ced4da', borderRadius: '0.375rem' }}
+          className={styles.attachmentInput}
           data-testid="attachment"
           onChange={handleFileChange}
         />
-        <small style={{ color: '#6c757d' }}>{t('attachmentLimit')}</small>
+        <small className={styles.attachmentLimitText}>
+          {t('attachmentLimit')}
+        </small>
       </FormFieldGroup>
 
       {agendaItemFormState.attachments.map((att) => (

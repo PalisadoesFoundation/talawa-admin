@@ -172,3 +172,7 @@
   align-items: center;
   justify-content: center;
 }
+
+.notificationLinkInline {
+  text-decoration: none;
+}

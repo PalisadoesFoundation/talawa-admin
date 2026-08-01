@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormFieldGroup } from './FormFieldGroup';
 import type { InterfaceFormSelectFieldProps } from '../../types/shared-components/FormFieldGroup/interface';
+import styles from './FormFieldGroup.module.css';
 
 /**
  * Renders a select input field within a FormFieldGroup for consistent styling and validation.
@@ -42,8 +43,7 @@ export const FormSelectField: React.FC<InterfaceFormSelectFieldProps> = ({
         required={required}
         aria-required={required ? 'true' : undefined}
         data-testid={dataTestId}
-        className="form-input"
-        style={isInvalid ? { borderColor: 'var(--red-500, #ef4444)' } : undefined}
+        className={`form-input ${isInvalid ? styles.inputError : ''}`.trim()}
       >
         {children}
       </select>

@@ -17,7 +17,6 @@ import { useMutation, useQuery } from '@apollo/client';
 import cookies from 'js-cookie';
 import i18next from 'i18next';
 
-
 import {
   InterfaceUserPortalNavbarProps,
   DEFAULT_USER_MODE_PROPS,
@@ -33,6 +32,7 @@ import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
 import LanguageSelector from './LanguageSelector';
 import UserProfileDropdown from './UserDropdown';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import Button from 'shared-components/Button';
 
 export const UserPortalNavigationBar = (
   props: InterfaceUserPortalNavbarProps,
@@ -56,14 +56,11 @@ export const UserPortalNavigationBar = (
     showNotifications = defaults.showNotifications ?? true,
     showLanguageSelector = defaults.showLanguageSelector ?? true,
     showUserProfile = defaults.showUserProfile ?? true,
-    variant = defaults.variant ?? 'dark',
-    expandBreakpoint = defaults.expandBreakpoint ?? 'md',
     mobileLayout = defaults.mobileLayout ?? 'collapse',
     onLogout,
     onLanguageChange,
     onNavigation,
     className,
-    customStyles,
     userName,
   } = props;
 
@@ -174,26 +171,26 @@ export const UserPortalNavigationBar = (
     if (!navigationLinks || navigationLinks.length === 0) return null;
 
     return (
-      <nav style={{ display: 'flex', flexGrow: 1, paddingRight: '1rem', paddingTop: '0.25rem', marginRight: 'auto' }}>
+      <nav className={styles.navLinksRow}>
         {navigationLinks.map((link: NavigationLink) => {
           const linkLabel = link.translationKey
             ? t(link.translationKey.split(':').pop() || link.translationKey)
             : link.label;
 
           return (
-            <button
+            <Button
+              variant="plain"
               key={link.id}
               type="button"
-              className={isLinkActive(link) ? styles.navLinkActive : styles.navLink}
+              className={`${isLinkActive(link) ? styles.navLinkActive : styles.navLink} ${styles.navLinkBtn}`}
               onClick={async (): Promise<void> => {
                 await handleNavigation(link);
               }}
               data-testid={link.testId || `navigationLink-${link.id}`}
-              style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', padding: '0.5rem 1rem' }}
             >
-              {link.icon && <link.icon style={{ marginRight: '0.5rem' }} />}
+              {link.icon && <link.icon className={styles.linkIcon} />}
               {linkLabel}
-            </button>
+            </Button>
           );
         })}
       </nav>
@@ -204,7 +201,7 @@ export const UserPortalNavigationBar = (
   const renderDesktopContent = (): JSX.Element => (
     <>
       {renderNavigationLinks()}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+      <div className={styles.actionsRow}>
         <LanguageSelector
           showLanguageSelector={showLanguageSelector}
           testIdPrefix={''}
@@ -228,52 +225,21 @@ export const UserPortalNavigationBar = (
     </>
   );
 
-  // Render mobile content
-  const renderMobileContent = (): JSX.Element => (
-    <>
-      {renderNavigationLinks()}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-        <LanguageSelector
-          showLanguageSelector={showLanguageSelector}
-          testIdPrefix={'mobile'}
-          dropDirection={dropDirection}
-          handleLanguageChange={handleLanguageChange}
-          currentLanguageCode={currentLanguageCode}
-        />
-        {showNotifications && mode === 'user' && <NotificationIcon />}
-        <UserProfileDropdown
-          showUserProfile={showUserProfile}
-          dropDirection={dropDirection}
-          handleLogout={handleLogout}
-          finalUserName={finalUserName}
-          navigate={navigate}
-          tCommon={tCommon}
-          styles={styles}
-          PermIdentityIcon={PermIdentityIcon}
-          testIdPrefix={'mobile'}
-        />
-      </div>
-    </>
-  );
-
   // Determine navbar className
   const navbarClassName = `${styles.colorPrimary} ${className || ''}`.trim();
 
   // Render based on mobile layout
   if (mobileLayout === 'offcanvas') {
     return (
-      <nav
-        className={navbarClassName}
-        style={{ display: 'flex', alignItems: 'center', padding: '0.5rem 1rem', ...customStyles }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+      <nav className={`${navbarClassName} ${styles.navBar}`}>
+        <div className={styles.navInner}>
           <a
             href={homeLink}
             onClick={(e) => {
               e.preventDefault();
               handleBrandClick();
             }}
-            style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit', marginRight: 'auto' }}
+            className={styles.brandLink}
           >
             <img
               className={styles.talawaImage}
@@ -291,18 +257,15 @@ export const UserPortalNavigationBar = (
 
   // Collapse layout (default for user mode)
   return (
-    <nav
-      className={navbarClassName}
-      style={{ display: 'flex', alignItems: 'center', padding: '0.5rem 1rem', ...customStyles }}
-    >
-      <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+    <nav className={`${navbarClassName} ${styles.navBar}`}>
+      <div className={styles.navInner}>
         <a
           href={homeLink}
           onClick={(e) => {
             e.preventDefault();
             handleBrandClick();
           }}
-          style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit', marginRight: 'auto' }}
+          className={styles.brandLink}
         >
           <img
             className={styles.talawaImage}

@@ -48,3 +48,15 @@
 .groupsViewButton {
   min-width: var(--space-8);
 }
+
+.errorHeading {
+  text-align: center;
+}
+
+.justifyCenter {
+  justify-content: center;
+}
+
+.alignCenter {
+  align-items: center;
+}

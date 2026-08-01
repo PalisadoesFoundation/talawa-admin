@@ -18,6 +18,14 @@ Defined in: [src/utils/interfaces.ts:455](https://github.com/PalisadoesFoundatio
 
 ***
 
+### adminsCount?
+
+> `optional` **adminsCount**: `number`
+
+Defined in: [src/utils/interfaces.ts:460](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L460)
+
+***
+
 ### avatarURL
 
 > **avatarURL**: `string`
@@ -54,7 +62,7 @@ Defined in: [src/utils/interfaces.ts:453](https://github.com/PalisadoesFoundatio
 
 > `optional` **isMember**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:469](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L469)
+Defined in: [src/utils/interfaces.ts:470](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L470)
 
 ***
 
@@ -62,7 +70,7 @@ Defined in: [src/utils/interfaces.ts:469](https://github.com/PalisadoesFoundatio
 
 > `optional` **members**: `object`
 
-Defined in: [src/utils/interfaces.ts:460](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L460)
+Defined in: [src/utils/interfaces.ts:461](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L461)
 
 #### edges
 
@@ -94,4 +102,4 @@ Defined in: [src/utils/interfaces.ts:454](https://github.com/PalisadoesFoundatio
 
 > **role**: `string`
 
-Defined in: [src/utils/interfaces.ts:468](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L468)
+Defined in: [src/utils/interfaces.ts:469](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L469)

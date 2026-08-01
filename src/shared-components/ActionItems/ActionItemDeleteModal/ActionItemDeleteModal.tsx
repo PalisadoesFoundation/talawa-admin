@@ -38,6 +38,8 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import { DeleteModal } from 'shared-components/CRUDModalTemplate/DeleteModal';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 
+import styles from './ActionItemDeleteModal.module.css';
+
 export interface IItemDeleteModalProps {
   isOpen: boolean;
   hide: () => void;
@@ -114,9 +116,8 @@ const ItemDeleteModal: React.FC<IItemDeleteModalProps> = ({
         touched={false}
         error={undefined}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <div className={styles.radioOption}>
           <input
-            
             type="radio"
             name="applyTo"
             id="deleteApplyToSeries"
@@ -124,13 +125,12 @@ const ItemDeleteModal: React.FC<IItemDeleteModalProps> = ({
             checked={applyTo === 'series'}
             onChange={() => setApplyTo('series')}
           />
-          <label style={{ marginLeft: 6, cursor: "pointer" }} htmlFor="deleteApplyToSeries">
+          <label className={styles.radioLabel} htmlFor="deleteApplyToSeries">
             {t('entireSeries')}
           </label>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <div className={styles.radioOption}>
           <input
-            
             type="radio"
             name="applyTo"
             id="deleteApplyToInstance"
@@ -138,7 +138,7 @@ const ItemDeleteModal: React.FC<IItemDeleteModalProps> = ({
             checked={applyTo === 'instance'}
             onChange={() => setApplyTo('instance')}
           />
-          <label style={{ marginLeft: 6, cursor: "pointer" }} htmlFor="deleteApplyToInstance">
+          <label className={styles.radioLabel} htmlFor="deleteApplyToInstance">
             {t('thisEventOnly')}
           </label>
         </div>

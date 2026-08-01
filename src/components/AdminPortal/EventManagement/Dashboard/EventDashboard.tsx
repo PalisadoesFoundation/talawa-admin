@@ -151,7 +151,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
           eventModalIsOpen={eventModalIsOpen}
           hideViewModal={hideViewModal}
         />
-        <div style={{ display: 'flex', padding: '0 1.5rem' }} data-testid="event-stats">
+        <div className={styles.eventStatsRow} data-testid="event-stats">
           {/* Attendees data not available in new query; adjust or remove */}
           <div
             className={`${styles.ctacards}`}
@@ -188,14 +188,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
           <div className={styles.eventContainer} data-testid="event-details">
             <div className={styles.eventDetailsBox}>
               <Button
-                style={{
-                  position: 'absolute',
-                  right: 0,
-                  marginRight: '1rem',
-                  padding: '0.25rem',
-                  marginTop: '0.5rem',
-                  borderRadius: '50%',
-                }}
+                className={styles.editEventButton}
                 onClick={showViewModal}
                 data-testid="edit-event-button"
                 aria-label={tEventList('editEvent')}

@@ -41,6 +41,7 @@ import EmptyState from 'shared-components/EmptyState/EmptyState';
 import Group from '@mui/icons-material/Group';
 import Search from '@mui/icons-material/Search';
 import ErrorPanel from 'shared-components/ErrorPanel';
+import Button from 'shared-components/Button/Button';
 
 interface InterfaceRequestsListItem {
   membershipRequestId: string;
@@ -243,15 +244,11 @@ const Requests = (): JSX.Element => {
         <div className="page-header-left">
           <h1 className="page-title">
             {t('requests.title')}{' '}
-            <span
-              className="badge badge-orange request-badge"
-            >
+            <span className="badge badge-orange request-badge">
               {displayedRequests.length} {t('requests.pending')}
             </span>
           </h1>
-          <p className="page-subtitle">
-            {t('requests.reviewAndManage')}
-          </p>
+          <p className="page-subtitle">{t('requests.reviewAndManage')}</p>
         </div>
       </div>
 
@@ -315,15 +312,19 @@ const Requests = (): JSX.Element => {
                 </thead>
                 <tbody>
                   {displayedRequests.map((req) => {
-                    const user = req.user || ({} as InterfaceRequestsListItem['user']);
+                    const user =
+                      req.user || ({} as InterfaceRequestsListItem['user']);
                     const initials = getInitials(user.name || '');
                     const requestedDate = (() => {
                       try {
-                        return new Date(req.createdAt).toLocaleDateString('en-US', {
-                          month: 'short',
-                          day: 'numeric',
-                          year: 'numeric',
-                        });
+                        return new Date(req.createdAt).toLocaleDateString(
+                          'en-US',
+                          {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric',
+                          },
+                        );
                       } catch {
                         return '';
                       }
@@ -335,7 +336,9 @@ const Requests = (): JSX.Element => {
                             <div className="user-cell-avatar">{initials}</div>
                             <div>
                               <div className="user-cell-name">{user.name}</div>
-                              <div className="user-cell-email">{user.emailAddress}</div>
+                              <div className="user-cell-email">
+                                {user.emailAddress}
+                              </div>
                             </div>
                           </div>
                         </td>
@@ -345,7 +348,8 @@ const Requests = (): JSX.Element => {
                         </td>
                         <td>
                           <div className="request-actions">
-                            <button
+                            <Button
+                              variant="plain"
                               className="btn btn-primary btn-sm"
                               data-testid={`acceptMembershipRequestBtn${req.membershipRequestId}`}
                               onClick={async () => {
@@ -353,8 +357,9 @@ const Requests = (): JSX.Element => {
                               }}
                             >
                               {t('requests.accept')}
-                            </button>
-                            <button
+                            </Button>
+                            <Button
+                              variant="plain"
                               className="btn btn-secondary btn-sm"
                               data-testid={`rejectMembershipRequestBtn${req.membershipRequestId}`}
                               onClick={async () => {
@@ -362,7 +367,7 @@ const Requests = (): JSX.Element => {
                               }}
                             >
                               {t('requests.reject')}
-                            </button>
+                            </Button>
                           </div>
                         </td>
                       </tr>

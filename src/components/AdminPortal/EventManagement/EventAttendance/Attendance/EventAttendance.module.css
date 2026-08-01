@@ -1,5 +1,9 @@
 /* EventAttendance — attendance tracking tab */
 
+.membernameContainer {
+  align-items: center;
+}
+
 .membername {
   font-size: 14px;
   font-weight: 600;
@@ -40,6 +44,26 @@
   max-width: 400px;
 }
 
+.topControlsWrapper {
+  align-items: center;
+}
+
+.searchAndFilterWrapper {
+  align-items: center;
+}
+
 .dropdown {
   /* handled by DropDownButton component */
+}
+
+.tooltip {
+  background-color: var(--surface, #fff);
+  font-size: var(--font-size-3xl);
+  max-height: var(--space-16);
+  overflow-y: scroll;
+  scrollbar-color: white;
+  border: var(--primary-border-solid);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-offset-sm) var(--shadow-blur-md)
+    var(--shadow-spread-xs) rgba(var(--color-black), 0.1);
 }

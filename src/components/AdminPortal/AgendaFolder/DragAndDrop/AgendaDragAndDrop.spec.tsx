@@ -79,8 +79,6 @@ vi.mock('@hello-pangea/dnd', async () => {
   };
 });
 
-const mockT = (key: string): string => key;
-
 const mockSetFolders = vi.fn();
 const mockOnEditFolder = vi.fn();
 const mockOnDeleteFolder = vi.fn();
@@ -351,7 +349,6 @@ const renderAgendaDragAndDrop = (
           folders={folders}
           setFolders={mockSetFolders}
           agendaFolderConnection="Event"
-          t={mockT}
           onEditFolder={mockOnEditFolder}
           onDeleteFolder={mockOnDeleteFolder}
           onPreviewItem={mockOnPreviewItem}
@@ -1890,7 +1887,6 @@ describe('AgendaDragAndDrop', () => {
               folders={folders}
               setFolders={mockSetFolders}
               agendaFolderConnection="Organization"
-              t={mockT}
               onEditFolder={mockOnEditFolder}
               onDeleteFolder={mockOnDeleteFolder}
               onPreviewItem={mockOnPreviewItem}

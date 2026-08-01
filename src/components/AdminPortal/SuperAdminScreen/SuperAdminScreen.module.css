@@ -3,13 +3,23 @@
  * Layout handled by design system — these are kept as no-ops for test compatibility.
  */
 
-.pageContainer {}
-.collapsedDrawer {}
-.expandedDrawer {}
-.navContainer {}
-.opendrawer {}
-.collapseSidebarButton {}
-.expand {}
-.contract {}
-.containerHeight {}
-.scrollableCardBody {}
+.pageContainer {
+}
+.collapsedDrawer {
+}
+.expandedDrawer {
+}
+.navContainer {
+}
+.opendrawer {
+}
+.collapseSidebarButton {
+}
+.expand {
+}
+.contract {
+}
+.containerHeight {
+}
+.scrollableCardBody {
+}

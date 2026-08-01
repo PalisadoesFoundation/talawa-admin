@@ -17,15 +17,19 @@ import {
 import styles from './Donate.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import { errorHandler } from 'utils/errorHandler';
-import type {
-  InterfaceDonation,
-} from 'types/UserPortal/Donation/interface';
+import type { InterfaceDonation } from 'types/UserPortal/Donation/interface';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import Button from 'shared-components/Button';
 
 const currencies = ['USD', 'INR', 'EUR'];
 const currencyOptions = currencies.map((c) => ({ value: c, label: c }));
 const presetAmounts = [10, 25, 50, 100];
 
+/**
+ * `Donate` renders the user portal donation screen for an organization.
+ * It provides a donation form with preset amounts and currency selection,
+ * along with a history of the user's previous donations.
+ */
 export default function Donate(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'donate' });
   const { getItem } = useLocalStorage();
@@ -34,19 +38,26 @@ export default function Donate(): JSX.Element {
   const { orgId: organizationId } = useParams();
 
   const [amount, setAmount] = useState('');
-  const [organizationDetails, setOrganizationDetails] = useState<{ name: string }>({ name: '' });
+  const [organizationDetails, setOrganizationDetails] = useState<{
+    name: string;
+  }>({ name: '' });
   const [donations, setDonations] = useState<InterfaceDonation[]>([]);
   const [selectedCurrency, setSelectedCurrency] = useState('USD');
 
-  const { data: donationData, loading, refetch } = useQuery(
-    ORGANIZATION_DONATION_CONNECTION_LIST,
-    { variables: { orgId: organizationId } },
-  );
+  const {
+    data: donationData,
+    loading,
+    refetch,
+  } = useQuery(ORGANIZATION_DONATION_CONNECTION_LIST, {
+    variables: { orgId: organizationId },
+  });
   const { data } = useQuery(ORGANIZATION_LIST, {
     variables: { id: organizationId },
   });
   const [donate] = useMutation(DONATE_TO_ORGANIZATION);
-  const [donateWithCurrency] = useMutation(DONATE_TO_ORGANIZATION_WITH_CURRENCY);
+  const [donateWithCurrency] = useMutation(
+    DONATE_TO_ORGANIZATION_WITH_CURRENCY,
+  );
 
   useEffect(() => {
     if (data?.organizations?.length) {
@@ -60,6 +71,14 @@ export default function Donate(): JSX.Element {
     }
   }, [donationData]);
 
+  /**
+   * Determines whether an error from the currency-based donation mutation indicates
+   * that the backend does not support the currency fields, in which case the legacy
+   * donation mutation should be used as a fallback.
+   *
+   * @param error - The error thrown by the donation mutation.
+   * @returns True if the legacy mutation should be used as a fallback.
+   */
   const shouldFallbackToLegacyDonationMutation = (error: unknown): boolean => {
     const apolloError = error as ApolloError;
     const combinedMessage = [
@@ -72,10 +91,17 @@ export default function Donate(): JSX.Element {
     return (
       combinedMessage.includes('unknown argument "currencycode"') ||
       combinedMessage.includes('unknown type "iso4217currencycode"') ||
-      combinedMessage.includes('field "createdonation" argument "currencycode" is not defined')
+      combinedMessage.includes(
+        'field "createdonation" argument "currencycode" is not defined',
+      )
     );
   };
 
+  /**
+   * Submits a donation for the current user to the organization.
+   * Validates the amount, attempts the currency-based mutation first,
+   * and falls back to the legacy mutation if the server does not support currency codes.
+   */
   const donateToOrg = async (): Promise<void> => {
     if (!userId || !organizationId || !userName) return;
     if (amount === '' || Number.isNaN(Number(amount))) {
@@ -83,24 +109,33 @@ export default function Donate(): JSX.Element {
       return;
     }
     if (Number(amount) < 1 || Number(amount) > 10000000) {
-      NotificationToast.error(t('donationOutOfRange', { min: 1, max: 10000000 }));
+      NotificationToast.error(
+        t('donationOutOfRange', { min: 1, max: 10000000 }),
+      );
       return;
     }
     try {
       try {
         await donateWithCurrency({
           variables: {
-            userId, createDonationOrgId2: organizationId, payPalId: 'paypalId',
-            nameOfUser: userName, amount: Number(amount),
-            nameOfOrg: organizationDetails.name, currencyCode: selectedCurrency,
+            userId,
+            createDonationOrgId2: organizationId,
+            payPalId: 'paypalId',
+            nameOfUser: userName,
+            amount: Number(amount),
+            nameOfOrg: organizationDetails.name,
+            currencyCode: selectedCurrency,
           },
         });
       } catch (error) {
         if (shouldFallbackToLegacyDonationMutation(error)) {
           await donate({
             variables: {
-              userId, createDonationOrgId2: organizationId, payPalId: 'paypalId',
-              nameOfUser: userName, amount: Number(amount),
+              userId,
+              createDonationOrgId2: organizationId,
+              payPalId: 'paypalId',
+              nameOfUser: userName,
+              amount: Number(amount),
               nameOfOrg: organizationDetails.name,
             },
           });
@@ -129,13 +164,14 @@ export default function Donate(): JSX.Element {
           {/* Quick presets */}
           <div className={styles.presets}>
             {presetAmounts.map((preset) => (
-              <button
+              <Button
+                variant="plain"
                 key={preset}
                 className={`${styles.presetBtn} ${amount === String(preset) ? styles.presetBtnActive : ''}`}
                 onClick={() => setAmount(String(preset))}
               >
                 ${preset}
-              </button>
+              </Button>
             ))}
           </div>
 
@@ -159,29 +195,29 @@ export default function Donate(): JSX.Element {
               <input
                 id="donationAmountInput"
                 type="text"
-                className="form-input"
+                className={`form-input ${styles.fullWidthInput}`}
                 data-testid="donationAmount"
                 placeholder={t('amount')}
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
-                style={{ width: '100%' }}
               />
             </div>
           </div>
 
-          <button
+          <Button
+            variant="plain"
             className={styles.donateBtn}
             data-testid="donateBtn"
             onClick={donateToOrg}
           >
             {t('donate')}
-          </button>
+          </Button>
         </div>
 
         {/* Right: Donation history */}
         <div className={styles.historyPanel}>
           {loading ? (
-            <div style={{ textAlign: 'center', padding: 32, color: 'var(--gray-400)' }}>
+            <div className={styles.loading}>
               <HourglassBottomIcon /> {t('loading')}
             </div>
           ) : donations.length === 0 ? (
@@ -195,9 +231,12 @@ export default function Donate(): JSX.Element {
           ) : (
             <>
               <div className={styles.sectionHeader}>
-                <h3 className={styles.sectionTitle}>{t('yourPreviousDonations')}</h3>
+                <h3 className={styles.sectionTitle}>
+                  {t('yourPreviousDonations')}
+                </h3>
                 <span className={styles.donationCount}>
-                  {donations.length} {donations.length === 1 ? 'donation' : 'donations'}
+                  {donations.length}{' '}
+                  {donations.length === 1 ? 'donation' : 'donations'}
                 </span>
               </div>
               <div className="table-wrapper">
@@ -212,7 +251,7 @@ export default function Donate(): JSX.Element {
                   <tbody>
                     {donations.map((d) => (
                       <tr key={d._id} data-testid="donationCard">
-                        <td style={{ fontWeight: 500 }}>{d.nameOfUser}</td>
+                        <td className={styles.donationCard}>{d.nameOfUser}</td>
                         <td>${Number(d.amount).toLocaleString()}</td>
                         <td>{dayjs(d.updatedAt).format('MMM D, YYYY')}</td>
                       </tr>

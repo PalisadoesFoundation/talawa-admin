@@ -18,6 +18,7 @@ import Security from './Security';
 import useLocalStorage from 'utils/useLocalstorage';
 import OAuthAccountsSettings from 'components/Auth/OAuthAccountsSettings/OAuthAccountsSettings';
 import styles from './MemberDetail.module.css';
+import Button from 'shared-components/Button/Button';
 
 const MemberDetail: React.FC = (): JSX.Element => {
   const { getItem } = useLocalStorage();
@@ -54,7 +55,8 @@ const MemberDetail: React.FC = (): JSX.Element => {
       {/* Tabs */}
       <div className="tabs" role="tablist">
         {tabItems.map((item) => (
-          <button
+          <Button
+            variant="plain"
             key={item.key}
             className={`tab${activeTab === item.key ? ' active' : ''}`}
             role="tab"
@@ -62,7 +64,7 @@ const MemberDetail: React.FC = (): JSX.Element => {
             onClick={() => setActiveTab(item.key)}
           >
             {item.label}
-          </button>
+          </Button>
         ))}
       </div>
 
@@ -76,9 +78,7 @@ const MemberDetail: React.FC = (): JSX.Element => {
           </div>
         )}
         {activeTab === 'organizations' && <UserOrganizations />}
-        {activeTab === 'events' && (
-          <UserEvents orgId={orgId} userId={userId} />
-        )}
+        {activeTab === 'events' && <UserEvents orgId={orgId} userId={userId} />}
         {activeTab === 'tags' && <UserTags id={userId} />}
       </div>
     </LocalizationProvider>

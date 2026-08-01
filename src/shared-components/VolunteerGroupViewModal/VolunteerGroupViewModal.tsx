@@ -38,15 +38,13 @@ import { ViewModal } from 'shared-components/CRUDModalTemplate/ViewModal';
 import styles from './VolunteerGroupViewModal.module.css';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from '@mui/material';
+import Paper from '@mui/material/Paper';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 import Avatar from 'shared-components/Avatar/Avatar';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import { InterfaceVolunteerGroupViewModalProps } from 'types/shared-components/VolunteerGroupViewModal/interface';
@@ -91,7 +89,7 @@ const VolunteerGroupViewModal: React.FC<
         </div>
         {/* Input field to enter the group description */}
         {description && (
-          <div style={{ marginBottom: 12 }}>
+          <div className={styles.descMargin}>
             <FormTextField
               name="description"
               label={tCommon('description')}
@@ -178,10 +176,12 @@ const VolunteerGroupViewModal: React.FC<
               <Table aria-label={t('groupTable')}>
                 <TableHead>
                   <TableRow>
-                    <TableCell style={{ fontWeight: 600 }}>
+                    <TableCell className={styles.tableHeaderCell}>
                       {tCommon('serialNumber')}
                     </TableCell>
-                    <TableCell style={{ fontWeight: 600 }}>{tCommon('name')}</TableCell>
+                    <TableCell className={styles.tableHeaderCell}>
+                      {tCommon('name')}
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>

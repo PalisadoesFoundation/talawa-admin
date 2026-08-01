@@ -107,7 +107,7 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
             checked={deleteOption === 'single'}
             onChange={() => setDeleteOption('single')}
             label={t('deleteThisInstance')}
-            style={{ marginBottom: 8 }}
+            className={styles.FormCheckField}
             data-testid="deleteThisInstance"
           />
           <FormCheckField
@@ -118,7 +118,7 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
             checked={deleteOption === 'following'}
             onChange={() => setDeleteOption('following')}
             label={t('deleteThisAndFollowing')}
-            style={{ marginBottom: 8 }}
+            className={styles.FormCheckField}
             data-testid="deleteThisAndFollowing"
           />
           <FormCheckField
@@ -129,7 +129,7 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
             checked={deleteOption === 'all'}
             onChange={() => setDeleteOption('all')}
             label={t('deleteAllEvents')}
-            style={{ marginBottom: 8 }}
+            className={styles.FormCheckField}
             data-testid="deleteAllEvents"
           />
         </div>

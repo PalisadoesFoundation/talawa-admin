@@ -1,0 +1,24 @@
+.skeletonBlock {
+  height: 14px;
+  width: 40%;
+  background: var(--gray-200);
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+.skeletonBlockLarge {
+  height: 28px;
+  width: 30%;
+  background: var(--gray-100);
+  border-radius: 4px;
+}
+
+.statCard {
+  border: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.fallbackCard {
+  min-height: 120px;
+}

@@ -46,7 +46,7 @@ import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModa
 import { useTranslation } from 'react-i18next';
 import { Button } from 'shared-components/Button';
 import { Navigate, useParams } from 'react-router';
-import { WarningAmberRounded } from '@mui/icons-material';
+import WarningAmberRoundedIcon from '@mui/icons-material/WarningAmberRounded';
 import { useQuery } from '@apollo/client';
 import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
 import {
@@ -162,8 +162,8 @@ function Groups(): JSX.Element {
   if (groupsError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
-        <WarningAmberRounded className={styles.icon} />
-        <h6 style={{ textAlign: "center" }}>
+        <WarningAmberRoundedIcon className={styles.icon} />
+        <h6 className={styles.errorHeading}>
           {tErrors('errorLoading', { entity: t('volunteerGroups') })}
         </h6>
       </div>
@@ -181,10 +181,7 @@ function Groups(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <div
-            style={{ justifyContent: "center" }}
-            data-testid="groupName"
-          >
+          <div className={styles.justifyCenter} data-testid="groupName">
             {params.row.name}
           </div>
         );
@@ -202,10 +199,7 @@ function Groups(): JSX.Element {
       renderCell: (params: GridCellParams) => {
         const { id, name, avatarURL } = params.row.leader;
         return (
-          <div
-            style={{ alignItems: "center" }}
-            data-testid="leaderName"
-          >
+          <div className={styles.alignCenter} data-testid="leaderName">
             {avatarURL ? (
               <img
                 src={avatarURL}
@@ -239,7 +233,7 @@ function Groups(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <div style={{ justifyContent: "center" }}>
+          <div className={styles.justifyCenter}>
             {params.row.volunteers.length}
           </div>
         );
@@ -275,8 +269,7 @@ function Groups(): JSX.Element {
                 data-testid="editGroupBtn"
                 onClick={() => handleEditClick(params.row)}
                 aria-label={t('editGroup')}
-              >
-              </Button>
+              ></Button>
             )}
           </>
         );

@@ -16,3 +16,11 @@
   font-size: var(--font-size-4xl);
   margin-bottom: var(--space-5);
 }
+
+.messageText {
+  text-align: center;
+}
+
+.retryWrapper {
+  text-align: center;
+}

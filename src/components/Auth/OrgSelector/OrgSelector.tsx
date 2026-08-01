@@ -135,13 +135,13 @@ export const OrgSelector: React.FC<InterfaceOrgSelectorProps> = ({
       : undefined;
 
   return (
-    <div style={{ marginBottom: '1rem' }} ref={dropdownRef}>
+    <div className={styles.labelWrapper} ref={dropdownRef}>
       <label htmlFor={inputId}>
         {displayLabel}
-        {required && <span style={{ color: 'var(--red-500)' }}> *</span>}
+        {required && <span className={styles.requiredAsterisk}> *</span>}
       </label>
 
-      <div style={{ position: 'relative' }}>
+      <div className={styles.inputWrapper}>
         <input
           id={inputId}
           type="text"
@@ -161,8 +161,7 @@ export const OrgSelector: React.FC<InterfaceOrgSelectorProps> = ({
           data-testid={testId}
           ref={inputRef}
           autoComplete="off"
-          className="form-input"
-          style={hasError ? { borderColor: 'var(--red-500)' } : undefined}
+          className={`form-input ${hasError ? styles.inputError : ''}`}
         />
 
         {isOpen && !disabled && (
@@ -216,7 +215,7 @@ export const OrgSelector: React.FC<InterfaceOrgSelectorProps> = ({
       {hasError && (
         <div
           id={errorId}
-          style={{ display: 'block', color: 'var(--red-500)', fontSize: '0.875em', marginTop: '0.25rem' }}
+          className={styles.errorMessage}
           role="status"
           aria-live="polite"
         >

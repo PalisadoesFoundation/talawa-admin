@@ -157,3 +157,27 @@
 .dropdown {
   min-width: 90px;
 }
+
+.fullWidthInput {
+  width: 100%;
+}
+
+.loadingHistory {
+  text-align: center;
+  padding: 32px;
+  color: var(--gray-400);
+}
+
+.mediumText {
+  font-weight: 500;
+}
+
+.loading {
+  text-align: center;
+  padding: 32px;
+  color: var(--gray-400);
+}
+
+.donationCard {
+  font-weight: 500;
+}

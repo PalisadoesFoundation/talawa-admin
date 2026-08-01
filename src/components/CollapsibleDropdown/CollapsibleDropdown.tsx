@@ -86,19 +86,18 @@ const CollapsibleDropdown = ({
         <div className={styles.collapsibleDropdownIconWrapper}>
           <IconComponent
             name={name}
-            fill={showDropdown ? 'var(--gray-900, #111827)' : 'var(--gray-500)'}
+            fill={showDropdown ? 'var(--gray-900)' : 'var(--gray-500)'}
           />
         </div>
         {tCommon(name)}
         <i
-          className={`ms-auto fa
-          ${showDropdown ? 'var(--surface, #fff)' : 'var(--gray-500)'}
-          ${showDropdown ? 'fa-chevron-up' : 'fa-chevron-down'}
-          `}
+          className={`ms-auto fa ${showDropdown ? 'fa-chevron-up' : 'fa-chevron-down'} ${
+            showDropdown ? styles.chevronActive : styles.chevronInactive
+          }`}
         />
       </Button>
       {showDropdown && (
-        <div style={{ paddingLeft: '1.5rem' }}>
+        <div className={styles.subTargetsWrapper}>
           {subTargets &&
             subTargets.map(({ name, icon: stringIcon, url }, index) => {
               return (
@@ -120,7 +119,7 @@ const CollapsibleDropdown = ({
                         <i className={`fa ${stringIcon}`} />
                       </div>
                       {tCommon(name || '')}
-                      <div style={{ marginLeft: "auto" }}>
+                      <div className={styles.chevronWrapper}>
                         <i
                           className={`fa fa-chevron-right ${
                             isActive === true ? 'text-white' : 'text-secondary'

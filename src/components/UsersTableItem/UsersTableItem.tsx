@@ -215,13 +215,14 @@ const UsersTableItem = (props: Props): JSX.Element => {
         <td>{memberOrgs.length}</td>
         <td>{dayjs(user.createdAt).format('MMM D, YYYY')}</td>
         <td>
-          <button
+          <Button
+            variant="plain"
             className={styles.manageBtn}
             onClick={() => setShowJoinedOrganizations(true)}
             data-testid={`showJoinedOrgsBtn${user.id}`}
           >
             {tCommon('manage')}
-          </button>
+          </Button>
         </td>
       </tr>
       <BaseModal
@@ -242,7 +243,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         }
       >
         {memberOrgs.length !== 0 && (
-          <div style={{ marginBottom: 16 }}>
+          <div className={styles.searchContainer}>
             <SearchBar
               placeholder={t('searchByOrgName')}
               value={searchByNameJoinedOrgs}
@@ -260,11 +261,16 @@ const UsersTableItem = (props: Props): JSX.Element => {
         <div>
           {memberOrgs.length === 0 ? (
             <div className={styles.notJoined}>
-              <p>{user.name} {t('hasNotJoinedAnyOrg')}</p>
+              <p>
+                {user.name} {t('hasNotJoinedAnyOrg')}
+              </p>
             </div>
           ) : joinedOrgs.length === 0 ? (
             <div className={styles.notJoined}>
-              <p>{tCommon('noResultsFoundFor')} &quot;{searchByNameJoinedOrgs}&quot;</p>
+              <p>
+                {tCommon('noResultsFoundFor')} &quot;{searchByNameJoinedOrgs}
+                &quot;
+              </p>
             </div>
           ) : (
             <div className={styles.orgList}>
@@ -272,9 +278,8 @@ const UsersTableItem = (props: Props): JSX.Element => {
                 <div key={`org-joined-${org.id}`} className={styles.orgRow}>
                   <div className={styles.orgRowLeft}>
                     <div
-                      className={styles.orgAvatar}
+                      className={`${styles.orgAvatar} ${styles.clickable}`}
                       onClick={() => goToOrg(org.id)}
-                      style={{ cursor: 'pointer' }}
                     >
                       <ProfileAvatarDisplay
                         fallbackName={org.name}
@@ -286,32 +291,39 @@ const UsersTableItem = (props: Props): JSX.Element => {
                     </div>
                     <div className={styles.orgInfo}>
                       <div
-                        className={styles.orgName}
+                        className={`${styles.orgName} ${styles.clickable}`}
                         onClick={() => goToOrg(org.id)}
-                        style={{ cursor: 'pointer' }}
                         data-testid={`orgName${org.id}`}
                       >
                         {org.name}
                       </div>
                       <div className={styles.orgMeta}>
                         {org.city && <span>{org.city}</span>}
-                        <span>{dayjs(org.createdAt).format('MMM D, YYYY')}</span>
+                        <span>
+                          {dayjs(org.createdAt).format('MMM D, YYYY')}
+                        </span>
                       </div>
                     </div>
                   </div>
                   <div className={styles.orgRowRight}>
                     <select
-                      className="form-input"
-                      style={{ padding: '4px 10px', fontSize: 13, width: 'auto' }}
+                      className={`form-input ${styles.roleSelect}`}
                       onChange={changeRoleInOrg}
                       data-testid={`changeRoleInOrg${org.id}`}
                       disabled={isAdmin}
-                      defaultValue={isAdmin ? `ADMIN?${org.id}` : `USER?${org.id}`}
+                      defaultValue={
+                        isAdmin ? `ADMIN?${org.id}` : `USER?${org.id}`
+                      }
                     >
-                      <option value={`USER?${org.id}`}>{tCommon('user')}</option>
-                      <option value={`ADMIN?${org.id}`}>{tCommon('admin')}</option>
+                      <option value={`USER?${org.id}`}>
+                        {tCommon('user')}
+                      </option>
+                      <option value={`ADMIN?${org.id}`}>
+                        {tCommon('admin')}
+                      </option>
                     </select>
-                    <button
+                    <Button
+                      variant="plain"
                       className={styles.removeButton}
                       data-testid={`removeUserFromOrgBtn${org.id}`}
                       onClick={() => {
@@ -325,7 +337,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                       }}
                     >
                       {tCommon('remove')}
-                    </button>
+                    </Button>
                   </div>
                 </div>
               ))}
@@ -340,9 +352,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         onHide={() => onHideRemoveUserModal()}
         headerClassName={styles.modalHeader}
         title={
-          <span>
-            {t('removeUserFrom', { org: removeUserProps.orgName })}
-          </span>
+          <span>{t('removeUserFrom', { org: removeUserProps.orgName })}</span>
         }
         footer={
           <>
@@ -394,7 +404,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         }
       >
         {blockedOrgs.length !== 0 && (
-          <div style={{ display: "flex", gap: 8 }}>
+          <div className={styles.flexRowGap}>
             <SearchBar
               placeholder={t('searchByOrgName')}
               value={searchByNameBlockedOrgs}
@@ -504,9 +514,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         onHide={() => onHideBlockUserModal()}
         headerClassName={styles.modalHeader}
         title={
-          <span>
-            {t('unblockUserFrom', { org: removeUserProps.orgName })}
-          </span>
+          <span>{t('unblockUserFrom', { org: removeUserProps.orgName })}</span>
         }
         footer={
           <>

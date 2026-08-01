@@ -7,6 +7,11 @@
   flex-wrap: wrap;
 }
 
+.eventStatsRow {
+  display: flex;
+  padding: 0 1.5rem;
+}
+
 .eventDetailsBox {
   flex: 2;
   min-width: 300px;
@@ -14,6 +19,15 @@
   border: 1px solid var(--gray-200, #e5e7eb);
   border-radius: 14px;
   padding: 24px;
+}
+
+.editEventButton {
+  position: absolute;
+  right: 0;
+  margin-right: 1rem;
+  padding: 0.25rem;
+  margin-top: 0.5rem;
+  border-radius: 50%;
 }
 
 .titlename {

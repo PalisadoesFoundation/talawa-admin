@@ -18,3 +18,7 @@
   margin-bottom: 10px;
   background-color: var(--disabled-btn);
 }
+
+.FormTextFields {
+  justify-content: space-between;
+}

@@ -70,7 +70,7 @@ const SidebarNavItem = ({
           {
             style: {
               fontSize: resolvedSize,
-              color: isActive ? 'var(--gray-900, #111827)' : 'var(--gray-500)',
+              color: isActive ? 'var(--gray-900)' : 'var(--gray-500)',
             },
           },
         );
@@ -119,7 +119,7 @@ const SidebarNavItem = ({
       }}
       data-testid={testId}
       data-cy={dataCy}
-      title={hideDrawer ? (tooltip || label) : undefined}
+      title={hideDrawer ? tooltip || label : undefined}
     >
       {({ isActive }) => (
         <div className={styles.linkContent}>

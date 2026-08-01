@@ -28,7 +28,7 @@
  */
 import React from 'react';
 import type { InterfaceTableCheckIn } from 'types/shared-components/CheckIn/interface';
-import Button from '@mui/material/Button';
+import Button from 'shared-components/Button/Button';
 import { useMutation } from '@apollo/client';
 import { MARK_CHECKIN } from 'GraphQl/Mutations/mutations';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -113,10 +113,14 @@ export const TableRow = ({
     >
       {data.isCheckedIn ? (
         <div>
-          <Button variant="contained" disabled style={{ margin: 8, padding: 8 }}>
+          <Button variant="contained" disabled className={styles.actionButton}>
             {t('checkedIn')}
           </Button>
-          <Button variant="contained" style={{ margin: 8, padding: 8 }} onClick={notify}>
+          <Button
+            variant="contained"
+            className={styles.actionButton}
+            onClick={notify}
+          >
             {t('downloadTag')}
           </Button>
         </div>

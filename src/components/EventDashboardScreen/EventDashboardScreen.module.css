@@ -142,3 +142,7 @@
 .flexOne {
   flex: 1;
 }
+
+.headerWrapper {
+  align-items: center;
+}

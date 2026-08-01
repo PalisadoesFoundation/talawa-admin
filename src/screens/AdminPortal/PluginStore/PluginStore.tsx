@@ -13,7 +13,6 @@ import { PluginList, UninstallConfirmationModal } from './components';
 import { usePluginActions, usePluginFilters } from './hooks';
 import { useGetAllPlugins } from 'plugin/graphql-service';
 import type { IPluginMeta } from 'plugin';
-import { Button } from 'shared-components/Button';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import {
   useApolloClient,
@@ -28,6 +27,7 @@ import {
 } from 'utils/adminPluginInstaller';
 import PluginDetailView from './PluginDetailView';
 import styles from './PluginStore.module.css';
+import Button from 'shared-components/Button/Button';
 
 const STRUCTURE = `plugin.zip
 ├── admin/              (optional)
@@ -66,7 +66,7 @@ export default function PluginStore() {
     null,
   );
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(12);
+  const [rowsPerPage] = useState(12);
 
   // Upload state
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -275,31 +275,30 @@ export default function PluginStore() {
           <span>
             {t('showingPlugins', {
               start: page * rowsPerPage + 1,
-              end: Math.min(
-                (page + 1) * rowsPerPage,
-                filteredPlugins.length,
-              ),
+              end: Math.min((page + 1) * rowsPerPage, filteredPlugins.length),
               total: filteredPlugins.length,
             })}
           </span>
           <div className={styles.paginationControls}>
-            <button
+            <Button
+              variant="plain"
               className={styles.paginationBtn}
               onClick={() => setPage((p) => p - 1)}
               disabled={page === 0}
             >
               &lsaquo;
-            </button>
+            </Button>
             <span>
               {page + 1} / {totalPages}
             </span>
-            <button
+            <Button
+              variant="plain"
               className={styles.paginationBtn}
               onClick={() => setPage((p) => p + 1)}
               disabled={page >= totalPages - 1}
             >
               &rsaquo;
-            </button>
+            </Button>
           </div>
         </div>
       )}
@@ -318,27 +317,26 @@ export default function PluginStore() {
         <div className={styles.uploadColumns}>
           {/* Left: dropzone + parsed info */}
           <div className={styles.uploadLeft}>
-            <button
+            <Button
+              variant="plain"
               type="button"
               className={styles.dropzone}
               onClick={() => fileRef.current?.click()}
             >
               <FaUpload className={styles.dropzoneIcon} />
               <div className={styles.dropzoneTitle}>
-                {selectedFile
-                  ? selectedFile.name
-                  : tCommon('selectAZipFile')}
+                {selectedFile ? selectedFile.name : tCommon('selectAZipFile')}
               </div>
               <div className={styles.dropzoneHint}>
                 {tCommon('clickToBrowseFile')}
               </div>
-            </button>
+            </Button>
 
             <input
               ref={fileRef}
               type="file"
               accept=".zip"
-              style={{ display: 'none' }}
+              className={styles.fileRefInput}
               onChange={handleFileSelect}
             />
 
@@ -351,9 +349,7 @@ export default function PluginStore() {
 
             {manifest && zipStructure && (
               <div className={styles.pluginInfo}>
-                <div className={styles.pluginInfoHeader}>
-                  {t('pluginInfo')}
-                </div>
+                <div className={styles.pluginInfoHeader}>{t('pluginInfo')}</div>
                 <div className={styles.pluginInfoBody}>
                   <div className={styles.infoRow}>
                     <strong>{tCommon('name')}:</strong> {manifest.name}

@@ -93,9 +93,7 @@ const EventDashboardScreen = (): React.JSX.Element => {
           <div
             className={`${styles.colorLight} ${styles.mainContainerEventDashboard}`}
           >
-            <div
-              className={`${styles.gap}`}
-            >
+            <div className={`${styles.gap}`}>
               <div className={styles.flexOne}>
                 <h1>{t('title')}</h1>
               </div>
@@ -149,7 +147,7 @@ const EventDashboardScreen = (): React.JSX.Element => {
         } `}
         data-testid="mainpageright"
       >
-        <div style={{ alignItems: "center" }}>
+        <div className={styles.headerWrapper}>
           <div className={styles.flexOne}>
             <h1>{t('title')}</h1>
           </div>

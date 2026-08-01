@@ -39,3 +39,11 @@
   color: var(--green-500, #3ecf8e);
   font-weight: var(--font-weight-semibold);
 }
+
+.sectionContainer {
+  margin-bottom: 16px;
+}
+
+.optionsMargin {
+  margin: 0 8px;
+}

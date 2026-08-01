@@ -140,7 +140,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
         title={t('title')}
       >
         <form onSubmit={handleSubmit} data-testid="onspot-attendee-form">
-          <div style={{ justifyContent: "space-between" }}>
+          <div className={styles.FormTextFields}>
             <FormTextField
               name="firstName"
               label={tCommon('firstName')}

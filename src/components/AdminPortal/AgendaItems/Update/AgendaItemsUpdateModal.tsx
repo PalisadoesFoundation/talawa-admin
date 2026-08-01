@@ -237,7 +237,7 @@ const AgendaItemsUpdateModal: React.FC<
     >
       {/* Folder */}
       <FormFieldGroup name="folder" label={t('folder')}>
-        <div style={{ width: '100%' }}>
+        <div className={styles.fullWidthFieldWrapper}>
           <DropDownButton
             id="agenda-folder-dropdown"
             options={(agendaFolderData ?? []).map((f) => ({
@@ -263,7 +263,7 @@ const AgendaItemsUpdateModal: React.FC<
 
       {/* Category */}
       <FormFieldGroup name="category" label={t('category')}>
-        <div style={{ width: '100%' }}>
+        <div className={styles.fullWidthFieldWrapper}>
           <DropDownButton
             id="agenda-category-dropdown"
             options={(agendaItemCategories ?? []).map((c) => ({
@@ -287,8 +287,8 @@ const AgendaItemsUpdateModal: React.FC<
         </div>
       </FormFieldGroup>
 
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', marginBottom: '1rem' }}>
-        <div style={{ flex: '1 1 0' }}>
+      <div className={styles.dualFieldRow}>
+        <div className={styles.dualFieldColumn}>
           <FormTextField
             name="title"
             label={t('title')}
@@ -297,7 +297,7 @@ const AgendaItemsUpdateModal: React.FC<
             onChange={(v) => setItemFormState({ ...itemFormState, name: v })}
           />
         </div>
-        <div style={{ flex: '1 1 0' }}>
+        <div className={styles.dualFieldColumn}>
           <FormTextField
             name="duration"
             label={t('duration')}
@@ -339,9 +339,9 @@ const AgendaItemsUpdateModal: React.FC<
 
       {/* URLs */}
       <FormFieldGroup name="url" label={t('url')}>
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <div className={styles.urlInputRow}>
           <input
-            style={{ width: '100%', padding: '0.375rem 0.75rem', border: '1px solid #ced4da', borderRadius: '0.375rem' }}
+            className={styles.urlInputField}
             placeholder={t('enterUrl')}
             value={newUrl}
             onChange={(e) => setNewUrl(e.target.value)}
@@ -376,7 +376,7 @@ const AgendaItemsUpdateModal: React.FC<
           type="file"
           multiple
           accept="image/*,video/*"
-          style={{ width: '100%', padding: '0.375rem 0.75rem', border: '1px solid #ced4da', borderRadius: '0.375rem' }}
+          className={styles.attachmentInput}
           onChange={handleFileChange}
         />
       </FormFieldGroup>

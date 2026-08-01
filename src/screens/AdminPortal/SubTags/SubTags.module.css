@@ -163,6 +163,10 @@ form label,
   margin-right: var(--space-3);
 }
 
+.errorHeading {
+  text-align: center;
+}
+
 /* Row Background */
 
 .rowBackground {
@@ -268,4 +272,26 @@ form label,
   scrollbar-color: var(--gray-400, #9ca3af) var(--gray-100, #f3f4f6);
   max-height: calc(100vh - var(--space-20));
   overflow: auto;
+}
+
+.titleCount {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--gray-400);
+  margin-left: 8px;
+}
+
+.cellPrimaryLink {
+  color: var(--green-600);
+}
+
+.emptyCell {
+  text-align: center;
+  padding: 40px;
+  color: var(--gray-400);
+}
+
+.actionBtns {
+  display: flex;
+  gap: 6px;
 }

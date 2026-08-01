@@ -6,22 +6,41 @@
 
 Defined in: [src/shared-components/Button/Button.types.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Button/Button.types.ts#L32)
 
-Props for the shared Button wrapper.
-Extends react-bootstrap Button props and adds loading, icon, and layout helpers.
-
 ## Extends
 
-- `Omit`\<`BootstrapButtonProps`, `"size"` \| `"variant"`\>
+- `Omit`\<`HTMLAttributes`\<`HTMLElement`\>, `"size"`\>
 
 ## Properties
+
+### disabled?
+
+> `optional` **disabled**: `boolean`
+
+Defined in: [src/shared-components/Button/Button.types.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Button/Button.types.ts#L47)
+
+***
+
+### form?
+
+> `optional` **form**: `string`
+
+Defined in: [src/shared-components/Button/Button.types.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Button/Button.types.ts#L50)
+
+***
 
 ### fullWidth?
 
 > `optional` **fullWidth**: `boolean`
 
-Defined in: [src/shared-components/Button/Button.types.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Button/Button.types.ts#L41)
+Defined in: [src/shared-components/Button/Button.types.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Button/Button.types.ts#L38)
 
-Stretch to the parent width.
+***
+
+### href?
+
+> `optional` **href**: `string`
+
+Defined in: [src/shared-components/Button/Button.types.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Button/Button.types.ts#L43)
 
 ***
 
@@ -29,9 +48,7 @@ Stretch to the parent width.
 
 > `optional` **icon**: `ReactNode`
 
-Defined in: [src/shared-components/Button/Button.types.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Button/Button.types.ts#L47)
-
-Optional leading/trailing icon.
+Defined in: [src/shared-components/Button/Button.types.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Button/Button.types.ts#L41)
 
 ***
 
@@ -39,9 +56,7 @@ Optional leading/trailing icon.
 
 > `optional` **iconPosition**: [`ButtonIconPosition`](../type-aliases/ButtonIconPosition.md)
 
-Defined in: [src/shared-components/Button/Button.types.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Button/Button.types.ts#L49)
-
-Placement of the icon relative to the text.
+Defined in: [src/shared-components/Button/Button.types.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Button/Button.types.ts#L42)
 
 ***
 
@@ -49,9 +64,7 @@ Placement of the icon relative to the text.
 
 > `optional` **isLoading**: `boolean`
 
-Defined in: [src/shared-components/Button/Button.types.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Button/Button.types.ts#L43)
-
-Show the loading spinner and disable interactions.
+Defined in: [src/shared-components/Button/Button.types.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Button/Button.types.ts#L39)
 
 ***
 
@@ -59,9 +72,27 @@ Show the loading spinner and disable interactions.
 
 > `optional` **loadingText**: `ReactNode`
 
+Defined in: [src/shared-components/Button/Button.types.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Button/Button.types.ts#L40)
+
+***
+
+### name?
+
+> `optional` **name**: `string`
+
+Defined in: [src/shared-components/Button/Button.types.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Button/Button.types.ts#L48)
+
+***
+
+### rel?
+
+> `optional` **rel**: `string`
+
 Defined in: [src/shared-components/Button/Button.types.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Button/Button.types.ts#L45)
 
-Optional text to display while loading; falls back to children.
+#### Overrides
+
+`Omit.rel`
 
 ***
 
@@ -69,9 +100,31 @@ Optional text to display while loading; falls back to children.
 
 > `optional` **size**: [`ButtonSize`](../type-aliases/ButtonSize.md)
 
-Defined in: [src/shared-components/Button/Button.types.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Button/Button.types.ts#L39)
+Defined in: [src/shared-components/Button/Button.types.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Button/Button.types.ts#L37)
 
-Size token. `md` is the default; `xl` uses custom styling.
+***
+
+### target?
+
+> `optional` **target**: `string`
+
+Defined in: [src/shared-components/Button/Button.types.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Button/Button.types.ts#L44)
+
+***
+
+### type?
+
+> `optional` **type**: `"button"` \| `"submit"` \| `"reset"`
+
+Defined in: [src/shared-components/Button/Button.types.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Button/Button.types.ts#L46)
+
+***
+
+### value?
+
+> `optional` **value**: `string` \| `number` \| readonly `string`[]
+
+Defined in: [src/shared-components/Button/Button.types.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Button/Button.types.ts#L49)
 
 ***
 
@@ -79,6 +132,4 @@ Size token. `md` is the default; `xl` uses custom styling.
 
 > `optional` **variant**: [`ButtonVariant`](../type-aliases/ButtonVariant.md)
 
-Defined in: [src/shared-components/Button/Button.types.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Button/Button.types.ts#L37)
-
-Visual variant (e.g., primary, outline-primary, danger).
+Defined in: [src/shared-components/Button/Button.types.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/Button/Button.types.ts#L36)

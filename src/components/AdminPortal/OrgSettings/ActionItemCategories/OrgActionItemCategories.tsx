@@ -17,6 +17,8 @@ import SearchBar from 'shared-components/SearchBar/SearchBar';
 import SortingButton from 'shared-components/SortingButton/SortingButton';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 import { useModalState } from 'shared-components/CRUDModalTemplate';
+import Button from 'shared-components/Button/Button';
+import { EyeIcon, PencilIcon, PlusIcon } from './icons';
 
 enum CategoryStatus {
   Active = 'active',
@@ -27,25 +29,6 @@ interface IActionItemCategoryProps {
   orgId: string;
 }
 
-/** SVG icons */
-const EyeIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-    <circle cx="12" cy="12" r="3" />
-  </svg>
-);
-const PencilIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
-  </svg>
-);
-const PlusIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <line x1="12" y1="5" x2="12" y2="19" />
-    <line x1="5" y1="12" x2="19" y2="12" />
-  </svg>
-);
-
 const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgActionItemCategories',
@@ -53,9 +36,13 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
-  const [category, setCategory] = useState<IActionItemCategoryInfo | null>(null);
+  const [category, setCategory] = useState<IActionItemCategoryInfo | null>(
+    null,
+  );
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState<'createdAt_ASC' | 'createdAt_DESC'>('createdAt_DESC');
+  const [sortBy, setSortBy] = useState<'createdAt_ASC' | 'createdAt_DESC'>(
+    'createdAt_DESC',
+  );
   const [status, setStatus] = useState<CategoryStatus | null>(null);
   const [categories, setCategories] = useState<IActionItemCategoryInfo[]>([]);
   const [modalMode, setModalMode] = useState<'edit' | 'create'>('create');
@@ -106,7 +93,8 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
     }
 
     filtered = [...filtered].sort((a, b) => {
-      const d = new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      const d =
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
       return sortBy === 'createdAt_DESC' ? d : -d;
     });
 
@@ -116,6 +104,7 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
   if (catError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
+        // css-check-ignore-next-line
         <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
         <div className={styles.errorText}>
           {tErrors('errorLoading', { entity: 'Action Item Categories' })}
@@ -150,7 +139,9 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
               ? tCommon('createdLatest')
               : tCommon('createdEarliest')
           }
-          onSortChange={(v) => setSortBy(v as 'createdAt_DESC' | 'createdAt_ASC')}
+          onSortChange={(v) =>
+            setSortBy(v as 'createdAt_DESC' | 'createdAt_ASC')
+          }
           dataTestIdPrefix="sort"
           buttonLabel={tCommon('sort')}
           type="sort"
@@ -177,14 +168,15 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
           type="filter"
         />
         <div className={styles.toolbarSpacer} />
-        <button
+        <Button
+          variant="plain"
           className={styles.createBtn}
           onClick={() => handleOpenModal(null, 'create')}
           data-testid="createActionItemCategoryBtn"
         >
           <PlusIcon />
           {tCommon('create')}
-        </button>
+        </Button>
       </div>
 
       {/* Table */}
@@ -223,7 +215,8 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
                   <td>{dayjs(cat.createdAt).format('DD/MM/YYYY')}</td>
                   <td>
                     <div className={styles.actionBtns}>
-                      <button
+                      <Button
+                        variant="plain"
                         className={styles.iconBtn}
                         data-testid={`viewCategoryBtn${i + 1}`}
                         onClick={() => {
@@ -233,15 +226,16 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
                         title={tCommon('view')}
                       >
                         <EyeIcon />
-                      </button>
-                      <button
+                      </Button>
+                      <Button
+                        variant="plain"
                         className={styles.iconBtn}
                         data-testid={`editCategoryBtn${i + 1}`}
                         onClick={() => handleOpenModal(cat, 'edit')}
                         title={tCommon('edit')}
                       >
                         <PencilIcon />
-                      </button>
+                      </Button>
                     </div>
                   </td>
                 </tr>

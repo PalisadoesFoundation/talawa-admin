@@ -130,8 +130,8 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
       size="lg"
       data-testid="actionItemViewModal"
     >
-      <div style={{ padding: 12 }}>
-        <div style={{ width: "100%" }}>
+      <div className={styles.modalBody}>
+        <div className={styles.fullWidth}>
           <FormFieldGroup
             name="category"
             label={t('category')}
@@ -148,7 +148,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
             />
           </FormFieldGroup>
         </div>
-        <div style={{ gap: 12 }}>
+        <div className={styles.gapContainer}>
           <FormFieldGroup
             name="assignedTo"
             label={t('assignedTo')}
@@ -183,8 +183,8 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
             />
           </FormFieldGroup>
         </div>
-        <div style={{ marginLeft: "auto", alignItems: "flex-start" }}>
-          <div style={{ marginBottom: 12 }}>
+        <div className={styles.statusEventWrapper}>
+          <div className={styles.statusWrapper}>
             <span className="field-label">{t('status')}</span>
 
             <div>

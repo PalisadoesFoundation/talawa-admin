@@ -604,7 +604,7 @@ function EventListCardModals({
                 checked={updateOption === 'single'}
                 onChange={() => setUpdateOption('single')}
                 label={t('updateThisInstance')}
-                style={{ marginBottom: 8 }}
+                className={styles.FormCheckField}
                 data-testid="update-single-radio"
               />
             )}
@@ -617,7 +617,7 @@ function EventListCardModals({
                 checked={updateOption === 'following'}
                 onChange={() => setUpdateOption('following')}
                 label={t('updateThisAndFollowing')}
-                style={{ marginBottom: 8 }}
+                className={styles.FormCheckField}
                 data-testid="update-following-radio"
               />
             )}
@@ -630,7 +630,7 @@ function EventListCardModals({
                 checked={updateOption === 'entireSeries'}
                 onChange={() => setUpdateOption('entireSeries')}
                 label={t('updateEntireSeries')}
-                style={{ marginBottom: 8 }}
+                className={styles.FormCheckField}
                 data-testid="update-entire-series-radio"
               />
             )}

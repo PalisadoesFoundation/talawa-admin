@@ -19,9 +19,15 @@ import { useTableData } from 'shared-components/DataTable/hooks/useTableData';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import styles from './OrganizationFundCampaigns.module.css';
+import Button from 'shared-components/Button/Button';
 
+/** Number of rows displayed per page in the campaigns table. */
 const PAGE_SIZE = 10;
 
+/**
+ * `OrganizationFundCampaign` renders the list of fund campaigns for an organization.
+ * It provides search, progress tracking, and the ability to create or edit campaigns.
+ */
 const OrganizationFundCampaign = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'fundCampaign' });
   const { t: tCommon } = useTranslation('common');
@@ -70,6 +76,12 @@ const OrganizationFundCampaign = (): JSX.Element => {
     }),
   });
 
+  /**
+   * Opens the campaign modal in either 'create' or 'edit' mode with the selected campaign.
+   *
+   * @param selectedCampaign - The campaign to edit, or null when creating a new campaign.
+   * @param mode - Whether the modal should create a new campaign or edit an existing one.
+   */
   const handleOpenModal = useCallback(
     (
       selectedCampaign: InterfaceCampaignInfo | null,
@@ -88,6 +100,11 @@ const OrganizationFundCampaign = (): JSX.Element => {
     );
   }, [campaignsData, searchText]);
 
+  /**
+   * Navigates to the pledge management screen for the given campaign.
+   *
+   * @param campaignId - The ID of the campaign whose pledges should be managed.
+   */
   const handleClick = (campaignId: string): void => {
     navigate(`/admin/fundCampaignPledge/${orgId}/${campaignId}`);
   };
@@ -106,10 +123,8 @@ const OrganizationFundCampaign = (): JSX.Element => {
   if (campaignError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
-        <WarningAmberRounded style={{ fontSize: 32, color: 'var(--red-500, #ef4444)', marginBottom: 12 }} />
-        <div className={styles.errorText}>
-          {campaignError.message}
-        </div>
+        <WarningAmberRounded className={styles.errorIcon} />
+        <div className={styles.errorText}>{campaignError.message}</div>
       </div>
     );
   }
@@ -131,12 +146,13 @@ const OrganizationFundCampaign = (): JSX.Element => {
           <p className="page-subtitle">{t('title')}</p>
         </div>
         <div className="page-header-actions">
-          <button
+          <Button
+            variant="plain"
             className="btn btn-secondary"
             onClick={() => navigate(`/admin/orgfunds/${orgId}`)}
           >
             &larr; {tCommon('back')}
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -152,21 +168,27 @@ const OrganizationFundCampaign = (): JSX.Element => {
           showClearButton
         />
         <div className={styles.toolbarSpacer} />
-        <button
+        <Button
+          variant="plain"
           className={styles.createBtn}
           onClick={() => handleOpenModal(null, 'create')}
           data-testid="addCampaignBtn"
           disabled={isArchived}
         >
           + {t('addCampaign')}
-        </button>
+        </Button>
       </div>
 
       {/* Content */}
-      {!campaignLoading && campaignData && filteredCampaigns.length === 0 && searchText ? (
+      {!campaignLoading &&
+      campaignData &&
+      filteredCampaigns.length === 0 &&
+      searchText ? (
         <EmptyState
           message="noResultsFound"
-          description={tCommon('noResultsFoundFor', { query: `"${searchText}"` })}
+          description={tCommon('noResultsFoundFor', {
+            query: `"${searchText}"`,
+          })}
           dataTestId="campaigns-search-empty"
         />
       ) : !campaignLoading && campaignData && filteredCampaigns.length === 0 ? (
@@ -194,38 +216,58 @@ const OrganizationFundCampaign = (): JSX.Element => {
                 const raised = c.amountRaised ?? 0;
                 const goal = c.goalAmount;
                 const pct = goal > 0 ? Math.round((raised / goal) * 100) : 0;
-                const symbol = currencySymbols[c.currencyCode as keyof typeof currencySymbols] || '$';
-                const fillClass = pct >= 100 ? styles.progressGreen : pct >= 50 ? styles.progressYellow : styles.progressBlue;
+                const symbol =
+                  currencySymbols[
+                    c.currencyCode as keyof typeof currencySymbols
+                  ] || '$';
+                const fillClass =
+                  pct >= 100
+                    ? styles.progressGreen
+                    : pct >= 50
+                      ? styles.progressYellow
+                      : styles.progressBlue;
 
                 return (
                   <tr key={c.id}>
                     <td>
-                      <button
+                      <Button
+                        variant="plain"
                         className={styles.campaignLink}
                         onClick={() => handleClick(c.id)}
                         data-testid="campaignName"
                       >
                         {c.name}
-                      </button>
+                      </Button>
                     </td>
                     <td>{dayjs(c.startAt).format('MMM D, YYYY')}</td>
-                    <td data-testid="endDateCell">{dayjs(c.endAt).format('MMM D, YYYY')}</td>
-                    <td data-testid="goalCell">
-                      <span style={{ fontWeight: 600 }}>{symbol}{goal.toLocaleString()}</span>
+                    <td data-testid="endDateCell">
+                      {dayjs(c.endAt).format('MMM D, YYYY')}
                     </td>
-                    <td data-testid="progressCell" style={{ minWidth: 120 }}>
+                    <td data-testid="goalCell">
+                      <span className={styles.goalAmount}>
+                        {symbol}
+                        {goal.toLocaleString()}
+                      </span>
+                    </td>
+                    <td
+                      data-testid="progressCell"
+                      className={styles.progressCell}
+                    >
                       <div className={styles.progressBarBg}>
                         <div
                           className={`${styles.progressBarFill} ${fillClass}`}
+                          //css-check-ignore-next-line
                           style={{ width: `${Math.min(pct, 100)}%` }}
                         />
                       </div>
                       <span className={styles.progressText}>
-                        {symbol}{raised.toLocaleString()} ({pct}%)
+                        {symbol}
+                        {raised.toLocaleString()} ({pct}%)
                       </span>
                     </td>
                     <td>
-                      <button
+                      <Button
+                        variant="plain"
                         className="btn btn-secondary btn-sm"
                         data-testid="editCampaignBtn"
                         onClick={(e) => {
@@ -234,7 +276,7 @@ const OrganizationFundCampaign = (): JSX.Element => {
                         }}
                       >
                         {tCommon('edit')}
-                      </button>
+                      </Button>
                     </td>
                   </tr>
                 );

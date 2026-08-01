@@ -65,15 +65,14 @@ const LoadingState = ({
         aria-label={t('loading', { defaultValue: 'Loading' })}
       >
         <div
-          className={
+          className={`${
             size === 'sm'
               ? styles.spinnerSm
               : size === 'lg'
                 ? styles.spinnerLg
                 : styles.spinnerXl
-          }
+          } ${styles.spinnerBase}`}
           data-testid="spinner"
-          style={{ border: '0.25em solid currentColor', borderRightColor: 'transparent', borderRadius: '50%', animation: 'spinner-border 0.75s linear infinite', color: 'var(--green-500)' }}
         />
       </div>
     );
@@ -98,13 +97,13 @@ const LoadingState = ({
     return (
       <div
         data-testid={dataTestId}
-        style={{ width: '100%' }}
+        className={styles.skeletonWrapper}
         role="status"
         aria-live="polite"
         aria-label={t('loading', { defaultValue: 'Loading' })}
       >
         {[...Array(safeRows)].map((_, rowIndex) => (
-          <div key={rowIndex} style={{ display: 'flex', marginBottom: '1rem', gap: '1rem' }}>
+          <div key={rowIndex} className={styles.skeletonRowWrapper}>
             {[...Array(safeCols)].map((_, colIndex) => (
               <div key={colIndex} className={`${styles.loadingItem} shimmer`} />
             ))}
@@ -139,15 +138,14 @@ const LoadingState = ({
         aria-label={t('loading', { defaultValue: 'Loading' })}
       >
         <div
-          className={
+          className={`${
             size === 'sm'
               ? styles.spinnerSm
               : size === 'lg'
                 ? styles.spinnerLg
                 : styles.spinnerXl
-          }
+          } ${styles.spinnerBase}`}
           data-testid="spinner"
-          style={{ border: '0.25em solid currentColor', borderRightColor: 'transparent', borderRadius: '50%', animation: 'spinner-border 0.75s linear infinite', color: 'var(--green-500)' }}
         />
       </div>
       {/* Render children underneath overlay */}

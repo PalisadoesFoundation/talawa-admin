@@ -322,7 +322,8 @@ const LoginPage = (): JSX.Element => {
               {/* Admin / User segmented toggle */}
               {location.pathname !== '/admin' && (
                 <div className={styles.segmentedToggle}>
-                  <button
+                  <Button
+                    variant="plain"
                     type="button"
                     className={
                       role === 'admin' ? styles.segmentedActive : undefined
@@ -330,8 +331,9 @@ const LoginPage = (): JSX.Element => {
                     onClick={(): void => setRole('admin')}
                   >
                     {tCommon('admin')}
-                  </button>
-                  <button
+                  </Button>
+                  <Button
+                    variant="plain"
                     type="button"
                     className={
                       role === 'user' ? styles.segmentedActive : undefined
@@ -339,7 +341,7 @@ const LoginPage = (): JSX.Element => {
                     onClick={(): void => setRole('user')}
                   >
                     {tCommon('user')}
-                  </button>
+                  </Button>
                 </div>
               )}
 
@@ -387,7 +389,10 @@ const LoginPage = (): JSX.Element => {
               role="tabpanel"
               aria-hidden={showTab !== 'REGISTER'}
             >
-              <h1 className={styles.registerHeading} data-testid="register-text">
+              <h1
+                className={styles.registerHeading}
+                data-testid="register-text"
+              >
                 {tCommon('register')}
               </h1>
               <RegistrationForm

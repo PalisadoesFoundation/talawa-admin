@@ -15,6 +15,7 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from '../../../utils/useLocalstorage';
 import type { IInviteMetadata } from './AcceptInvitation.interface';
+import styles from './AcceptInvitation.module.css';
 
 const STORAGE_KEY = 'pendingInvitationToken';
 const AUTH_TOKEN_KEY = 'token';
@@ -143,7 +144,7 @@ const AcceptInvitation = (): JSX.Element => {
       size="xl"
       data-testid="invitation-loading"
     >
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "24px 16px" }}>
+      <div className={styles.pageContainer}>
         <div className="card p-4">
           <h3>
             {invite?.eventId
@@ -187,7 +188,7 @@ const AcceptInvitation = (): JSX.Element => {
                         'Please login or create an account to accept this invitation.',
                     })}
                   </p>
-                  <div style={{ gap: 8 }}>
+                  <div className={styles.buttonRow}>
                     <Button onClick={handleLogin}>
                       {t('login', { defaultValue: 'Log in' })}
                     </Button>
@@ -208,17 +209,16 @@ const AcceptInvitation = (): JSX.Element => {
                   )}
 
                   {requiresConfirmation && (
-                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <div className={styles.flexRow}>
                       <input
                         id="confirmIsInvitee"
                         type="checkbox"
-                        
                         checked={confirmIsInvitee}
                         onChange={(e) => setConfirmIsInvitee(e.target.checked)}
                       />
                       <label
                         htmlFor="confirmIsInvitee"
-                        style={{ marginLeft: 6, cursor: "pointer" }}
+                        className={styles.checkboxLabel}
                       >
                         {t('confirmMatch', {
                           defaultValue:
@@ -229,7 +229,7 @@ const AcceptInvitation = (): JSX.Element => {
                   )}
 
                   {requiresConfirmation && (
-                    <div style={{ marginBottom: 12 }}>
+                    <div className={styles.marginBottom12}>
                       <Button
                         variant="outline-secondary"
                         onClick={() => {
@@ -248,7 +248,7 @@ const AcceptInvitation = (): JSX.Element => {
                     </div>
                   )}
 
-                  <div style={{ gap: 8 }}>
+                  <div className={styles.buttonRow}>
                     <LoadingState
                       isLoading={isSubmitting}
                       variant="inline"

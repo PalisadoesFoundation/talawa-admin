@@ -4,6 +4,182 @@
   background-color: var(--agendaItemRow-bg);
 }
 
+.folderContainerAgendaDragAndDrop {
+  margin: 0 1.5rem;
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 1rem;
+}
+
+.folderCardAgendaDragAndDrop {
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  border-radius: 1rem;
+}
+
+.folderHeaderAgendaDragAndDrop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.folderDragHandleColumnAgendaDragAndDrop {
+  text-align: center;
+  align-self: center;
+  flex: 0 0 auto;
+  width: 8%;
+}
+
+.dragHandleAgendaDragAndDrop {
+  display: inline-flex;
+  align-items: center;
+  cursor: grab;
+}
+
+.folderNameColumnAgendaDragAndDrop {
+  text-align: start;
+  align-self: center;
+  flex: 1 1 auto;
+}
+
+.folderDescriptionColumnAgendaDragAndDrop {
+  text-align: start;
+  align-self: center;
+  flex: 2 1 auto;
+}
+
+.folderActionsColumnAgendaDragAndDrop {
+  display: flex;
+  justify-content: flex-end;
+  align-self: center;
+  flex: 1 1 auto;
+}
+
+.folderActionButtonsAgendaDragAndDrop {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.folderSpacerDefaultAgendaDragAndDrop {
+  margin: 0 0.25rem;
+}
+
+.folderSpacerEventAgendaDragAndDrop {
+  margin: 1.5rem 0.25rem;
+}
+
+.tableShellAgendaDragAndDrop {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.tableShellEventAgendaDragAndDrop {
+  margin: 0 1.5rem;
+}
+
+.tableShellDefaultAgendaDragAndDrop {
+  margin: 0;
+}
+
+.tableHeadRowAgendaDragAndDrop {
+  display: flex;
+  margin: 0;
+  border: 1px solid #dee2e6;
+  padding: 1rem 0;
+}
+
+.tableHeadSequenceAgendaDragAndDrop {
+  flex: 0 0 8.33%;
+  font-weight: bold;
+  text-align: center;
+}
+
+.tableHeadTitleAgendaDragAndDrop {
+  flex: 0 0 16.67%;
+  font-weight: bold;
+  text-align: center;
+}
+
+.tableHeadCategoryAgendaDragAndDrop {
+  flex: 0 0 16.67%;
+  font-weight: bold;
+  text-align: center;
+}
+
+.tableHeadDescriptionAgendaDragAndDrop {
+  flex: 0 0 25%;
+  font-weight: bold;
+  text-align: center;
+}
+
+.tableHeadDurationAgendaDragAndDrop {
+  flex: 0 0 16.67%;
+  font-weight: bold;
+  text-align: center;
+}
+
+.tableHeadOptionsAgendaDragAndDrop {
+  flex: 0 0 16.67%;
+  font-weight: bold;
+  text-align: center;
+}
+
+.itemsContainerAgendaDragAndDrop {
+  background-color: #fcfcfd;
+  border: 1px solid #dee2e6;
+  border-top: none;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  margin: 0 1.5rem;
+}
+
+.emptyStateAgendaDragAndDrop {
+  padding: 1rem 0;
+  text-align: center;
+  font-weight: 600;
+  color: #adb5bd;
+}
+
+.itemRowInnerAgendaDragAndDrop {
+  display: flex;
+  margin: 1rem;
+  align-items: center;
+}
+
+.itemDragHandleColumnAgendaDragAndDrop {
+  flex: 0 0 8.33%;
+  text-align: center;
+}
+
+.itemDragHandleAgendaDragAndDrop {
+  cursor: grab;
+}
+
+.itemNameColumnAgendaDragAndDrop {
+  flex: 0 0 16.67%;
+  text-align: center;
+}
+
+.itemCategoryColumnAgendaDragAndDrop {
+  flex: 0 0 16.67%;
+  text-align: center;
+}
+
+.itemDescriptionColumnAgendaDragAndDrop {
+  flex: 0 0 25%;
+  text-align: center;
+}
+
+.itemDurationColumnAgendaDragAndDrop {
+  flex: 0 0 16.67%;
+  text-align: center;
+}
+
+.itemActionsColumnAgendaDragAndDrop {
+  flex: 0 0 16.67%;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
 .agendaItemRow:hover {
   background-color: var(--agendaItemRow-bg-hover);
 }

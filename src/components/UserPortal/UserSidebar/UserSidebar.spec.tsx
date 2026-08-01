@@ -20,7 +20,6 @@ vi.mock('shared-components/SidebarBase/SidebarBase.module.css', () => ({
   },
 }));
 
-
 vi.mock('./UserSidebar.module.css', () => ({
   default: {
     switchPortalWrapper: 'switchPortalWrapper',

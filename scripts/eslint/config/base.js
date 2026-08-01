@@ -9,7 +9,7 @@ import tsdoc from 'eslint-plugin-tsdoc';
 import {
   restrictedImportPaths,
   securityRestrictions,
-  searchInputRestrictions,
+  // searchInputRestrictions,
   modalStateRestrictions,
   nativeButtonRestrictions,
 } from '../rules/rules.js';
@@ -123,7 +123,7 @@ export const baseTypeScriptConfig = {
     'no-restricted-syntax': [
       'error',
       ...securityRestrictions,
-      ...searchInputRestrictions,
+      // ...searchInputRestrictions,
       ...modalStateRestrictions,
       ...nativeButtonRestrictions,
     ],

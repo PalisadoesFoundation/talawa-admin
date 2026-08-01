@@ -51,7 +51,7 @@ const VenueCard = ({
   const { t: tCommon } = useTranslation('common');
   return (
     <div
-      style={{ flex: '0 0 33.33%', maxWidth: '33.33%' }}
+      className={styles.cardWrapper}
       data-testid={`venue-item-${venueItem.node.id}`}
       key={venueItem.node.id}
     >
@@ -64,8 +64,8 @@ const VenueCard = ({
             className={styles.venueimage}
             crossOrigin="anonymous"
           />
-          <div style={{ paddingBottom: 0 }}>
-            <h3 style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div className={styles.cardBody}>
+            <h3 className={styles.venueTitleRow}>
               {/* Venue name with truncation if too long */}
               <div className={styles.title}>
                 {venueItem.node.name.length > 25
@@ -77,7 +77,11 @@ const VenueCard = ({
               {venueItem.node.capacity != null && (
                 <div className={styles.capacityLabel}>
                   {tCommon('capacity')}: {venueItem.node.capacity}
-                  <PeopleIcon style={{ marginLeft: '0.25rem' }} width={16} height={16} />
+                  <PeopleIcon
+                    className={styles.peopleIcon}
+                    width={16}
+                    height={16}
+                  />
                 </div>
               )}
             </h3>
@@ -89,7 +93,7 @@ const VenueCard = ({
                 : venueItem.node.description}
             </p>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginBottom: '0.5rem', marginRight: '1rem' }}>
+          <div className={styles.actionsRow}>
             {/* Edit button */}
             <Button
               size="sm"

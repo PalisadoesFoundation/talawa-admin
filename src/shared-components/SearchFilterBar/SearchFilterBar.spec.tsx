@@ -99,7 +99,7 @@ vi.mock('lodash', async () => {
   const actual = await vi.importActual('lodash');
   return {
     ...actual,
-    debounce: (...args: unknown[]) => mockLodashDebounce(...args),
+    debounce: (fn: (...args: unknown[]) => unknown) => mockLodashDebounce(fn),
   };
 });
 
@@ -509,9 +509,7 @@ describe('SearchFilterBar', () => {
         />,
       );
 
-      expect(
-        screen.getByTestId('sortTags-container'),
-      ).toBeInTheDocument();
+      expect(screen.getByTestId('sortTags-container')).toBeInTheDocument();
       expect(screen.getByText('Sort Tags')).toBeInTheDocument();
     });
 
@@ -554,15 +552,9 @@ describe('SearchFilterBar', () => {
 
       render(<SearchFilterBar {...threeDropdowns} />);
 
-      expect(
-        screen.getByTestId('sort-container'),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByTestId('filter-container'),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByTestId('time-container'),
-      ).toBeInTheDocument();
+      expect(screen.getByTestId('sort-container')).toBeInTheDocument();
+      expect(screen.getByTestId('filter-container')).toBeInTheDocument();
+      expect(screen.getByTestId('time-container')).toBeInTheDocument();
     });
   });
 

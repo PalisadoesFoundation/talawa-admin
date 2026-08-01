@@ -57,10 +57,7 @@ const UserGlobalScreen = (): JSX.Element => {
         onCloseMobile={handleCloseMobile}
       />
 
-      <Topbar
-        title={t('globalFeatures')}
-        onHamburgerClick={handleOpenMobile}
-      />
+      <Topbar title={t('globalFeatures')} onHamburgerClick={handleOpenMobile} />
 
       <main id="main-content" className="main" data-testid="mainpageright">
         <Outlet />

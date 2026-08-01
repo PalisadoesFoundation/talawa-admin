@@ -14,6 +14,34 @@
   width: 100%;
 }
 
+.cardShell {
+  border-radius: 1rem;
+  border: none;
+}
+
+.cardContentRow {
+  display: flex;
+  align-items: center;
+}
+
+.iconColumn {
+  flex: 0 0 33.33%;
+}
+
+.textColumn {
+  flex: 0 0 66.67%;
+}
+
+.primaryShimmerOverride {
+  border-radius: 0.25rem;
+  width: 75%;
+  margin-bottom: 0.5rem;
+}
+
+.secondaryShimmerOverride {
+  border-radius: 0.25rem;
+}
+
 .cardItem .iconWrapper {
   position: relative;
   height: 34px;

@@ -40,9 +40,9 @@ import EmptyState from 'shared-components/EmptyState/EmptyState';
 import Group from '@mui/icons-material/Group';
 import Search from '@mui/icons-material/Search';
 /* Alert replaced with plain div for Talawa design */
-import RBButton from 'shared-components/Button';
 import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import { useModalState } from 'shared-components/CRUDModalTemplate/hooks/useModalState';
+import Button from 'shared-components/Button';
 
 interface InterfaceOrgFormState {
   addressLine1: string;
@@ -167,7 +167,7 @@ function OrgList(): JSX.Element {
   const [isLoading, setIsLoading] = useState(true);
   const [typedValue, setTypedValue] = useState('');
   const [filterName, setFilterName] = useState('');
-  const [sortingState, setSortingState] = useState({
+  const [sortingState] = useState({
     option: 'Latest',
     selectedOption: 'Latest',
   });
@@ -363,14 +363,6 @@ function OrgList(): JSX.Element {
     refetchOrgs({ filter: val });
   };
 
-  const handleSortChange = (value: string | number): void => {
-    const option = String(value);
-    setSortingState({
-      option,
-      selectedOption: option,
-    });
-  };
-
   const handleChangePage = (
     _event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,
@@ -404,7 +396,7 @@ function OrgList(): JSX.Element {
               <strong>{tLogin('emailNotVerified')}</strong>
             </div>
             <div className={styles.warningActions}>
-              <RBButton
+              <Button
                 variant="outline-primary"
                 size="sm"
                 onClick={handleResendVerification}
@@ -414,15 +406,16 @@ function OrgList(): JSX.Element {
                 {resendLoading
                   ? tCommon('loading')
                   : tLogin('resendVerification')}
-              </RBButton>
-              <button
+              </Button>
+              <Button
+                variant="plain"
                 type="button"
                 className={styles.warningDismiss}
                 onClick={handleDismissWarning}
                 aria-label="Dismiss"
               >
                 &times;
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -465,14 +458,15 @@ function OrgList(): JSX.Element {
           />
         </div>
         {role === 'administrator' && (
-          <button
+          <Button
+            variant="plain"
             type="button"
             className="btn btn-primary"
             onClick={open}
             data-testid="createOrganizationBtn"
           >
             + {t('createOrganization')}
-          </button>
+          </Button>
         )}
       </div>
 
@@ -547,7 +541,9 @@ function OrgList(): JSX.Element {
                 .join('')
                 .slice(0, 2)
                 .toUpperCase();
-              const avatarGradient = {background:getAvatarGradient(item.name)};
+              const avatarGradient = {
+                background: getAvatarGradient(item.name),
+              };
               const createdDate = new Date(item.createdAt).toLocaleDateString(
                 'en-US',
                 { month: 'short', year: 'numeric' },
@@ -565,7 +561,12 @@ function OrgList(): JSX.Element {
                       style={avatarGradient}
                     >
                       {avatarUrl ? (
-                        <img src={avatarUrl} alt={initials} crossOrigin="anonymous" className={styles.orgCardAvatar}/>
+                        <img
+                          src={avatarUrl}
+                          alt={initials}
+                          crossOrigin="anonymous"
+                          className={styles.orgCardAvatar}
+                        />
                       ) : (
                         initials
                       )}
@@ -636,7 +637,7 @@ function OrgList(): JSX.Element {
               >
                 {t('goToStore')}
               </Link>
-              <RBButton
+              <Button
                 type="submit"
                 className={styles.enableEverythingBtn}
                 onClick={closeDialogModal}
@@ -644,7 +645,7 @@ function OrgList(): JSX.Element {
                 data-testid="enableEverythingForm"
               >
                 {t('enableEverything')}
-              </RBButton>
+              </Button>
             </div>
           </div>
         </section>

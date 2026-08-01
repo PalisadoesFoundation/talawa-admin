@@ -42,7 +42,6 @@ export default function AgendaDragAndDrop({
   folders,
   setFolders,
   agendaFolderConnection,
-  t,
   onEditFolder,
   onDeleteFolder,
   onPreviewItem,
@@ -54,6 +53,8 @@ export default function AgendaDragAndDrop({
     UPDATE_AGENDA_ITEM_SEQUENCE_MUTATION,
   );
   const { t: tErrors } = useTranslation('errors');
+  const { t } = useTranslation('translation', { keyPrefix: 'agendaSection' });
+
   const [updateAgendaFolder] = useMutation(UPDATE_AGENDA_FOLDER_MUTATION);
   /**
    * Prevent concurrent drag mutations
@@ -228,12 +229,7 @@ export default function AgendaDragAndDrop({
             <div
               ref={provided.innerRef}
               {...provided.droppableProps}
-              style={{
-                margin: '0 1.5rem',
-                backgroundColor: '#f8f9fa',
-                padding: '1rem',
-                borderRadius: '1rem',
-              }}
+              className={styles.folderContainerAgendaDragAndDrop}
             >
               {folders.map((agendaFolder, index) => {
                 const isDefault = agendaFolder.isDefaultFolder;
@@ -250,28 +246,25 @@ export default function AgendaDragAndDrop({
                         {...provided.draggableProps}
                         className={`${styles.agendaItemRow} ${getDraggingClass(
                           snapshot.isDragging,
-                        )}`}
-                        style={{
-                          padding: '1rem 1.5rem',
-                          marginBottom: '1.5rem',
-                          borderRadius: '1rem',
-                        }}
+                        )} ${styles.folderCardAgendaDragAndDrop}`}
                       >
                         {/* Folder header */}
-                        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
+                        <div className={styles.folderHeaderAgendaDragAndDrop}>
                           <div
-                            style={{ textAlign: 'center', alignSelf: 'center', flex: '0 0 auto', width: '8%' }}
+                            className={
+                              styles.folderDragHandleColumnAgendaDragAndDrop
+                            }
                           >
                             <span
                               {...provided.dragHandleProps}
-                              style={{ display: 'inline-flex', alignItems: 'center', cursor: 'grab' }}
+                              className={styles.dragHandleAgendaDragAndDrop}
                             >
                               ☰
                             </span>
                           </div>
 
                           <div
-                            style={{ textAlign: 'start', alignSelf: 'center', flex: '1 1 auto' }}
+                            className={styles.folderNameColumnAgendaDragAndDrop}
                           >
                             <span className={styles.categoryChip}>
                               {agendaFolder.name}
@@ -279,7 +272,9 @@ export default function AgendaDragAndDrop({
                           </div>
 
                           <div
-                            style={{ textAlign: 'start', alignSelf: 'center', flex: '2 1 auto' }}
+                            className={
+                              styles.folderDescriptionColumnAgendaDragAndDrop
+                            }
                           >
                             <span className={styles.categoryChip}>
                               {agendaFolder.description}
@@ -287,67 +282,90 @@ export default function AgendaDragAndDrop({
                           </div>
 
                           <div
-                            style={{ display: 'flex', justifyContent: 'flex-end', alignSelf: 'center', flex: '1 1 auto' }}
+                            className={
+                              styles.folderActionsColumnAgendaDragAndDrop
+                            }
                           >
-                            <div style={{ display: 'flex', gap: '0.5rem' }}>
+                            <div
+                              className={
+                                styles.folderActionButtonsAgendaDragAndDrop
+                              }
+                            >
                               <Button
                                 size="sm"
                                 disabled={isDefault}
                                 variant="outline-secondary"
                                 onClick={() => onEditFolder(agendaFolder)}
                                 aria-label={t('editFolder')}
-                              >
-                              </Button>
+                              ></Button>
                               <Button
                                 size="sm"
                                 disabled={isDefault}
                                 variant="danger"
                                 onClick={() => onDeleteFolder(agendaFolder)}
                                 aria-label={t('deleteFolder')}
-                              >
-                              </Button>
+                              ></Button>
                             </div>
                           </div>
                         </div>
 
                         <div
-                          style={{
-                            margin: `${agendaFolderConnection === 'Event' ? '1.5rem' : '0'} 0.25rem`,
-                          }}
+                          className={
+                            agendaFolderConnection === 'Event'
+                              ? styles.folderSpacerEventAgendaDragAndDrop
+                              : styles.folderSpacerDefaultAgendaDragAndDrop
+                          }
                         />
 
                         {/* Table head */}
                         <div
-                          style={{
-                            boxShadow: '0 .125rem .25rem rgba(0,0,0,.075)',
-                            margin: agendaFolderConnection === 'Event' ? '0 1.5rem' : '0',
-                          }}
+                          className={`${styles.tableShellAgendaDragAndDrop} ${
+                            agendaFolderConnection === 'Event'
+                              ? styles.tableShellEventAgendaDragAndDrop
+                              : styles.tableShellDefaultAgendaDragAndDrop
+                          }`}
                         >
                           <div
-                            className={styles.tableHeadAgendaItems}
-                            style={{
-                              display: 'flex',
-                              margin: '0',
-                              border: '1px solid #dee2e6',
-                              padding: '1rem 0',
-                            }}
+                            className={`${styles.tableHeadAgendaItems} ${styles.tableHeadRowAgendaDragAndDrop}`}
                           >
-                            <div style={{ flex: '0 0 8.33%', fontWeight: 'bold', textAlign: 'center' }}>
+                            <div
+                              className={
+                                styles.tableHeadSequenceAgendaDragAndDrop
+                              }
+                            >
                               {t('sequence')}
                             </div>
-                            <div style={{ flex: '0 0 16.67%', fontWeight: 'bold', textAlign: 'center' }}>
+                            <div
+                              className={styles.tableHeadTitleAgendaDragAndDrop}
+                            >
                               {t('title')}
                             </div>
-                            <div style={{ flex: '0 0 16.67%', fontWeight: 'bold', textAlign: 'center' }}>
+                            <div
+                              className={
+                                styles.tableHeadCategoryAgendaDragAndDrop
+                              }
+                            >
                               {t('category')}
                             </div>
-                            <div style={{ flex: '0 0 25%', fontWeight: 'bold', textAlign: 'center' }}>
+                            <div
+                              className={
+                                styles.tableHeadDescriptionAgendaDragAndDrop
+                              }
+                            >
                               {t('description')}
                             </div>
-                            <div style={{ flex: '0 0 16.67%', fontWeight: 'bold', textAlign: 'center' }}>
+                            <div
+                              className={
+                                styles.tableHeadDurationAgendaDragAndDrop
+                              }
+                            >
                               {t('duration')}
                             </div>
-                            <div style={{ flex: '0 0 16.67%', fontWeight: 'bold', textAlign: 'center' }}>
+                            <div
+                              className={
+                                styles.tableHeadOptionsAgendaDragAndDrop
+                              }
+                            >
                               {t('options')}
                             </div>
                           </div>
@@ -363,23 +381,12 @@ export default function AgendaDragAndDrop({
                             <div
                               ref={provided.innerRef}
                               {...provided.droppableProps}
-                              style={{
-                                backgroundColor: '#fcfcfd',
-                                border: '1px solid #dee2e6',
-                                borderTop: 'none',
-                                boxShadow: '0 .125rem .25rem rgba(0,0,0,.075)',
-                                margin: '0 1.5rem',
-                              }}
+                              className={styles.itemsContainerAgendaDragAndDrop}
                             >
                               {/* EMPTY STATE */}
                               {agendaFolder.items.edges.length === 0 && (
                                 <div
-                                  style={{
-                                    padding: '1rem 0',
-                                    textAlign: 'center',
-                                    fontWeight: 600,
-                                    color: '#adb5bd',
-                                  }}
+                                  className={styles.emptyStateAgendaDragAndDrop}
                                 >
                                   {t('noAgendaItems')}
                                 </div>
@@ -401,37 +408,64 @@ export default function AgendaDragAndDrop({
                                         className={`${styles.agendaItemRow} ${getDraggingClass(
                                           snapshot.isDragging,
                                         )}`}
-                                        style={{ padding: '0.5rem 0' }}
                                       >
-                                        <div style={{ display: 'flex', margin: '1rem', alignItems: 'center' }}>
-                                          <div style={{ flex: '0 0 8.33%', textAlign: 'center' }}>
+                                        <div
+                                          className={
+                                            styles.itemRowInnerAgendaDragAndDrop
+                                          }
+                                        >
+                                          <div
+                                            className={
+                                              styles.itemDragHandleColumnAgendaDragAndDrop
+                                            }
+                                          >
                                             <span
                                               {...provided.dragHandleProps}
-                                              style={{ cursor: 'grab' }}
+                                              className={
+                                                styles.itemDragHandleAgendaDragAndDrop
+                                              }
                                             >
                                               ☰
                                             </span>
                                           </div>
 
-                                          <div style={{ flex: '0 0 16.67%', textAlign: 'center' }}>
+                                          <div
+                                            className={
+                                              styles.itemNameColumnAgendaDragAndDrop
+                                            }
+                                          >
                                             {agendaItem.name}
                                           </div>
 
-                                          <div style={{ flex: '0 0 16.67%', textAlign: 'center' }}>
+                                          <div
+                                            className={
+                                              styles.itemCategoryColumnAgendaDragAndDrop
+                                            }
+                                          >
                                             {agendaItem.category?.name ??
                                               t('noCategory')}
                                           </div>
 
-                                          <div style={{ flex: '0 0 25%', textAlign: 'center' }}>
+                                          <div
+                                            className={
+                                              styles.itemDescriptionColumnAgendaDragAndDrop
+                                            }
+                                          >
                                             {agendaItem.description}
                                           </div>
 
-                                          <div style={{ flex: '0 0 16.67%', textAlign: 'center' }}>
+                                          <div
+                                            className={
+                                              styles.itemDurationColumnAgendaDragAndDrop
+                                            }
+                                          >
                                             {agendaItem.duration ?? '-'}
                                           </div>
 
                                           <div
-                                            style={{ flex: '0 0 16.67%', display: 'flex', justifyContent: 'center', gap: '0.5rem' }}
+                                            className={
+                                              styles.itemActionsColumnAgendaDragAndDrop
+                                            }
                                           >
                                             <Button
                                               size="sm"
@@ -450,8 +484,7 @@ export default function AgendaDragAndDrop({
                                                 onEditItem(agendaItem)
                                               }
                                               aria-label={t('editItem')}
-                                            >
-                                            </Button>
+                                            ></Button>
                                             <Button
                                               size="sm"
                                               variant="danger"
@@ -459,8 +492,7 @@ export default function AgendaDragAndDrop({
                                                 onDeleteItem(agendaItem)
                                               }
                                               aria-label={t('deleteItem')}
-                                            >
-                                            </Button>
+                                            ></Button>
                                           </div>
                                         </div>
                                       </div>

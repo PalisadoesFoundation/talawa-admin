@@ -102,7 +102,7 @@ function EventAgenda(props: { eventId: string }): JSX.Element {
       <div className={`${styles.container} rounded-4 my-3`}>
         <div className={styles.message}>
           <WarningAmberRounded className={styles.errorIcon} />
-          <h6 style={{ textAlign: "center" }}>
+          <h6 className={styles.errorText}>
             Error occurred while loading{' '}
             {agendaFolderError ? 'Agenda Folders' : 'Agenda Items'}
             <br />

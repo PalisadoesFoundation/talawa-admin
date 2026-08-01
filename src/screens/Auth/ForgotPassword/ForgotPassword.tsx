@@ -158,8 +158,8 @@ const ForgotPassword = (): JSX.Element => {
       variant="spinner"
     >
       <div className={styles.pageWrapper}>
-        <div style={{ display: "flex", flexWrap: "wrap", width: "100%", alignItems: "center" }}>
-          <div style={{ flex: "0 0 33.33%", maxWidth: "33.33%", padding: 0 }}>
+        <div className={styles.flexRow}>
+          <div className={styles.columnThird}>
             <div className={styles.cardTemplate}>
               <div className={styles.keyWrapper}>
                 <div className={styles.themeOverlay} />
@@ -169,12 +169,12 @@ const ForgotPassword = (): JSX.Element => {
                 />
               </div>
 
-              <h3 style={{ textAlign: "center" }}>
+              <h3 className={styles.centeredHeading}>
                 {tCommon('forgotPassword')}
               </h3>
 
               {showEnterEmail ? (
-                <div style={{ marginTop: 16 }}>
+                <div className={styles.formSpacing}>
                   <form onSubmit={getOTP}>
                     <FormTextField
                       name="registeredEmail"
@@ -197,7 +197,7 @@ const ForgotPassword = (): JSX.Element => {
                   </form>
                 </div>
               ) : (
-                <div style={{ marginTop: 16 }}>
+                <div className={styles.formSpacing}>
                   <form onSubmit={submitForgotPassword}>
                     <FormTextField
                       name="userOtp"
@@ -249,7 +249,7 @@ const ForgotPassword = (): JSX.Element => {
                       data-testid="confirmNewPassword"
                     />
 
-                    <Button type="submit" style={{ width: "100%" }}>
+                    <Button type="submit" className={styles.fullWidthBtn}>
                       {t('changePassword')}
                     </Button>
                   </form>
@@ -257,10 +257,7 @@ const ForgotPassword = (): JSX.Element => {
               )}
 
               <div className="items-center">
-                <Link
-                  to="/"
-                  style={{ margin: "0 auto", display: "flex", alignItems: "center", color: "var(--gray-500, #6b7280)" }}
-                >
+                <Link to="/" className={styles.backLink}>
                   <ArrowRightAlt
                     fontSize="medium"
                     sx={{ transform: 'rotate(180deg)' }}

@@ -6,7 +6,6 @@
  */
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
-import { Button } from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useParams } from 'react-router';
 import styles from './UserContactDetails.module.css';
@@ -31,17 +30,11 @@ import {
 } from 'utils/formEnumFields';
 import dayjs from 'dayjs';
 import DropDownButton from 'shared-components/DropDownButton/DropDownButton';
-import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { InterfaceMemberDetailProps } from 'types/AdminPortal/MemberDetail/interface';
 import { resolveAvatarFile } from './resolveAvatarFile';
 import { phoneFieldConfigs, addressFieldConfigs } from './fieldConfigs';
-
-/** Pencil edit icon SVG */
-const PencilIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z" />
-  </svg>
-);
+import Button from 'shared-components/Button/Button';
+import { PencilIcon } from './icons';
 
 const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
   id,
@@ -261,7 +254,8 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
                     className={styles.avatarImage}
                     enableEnlarge={true}
                   />
-                  <button
+                  <Button
+                    variant="plain"
                     type="button"
                     className={styles.avatarEditBtn}
                     onClick={() => fileInputRef.current?.click()}
@@ -270,7 +264,7 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
                     aria-label={tCommon('userEditProfilePicture')}
                   >
                     <PencilIcon />
-                  </button>
+                  </Button>
                 </div>
                 <input
                   accept="image/*"
@@ -497,9 +491,7 @@ const UserContactDetails: React.FC<InterfaceMemberDetailProps> = ({
                 {addressFieldConfigs.map((field) => (
                   <div
                     className={
-                      field.colSize === 12
-                        ? styles.formCol12
-                        : styles.formCol6
+                      field.colSize === 12 ? styles.formCol12 : styles.formCol6
                     }
                     key={field.id}
                   >

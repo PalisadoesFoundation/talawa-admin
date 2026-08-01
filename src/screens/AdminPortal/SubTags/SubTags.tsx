@@ -50,7 +50,7 @@ function SubTags(): JSX.Element {
   const [tagNameTouched, setTagNameTouched] = useState(false);
 
   const [tagSearchName, setTagSearchName] = useState('');
-  const [tagSortOrder, setTagSortOrder] = useState<SortedByType>('DESCENDING');
+  const [tagSortOrder] = useState<SortedByType>('DESCENDING');
 
   const showAddSubTagModal = (): void => {
     addSubTagModal.open();
@@ -142,9 +142,7 @@ function SubTags(): JSX.Element {
       <div className={`${styles.errorContainer} rounded-4 my-3`}>
         <div className={styles.errorMessage}>
           <WarningAmberRounded className={styles.errorIcon} />
-          <h6 style={{ textAlign: "center" }}>
-            {tCommon('errorOccured')}
-          </h6>
+          <h6 className={styles.errorHeading}>{tCommon('errorOccured')}</h6>
         </div>
       </div>
     );
@@ -175,7 +173,10 @@ function SubTags(): JSX.Element {
       <nav className="breadcrumb" aria-label="Breadcrumb">
         <a
           href="#"
-          onClick={(e) => { e.preventDefault(); navigate(`/admin/orgtags/${orgId}`); }}
+          onClick={(e) => {
+            e.preventDefault();
+            navigate(`/admin/orgtags/${orgId}`);
+          }}
           data-testid="allTagsBtn"
         >
           {t('tags')}
@@ -186,7 +187,10 @@ function SubTags(): JSX.Element {
             {tag._id === parentTagId ? (
               <a
                 href="#"
-                onClick={(e) => { e.preventDefault(); redirectToManageTag(tag._id as string); }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  redirectToManageTag(tag._id as string);
+                }}
                 data-testid="redirectToSubTags"
                 data-text={tag.name}
               >
@@ -195,7 +199,10 @@ function SubTags(): JSX.Element {
             ) : (
               <a
                 href="#"
-                onClick={(e) => { e.preventDefault(); redirectToSubTags(tag._id as string); }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  redirectToSubTags(tag._id as string);
+                }}
                 data-testid="redirectToSubTags"
                 data-text={tag.name}
               >
@@ -204,14 +211,15 @@ function SubTags(): JSX.Element {
             )}
           </span>
         ))}
-        {' \u203A '}{t('subTags')}
+        {' \u203A '}
+        {t('subTags')}
       </nav>
 
       <div className="page-header">
         <div className="page-header-left">
           <h1 className="page-title">
             {parentTagName} &mdash; {t('subTags')}{' '}
-            <span style={{ fontSize: '16px', fontWeight: 500, color: 'var(--gray-400)', marginLeft: '8px' }}>
+            <span className={styles.titleCount}>
               {subTagsList?.length ?? 0}
             </span>
           </h1>
@@ -225,21 +233,49 @@ function SubTags(): JSX.Element {
           >
             {`${t('manageTag')} ${subTagsData?.getChildTags.name}`}
           </Button>
-          <button
+          <Button
+            variant="plain"
             className="btn btn-primary"
             onClick={showAddSubTagModal}
             data-testid="addSubTagBtn"
           >
-            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            {' '}{t('addChildTag')}
-          </button>
+            <svg
+              aria-hidden="true"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>{' '}
+            {t('addChildTag')}
+          </Button>
         </div>
       </div>
 
       {/* Toolbar */}
       <div className="toolbar">
         <div className="search-bar">
-          <svg aria-hidden="true" className="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <svg
+            aria-hidden="true"
+            className="search-icon"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
           <input
             type="text"
             placeholder={tCommon('searchByName')}
@@ -301,53 +337,68 @@ function SubTags(): JSX.Element {
                   <tbody>
                     {subTagsList.length === 0 ? (
                       <tr>
-                        <td colSpan={5} style={{ textAlign: 'center', padding: '40px', color: 'var(--gray-400)' }}>
+                        <td colSpan={5} className={styles.emptyCell}>
                           {t('noTagsFound')}
                         </td>
                       </tr>
                     ) : (
-                      subTagsList.map((subTag: InterfaceQueryUserTagChildTags['childTags']['edges'][number]['node']) => (
-                        <tr key={subTag._id}>
-                          <td className="cell-primary">
-                            <a
-                              href="#"
-                              onClick={(e) => {
-                                e.preventDefault();
-                                redirectToManageTag(subTag._id);
-                              }}
-                              style={{ color: 'var(--green-600)' }}
-                              data-testid="tagName"
-                            >
-                              {subTag.name}
-                            </a>
-                          </td>
-                          <td>{subTag.usersAssignedTo?.totalCount ?? 0}</td>
-                          <td>{subTag.childTags?.totalCount ?? 0}</td>
-                          <td>
-                            {subTag.createdAt
-                              ? new Date(subTag.createdAt).toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' })
-                              : ''}
-                          </td>
-                          <td>
-                            <div style={{ display: 'flex', gap: '6px' }}>
-                              <button
-                                className="btn btn-sm btn-secondary"
-                                onClick={() => redirectToManageTag(subTag._id)}
-                                data-testid="manageTagBtn"
+                      subTagsList.map(
+                        (
+                          subTag: InterfaceQueryUserTagChildTags['childTags']['edges'][number]['node'],
+                        ) => (
+                          <tr key={subTag._id}>
+                            <td className="cell-primary">
+                              <a
+                                href="#"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  redirectToManageTag(subTag._id);
+                                }}
+                                className={styles.cellPrimaryLink}
+                                data-testid="tagName"
                               >
-                                {tCommon('edit')}
-                              </button>
-                              <button
-                                className="btn btn-sm btn-danger"
-                                onClick={() => redirectToSubTags(subTag._id)}
-                                data-testid="subTagsBtn"
-                              >
-                                {tCommon('delete')}
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))
+                                {subTag.name}
+                              </a>
+                            </td>
+                            <td>{subTag.usersAssignedTo?.totalCount ?? 0}</td>
+                            <td>{subTag.childTags?.totalCount ?? 0}</td>
+                            <td>
+                              {subTag.createdAt
+                                ? new Date(subTag.createdAt).toLocaleDateString(
+                                    'en-US',
+                                    {
+                                      month: 'short',
+                                      day: '2-digit',
+                                      year: 'numeric',
+                                    },
+                                  )
+                                : ''}
+                            </td>
+                            <td>
+                              <div className={styles.actionBtns}>
+                                <Button
+                                  variant="plain"
+                                  className="btn btn-sm btn-secondary"
+                                  onClick={() =>
+                                    redirectToManageTag(subTag._id)
+                                  }
+                                  data-testid="manageTagBtn"
+                                >
+                                  {tCommon('edit')}
+                                </Button>
+                                <Button
+                                  variant="plain"
+                                  className="btn btn-sm btn-danger"
+                                  onClick={() => redirectToSubTags(subTag._id)}
+                                  data-testid="subTagsBtn"
+                                >
+                                  {tCommon('delete')}
+                                </Button>
+                              </div>
+                            </td>
+                          </tr>
+                        ),
+                      )
                     )}
                   </tbody>
                 </table>

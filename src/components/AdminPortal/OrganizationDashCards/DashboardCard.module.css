@@ -10,7 +10,9 @@
   box-shadow: var(--shadow-card);
   width: 100%;
   overflow: hidden;
-  transition: box-shadow 0.2s ease, transform 0.15s ease;
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
 }
 
 .cardBodyMainDiv:hover {
@@ -80,6 +82,9 @@
 }
 
 /* -- Unused legacy classes kept as no-ops to avoid TS errors -- */
-.cardBodymain {}
-.iconCol {}
-.contentCol {}
+.cardBodymain {
+}
+.iconCol {
+}
+.contentCol {
+}

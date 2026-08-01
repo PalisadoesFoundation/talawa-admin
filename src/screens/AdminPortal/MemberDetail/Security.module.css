@@ -35,3 +35,13 @@
     grid-template-columns: 1fr;
   }
 }
+
+.descriptionText {
+  font-size: 14px;
+  color: var(--gray-600, #4b5563);
+  margin: 0;
+}
+
+.alignSelfStart {
+  align-self: flex-start;
+}

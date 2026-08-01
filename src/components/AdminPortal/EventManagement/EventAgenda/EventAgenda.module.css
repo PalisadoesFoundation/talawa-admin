@@ -12,6 +12,10 @@
   padding: 48px 24px;
 }
 
+.errorText {
+  text-align: center;
+}
+
 .errorIcon {
   font-size: 32px;
   color: var(--red-500, #ef4444);

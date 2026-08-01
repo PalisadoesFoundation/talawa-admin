@@ -29,8 +29,10 @@ export type ButtonVariant =
   | 'toolbar-action'
   | (string & {});
 
-export interface InterfaceButtonProps
-  extends Omit<HTMLAttributes<HTMLElement>, 'size'> {
+export interface InterfaceButtonProps extends Omit<
+  HTMLAttributes<HTMLElement>,
+  'size'
+> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   fullWidth?: boolean;

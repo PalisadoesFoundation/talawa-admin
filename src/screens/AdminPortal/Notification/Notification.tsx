@@ -14,7 +14,7 @@ import {
 } from 'GraphQl/Queries/NotificationQueries';
 import useLocalStorage from 'utils/useLocalstorage';
 import { Link } from 'react-router-dom';
-import { Button } from 'shared-components/Button';
+import Button from 'shared-components/Button';
 import NotificationsNone from '@mui/icons-material/NotificationsNone';
 import styles from './Notification.module.css';
 import { useTranslation } from 'react-i18next';
@@ -85,12 +85,22 @@ const Notification: React.FC = () => {
   // Assign icon colors in a rotating pattern matching the prototype
   const iconColors = ['green', 'blue', 'orange', 'purple', 'red'];
   // Assign icon symbols in a rotating pattern matching the prototype
-  const iconSymbols = ['\u2721', '\u2605', '\u2709', '\u2665', '\u{1F4B0}', '\u270D', '\u26D4', '\u2605'];
+  const iconSymbols = [
+    '\u2721',
+    '\u2605',
+    '\u2709',
+    '\u2665',
+    '\u{1F4B0}',
+    '\u270D',
+    '\u26D4',
+    '\u2605',
+  ];
 
   // Filter for the active tab
-  const displayNotifications = activeTab === 'unread'
-    ? notifications.filter((n) => !n.isRead)
-    : notifications;
+  const displayNotifications =
+    activeTab === 'unread'
+      ? notifications.filter((n) => !n.isRead)
+      : notifications;
 
   return (
     <>
@@ -102,31 +112,30 @@ const Notification: React.FC = () => {
       </div>
 
       <div className="tabs" role="tablist">
-        <button
+        <Button
+          variant="plain"
           className={`tab ${activeTab === 'all' ? 'active' : ''}`}
           role="tab"
           aria-selected={activeTab === 'all'}
           onClick={() => setActiveTab('all')}
         >
           All
-        </button>
-        <button
+        </Button>
+        <Button
+          variant="plain"
           className={`tab ${activeTab === 'unread' ? 'active' : ''}`}
           role="tab"
           aria-selected={activeTab === 'unread'}
           onClick={() => setActiveTab('unread')}
         >
           Unread
-        </button>
+        </Button>
       </div>
 
       <div className="card">
         {isLoading ? (
           Array.from({ length: pageSize }).map((_, idx) => (
-            <div
-              key={`skeleton-${idx}`}
-              className={styles.notificationItem}
-            >
+            <div key={`skeleton-${idx}`} className={styles.notificationItem}>
               <div className={styles.profileSection} />
               <div className={styles.notificationContent}>
                 <div className={styles.skeletonTitle} />
@@ -148,20 +157,17 @@ const Notification: React.FC = () => {
                 key={notification.id}
                 className={`notif-item${!notification.isRead ? ' unread' : ''}`}
               >
-                <div className={`notif-icon ${iconColors[idx % iconColors.length]}`}>
+                <div
+                  className={`notif-icon ${iconColors[idx % iconColors.length]}`}
+                >
                   {iconSymbols[idx % iconSymbols.length]}
                 </div>
                 <Link
                   to={notification.navigation || '#'}
-                  className="notif-content"
-                  style={{ textDecoration: 'none' }}
+                  className={`notif-content ${styles.notificationLinkInline}`}
                 >
-                  <div className="notif-title">
-                    {notification.title}
-                  </div>
-                  <div className="notif-desc">
-                    {notification.body}
-                  </div>
+                  <div className="notif-title">{notification.title}</div>
+                  <div className="notif-desc">{notification.body}</div>
                 </Link>
                 {!notification.isRead ? (
                   <Button
@@ -178,7 +184,9 @@ const Notification: React.FC = () => {
                 ) : (
                   <span className="notif-time" />
                 )}
-                <div className={!notification.isRead ? 'unread-dot' : 'read-dot'} />
+                <div
+                  className={!notification.isRead ? 'unread-dot' : 'read-dot'}
+                />
               </li>
             ))}
           </ul>
@@ -187,25 +195,27 @@ const Notification: React.FC = () => {
 
       {(page > 0 || notifications.length > 1) && (
         <div className="pagination">
-          <button
+          <Button
+            variant="plain"
             className="pagination-btn"
             onClick={handlePrev}
             disabled={page === 0}
-            data-testid="prev-button"
+            data-testid="prev-Button"
           >
             &laquo;
-          </button>
+          </Button>
           <span className="pagination-info">
             {t('prev')} / {t('next')}
           </span>
-          <button
+          <Button
+            variant="plain"
             className="pagination-btn"
             onClick={handleNext}
             disabled={notifications.length < pageSize}
-            data-testid="next-button"
+            data-testid="next-Button"
           >
             &raquo;
-          </button>
+          </Button>
         </div>
       )}
     </>

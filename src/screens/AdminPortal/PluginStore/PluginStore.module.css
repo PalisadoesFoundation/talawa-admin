@@ -36,7 +36,9 @@
   background: var(--surface, #fff);
   color: var(--gray-900, #111827);
   outline: none;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
 }
 
 .searchInput:focus {
@@ -163,7 +165,9 @@
   text-align: center;
   background: var(--gray-50, #fafafa);
   cursor: pointer;
-  transition: border-color 0.2s, background 0.2s;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -328,4 +332,8 @@
   overflow-x: auto;
   margin: 0;
   white-space: pre;
+}
+
+.fileRefInput {
+  display: none;
 }

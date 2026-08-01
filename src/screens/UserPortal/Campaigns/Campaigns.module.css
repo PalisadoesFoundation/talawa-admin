@@ -168,3 +168,11 @@
 .uniformTableLayout tbody td:nth-child(9) {
   width: 12%;
 }
+
+.errorHeading {
+  text-align: center;
+}
+
+.boldText {
+  font-weight: 600;
+}

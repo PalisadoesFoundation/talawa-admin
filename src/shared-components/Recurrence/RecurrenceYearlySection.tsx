@@ -2,6 +2,7 @@ import React from 'react';
 import { Frequency, monthNames } from '../../utils/recurrenceUtils';
 import { useTranslation } from 'react-i18next';
 import type { InterfaceRecurrenceYearlySectionProps } from 'types/shared-components/Recurrence/interface';
+import styles from './RecurrenceYearlySection.module.css';
 
 /**
  * Yearly recurrence options section.
@@ -23,16 +24,14 @@ export const RecurrenceYearlySection: React.FC<
   }
 
   return (
-    <div style={{ marginBottom: 16 }}>
+    <div className={styles.sectionContainer}>
       <span className="text-secondary">{t('yearlyOn')}</span>
       <br />
-      <div style={{ margin: "0 8px" }}>
-        <span style={{ color: "var(--gray-500, #6b7280)" }}>
+      <div className={styles.optionsMargin}>
+        <span className={styles.yearlyDate}>
           {monthNames[startDate.getMonth()]} {startDate.getDate()}
         </span>
-        <p className="small">
-          {t('yearlyRecurrenceDesc')}
-        </p>
+        <p className="small">{t('yearlyRecurrenceDesc')}</p>
       </div>
     </div>
   );

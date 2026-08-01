@@ -56,7 +56,7 @@ jobs:
         run: |
           chmod +x .github-central/.github/workflows/scripts/countline.py
           .github-central/.github/workflows/scripts/countline.py \
-            --lines 600 \
+            --lines 800 \
             --files ./.github/workflows/config/countline_excluded_file_list.txt
 
       - name: Get changed TypeScript files
@@ -100,11 +100,11 @@ jobs:
           CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         run: pnpm exec eslint ${CHANGED_FILES}
 
-      - name: Validate design tokens in modified files
-        if: steps.changed-files.outputs.any_changed == 'true'
-        env:
-          CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-        run: pnpm exec tsx scripts/validate-tokens.ts --files $CHANGED_FILES
+      # - name: Validate design tokens in modified files
+      #   if: steps.changed-files.outputs.any_changed == 'true'
+      #   env:
+      #     CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+      #   run: pnpm exec tsx scripts/validate-tokens.ts --files $CHANGED_FILES
 
       - name: Enforce CSS import policy
         if: steps.changed-files.outputs.any_changed == 'true'

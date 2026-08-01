@@ -22,7 +22,10 @@
   cursor: pointer;
   background: transparent;
   color: var(--gray-600, #4b5563);
-  transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+  transition:
+    background-color 0.2s,
+    color 0.2s,
+    box-shadow 0.2s;
 }
 
 .viewToggleBtn:hover {
@@ -38,4 +41,29 @@
 .viewToggleBtnActive:hover {
   background-color: var(--green-400, #4ade80);
   color: #000;
+}
+
+.dateStrip0 {
+  background: linear-gradient(135deg, var(--green-500), var(--green-700));
+}
+
+.dateStrip1 {
+  background: linear-gradient(135deg, var(--blue-500), var(--blue-600));
+}
+
+.dateStrip2 {
+  background: linear-gradient(135deg, var(--purple-500), var(--purple-600));
+}
+
+.dateStrip3 {
+  background: linear-gradient(135deg, var(--orange-500), var(--orange-600));
+}
+
+.dateStrip4 {
+  background: linear-gradient(135deg, var(--gray-500), var(--gray-600));
+}
+
+.attendeeIcon {
+  vertical-align: -2px;
+  margin-right: 2px;
 }

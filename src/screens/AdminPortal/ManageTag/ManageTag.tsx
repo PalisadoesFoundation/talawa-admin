@@ -56,28 +56,17 @@ import { useMutation, useQuery } from '@apollo/client';
 import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 
-import { useNavigate, useParams, Link } from 'react-router';
-import Button from 'shared-components/Button/Button';
+import { useNavigate, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfaceQueryUserTagsAssignedMembers } from 'utils/interfaces';
 import styles from './ManageTag.module.css';
-import {
-  DataGrid,
-  type GridCellParams,
-  type TokenAwareGridColDef,
-  convertTokenColumns,
-} from 'shared-components/DataGridWrapper';
 import type {
   InterfaceTagAssignedMembersQuery,
   SortedByType,
   TagActionType,
 } from 'utils/organizationTagsUtils';
-import {
-  TAGS_QUERY_DATA_CHUNK_SIZE,
-  dataGridStyle,
-} from 'utils/organizationTagsUtils';
-import Stack from '@mui/material/Stack';
+import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import {
   REMOVE_USER_TAG,
   UNASSIGN_USER_TAG,
@@ -91,8 +80,8 @@ import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/Infinit
 import EditUserTagModal from './editModal/EditUserTagModal';
 import RemoveUserTagModal from './removeModal/RemoveUserTagModal';
 import UnassignUserTagModal from './unassignModal/UnassignUserTagModal';
-import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { useModalState } from 'shared-components/CRUDModalTemplate';
+import Button from 'shared-components/Button/Button';
 
 export const getManageTagErrorMessage = (error: unknown): string => {
   if (error instanceof Error) {
@@ -116,15 +105,14 @@ function ManageTag(): JSX.Element {
   const editUserTagModal = useModalState();
   const removeUserTagModal = useModalState();
 
-  const [unassignUserId, setUnassignUserId] = useState(null);
+  const [unassignUserId, setUnassignUserId] = useState<string | null>(null);
   const [assignedMemberSearchInput, setAssignedMemberSearchInput] =
     useState('');
   const [assignedMemberSearchFirstName, setAssignedMemberSearchFirstName] =
     useState('');
   const [assignedMemberSearchLastName, setAssignedMemberSearchLastName] =
     useState('');
-  const [assignedMemberSortOrder, setAssignedMemberSortOrder] =
-    useState<SortedByType>('DESCENDING');
+  const [assignedMemberSortOrder] = useState<SortedByType>('DESCENDING');
   // a state to specify whether we're assigning to tags or removing from tags
   const [tagActionType, setTagActionType] =
     useState<TagActionType>('assignToTags');
@@ -283,7 +271,7 @@ function ManageTag(): JSX.Element {
       <div className={`${styles.errorContainer} rounded-4 my-3`}>
         <div className={styles.errorMessage}>
           <WarningAmberRounded className={styles.errorIcon} />
-          <h6 style={{ textAlign: "center" }}>
+          <h6 className={styles.errorHeading}>
             {t('errorLoadingAssignedMembers')}
           </h6>
         </div>
@@ -319,89 +307,15 @@ function ManageTag(): JSX.Element {
       .join(' ');
   };
 
-  const columns: TokenAwareGridColDef[] = [
-    {
-      field: 'id',
-      headerName: '#',
-      minWidth: 'space-13',
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return <div>{params.row?.id}</div>;
-      },
-    },
-    {
-      field: 'userName',
-      headerName: tCommon('userName'),
-      flex: 2,
-      minWidth: 'space-13',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div data-testid="memberName">
-            {getFullName(params.row?.firstName, params.row?.lastName)}
-          </div>
-        );
-      },
-    },
-    {
-      field: 'actions',
-      headerName: tCommon('actions'),
-      flex: 1,
-      align: 'center',
-      minWidth: 'space-13',
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div>
-            <Link
-              to={`/admin/member/${orgId}/${params.row?._id}`}
-              state={{ id: params.row?._id }}
-              data-testid="viewProfileBtn"
-            >
-              <div
-                className={`btn btn-sm btn-primary ${styles.editButton}`}
-              >
-                {t('viewProfile')}
-              </div>
-            </Link>
-
-            <Button
-              size="sm"
-              variant="danger"
-              onClick={() => {
-                setUnassignUserId(params.row?._id);
-                toggleUnassignUserTagModal();
-              }}
-              data-testid="unassignTagBtn"
-            >
-              {tCommon('unassign')}
-            </Button>
-          </div>
-        );
-      },
-    },
-  ];
-
   const hasMoreAssignedMembers = Boolean(
     userTagAssignedMembersData?.getAssignedUsers.usersAssignedTo?.pageInfo
       ?.hasNextPage,
   );
 
-  const avatarColors = [
-    { bg: '#dbeafe', color: '#2563eb' },
-    { bg: '#fce7f3', color: '#db2777' },
-    { bg: '#d1fae5', color: '#15803d' },
-    { bg: '#ede9fe', color: '#7c3aed' },
-    { bg: '#fef3c7', color: '#b45309' },
-  ];
-
-  const getInitials = (firstName?: string | null, lastName?: string | null): string => {
+  const getInitials = (
+    firstName?: string | null,
+    lastName?: string | null,
+  ): string => {
     const f = firstName?.charAt(0)?.toUpperCase() ?? '';
     const l = lastName?.charAt(0)?.toUpperCase() ?? '';
     return f + l || '?';
@@ -410,15 +324,17 @@ function ManageTag(): JSX.Element {
   return (
     <>
       <nav
-        className="breadcrumb"
+        className={`breadcrumb ${styles.breadcrumbNav}`}
         aria-label="Breadcrumb"
-        style={{ fontSize: '13px', color: 'var(--gray-400)', marginBottom: '8px' }}
       >
         <a
           href="#"
-          onClick={(e) => { e.preventDefault(); navigate(`/admin/orgtags/${orgId}`); }}
+          onClick={(e) => {
+            e.preventDefault();
+            navigate(`/admin/orgtags/${orgId}`);
+          }}
           data-testid="allTagsBtn"
-          style={{ color: 'var(--gray-400)' }}
+          className={styles.breadcrumbLink}
         >
           {t('tags')}
         </a>
@@ -426,16 +342,23 @@ function ManageTag(): JSX.Element {
           <span key={index}>
             {' \u203A '}
             {tag._id === currentTagId ? (
-              <span style={{ color: 'var(--gray-700)' }} data-testid="redirectToManageTag" data-text={tag.name}>
+              <span
+                className={styles.breadcrumbCurrent}
+                data-testid="redirectToManageTag"
+                data-text={tag.name}
+              >
                 {tag.name}
               </span>
             ) : (
               <a
                 href="#"
-                onClick={(e) => { e.preventDefault(); redirectToManageTag(tag._id as string); }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  redirectToManageTag(tag._id as string);
+                }}
                 data-testid="redirectToManageTag"
                 data-text={tag.name}
-                style={{ color: 'var(--gray-400)' }}
+                className={styles.breadcrumbLink}
               >
                 {tag.name}
               </a>
@@ -448,26 +371,44 @@ function ManageTag(): JSX.Element {
         <div className="page-header-left">
           <h1 className="page-title">
             {currentTagName || t('manageTag')}
-            <button
-              className="btn-icon"
-              style={{ display: 'inline-flex', verticalAlign: 'middle', marginLeft: '8px' }}
+            <Button
+              variant="plain"
+              className={`btn-icon ${styles.editIconBtn}`}
               title={tCommon('edit')}
               onClick={editUserTagModal.open}
               data-testid="editUserTag"
             >
-              <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-            </button>
+              <svg
+                aria-hidden="true"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+              </svg>
+            </Button>
           </h1>
           <p className="page-subtitle">{t('assignedMembersOf')}</p>
         </div>
         <div className="page-header-actions">
           <a
             href="#"
-            onClick={(e) => { e.preventDefault(); redirectToSubTags(currentTagId as string); }}
+            onClick={(e) => {
+              e.preventDefault();
+              redirectToSubTags(currentTagId as string);
+            }}
             className="btn btn-secondary"
             data-testid="subTagsBtn"
           >
-            {t('subTags')} ({userTagAssignedMembersData?.getAssignedUsers?.childTags?.totalCount ?? 0})
+            {t('subTags')} (
+            {userTagAssignedMembersData?.getAssignedUsers?.childTags
+              ?.totalCount ?? 0}
+            )
           </a>
         </div>
       </div>
@@ -480,7 +421,9 @@ function ManageTag(): JSX.Element {
           </div>
           <div className="card-body">
             <div className="form-group">
-              <label className="field-label" htmlFor="tag-name">{t('tagName') || 'Tag Name'}</label>
+              <label className="field-label" htmlFor="tag-name">
+                {t('tagName') || 'Tag Name'}
+              </label>
               <input
                 type="text"
                 id="tag-name"
@@ -490,22 +433,28 @@ function ManageTag(): JSX.Element {
                 aria-label={t('tagName') || 'Tag name'}
               />
             </div>
-            <div style={{ marginTop: '8px', display: 'flex', gap: '8px' }}>
-              <button
+            <div className={styles.saveBtnWrapper}>
+              <Button
+                variant="plain"
                 className="btn btn-primary"
-                onClick={(e) => {
-                  const form = document.createElement('form');
-                  const event = new Event('submit', { bubbles: true, cancelable: true }) as unknown as React.FormEvent<HTMLFormElement>;
-                  Object.defineProperty(event, 'preventDefault', { value: () => {} });
+                onClick={() => {
+                  const event = new Event('submit', {
+                    bubbles: true,
+                    cancelable: true,
+                  }) as unknown as React.FormEvent<HTMLFormElement>;
+                  Object.defineProperty(event, 'preventDefault', {
+                    value: () => {},
+                  });
                   handleEditUserTag(event);
                 }}
                 data-testid="saveTagBtn"
               >
                 {tCommon('save') || 'Save'}
-              </button>
+              </Button>
             </div>
-            <div style={{ marginTop: '8px', display: 'flex', gap: '8px' }}>
-              <button
+            <div className={styles.assignBtnsWrapper}>
+              <Button
+                variant="plain"
                 className="btn btn-primary btn-sm"
                 onClick={() => {
                   setTagActionType('assignToTags');
@@ -514,8 +463,9 @@ function ManageTag(): JSX.Element {
                 data-testid="assignToTags"
               >
                 {t('assignToTags')}
-              </button>
-              <button
+              </Button>
+              <Button
+                variant="plain"
                 className="btn btn-danger btn-sm"
                 onClick={() => {
                   setTagActionType('removeFromTags');
@@ -524,23 +474,20 @@ function ManageTag(): JSX.Element {
                 data-testid="removeFromTags"
               >
                 {t('removeFromTags')}
-              </button>
+              </Button>
             </div>
 
-            <div className="danger-zone" style={{ marginTop: '24px', paddingTop: '20px', borderTop: '1px solid var(--red-50)' }}>
-              <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--red-600)', marginBottom: '8px' }}>
-                Danger Zone
-              </p>
-              <p style={{ fontSize: '12px', color: 'var(--gray-500)', marginBottom: '12px' }}>
-                Deleting this tag will remove it from all assigned members. This action cannot be undone.
-              </p>
-              <button
+            <div className={styles.dangerZone}>
+              <p className={styles.dangerZoneTitle}>{t('dangerZone')}</p>
+              <p className={styles.dangerZoneDesc}>{t('dangerZoneDesc')}</p>
+              <Button
+                variant="plain"
                 className="btn btn-danger"
                 onClick={removeUserTagModal.open}
                 data-testid="removeTag"
               >
-                Delete Tag
-              </button>
+                {t('removeUserTag')}
+              </Button>
             </div>
           </div>
         </div>
@@ -551,24 +498,41 @@ function ManageTag(): JSX.Element {
             <span className="card-title">
               {t('assignedMembersOf')} ({userTagAssignedMembers.length})
             </span>
-            <button
+            <Button
+              variant="plain"
               className="btn btn-sm btn-primary"
               onClick={addPeopleToTagModal.open}
               data-testid="addPeopleToTagBtn"
             >
               {t('addPeopleToTag')}
-            </button>
+            </Button>
           </div>
           <div className="card-body">
-            <div style={{ marginBottom: '14px' }}>
-              <div className="search-bar" style={{ width: '100%' }}>
-                <svg aria-hidden="true" className="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <div className={styles.searchBarWrapper}>
+              <div className={`search-bar ${styles.searchBarFullWidth}`}>
+                <svg
+                  aria-hidden="true"
+                  className="search-icon"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
                 <input
                   type="text"
                   placeholder={tCommon('searchByName')}
                   aria-label={tCommon('searchByName')}
                   value={assignedMemberSearchInput}
-                  onChange={(e) => setAssignedMemberSearchInput(e.target.value.trim())}
+                  onChange={(e) =>
+                    setAssignedMemberSearchInput(e.target.value.trim())
+                  }
                   data-testid="searchInput"
                 />
               </div>
@@ -591,52 +555,43 @@ function ManageTag(): JSX.Element {
                   scrollableTarget="manageTagScrollableDiv"
                 >
                   {userTagAssignedMembers.length === 0 ? (
-                    <div style={{ padding: '20px', textAlign: 'center', color: 'var(--gray-400)', fontSize: '13px' }}>
+                    <div className={styles.emptyMembers}>
                       {t('noAssignedMembersFound')}
                     </div>
                   ) : (
                     userTagAssignedMembers.map((member, index) => {
-                      const colorSet = avatarColors[index % avatarColors.length];
-                      const initials = getInitials(member.firstName, member.lastName);
-                      const fullName = getFullName(member.firstName, member.lastName);
+                      const initials = getInitials(
+                        member.firstName,
+                        member.lastName,
+                      );
+                      const fullName = getFullName(
+                        member.firstName,
+                        member.lastName,
+                      );
                       return (
                         <div
                           key={member._id || index}
-                          className="member-row"
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '12px',
-                            padding: '10px 0',
-                            borderBottom: index < userTagAssignedMembers.length - 1 ? '1px solid var(--gray-100)' : 'none',
-                          }}
+                          className={`member-row ${styles.memberRow} ${
+                            index < userTagAssignedMembers.length - 1
+                              ? styles.memberRowBorder
+                              : ''
+                          }`}
                         >
                           <div
-                            className="member-avatar"
-                            style={{
-                              width: '36px',
-                              height: '36px',
-                              borderRadius: '50%',
-                              background: colorSet.bg,
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              fontSize: '12px',
-                              fontWeight: 600,
-                              color: colorSet.color,
-                              flexShrink: 0,
-                            }}
+                            className={`${styles.memberAvatar} ${
+                              styles[`avatarColor${index % 5}`]
+                            }`}
                           >
                             {initials}
                           </div>
                           <span
-                            className="member-name"
-                            style={{ flex: 1, fontSize: '13px', fontWeight: 500, color: 'var(--gray-900)' }}
+                            className={styles.memberNameText}
                             data-testid="memberName"
                           >
                             {fullName}
                           </span>
-                          <button
+                          <Button
+                            variant="plain"
                             className="btn btn-sm btn-danger"
                             onClick={() => {
                               setUnassignUserId(member._id);
@@ -645,7 +600,7 @@ function ManageTag(): JSX.Element {
                             data-testid="unassignTagBtn"
                           >
                             Remove
-                          </button>
+                          </Button>
                         </div>
                       );
                     })

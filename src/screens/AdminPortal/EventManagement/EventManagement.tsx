@@ -11,6 +11,8 @@ import EventAgenda from 'components/AdminPortal/EventManagement/EventAgenda/Even
 import useLocalStorage from 'utils/useLocalstorage';
 import EventAttendance from 'components/AdminPortal/EventManagement/EventAttendance/Attendance/EventAttendance';
 import EventRegistrants from 'components/AdminPortal/EventManagement/EventRegistrant/EventRegistrants';
+import styles from './EventManagement.module.css';
+import Button from 'shared-components/Button/Button';
 
 type TabOptions =
   | 'dashboard'
@@ -112,20 +114,22 @@ const EventManagement = (): JSX.Element => {
           <p className="page-subtitle">{t('events')}</p>
         </div>
         <div className="page-header-actions">
-          <button
+          <Button
+            variant="plain"
             className="btn btn-secondary"
             onClick={handleBack}
             data-testid="backBtn"
           >
             &larr; {t('backToEvents') || 'Back to Events'}
-          </button>
+          </Button>
         </div>
       </div>
 
       {/* Tabs */}
       <div className="tabs" role="tablist">
         {eventDashboardTabs.map(({ value }) => (
-          <button
+          <Button
+            variant="plain"
             key={value}
             className={`tab${tab === value ? ' active' : ''}`}
             role="tab"
@@ -134,14 +138,12 @@ const EventManagement = (): JSX.Element => {
             data-testid={`${value}Btn`}
           >
             {t(value)}
-          </button>
+          </Button>
         ))}
       </div>
 
       {/* Tab content */}
-      <div style={{ marginTop: 4 }}>
-        {currentTab?.component}
-      </div>
+      <div className={styles.tabContent}>{currentTab?.component}</div>
     </div>
   );
 };

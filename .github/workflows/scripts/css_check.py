@@ -105,34 +105,67 @@ def check_embedded_styles(
     }
 
     in_block_comment = False
+    in_ignore_block = False
+    ignore_next_line = False
 
     for line_number, line in enumerate(lines, start=1):
+        # Determine if current line should be skipped
+        skip_current_line = in_ignore_block or ignore_next_line
+        ignore_next_line = False
+
         # Skip comments and import statements
         stripped_line = line.strip()
         if stripped_line.startswith(("import ", "import{", "import(")):
             continue
 
-        result = ""
+        code_result = ""
+        comments_on_line = []
+        current_comment = []
+
         i = 0
         while i < len(line):
             if in_block_comment:
                 if line[i : i + 2] == "*/":
                     in_block_comment = False
+                    comments_on_line.append("".join(current_comment))
+                    current_comment = []
                     i += 2
                 else:
+                    current_comment.append(line[i])
                     i += 1
             else:
                 if line[i : i + 2] == "/*":
                     in_block_comment = True
+                    if current_comment:
+                        comments_on_line.append("".join(current_comment))
+                        current_comment = []
                     i += 2
                 elif line[i : i + 2] == "//":
+                    comments_on_line.append(line[i + 2 :])
                     break
                 else:
-                    result += line[i]
+                    code_result += line[i]
                     i += 1
-        code_line = result
 
-        if not code_line.strip():
+        if in_block_comment and current_comment:
+            comments_on_line.append("".join(current_comment))
+
+        code_line = code_result
+        line_comments_text = " ".join(comments_on_line)
+
+        # Process ignore directives found in comments
+        if "css-check-ignore-start" in line_comments_text:
+            in_ignore_block = True
+            skip_current_line = True
+
+        if "css-check-ignore-end" in line_comments_text:
+            in_ignore_block = False
+            skip_current_line = True
+
+        if "css-check-ignore-next-line" in line_comments_text:
+            ignore_next_line = True
+
+        if skip_current_line or not code_line.strip():
             continue
 
         # Check for URL references (skip these as they're not style violations)

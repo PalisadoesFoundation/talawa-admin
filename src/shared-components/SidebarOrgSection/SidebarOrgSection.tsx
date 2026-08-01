@@ -67,7 +67,7 @@ const SidebarOrgSection = ({
             className={`${styles.profileContainer} ${styles.bgDanger}`}
             data-testid="sidebar-org-error"
           >
-            <div style={{ padding: "0 12px" }}>
+            <div className={styles.errorIconWrapper}>
               <WarningAmberOutlined />
             </div>
             <span className={styles.errorText}>

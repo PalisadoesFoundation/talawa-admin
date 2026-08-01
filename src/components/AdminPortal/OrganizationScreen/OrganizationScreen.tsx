@@ -8,7 +8,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import type { JSX } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 import {
   Navigate,
   Outlet,
@@ -18,18 +17,17 @@ import {
 } from 'react-router';
 import { updateTargets } from 'state/action-creators';
 import { useAppDispatch } from 'state/hooks';
-import type { RootState } from 'state/reducers';
-import type { TargetsType } from 'state/reducers/routesReducer';
 import type { InterfaceMapType } from 'utils/interfaces';
 import { useQuery } from '@apollo/client';
-import { GET_ORGANIZATION_BASIC_DATA, GET_ORGANIZATION_EVENTS_PG } from 'GraphQl/Queries/Queries';
+import {
+  GET_ORGANIZATION_BASIC_DATA,
+  GET_ORGANIZATION_EVENTS_PG,
+} from 'GraphQl/Queries/Queries';
 import useLocalStorage from 'utils/useLocalstorage';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import AdminSidebar from 'components/Layout/AdminSidebar/AdminSidebar';
 import Topbar from 'components/Layout/Topbar/Topbar';
-import type {
-  IOrganizationData,
-} from 'types/shared-components/SidebarOrgSection/interface';
+import type { IOrganizationData } from 'types/shared-components/SidebarOrgSection/interface';
 
 const OrganizationScreen = (): JSX.Element => {
   const { getItem, setItem } = useLocalStorage();
@@ -46,11 +44,6 @@ const OrganizationScreen = (): JSX.Element => {
   const shouldFetchEventName = Boolean(orgId && eventId);
   const EVENTS_PAGE_SIZE = 100;
 
-  // Redux route targets
-  const appRoutes: { targets: TargetsType[] } = useSelector(
-    (state: RootState) => state.appRoutes,
-  );
-  const { targets } = appRoutes;
   const dispatch = useAppDispatch();
 
   // Sidebar collapse state

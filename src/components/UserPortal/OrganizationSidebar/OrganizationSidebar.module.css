@@ -74,3 +74,43 @@
 .memberImage {
   border-radius: 50%;
 }
+
+.loadingContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.memberItem {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.emptyState {
+  width: 100%;
+  text-align: center;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.eventHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.detailsRow {
+  display: flex;
+  flex-direction: row;
+}

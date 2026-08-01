@@ -124,3 +124,17 @@
   max-height: var(--space-14);
   overflow-y: auto;
 }
+
+.noOneSelected {
+  color: var(--gray-400, #9ca3af);
+  margin: 0 auto;
+  text-align: center;
+}
+
+.errorMessage {
+  text-align: center;
+}
+
+.SearchBar {
+  margin: 12px 0px;
+}

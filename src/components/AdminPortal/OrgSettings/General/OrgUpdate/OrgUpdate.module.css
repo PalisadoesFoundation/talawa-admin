@@ -98,3 +98,20 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+.errorMessage {
+  font-weight: 600;
+  color: var(--red-500, #ef4444);
+  text-align: center;
+}
+
+.saveChangesBtnWrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.saveIcon {
+  width: 16px;
+  height: 16px;
+}

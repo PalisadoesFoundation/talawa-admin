@@ -245,7 +245,6 @@ const CategoryModal: FC<IActionItemCategoryModal> = ({
             type="checkbox"
             checked={isDisabled}
             data-testid="isDisabledSwitch"
-            
             onChange={() =>
               setFormState({ ...formState, isDisabled: !isDisabled })
             }

@@ -114,3 +114,36 @@
     transform: scale(1);
   }
 }
+
+.flexRow {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  align-items: center;
+}
+
+.columnThird {
+  flex: 0 0 33.33%;
+  max-width: 33.33%;
+  padding: 0;
+}
+
+.centeredHeading {
+  text-align: center;
+}
+
+.centeredText {
+  text-align: center;
+}
+
+.fullWidthLink {
+  width: 100%;
+}
+
+.fullWidthBtn {
+  width: 100%;
+}
+
+.centeredFlex {
+  justify-content: center;
+}

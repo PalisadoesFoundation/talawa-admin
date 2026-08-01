@@ -36,3 +36,7 @@
   background-color: var(--red-500, #ef4444);
   color: #fff;
 }
+
+.FormCheckField {
+  margin-bottom: 8px;
+}

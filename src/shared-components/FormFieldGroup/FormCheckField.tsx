@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormFieldGroup } from './FormFieldGroup';
 import type { InterfaceFormCheckFieldProps } from '../../types/shared-components/FormFieldGroup/interface';
+import styles from './FormFieldGroup.module.css';
 
 /**
  * Renders a checkbox, radio, or switch input field within a FormFieldGroup for consistent styling and validation.
@@ -29,7 +30,12 @@ export const FormCheckField: React.FC<InterfaceFormCheckFieldProps> = ({
   const isInvalid = touched && !!error;
 
   const checkComponent = (
-    <div className={className} style={inline ? { display: 'inline-block' } : undefined}>
+    <div
+      className={
+        `${className || ''} ${inline ? styles.inlineBlock : ''}`.trim() ||
+        undefined
+      }
+    >
       <input
         type={type === 'switch' ? 'checkbox' : type}
         role={type === 'switch' ? 'switch' : undefined}
@@ -39,11 +45,11 @@ export const FormCheckField: React.FC<InterfaceFormCheckFieldProps> = ({
         onChange={onChange}
         disabled={disabled}
         data-testid={dataTestId}
-        style={isInvalid ? { borderColor: 'var(--red-500, #ef4444)' } : undefined}
+        className={isInvalid ? styles.inputError : undefined}
         {...props}
       />
       {label && (
-        <label htmlFor={id || name} style={{ marginLeft: '0.5rem' }}>
+        <label htmlFor={id || name} className={styles.checkLabel}>
           {label}
         </label>
       )}

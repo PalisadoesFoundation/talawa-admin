@@ -124,10 +124,10 @@ function userNavbar(): JSX.Element {
   };
 
   return (
-    <nav className={`${styles.colorPrimary}`} style={{ display: 'flex', alignItems: 'center', padding: '0.5rem 1rem' }}>
-      <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+    <nav className={`${styles.colorPrimary} ${styles.navContainer}`}>
+      <div className={styles.navInner}>
         {/* Navbar brand with logo and name */}
-        <a href="#" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit', marginRight: 'auto' }}>
+        <a href="#" className={styles.brandLink}>
           <img
             className={styles.talawaImage}
             src={TalawaImage}
@@ -138,7 +138,7 @@ function userNavbar(): JSX.Element {
         </a>
 
         {/* Navbar actions */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+        <div className={styles.navActions}>
           {/* Dropdown for language selection */}
           <DropDownButton
             id="language-dropdown"

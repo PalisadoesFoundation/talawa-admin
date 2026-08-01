@@ -4,3 +4,11 @@
   overflow: auto;
   margin-bottom: var(--space-2);
 }
+
+.reviewItem {
+  background: var(--surface, #fff);
+  border-radius: 12px;
+  border: 1px solid var(--gray-200, #e5e7eb);
+  padding: 16px;
+  margin: 4px;
+}

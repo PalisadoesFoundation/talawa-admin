@@ -249,6 +249,7 @@
     "close": "Cerrar"
   },
   "notification": {
+    "notifications": "Notificaciones",
     "title": "Notificaciones",
     "allCaughtUp": "¡Estás al día!",
     "prev": "Anterior",
@@ -343,6 +344,7 @@
   "requests": {
     "profile": "Perfil",
     "title": "Solicitudes",
+    "reviewAndManage": "Revisar y gestionar solicitudes de membresía",
     "sl_no": "Número de serie",
     "name": "Nombre",
     "email": "Correo electrónico",
@@ -432,6 +434,15 @@
     "logo": "Logo",
     "social": "Enlaces de redes sociales",
     "url": "Introducir URL",
+    "clickToUpload": "Haga clic para cargar o arrastre y suelte",
+    "facebookUrl": "URL de Facebook",
+    "xUrl": "URL de X (Twitter)",
+    "githubUrl": "URL de GitHub",
+    "linkedInUrl": "URL de LinkedIn",
+    "instagramUrl": "URL de Instagram",
+    "youtubeUrl": "URL de YouTube",
+    "redditUrl": "URL de Reddit",
+    "slackUrl": "URL de Slack",
     "profileChangedMsg": "Se actualizaron correctamente los detalles del perfil.",
     "resetData": "Restablezca correctamente los detalles del perfil.",
     "sessionTimeout": {
@@ -530,6 +541,7 @@
     "card_test_id": "organization-card-{{id}}"
   },
   "organizationTags": {
+    "subTags": "Subetiquetas",
     "title": "Etiquetas de Organización",
     "createTag": "Crear una nueva etiqueta",
     "manageTag": "Gestionar",
@@ -558,6 +570,8 @@
     "tags": "Etiquetas"
   },
   "manageTag": {
+    "assignedMembersOf": "Miembros asignados de",
+    "manageTag": "Administrar etiqueta",
     "title": "Detalles de la Etiqueta",
     "addPeopleToTag": "Agregar Personas a la etiqueta",
     "viewProfile": "Ver",
@@ -601,6 +615,8 @@
     "tags": "Etiquetas",
     "errorOccurredWhileLoadingAssignedUser": "Se produjo un error al cargar los usuarios asignados",
     "sortPeople": "Ordenar personas",
+    "dangerZone": "Zona de peligro",
+    "dangerZoneDesc": "Eliminar esta etiqueta la desvinculará de todos los miembros asignados. Esta acción no se puede deshacer.",
     "noTagsFound": "No se encontraron etiquetas",
     "tagActions": "Acciones de etiqueta",
     "loadAssignedUsersError": "Se produjo un error al cargar los usuarios asignados",
@@ -681,6 +697,9 @@
     "week": "Semana",
     "month": "Mes",
     "year": "Año",
+    "loadingEvents": "Cargando eventos...",
+    "noEventsFound": "No se encontraron eventos",
+    "emptyStateText": "Prueba un filtro diferente o crea un nuevo evento.",
     "done": "Hecho",
     "createChat": "Crear chat",
     "viewType": "Tipo de Vista",
@@ -977,6 +996,7 @@
   },
   "funds": {
     "title": "Fondos",
+    "manageFundsDescription": "Gestiona campañas de recaudación de fondos y realiza un seguimiento de las donaciones",
     "createFund": "Crear fondo",
     "fundName": "Nombre del fondo",
     "fundId": "ID de referencia del fondo",
@@ -991,6 +1011,10 @@
     "fundUpdate": "Actualizar fondo",
     "fundDelete": "Eliminar fondo",
     "searchByName": "Buscar por nombre",
+    "allCampaigns": "Todos los fondos",
+    "goal": "Meta",
+    "endDate": "Fecha de finalización",
+    "progress": "Progreso",
     "noFundsFound": "No se encontraron fondos",
     "createdBy": "Creado por",
     "createdOn": "Creado en",
@@ -1188,8 +1212,12 @@
     "pin": "Fijar"
   },
   "blockUnblockUser": {
+    "actions": "Acciones",
+    "reason": "Motivo",
+    "blockedDate": "Fecha de bloqueo",
     "title": "Usuario de bloqueo/desbloqueo de Talawa",
     "pageName": "Bloqueo/desbloqueo",
+    "manageBlockedUsers": "Usuarios que han sido bloqueados de la organización",
     "searchByName": "Buscar por nombre",
     "view": "Ver",
     "listOfUsers": "Lista de Usuarios que enviaron spam",
@@ -1214,6 +1242,7 @@
     "errorLoadingMembers": "Error al cargar los datos de los miembros"
   },
   "eventManagement": {
+    "events": "Eventos",
     "name": "Gestión de eventos",
     "title": "Gestión de eventos",
     "dashboard": "Tablero",
@@ -1277,6 +1306,7 @@
   },
   "orgSettings": {
     "title": "Configuración",
+    "manageOrgPreferences": "Gestiona las preferencias de tu organización",
     "general": "General",
     "actionItemCategories": "Categorías de elementos de acción",
     "editOrganization": "Editar organización",
@@ -1513,7 +1543,8 @@
     "searchUsers": "Buscar usuarios",
     "searchOrganizations": "Buscar Organizaciones",
     "loading": "Cargando...",
-    "title": "Organizaciones"
+    "title": "Organizaciones",
+    "discoverOrganizations": "Descubre y únete a nuevas organizaciones"
   },
   "userSidebarOrg": {
     "yourOrganizations": "Tus Organizaciones",
@@ -1797,9 +1828,12 @@
     "tagCreationFailed": "Error al crear la etiqueta"
   },
   "userEvents": {
+    "createEventTitle": "Crear evento",
     "title": "Eventos",
     "name": "Eventos",
     "nothingToShow": "No hay nada que mostrar aquí.",
+    "noEventsFound": "No se encontraron eventos",
+    "emptyStateText": "Prueba un filtro diferente o crea un nuevo evento.",
     "search": "Buscar",
     "createEvent": "Crear evento",
     "recurring": "Periódica",
@@ -1918,6 +1952,7 @@
     "advertisementLoading": "Cargando anuncios..."
   },
   "userChat": {
+    "noChats": "No hay chats",
     "starredMessages": "Mensajes destacados",
     "all": "Todos",
     "unread": "No leídos",
@@ -1927,6 +1962,7 @@
     "add": "Agregar",
     "chat": "Charlar",
     "search": "Buscar",
+    "searchContacts": "Buscar conversaciones...",
     "messages": "Mensajes",
     "contacts": "Contactos",
     "create": "crear",
@@ -2020,6 +2056,7 @@
   },
   "organizationVenues": {
     "title": "Lugares",
+    "manageVenues": "Gestionar lugares y espacios para eventos",
     "addVenue": "Agregar lugar",
     "venueDetails": "Detalles del lugar",
     "venueName": "Nombre del lugar",
@@ -2331,6 +2368,7 @@
     "volunteerScope": "Alcance del voluntario"
   },
   "userVolunteer": {
+    "volunteerManagement": "Gestión de Voluntarios",
     "title": "Voluntariado",
     "name": "Título",
     "upcomingEvents": "Próximos Eventos",
@@ -2395,6 +2433,10 @@
   },
   "pluginStore": {
     "title": "Tienda de Plugins",
+    "searchPlugins": "Buscar plugins...",
+    "showingPlugins": "Mostrando {{start}}-{{end}} de {{total}} plugins",
+    "enable": "Habilitar",
+    "configure": "Configurar",
     "subtitle": "Descubre y gestiona plugins para ampliar las capacidades de tu organización.",
     "searchPlaceholder": "Buscar plugins...",
     "allPlugins": "Todos los Plugins",
@@ -2568,6 +2610,8 @@
     "invalidCapacity": "La capacidad debe ser un número positivo"
   },
   "manageTags": {
+    "assignedMembersOf": "Miembros asignados de",
+    "manageTag": "Administrar etiqueta",
     "loadAssignedUsersError": "Se produjo un error al cargar los usuarios asignados",
     "sortPeople": "Ordenar personas",
     "unassign": "Desasignar",

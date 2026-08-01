@@ -426,7 +426,7 @@ export const AttendanceStatisticsModal: React.FC<
         parentContainerStyle="p-2 m-2"
       />
       <Button
-        style={{ padding: '0.5rem', margin: '0.5rem' }}
+        className={styles.modalButton}
         variant="secondary"
         onClick={handleClose}
         data-testid="close-button"
@@ -456,36 +456,11 @@ export const AttendanceStatisticsModal: React.FC<
         title={t('historical_statistics')}
         bodyClassName={styles.modalBody}
       >
-        <div
-          className={styles.positionedTopRight}
-          style={{
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'flex-end',
-            alignItems: 'baseline',
-            position: 'absolute',
-          }}
-        ></div>
-        <div
-          style={{
-            width: '100%',
-            border: '1px solid var(--green-500, #3ecf8e)',
-            display: 'flex',
-            flexDirection: 'row',
-            borderRadius: '0.375rem',
-          }}
-        >
+        <div className={styles.positionedTopRight}></div>
+        <div className={styles.contentWrapper}>
           {showTrends ? (
             <div
-              className={`${styles.borderRightGreen} ${styles.chartContainer}`}
-              style={{
-                color: 'var(--green-500, #3ecf8e)',
-                position: 'relative',
-                paddingTop: '1.5rem',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '50%',
-              }}
+              className={`${styles.borderRightGreen} ${styles.chartContainer} ${styles.trendPanel}`}
             >
               <Line
                 data={chartData}
@@ -494,26 +469,17 @@ export const AttendanceStatisticsModal: React.FC<
                 height={400}
               />
               <div
-                className={styles.topRightCorner}
-                style={{
-                  padding: '0 0.25rem',
-                  border: '1px solid var(--green-500, #3ecf8e)',
-                }}
+                className={`${styles.topRightCorner} ${styles.topRightCornerPadded}`}
               >
-                <p style={{ color: '#000' }}>{t('trends')}</p>
+                <p className={styles.chartLabelText}>{t('trends')}</p>
               </div>
               <div
-                className={styles.paddingBottom2Rem}
-                style={{
-                  display: 'flex',
-                  position: 'absolute',
-                  bottom: '0.25rem',
-                }}
+                className={`${styles.paddingBottom2Rem} ${styles.navigationRow}`}
                 role="navigation"
                 aria-label={t('chartPageNavigation')}
               >
                 <Button
-                  style={{ padding: 0 }}
+                  className={styles.navigationButton}
                   onClick={handlePreviousPage}
                   disabled={currentPage === 0}
                   aria-label={t('previousPage')}
@@ -528,14 +494,14 @@ export const AttendanceStatisticsModal: React.FC<
                 </Button>
                 <Button
                   data-testid="today-button"
-                  style={{ padding: '0.25rem', marginLeft: '0.5rem' }}
+                  className={styles.todayButton}
                   onClick={() => handleDateChange(new Date())}
                   aria-label={t('goToToday')}
                 >
                   {t('today')}
                 </Button>
                 <Button
-                  style={{ padding: 0, marginLeft: '0.5rem' }}
+                  className={styles.nextButton}
                   onClick={handleNextPage}
                   disabled={currentPage >= totalPages - 1}
                   aria-label={t('nextPage')}
@@ -552,49 +518,26 @@ export const AttendanceStatisticsModal: React.FC<
             </div>
           ) : (
             <div
-              className={styles.borderRightGreen}
-              style={{
-                color: 'var(--green-500, #3ecf8e)',
-                position: 'relative',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '50%',
-              }}
+              className={`${styles.borderRightGreen} ${styles.summaryPanel}`}
             >
-              <h1 className={styles.largeBoldText} style={{ fontWeight: 'bold' }}>
+              <h1
+                className={`${styles.largeBoldText} ${styles.summaryHeading}`}
+              >
                 {statistics.totalMembers}
               </h1>
               <div
-                className={styles.bottomRightCorner}
-                style={{
-                  padding: '0 0.25rem',
-                  border: '1px solid var(--green-500, #3ecf8e)',
-                }}
+                className={`${styles.bottomRightCorner} ${styles.bottomRightCornerPadded}`}
               >
-                <p style={{ color: '#000' }}>{t('attendanceCount')}</p>
+                <p className={styles.cornerLabelText}>{t('attendanceCount')}</p>
               </div>
             </div>
           )}
-          <div
-            style={{
-              color: 'var(--green-500, #3ecf8e)',
-              position: 'relative',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'flex-start',
-              width: '50%',
-            }}
-          >
-            <div style={{ marginTop: '0.5rem', paddingBottom: '0.5rem', padding: '0.5rem', display: 'flex' }}>
+          <div className={styles.demographicsPanel}>
+            <div className={styles.controlsRow}>
               <Button
                 data-testid="gender-button"
                 variant={selectedCategory === 'Gender' ? 'success' : 'light'}
-                style={{
-                  border: '1px solid var(--green-500, #3ecf8e)',
-                  padding: '0.5rem',
-                }}
+                className={styles.controlButtonBorder}
                 onClick={() => handleCategoryChange('Gender')}
               >
                 {t('gender')}
@@ -602,18 +545,14 @@ export const AttendanceStatisticsModal: React.FC<
               <Button
                 data-testid="age-button"
                 variant={selectedCategory === 'Age' ? 'success' : 'light'}
-                style={{
-                  border: '1px solid var(--green-500, #3ecf8e)',
-                  borderLeft: 'none',
-                  padding: '0.5rem',
-                }}
+                className={styles.controlButtonBorderLeftNone}
                 onClick={() => handleCategoryChange('Age')}
               >
                 {t('age')}
               </Button>
             </div>
             <Bar
-              style={{ marginBottom: '1rem' }}
+              className={styles.chartWrapper}
               options={{ responsive: true, animation: false }}
               data={{
                 labels: categoryLabels,
@@ -646,13 +585,9 @@ export const AttendanceStatisticsModal: React.FC<
               }}
             />
             <div
-              className={styles.topLeftCorner}
-              style={{
-                padding: '0 0.25rem',
-                border: '1px solid var(--green-500, #3ecf8e)',
-              }}
+              className={`${styles.topLeftCorner} ${styles.topLeftCornerPadded}`}
             >
-              <p style={{ color: '#000' }}>{t('demography')}</p>
+              <p className={styles.cornerLabelText}>{t('demography')}</p>
             </div>
           </div>
         </div>

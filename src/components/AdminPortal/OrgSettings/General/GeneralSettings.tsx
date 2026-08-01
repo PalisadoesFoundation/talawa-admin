@@ -5,10 +5,21 @@ import OrgUpdate from './OrgUpdate/OrgUpdate';
 import { useTranslation } from 'react-i18next';
 import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLanguageDropDown';
 
+/**
+ * Props for the {@link GeneralSettings} component.
+ */
 interface InterfaceGeneralSettingsProps {
+  /**
+   * The ID of the organization whose general settings are being managed.
+   */
   orgId: string;
 }
 
+/**
+ * `GeneralSettings` component provides the general settings page for an organization.
+ * It renders cards for editing organization details, deleting the organization,
+ * and changing the application language.
+ */
 const GeneralSettings: FC<InterfaceGeneralSettingsProps> = ({ orgId }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'orgSettings' });
 

@@ -1,0 +1,43 @@
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.errorText {
+  display: block;
+  color: var(--red-500, #ef4444);
+  font-size: 0.875em;
+  margin-top: 0.25rem;
+}
+
+.helpText {
+  color: var(--gray-500, #6b7280);
+}
+
+.disabledLabel {
+  opacity: 0.5;
+}
+
+.inlineBlock {
+  display: inline-block;
+}
+
+.inputError {
+  border-color: var(--red-500, #ef4444);
+}
+
+.checkLabel {
+  margin-left: 0.5rem;
+}
+
+.adornmentGroup {
+  display: flex;
+  align-items: stretch;
+}

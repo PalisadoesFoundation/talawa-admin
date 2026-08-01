@@ -175,11 +175,7 @@ const UserEvents: React.FC<PeopleTabUserEventsProps> = ({ orgId, userId }) => {
 
         <div className={`${styles.peoplePageUserEventCardBody}`}>
           {filteredEvents.length === 0 ? (
-            <div
-              style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', fontWeight: 600, color: 'var(--gray-500)' }}
-            >
-              {t('noeventsAttended')}
-            </div>
+            <div className={styles.emptyState}>{t('noeventsAttended')}</div>
           ) : (
             filteredEvents.map((event, index) => (
               <PeopleTabUserEvents

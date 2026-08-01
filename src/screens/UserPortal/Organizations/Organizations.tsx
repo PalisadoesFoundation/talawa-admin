@@ -49,12 +49,9 @@ import useLocalStorage from 'utils/useLocalstorage';
 import styles from './Organizations.module.css';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
-import type { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';
 import Button from 'shared-components/Button';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
-
-type IOrganizationCardProps = InterfaceOrganizationCardProps;
 
 interface InterfaceMemberNode {
   id: string;
@@ -342,9 +339,7 @@ export default function Organizations(): React.JSX.Element {
         <div className="page-header">
           <div className="page-header-left">
             <h1 className="page-title">{t('selectOrganization')}</h1>
-            <p className="page-subtitle">
-              {t('joinedOrganizations')}
-            </p>
+            <p className="page-subtitle">{t('joinedOrganizations')}</p>
           </div>
         </div>
 
@@ -370,14 +365,15 @@ export default function Organizations(): React.JSX.Element {
                     ? tCommon('loading')
                     : tLogin('resendVerification')}
                 </Button>
-                <button
+                <Button
+                  variant="plain"
                   type="button"
                   className={styles.alertDismiss}
                   onClick={handleDismissWarning}
                   aria-label="Close"
                 >
                   &times;
-                </button>
+                </Button>
               </div>
             </div>
           </div>
@@ -426,7 +422,10 @@ export default function Organizations(): React.JSX.Element {
               <>
                 {/* My Organizations */}
                 {myOrgs.length > 0 && (
-                  <div className={styles.orgGrid} data-testid="organizations-list">
+                  <div
+                    className={styles.orgGrid}
+                    data-testid="organizations-list"
+                  >
                     {(rowsPerPage > 0
                       ? myOrgs.slice(
                           page * rowsPerPage,
@@ -440,7 +439,9 @@ export default function Organizations(): React.JSX.Element {
                         key={index}
                         data-testid="organization-card"
                         data-organization-name={organization.name}
-                        data-membership-status={organization.membershipRequestStatus}
+                        data-membership-status={
+                          organization.membershipRequestStatus
+                        }
                         data-cy="orgCard"
                       >
                         <div
@@ -450,17 +451,26 @@ export default function Organizations(): React.JSX.Element {
                         ></div>
                         <div className={styles.orgAvatar}>
                           {organization.avatarURL ? (
-                            <img src={organization.avatarURL} alt={getInitials(organization.name)} crossOrigin="anonymous" className={styles.orgAvatarImg}/>
+                            <img
+                              src={organization.avatarURL}
+                              alt={getInitials(organization.name)}
+                              crossOrigin="anonymous"
+                              className={styles.orgAvatarImg}
+                            />
                           ) : (
                             getInitials(organization.name)
                           )}
                         </div>
-                        <div className={styles.orgName}>{organization.name}</div>
+                        <div className={styles.orgName}>
+                          {organization.name}
+                        </div>
                         <div className={styles.orgMembers}>
                           {organization.membersCount || 0} members
                         </div>
                         <div className={styles.orgRole}>
-                          <span className={`badge ${organization.membershipRequestStatus === 'created' || role === 'administrator' ? 'badge-green' : 'badge-blue'}`}>
+                          <span
+                            className={`badge ${organization.membershipRequestStatus === 'created' || role === 'administrator' ? 'badge-green' : 'badge-blue'}`}
+                          >
                             {role === 'administrator' ? 'Admin' : 'Member'}
                           </span>
                         </div>
@@ -478,15 +488,21 @@ export default function Organizations(): React.JSX.Element {
                 {/* Browse Organizations */}
                 {browseOrgs.length > 0 && (
                   <>
-                    <h2 className={styles.sectionTitle}>{t('allOrganizations')}</h2>
-                    <div className={styles.sectionSubtitle}>Discover and join new organizations</div>
+                    <h2 className={styles.sectionTitle}>
+                      {t('allOrganizations')}
+                    </h2>
+                    <div className={styles.sectionSubtitle}>
+                      {t('discoverOrganizations')}
+                    </div>
                     <div className={styles.orgGrid}>
                       {browseOrgs.map((organization: IOrganization, index) => (
                         <div
                           key={`browse-${index}`}
                           data-testid="organization-card"
                           data-organization-name={organization.name}
-                          data-membership-status={organization.membershipRequestStatus}
+                          data-membership-status={
+                            organization.membershipRequestStatus
+                          }
                           data-cy="orgCard"
                         >
                           <OrganizationCard
@@ -497,9 +513,12 @@ export default function Organizations(): React.JSX.Element {
                               avatarURL: organization.avatarURL || '',
                               addressLine1: organization.addressLine1 || '',
                               admins: organization.admins,
-                              membershipRequestStatus: organization.membershipRequestStatus,
-                              userRegistrationRequired: organization.userRegistrationRequired,
-                              membershipRequests: organization.membershipRequests,
+                              membershipRequestStatus:
+                                organization.membershipRequestStatus,
+                              userRegistrationRequired:
+                                organization.userRegistrationRequired,
+                              membershipRequests:
+                                organization.membershipRequests,
                               isJoined: organization.isJoined,
                               membersCount: organization.membersCount || 0,
                               adminsCount: organization.adminsCount || 0,
@@ -521,7 +540,10 @@ export default function Organizations(): React.JSX.Element {
             ) : (
               <div className="empty-state">
                 <div className="empty-state-icon">{'\u{1F50D}'}</div>
-                <div className="empty-state-title" data-testid="no-organizations-message">
+                <div
+                  className="empty-state-title"
+                  data-testid="no-organizations-message"
+                >
                   {t('nothingToShow')}
                 </div>
               </div>

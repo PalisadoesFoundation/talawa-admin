@@ -58,6 +58,8 @@ import useVenueDeletion from '../../../hooks/useVenueDeletion';
 import { DeleteModal } from 'shared-components/CRUDModalTemplate';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 import SafeBreadcrumbs from 'shared-components/BreadcrumbsComponent/SafeBreadcrumbs';
+import styles from './OrganizationVenues.module.css';
+import Button from 'shared-components/Button/Button';
 
 export const getVenueNameById = (
   venues: InterfaceQueryVenueListItem[],
@@ -116,7 +118,6 @@ function organizationVenues(props?: {
   );
 
   const {
-    open: handleDelete,
     close: handleCloseDeleteVenueModal,
     confirmDelete,
     isOpen: deleteVenueModalOpenHook,
@@ -130,12 +131,6 @@ function organizationVenues(props?: {
     id: string;
     name: string;
   } | null>(null);
-
-  const openDeleteModal = (venueId: string): void => {
-    const venueName = getVenueNameById(venues, venueId);
-    setSelectedVenue({ id: venueId, name: venueName });
-    handleDelete(venueId);
-  };
 
   const handleCloseAndClear = (): void => {
     setSelectedVenue(null);
@@ -247,52 +242,47 @@ function organizationVenues(props?: {
         <div className="page-header-left">
           <h1 className="page-title">
             {t('title')}{' '}
-            <span
-              className="badge badge-gray"
-              style={{ fontSize: '14px', verticalAlign: 'middle', marginLeft: '8px' }}
-            >
+            <span className={`badge badge-gray ${styles.venueName}`}>
               {venues.length}
             </span>
           </h1>
           <p className="page-subtitle">{t('manageVenues')}</p>
         </div>
         <div className="page-header-actions">
-          <button
+          <Button
+            variant="plain"
             className="btn btn-primary"
             onClick={showCreateVenueModal}
             data-testid="createVenueBtn"
           >
             + {t('addVenue')}
-          </button>
+          </Button>
         </div>
       </div>
 
-      <div className="toolbar" style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '20px' }}>
+      <div className={`toolbar ${styles.toolbar}`}>
         <input
           type="text"
-          className="search-input"
+          className={`search-input ${styles.searchInput}`}
           placeholder={`${t('searchBy')} ${tCommon(searchBy)}`}
           value={searchTerm}
           onChange={(e) => handleSearch(e.target.value)}
           data-testid="searchInput"
-          style={{ flex: 1, padding: '8px 12px', border: '1px solid var(--gray-200)', borderRadius: 'var(--radius-md)', fontSize: '13px' }}
         />
         <select
-          className="filter-dropdown"
+          className={`filter-dropdown ${styles.filterSelect}`}
           value={searchBy}
           onChange={(e) => handleSearchByChange(e.target.value)}
           data-testid="searchByButton-filter"
-          style={{ padding: '8px 12px', border: '1px solid var(--gray-200)', borderRadius: 'var(--radius-md)', fontSize: '13px', background: 'var(--surface)' }}
         >
           <option value="name">{tCommon('name')}</option>
           <option value="desc">{tCommon('description')}</option>
         </select>
         <select
-          className="filter-dropdown"
+          className={`filter-dropdown ${styles.filterSelect}`}
           value={sortOrder}
           onChange={(e) => handleSortChange(e.target.value)}
           data-testid="sortVenues-filter"
-          style={{ padding: '8px 12px', border: '1px solid var(--gray-200)', borderRadius: 'var(--radius-md)', fontSize: '13px', background: 'var(--surface)' }}
         >
           <option value="highest">{t('highestCapacity')}</option>
           <option value="lowest">{t('lowestCapacity')}</option>
@@ -300,10 +290,7 @@ function organizationVenues(props?: {
       </div>
 
       <LoadingState isLoading={venueLoading} variant="spinner" size="lg">
-        <div
-          className="grid-3"
-          data-testid="orgvenueslist"
-        >
+        <div className="grid-3" data-testid="orgvenueslist">
           {venues.length ? (
             venues.map((venueItem: InterfaceQueryVenueListItem) => (
               <div className="venue-card" key={venueItem.node.id}>
@@ -312,7 +299,7 @@ function organizationVenues(props?: {
                     <img
                       src={venueItem.node.image}
                       alt={venueItem.node.name}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      className={styles.venueImage}
                     />
                   ) : (
                     'Image Placeholder'
@@ -325,15 +312,17 @@ function organizationVenues(props?: {
                   </div>
                   <div className="venue-meta">
                     <span className="venue-capacity">
-                      {t('capacity')}: <strong>{venueItem.node.capacity ?? 0}</strong>
+                      {t('capacity')}:{' '}
+                      <strong>{venueItem.node.capacity ?? 0}</strong>
                     </span>
-                    <button
+                    <Button
+                      variant="plain"
                       className="btn btn-secondary btn-sm"
                       data-testid={`editVenueBtn-${venueItem.node.id}`}
                       onClick={() => showEditVenueModal(venueItem)}
                     >
                       {tCommon('edit')}
-                    </button>
+                    </Button>
                   </div>
                 </div>
               </div>

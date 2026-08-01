@@ -5,7 +5,7 @@
 import React, { useRef, useState } from 'react';
 import { FaUpload, FaExclamationTriangle, FaCheck } from 'react-icons/fa';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
-import { Button } from 'shared-components/Button';
+import Button from 'shared-components/Button';
 import {
   useApolloClient,
   type ApolloClient,
@@ -143,10 +143,10 @@ export default function UploadPluginView({
     <div>
       {/* Back */}
       <div className={styles.backRow}>
-        <button className={styles.backBtn} onClick={onBack}>
+        <Button variant="plain" className={styles.backBtn} onClick={onBack}>
           <span>&larr;</span>
           {t('title')}
-        </button>
+        </Button>
       </div>
 
       <h1 className={styles.title}>{t('uploadPlugin')}</h1>
@@ -261,9 +261,7 @@ export default function UploadPluginView({
           </div>
 
           <div className={styles.refSection}>
-            <div className={styles.refLabel}>
-              {t('requiredManifestFields')}
-            </div>
+            <div className={styles.refLabel}>{t('requiredManifestFields')}</div>
             <pre className={styles.codeBlock}>{MANIFEST}</pre>
             <p className={styles.refNote}>
               Each folder needs its own manifest.json with these fields.

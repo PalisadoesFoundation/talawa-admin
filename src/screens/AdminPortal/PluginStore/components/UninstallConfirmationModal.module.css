@@ -1,0 +1,15 @@
+.footer {
+  display: flex;
+  gap: 8px;
+}
+
+.modalTitle {
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: var(--gray-900, #111827);
+}
+
+.warningText {
+  font-size: 13px;
+  color: var(--gray-500, #6b7280);
+}

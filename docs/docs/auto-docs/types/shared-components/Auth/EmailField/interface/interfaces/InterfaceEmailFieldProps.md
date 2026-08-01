@@ -85,6 +85,16 @@ Placeholder text for the input - defaults to "name@example.com"
 
 ***
 
+### required?
+
+> `optional` **required**: `boolean`
+
+Defined in: [src/types/shared-components/Auth/EmailField/interface.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Auth/EmailField/interface.ts#L36)
+
+Whether the field is required — defaults to true
+
+***
+
 ### testId?
 
 > `optional` **testId**: `string`

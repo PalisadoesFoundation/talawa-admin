@@ -9,16 +9,14 @@ import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
-import {
-  Paper,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from '@mui/material';
+import Paper from '@mui/material/Paper';
+import Stack from '@mui/material/Stack';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 import {
   UPDATE_VOLUNTEER_GROUP,
   UPDATE_VOLUNTEER_MEMBERSHIP,
@@ -213,9 +211,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
       loading={isSubmitting}
       showFooter={false}
     >
-      <fieldset
-        className={`btn-group ${styles.toggleGroup} mt-0`}
-      >
+      <fieldset className={`btn-group ${styles.toggleGroup} mt-0`}>
         <legend className="visually-hidden">{t('viewToggle')}</legend>
         <input
           type="radio"
@@ -229,7 +225,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
           className={`btn btn-outline-primary ${styles.toggleBtn}`}
           htmlFor="detailsRadio"
         >
-          <TbListDetails style={{ marginRight: 8 }} />
+          <TbListDetails className={styles.iconMarginRight} />
           {t('details')}
         </label>
 
@@ -246,7 +242,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
           className={`btn btn-outline-primary ${styles.toggleBtn}`}
           htmlFor="groupsRadio"
         >
-          <PiUserListBold style={{ marginRight: 8 }} size={21} />
+          <PiUserListBold className={styles.iconMarginRight} size={21} />
           {t('requests')}
         </label>
       </fieldset>
@@ -255,7 +251,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
         <form
           data-testid="groupForm"
           onSubmit={updateGroupHandler}
-          style={{ padding: 12 }}
+          className={styles.formPadding}
         >
           {/* Input field to enter the group name */}
           <FormFieldGroup
@@ -351,7 +347,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
           </Button>
         </form>
       ) : (
-        <div style={{ padding: "0 12px" }}>
+        <div className={styles.requestsPadding}>
           {requests.length === 0 ? (
             <Stack height="100%" alignItems="center" justifyContent="center">
               {t('noRequests')}
@@ -365,10 +361,10 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
               <Table aria-label={t('groupTable')}>
                 <TableHead>
                   <TableRow>
-                    <TableCell style={{ fontWeight: 600 }}>
+                    <TableCell className={styles.headerCell}>
                       {t('volunteerName')}
                     </TableCell>
-                    <TableCell style={{ fontWeight: 600 }}>
+                    <TableCell className={styles.headerCell}>
                       {t('volunteerActions')}
                     </TableCell>
                   </TableRow>
@@ -386,7 +382,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                         <TableCell
                           component="th"
                           scope="row"
-                          style={{ gap: 4 }}
+                          className={styles.flexGap4}
                           data-testid="userName"
                         >
                           <ProfileAvatarDisplay
@@ -399,7 +395,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                           {name}
                         </TableCell>
                         <TableCell component="th" scope="row">
-                          <div style={{ gap: 8 }}>
+                          <div className={styles.flexGap8}>
                             <Button
                               variant="success"
                               size="sm"
@@ -422,7 +418,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                                 updateMembershipStatus(request.id, 'rejected')
                               }
                             >
-                              <FaXmark size={18} style={{ fontWeight: 600 }} />
+                              <FaXmark size={18} className={styles.boldIcon} />
                             </Button>
                           </div>
                         </TableCell>

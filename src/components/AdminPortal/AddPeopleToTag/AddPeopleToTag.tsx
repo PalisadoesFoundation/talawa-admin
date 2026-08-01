@@ -221,7 +221,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
       <div className={`${styles.errorContainer} rounded-4 my-3`}>
         <div className={styles.errorMessage}>
           <WarningAmberRounded className={`${styles.errorIcon} fs-1`} />
-          <h6 style={{ textAlign: "center" }}>
+          <h6 className={styles.errorMessage}>
             {t('errorOccurredWhileLoadingMembers')}
             <br />
             {userTagsMembersToAssignToError.message}
@@ -334,9 +334,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
             className={`border border-2 border-dark-subtle-subtle rounded-3 ${styles.scrollContainer}`}
           >
             {assignToMembers.length === 0 ? (
-              <div style={{ color: "var(--gray-400, #9ca3af)", margin: "0 auto", textAlign: "center" }}>
-                {t('noOneSelected')}
-              </div>
+              <div className={styles.noOneSelected}>{t('noOneSelected')}</div>
             ) : (
               assignToMembers.map((member) => (
                 <div
@@ -356,7 +354,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
             )}
           </div>
 
-          <div style={{ margin: "12px 0" }}>
+          <div className={styles.SearchBar}>
             <div className="flex-grow-1">
               <SearchBar
                 placeholder={tCommon('firstName')}

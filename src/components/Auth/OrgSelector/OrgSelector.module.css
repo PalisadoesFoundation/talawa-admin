@@ -33,3 +33,26 @@
   padding: 0.75rem 1rem;
   color: var(--orgSelector-no-results-color);
 }
+
+.labelWrapper {
+  margin-bottom: 1rem;
+}
+
+.requiredAsterisk {
+  color: var(--red-500);
+}
+
+.inputWrapper {
+  position: relative;
+}
+
+.inputError {
+  border-color: var(--red-500) !important;
+}
+
+.errorMessage {
+  display: block;
+  color: var(--red-500);
+  font-size: 0.875em;
+  margin-top: 0.25rem;
+}

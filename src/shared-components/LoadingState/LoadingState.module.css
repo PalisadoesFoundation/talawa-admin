@@ -124,3 +124,27 @@
 .loadingItem {
   height: var(--space-8);
 }
+
+@keyframes spinnerBorder {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinnerBase {
+  border: 0.25em solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spinnerBorder 0.75s linear infinite;
+  color: var(--green-500);
+}
+
+.skeletonWrapper {
+  width: 100%;
+}
+
+.skeletonRowWrapper {
+  display: flex;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}

@@ -82,3 +82,13 @@
   outline: none;
   box-shadow: none;
 }
+
+.gapContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fullWidth {
+  width: 100%;
+}

@@ -24,19 +24,13 @@
  * ## Hooks:
  * - `useTranslation`: For internationalization of tab labels and content.
  * - `useParams`: Extracts the organization ID from the URL.
- * - `useNavigate`: Enables navigation to other routes.
- *
- * ## Methods:
- * - `renderButton`: Renders a button for each tab with the appropriate icon and label.
- * - `handleBack`: Navigates back to the organization page.
  *
  * @returns JSX.Element - The rendered `VolunteerManagement` component.
  */
 import React, { useState, useMemo } from 'react';
-import { Navigate, useNavigate, useParams } from 'react-router';
-import { FaChevronLeft, FaTasks } from 'react-icons/fa';
+import { Navigate, useParams } from 'react-router';
+import { FaTasks } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
-import { Button } from 'shared-components/Button';
 import DropDownButton from 'shared-components/DropDownButton';
 import { TbCalendarEvent } from 'react-icons/tb';
 import { FaRegEnvelopeOpen, FaUserGroup } from 'react-icons/fa6';
@@ -45,18 +39,25 @@ import Invitations from './Invitations/Invitations';
 import Actions from './Actions/Actions';
 import Groups from './Groups/Groups';
 import styles from './VolunteerManagement.module.css';
+import Button from 'shared-components/Button/Button';
 
 const volunteerDashboardTabs: { value: TabOptions; icon: JSX.Element }[] = [
   {
     value: 'upcomingEvents',
-    icon: <TbCalendarEvent size={21} style={{ marginRight: '0.5rem' }} />,
+    icon: <TbCalendarEvent size={21} className={styles.tabIcon} />,
   },
   {
     value: 'invitations',
-    icon: <FaRegEnvelopeOpen size={18} style={{ marginRight: '0.5rem' }} />,
+    icon: <FaRegEnvelopeOpen size={18} className={styles.tabIcon} />,
   },
-  { value: 'actions', icon: <FaTasks size={18} style={{ marginRight: '0.5rem' }} /> },
-  { value: 'groups', icon: <FaUserGroup size={18} style={{ marginRight: '0.5rem' }} /> },
+  {
+    value: 'actions',
+    icon: <FaTasks size={18} className={styles.tabIcon} />,
+  },
+  {
+    value: 'groups',
+    icon: <FaUserGroup size={18} className={styles.tabIcon} />,
+  },
 ];
 
 /**
@@ -86,47 +87,8 @@ const VolunteerManagement = (): JSX.Element => {
     return <Navigate to={'/'} />;
   }
 
-  // Hook for navigation
-  const navigate = useNavigate();
-
   // State hook for managing the currently selected tab
   const [tab, setTab] = useState<TabOptions>('upcomingEvents');
-
-  /**
-   * Renders a button for each tab with the appropriate icon and label.
-   *
-   * @param value - The tab value
-   * @param icon - The icon to display for the tab
-   * @returns JSX.Element - The rendered button component
-   */
-  const renderButton = ({
-    value,
-    icon,
-  }: {
-    value: TabOptions;
-    icon: React.ReactNode;
-  }): JSX.Element => {
-    const selected = tab === value;
-    const variant = selected ? 'success' : 'light';
-    const translatedText = t(value);
-
-    const className = selected
-      ? `${styles.tabButton} ${styles.activeTab}`
-      : `${styles.tabButton} ${styles.inActiveTab}`;
-    const props = {
-      variant,
-      className,
-      onClick: () => setTab(value),
-      'data-testid': `${value}Btn`,
-    };
-
-    return (
-      <Button key={value} {...props}>
-        {icon}
-        {translatedText}
-      </Button>
-    );
-  };
 
   // Create options for DropDownButton
   const tabOptions = useMemo(
@@ -138,10 +100,6 @@ const VolunteerManagement = (): JSX.Element => {
       })),
     [t],
   );
-
-  const handleBack = (): void => {
-    navigate(`/user/organization/${orgId}`);
-  };
 
   const isTabOption = (val: string): val is TabOptions =>
     volunteerDashboardTabs.some((option) => option.value === val);
@@ -192,7 +150,8 @@ const VolunteerManagement = (): JSX.Element => {
       {/* Tabs */}
       <div className="tabs" role="tablist">
         {volunteerDashboardTabs.map(({ value, icon }) => (
-          <button
+          <Button
+            variant="plain"
             key={value}
             className={`tab${tab === value ? ' active' : ''}`}
             role="tab"
@@ -202,7 +161,7 @@ const VolunteerManagement = (): JSX.Element => {
           >
             {icon}
             {t(value)}
-          </button>
+          </Button>
         ))}
       </div>
 

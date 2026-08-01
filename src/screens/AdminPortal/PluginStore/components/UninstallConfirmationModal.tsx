@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { Button } from 'shared-components/Button';
 import { IUninstallConfirmationModalProps } from 'types/AdminPortal/PluginStore/UninstallConfirmationModal/interface';
+import styles from './UninstallConfirmationModal.module.css';
 
 export default function UninstallConfirmationModal({
   show,
@@ -20,7 +21,7 @@ export default function UninstallConfirmationModal({
   const { t: tCommon } = useTranslation('common');
 
   const customFooter = (
-    <div style={{ display: 'flex', gap: 8 }}>
+    <div className={styles.footer}>
       <Button
         variant="secondary"
         onClick={onClose}
@@ -49,17 +50,12 @@ export default function UninstallConfirmationModal({
       centered
     >
       <div>
-        <div
-          data-testid="uninstall-modal-title"
-          style={{ marginBottom: 12, fontSize: 14, color: 'var(--gray-900, #111827)' }}
-        >
+        <div data-testid="uninstall-modal-title" className={styles.modalTitle}>
           {t('uninstallPluginMsg', {
             pluginName: plugin?.name || '',
           })}
         </div>
-        <div style={{ fontSize: 13, color: 'var(--gray-500, #6b7280)' }}>
-          {t('uninstallPluginWarning')}
-        </div>
+        <div className={styles.warningText}>{t('uninstallPluginWarning')}</div>
       </div>
     </BaseModal>
   );

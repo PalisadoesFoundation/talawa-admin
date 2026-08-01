@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 import styles from './PluginDetailView.module.css';
+import Button from 'shared-components/Button/Button';
 
 const TABS = ['details', 'features', 'changelog'] as const;
 type TabType = (typeof TABS)[number];
@@ -31,9 +32,7 @@ interface IPluginDetailViewProps {
 function isImageUrl(icon: string | undefined): boolean {
   if (!icon) return false;
   return (
-    icon.startsWith('http') ||
-    icon.startsWith('/') ||
-    icon.startsWith('data:')
+    icon.startsWith('http') || icon.startsWith('/') || icon.startsWith('data:')
   );
 }
 
@@ -88,12 +87,12 @@ export default function PluginDetailView({
 
   return (
     <div>
-      {/* Back button */}
+      {/* Back Button */}
       <div className={styles.backRow}>
-        <button className={styles.backBtn} onClick={onBack}>
+        <Button variant="plain" className={styles.backBtn} onClick={onBack}>
           <span className={styles.backArrow}>&larr;</span>
           {t('title')}
-        </button>
+        </Button>
       </div>
 
       {/* Hero */}
@@ -124,36 +123,36 @@ export default function PluginDetailView({
                     ariaLabel={isActive ? 'active' : 'inactive'}
                   />
                 </span>
-                <button
+                <Button
+                  variant="plain"
                   className={styles.actionBtn}
                   onClick={() =>
-                    togglePluginStatus(
-                      plugin,
-                      isActive ? 'inactive' : 'active',
-                    )
+                    togglePluginStatus(plugin, isActive ? 'inactive' : 'active')
                   }
                   disabled={loading}
                 >
                   <FaPowerOff className={styles.iconSmall} />
                   {isActive ? t('deactivate') : t('activate')}
-                </button>
-                <button
+                </Button>
+                <Button
+                  variant="plain"
                   className={styles.actionBtnDanger}
                   onClick={() => uninstallPlugin(plugin)}
                   disabled={loading}
                 >
                   <FaTrash className={styles.iconSmall} />
                   {t('uninstall')}
-                </button>
+                </Button>
               </>
             ) : (
-              <button
+              <Button
+                variant="plain"
                 className={styles.installBtn}
                 onClick={() => installPlugin(plugin)}
                 disabled={loading}
               >
                 {loading ? t('installing', { elapsed: '' }) : t('install')}
-              </button>
+              </Button>
             )}
           </div>
         </div>
@@ -162,7 +161,8 @@ export default function PluginDetailView({
       {/* Tabs */}
       <div className={styles.tabs} role="tablist">
         {TABS.map((name) => (
-          <button
+          <Button
+            variant="plain"
             key={name}
             role="tab"
             aria-selected={tab === name}
@@ -170,7 +170,7 @@ export default function PluginDetailView({
             className={tab === name ? styles.tabActive : styles.tab}
           >
             {t(name)}
-          </button>
+          </Button>
         ))}
       </div>
 
@@ -178,9 +178,7 @@ export default function PluginDetailView({
       <div className={styles.tabContent}>
         {tab === 'details' && (
           <>
-            <div className={styles.sectionTitle}>
-              {tCommon('description')}
-            </div>
+            <div className={styles.sectionTitle}>{tCommon('description')}</div>
             <div className={styles.description}>{info.description}</div>
 
             {details?.screenshots && details.screenshots.length > 0 && (

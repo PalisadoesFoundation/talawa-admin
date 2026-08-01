@@ -25,7 +25,7 @@
 /* ── Left Panel ────────────────────────────────────────────────── */
 .chatSidebar {
   width: 280px;
-  border-right: 1px solid var(--border, rgba(0,0,0,0.06));
+  border-right: 1px solid var(--border, rgba(0, 0, 0, 0.06));
   background: var(--surface, #fff);
   display: flex;
   flex-direction: column;
@@ -34,7 +34,7 @@
 
 .chatSidebarHeader {
   padding: 16px 16px 12px;
-  border-bottom: 1px solid var(--border, rgba(0,0,0,0.06));
+  border-bottom: 1px solid var(--border, rgba(0, 0, 0, 0.06));
 }
 
 .chatSidebarTitle {
@@ -61,7 +61,7 @@
 .chatSearch:focus-within {
   border-color: var(--green-500, #3ecf8e);
   background: var(--surface, #fff);
-  box-shadow: 0 0 0 3px rgba(62,207,142,0.12);
+  box-shadow: 0 0 0 3px rgba(62, 207, 142, 0.12);
 }
 
 .chatSearchInput {
@@ -200,6 +200,47 @@
   font-weight: 600;
 }
 
+.iconSm {
+  font-size: 18px;
+}
+
+.searchIconWrapper {
+  color: var(--gray-400);
+  font-size: 14px;
+}
+
+.avatarImage {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatarBg0 {
+  background: var(--blue-50);
+  color: var(--blue-600);
+}
+
+.avatarBg1 {
+  background: var(--purple-50);
+  color: var(--purple-500);
+}
+
+.avatarBg2 {
+  background: var(--green-50);
+  color: var(--green-700);
+}
+
+.avatarBg3 {
+  background: var(--orange-50);
+  color: var(--orange-500);
+}
+
+.avatarBg4 {
+  background: var(--red-50);
+  color: var(--red-500);
+}
+
 .unreadBadge {
   width: 18px;
   height: 18px;
@@ -278,7 +319,7 @@
     height: auto;
     max-height: 35vh;
     border-right: none;
-    border-bottom: 1px solid var(--border, rgba(0,0,0,0.06));
+    border-bottom: 1px solid var(--border, rgba(0, 0, 0, 0.06));
     overflow-y: auto;
   }
 
