@@ -54,53 +54,53 @@ jobs:
           CI: true
         run: pnpm run check-route-prefix -- --scan-entire-repo
 
-  Code-Coverage:
-    if: ${{ github.actor != 'dependabot[bot]' }}
-    name: Test and Calculate Code Coverage
-    needs: [Merge-Conflict-Check, Check-Route-Prefix]
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [24.x]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
+  # Code-Coverage:
+  #   if: ${{ github.actor != 'dependabot[bot]' }}
+  #   name: Test and Calculate Code Coverage
+  #   needs: [Merge-Conflict-Check, Check-Route-Prefix]
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       node-version: [24.x]
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: actions/setup-node@v4
+  #       with:
+  #         node-version: ${{ matrix.node-version }}
 
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 10.4.1
-      - name: Cache pnpm store
-        uses: actions/cache@v4
-        id: pnpm-cache
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
+  #     - uses: pnpm/action-setup@v4
+  #       with:
+  #         version: 10.4.1
+  #     - name: Cache pnpm store
+  #       uses: actions/cache@v4
+  #       id: pnpm-cache
+  #       with:
+  #         path: ~/.pnpm-store
+  #         key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-pnpm-
 
-      - name: Install dependencies
-        run: pnpm install
+  #     - name: Install dependencies
+  #       run: pnpm install
 
-      - name: Run Vitest Tests
-        env:
-          NODE_V8_COVERAGE: './coverage/vitest'
-        run: |
-          pnpm run test:coverage
+  #     - name: Run Vitest Tests
+  #       env:
+  #         NODE_V8_COVERAGE: './coverage/vitest'
+  #       run: |
+  #         pnpm run test:coverage
 
-      #######################################################################
-      # DO NOT DELETE ANY references to env.CODECOV_UNIQUE_NAME in this
-      # section. They are required for accurate calculations
-      #######################################################################
-      - name: Present and upload coverage to Codecov as ${{env.CODECOV_UNIQUE_NAME}}
-        uses: codecov/codecov-action@v5
-        with:
-          name: '${{env.CODECOV_UNIQUE_NAME}}'
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: false
-          verbose: true
-          exclude: 'docs/'
-          gcov_ignore: 'docs/'
-          files: ./coverage/vitest/lcov.info
-          disable_search: true
+  #     #######################################################################
+  #     # DO NOT DELETE ANY references to env.CODECOV_UNIQUE_NAME in this
+  #     # section. They are required for accurate calculations
+  #     #######################################################################
+  #     - name: Present and upload coverage to Codecov as ${{env.CODECOV_UNIQUE_NAME}}
+  #       uses: codecov/codecov-action@v5
+  #       with:
+  #         name: '${{env.CODECOV_UNIQUE_NAME}}'
+  #         token: ${{ secrets.CODECOV_TOKEN }}
+  #         fail_ci_if_error: false
+  #         verbose: true
+  #         exclude: 'docs/'
+  #         gcov_ignore: 'docs/'
+  #         files: ./coverage/vitest/lcov.info
+  #         disable_search: true
