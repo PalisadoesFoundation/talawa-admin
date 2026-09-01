@@ -18,7 +18,7 @@
     "@hello-pangea/dnd": "^18.0.1",
     "@mui/icons-material": "7.3.4",
     "@mui/material": "7.3.4",
-    "@mui/system": "7.3.5",
+    "@mui/system": "7.3.11",
     "@mui/x-charts": "^8.14.0",
     "@mui/x-data-grid": "^8.22.0",
     "@mui/x-date-pickers": "^8.14.0",
