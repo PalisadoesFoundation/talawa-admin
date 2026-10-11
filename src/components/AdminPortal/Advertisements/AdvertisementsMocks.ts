@@ -4,7 +4,8 @@
  * It simulates various backend responses to facilitate isolated frontend testing.
  *
  * @remarks
- * - Configures a mock `ApolloClient` with `authLink` to simulate bearer token headers.
+ * - Configures a mock `ApolloClient` using a plain HTTP link. Authentication is handled
+ *   via HTTP-only cookies set by the API on login; no Authorization header is needed.
  * - Defines `dateConstants` to ensure consistent date assertions across timezones.
  * - Provides tailored mock scenarios: Active/Completed lists, Infinite Scrolling, and Error states.
  * - Includes mutation mocks for Creating, Updating, and Deleting advertisements.
@@ -26,14 +27,11 @@
 import { act } from 'react';
 import type { NormalizedCacheObject, DocumentNode } from '@apollo/client';
 import { BACKEND_URL } from 'Constant/constant';
-import useLocalStorage from 'utils/useLocalstorage';
 import {
   ApolloClient,
   InMemoryCache,
-  ApolloLink,
   HttpLink,
 } from '@apollo/client';
-import { setContext } from '@apollo/client/link/context';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 import dayjs from 'dayjs';
 import {
@@ -133,7 +131,6 @@ interface IBaseMutationMock<T = unknown> {
   error?: Error;
 }
 
-const { getItem } = useLocalStorage();
 
 export const dateConstants = {
   create: {
@@ -176,17 +173,9 @@ const httpLink = new HttpLink({
   uri: BACKEND_URL,
 });
 
-const authLink = setContext((_, { headers }) => {
-  const token = getItem('token');
-  return {
-    headers: {
-      ...headers,
-      ...(token ? { authorization: `Bearer ${token}` } : {}), // i18n-ignore-line
-    },
-  };
-});
-
-export const link = ApolloLink.from([authLink, httpLink]);
+// The test mock client uses a plain HTTP link. Authentication for the real
+// app is handled via HTTP-only cookies; no Authorization header is needed.
+export const link = httpLink;
 
 export const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),

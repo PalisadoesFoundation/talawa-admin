@@ -48,12 +48,14 @@ const mockUseLocalStorage = useLocalStorage as unknown as ReturnType<
 const renderComponent = (
   mocks: MockedResponse[],
   initialRoute: string,
-  authToken?: string,
+  isLoggedIn?: boolean,
   pendingToken?: string,
 ) => {
   const mockLocalStorage = {
     getItem: vi.fn((key: string) => {
-      if (key === 'token') return authToken || null;
+      // Auth is handled via HTTP-only cookies; the IsLoggedIn flag is the
+      // client-side indicator of a logged-in session (token is never in localStorage).
+      if (key === 'IsLoggedIn') return isLoggedIn ? 'TRUE' : null;
       if (key === 'pendingInvitationToken') return pendingToken || null;
       return null;
     }),
@@ -298,7 +300,7 @@ describe('AcceptInvitation', () => {
         },
       },
     ];
-    renderComponent(mocks, '/invitation/test-token', 'auth-token');
+    renderComponent(mocks, '/invitation/test-token', true);
     await waitFor(() => {
       expect(screen.getByText('test@example.com')).toBeInTheDocument();
       expect(screen.getByText('org-1')).toBeInTheDocument();
@@ -486,7 +488,7 @@ describe('AcceptInvitation', () => {
     };
 
     it('should show accept button for authenticated user', async () => {
-      renderComponent([verifyMock], '/invitation/test-token', 'auth-token');
+      renderComponent([verifyMock], '/invitation/test-token', true);
       await waitFor(() => {
         expect(screen.getByTestId('accept-invite-btn')).toBeInTheDocument();
       });
@@ -496,7 +498,7 @@ describe('AcceptInvitation', () => {
       const { mockLocalStorage } = renderComponent(
         [verifyMock, acceptMock],
         '/invitation/test-token',
-        'auth-token',
+        true,
       );
       await waitFor(() => {
         expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
@@ -539,7 +541,7 @@ describe('AcceptInvitation', () => {
       renderComponent(
         [verifyWithoutEventMock, acceptMock],
         '/invitation/test-token',
-        'auth-token',
+        true,
       );
       await waitFor(() => {
         expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
@@ -565,7 +567,7 @@ describe('AcceptInvitation', () => {
       renderComponent(
         [verifyMock, acceptNullMock],
         '/invitation/test-token',
-        'auth-token',
+        true,
       );
       await waitFor(() => {
         expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
@@ -589,7 +591,7 @@ describe('AcceptInvitation', () => {
       renderComponent(
         [verifyMock, acceptFailMock],
         '/invitation/test-token',
-        'auth-token',
+        true,
       );
       await waitFor(() => {
         expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
@@ -615,7 +617,7 @@ describe('AcceptInvitation', () => {
       renderComponent(
         [verifyMock, acceptFailMock],
         '/invitation/test-token',
-        'auth-token',
+        true,
       );
       await waitFor(() => {
         expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
@@ -634,7 +636,7 @@ describe('AcceptInvitation', () => {
       renderComponent(
         [verifyMock, acceptMock],
         '/invitation/test-token',
-        'auth-token',
+        true,
       );
 
       await waitFor(() => {
@@ -678,7 +680,7 @@ describe('AcceptInvitation', () => {
       renderComponent(
         [verifyMaskedEmailMock],
         '/invitation/test-token',
-        'auth-token',
+        true,
       );
       await waitFor(() => {
         const acceptButton = screen.getByTestId('accept-invite-btn');
@@ -711,7 +713,7 @@ describe('AcceptInvitation', () => {
       renderComponent(
         [verifyMaskedEmailMock],
         '/invitation/test-token',
-        'auth-token',
+        true,
       );
       await waitFor(() => {
         expect(
@@ -741,14 +743,13 @@ describe('AcceptInvitation', () => {
       const { mockLocalStorage } = renderComponent(
         [verifyMaskedEmailMock],
         '/invitation/test-token',
-        'auth-token',
+        true,
       );
       await waitFor(() => {
         fireEvent.click(screen.getByText('Sign in as a different user'));
       });
       await waitFor(() => {
         expect(screen.getByText('Login Page')).toBeInTheDocument();
-        expect(mockLocalStorage.removeItem).toHaveBeenCalledWith('token');
         expect(mockLocalStorage.removeItem).toHaveBeenCalledWith('email');
         expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
           'pendingInvitationToken',
@@ -759,7 +760,7 @@ describe('AcceptInvitation', () => {
 
     // NEW: Test that "Sign in as different user" button only shows for masked emails
     it('should not show "Sign in as different user" button for non-masked invitations', async () => {
-      renderComponent([verifyMock], '/invitation/test-token', 'auth-token');
+      renderComponent([verifyMock], '/invitation/test-token', true);
       await waitFor(() => {
         expect(
           screen.queryByText('Sign in as a different user'),
@@ -787,7 +788,7 @@ describe('AcceptInvitation', () => {
       renderComponent(
         [verifyMaskedEmailMock],
         '/invitation/test-token',
-        'auth-token',
+        true,
       );
       await waitFor(() => {
         const checkbox = screen.getByLabelText(

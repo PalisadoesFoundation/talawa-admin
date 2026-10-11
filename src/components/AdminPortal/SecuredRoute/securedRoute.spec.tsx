@@ -118,7 +118,6 @@ describe('SecuredRoute', () => {
     it('should prevent timeout when user activity occurs within timeout window', async () => {
       setItem('IsLoggedIn', 'TRUE');
       setItem('role', 'administrator');
-      setItem('token', 'test-token');
 
       render(
         <MemoryRouter initialEntries={['/admin/orglist']}>
@@ -142,7 +141,6 @@ describe('SecuredRoute', () => {
       // Session should still be active
       const storage = useLocalStorage();
       expect(storage.getItem('IsLoggedIn')).toBe('TRUE');
-      expect(storage.getItem('token')).toBe('test-token');
       expect(NotificationToast.warning).not.toHaveBeenCalled();
       expect(screen.getByText('Test Protected Content')).toBeInTheDocument();
     });
@@ -152,7 +150,6 @@ describe('SecuredRoute', () => {
     it('should show warning toast after 15 minutes of inactivity', async () => {
       setItem('IsLoggedIn', 'TRUE');
       setItem('role', 'administrator');
-      setItem('token', 'test-token');
       setItem('userId', 'user-123');
       setItem('email', 'admin@example.com');
       setItem('name', 'Admin User');
@@ -178,7 +175,6 @@ describe('SecuredRoute', () => {
 
       const storage = useLocalStorage();
       expect(storage.getItem('IsLoggedIn')).toBe('FALSE');
-      expect(storage.getItem('token')).toBeNull();
       expect(storage.getItem('userId')).toBeNull();
       expect(storage.getItem('role')).toBeNull();
       expect(storage.getItem('email')).toBeNull();

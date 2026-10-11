@@ -16,7 +16,6 @@ import { useTranslation } from 'react-i18next';
 import useLocalStorage from '../../../utils/useLocalstorage';
 
 const STORAGE_KEY = 'pendingInvitationToken';
-const AUTH_TOKEN_KEY = 'token';
 const EMAIL_KEY = 'email';
 
 const AcceptInvitation = (): JSX.Element => {
@@ -90,7 +89,9 @@ const AcceptInvitation = (): JSX.Element => {
     run();
   }, [token, verify]);
 
-  const [isAuthenticated] = useState(() => Boolean(getItem(AUTH_TOKEN_KEY)));
+  // Check if user is already logged in via the IsLoggedIn flag set on successful
+  // sign-in. Actual auth tokens are stored in HTTP-only cookies, not localStorage.
+  const [isAuthenticated] = useState(() => getItem('IsLoggedIn') === 'TRUE');
   const requiresConfirmation = Boolean(invite?.inviteeEmailMasked);
   const [confirmIsInvitee, setConfirmIsInvitee] = useState(false);
 
@@ -233,7 +234,6 @@ const AcceptInvitation = (): JSX.Element => {
                       <Button
                         variant="outline-secondary"
                         onClick={() => {
-                          removeItem(AUTH_TOKEN_KEY);
                           removeItem(EMAIL_KEY);
                           if (invite?.invitationToken) {
                             setItem(STORAGE_KEY, invite.invitationToken);

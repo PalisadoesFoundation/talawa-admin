@@ -50,7 +50,7 @@ import { requestMiddleware, responseMiddleware } from 'utils/timezoneUtils';
 import { refreshToken } from 'utils/getRefreshToken';
 
 const { getItem, clearAllItems } = useLocalStorage();
-const BEARER_PREFIX = 'Bearer ';
+
 
 if (import.meta.env.DEV) {
   // Adds messages only in a dev environment
@@ -67,15 +67,15 @@ const resolvePendingRequests = (): void => {
   pendingRequests = [];
 };
 
+// Authentication is handled via HTTP-only cookies set by the API on login.
+// No Authorization header is needed — the browser automatically includes
+// the access-token cookie on every same-origin request.
 const authLink = setContext((_, { headers }) => {
   const lng = i18n.language;
-  const token = getItem('token');
-  const authHeaders = token ? { authorization: BEARER_PREFIX + token } : {};
 
   return {
     headers: {
       ...headers,
-      ...authHeaders,
       'Accept-Language': lng,
     },
   };
@@ -173,17 +173,19 @@ const uploadLink = createUploadLink({
   useGETForQueries: false,
 });
 
+// WebSocket subscriptions are authenticated by the talawa-api server's
+// `onConnect` handler, which expects an `authorization: Bearer <token>`
+// value in `connectionParams`. Because the app uses HTTP-only cookie auth,
+// the access token is not accessible from JavaScript. The WS handshake is
+// a standard HTTP upgrade that automatically includes the cookie, so the
+// server can authenticate the connection from the cookie alone.
+// Only the Accept-Language locale preference is forwarded here.
 const wsLink = new GraphQLWsLink(
   createClient({
     url: BACKEND_WEBSOCKET_URL,
-    connectionParams: () => {
-      const token = getItem('token');
-      const authParams = token ? { authorization: BEARER_PREFIX + token } : {};
-      return {
-        ...authParams,
-        'Accept-Language': i18n.language,
-      };
-    },
+    connectionParams: () => ({
+      'Accept-Language': i18n.language,
+    }),
     on: {
       // WebSocket connection events - debug logs removed for production
     },

@@ -96,7 +96,6 @@ const mockUsers = {
 const setupUser = (userType: keyof typeof mockUsers) => {
   const user = mockUsers[userType];
   setItem('id', user.id);
-  setItem('token', 'mock-token');
   if ('AdminFor' in user) setItem('AdminFor', user.AdminFor);
   if ('role' in user) setItem('role', user.role);
 };

@@ -82,7 +82,6 @@ const SecuredRouteForUser = (): JSX.Element => {
           removeItem('id');
           removeItem('name');
           removeItem('role');
-          removeItem('token');
           removeItem('userId');
           removeItem('AdminFor');
           setTimeout(() => {

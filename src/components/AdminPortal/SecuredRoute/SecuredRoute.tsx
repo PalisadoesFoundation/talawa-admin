@@ -73,7 +73,6 @@ const SecuredRoute = (): JSX.Element => {
           removeItem('id');
           removeItem('name');
           removeItem('role');
-          removeItem('token');
           removeItem('userId');
           setTimeout(() => {
             window.location.href = '/';
