@@ -162,7 +162,7 @@
     "eslint-plugin-react": "^7.37.4",
     "eslint-plugin-tsdoc": "^0.5.0",
     "glob": "^13.0.0",
-    "graphql": "^16.10.0",
+    "graphql": "^16.14.2",
     "husky": "^9.1.6",
     "knip": "^5.66.0",
     "lint-staged": "^16.2.7",
